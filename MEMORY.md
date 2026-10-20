@@ -58,7 +58,9 @@ adapters. The plan's Phase 0 (provider evidence) has not started.
 | **Phase 0 API Route Handlers (All 3 Providers)** | Antigravity & OpenCode — **COMPLETED** | Scaffolded live Next.js route handlers `/api/auth/hmac-challenge`, `/api/telemetry/github`, `/api/telemetry/hackerrank`, and `/api/telemetry/leetcode` with real bio scrapers and rate limit protections. |
 | **UI Chore Polish & SaaS Elevation** | Antigravity — **COMPLETED** | Redesigned `BrandLogo` mark with ambient glow, upgraded `AppHeader` "Demo data" pill to live "3 Providers Live" telemetry monitor, polished `/search` evidence standards, and wired real API audits in `/admin` & `/settings`. |
 | **Phase 1 Multi-Provider Live Sync & Dynamic Dashboard** | Antigravity & OpenCode — **COMPLETED** | Connected `triggerLiveSync` to query GitHub, LeetCode, and HackerRank in real-time; dynamically wired `/dashboard` KPI and Provider cards to live `currentUser` state. |
-| **Phase 1 Multi-Platform Standings & Tie-Break Computation** | Antigravity & OpenCode — **NEXT** | Connect `/leaderboard` table to dynamically calculate live ranks, handle ties under Section 9.6 (1, 2, 2, 4 scheme), and support platform-specific tabs. |
+| **Stream A: API Rate Limiting & Nonce Invalidation** | **OpenCode — IN PROGRESS** | Implement `src/lib/rate-limit.ts` (sliding-window rate limiter for `/api/telemetry/*`) and single-use nonce consumption in `/api/auth/hmac-challenge/route.ts` to close known replay debt. |
+| **Stream B: Dynamic Leaderboard & §9.6 Tie Engine** | **Antigravity — IN PROGRESS** | Build `src/lib/leaderboard.ts` with Section 9.6 deterministic ties (`1, 2, 2, 4`), bind live `currentUser` stats, add HackerRank tab with Section 5.6 capability-gating notice. |
+
 
 ---
 
@@ -216,21 +218,32 @@ broad `git add` has mislabelled shared history — stage files explicitly from n
 ---
 
 ## Multi-Agent Coordination & OpenCode Work Allocation
+ 
+OpenCode and Antigravity coordinate concurrently in `d:\Track. Win. Maintain\TWM 3.O`. To maintain zero regressions and maximize parallel velocity, work is partitioned strictly into non-overlapping domains:
 
-OpenCode and Antigravity coordinate concurrently in `d:\Track. Win. Maintain\TWM 3.O`. To maintain zero regressions and ship a world-class application, work is allocated as follows:
+### 🛡️ Stream A: Assigned to OpenCode (API Route Hardening & Replay Invalidation)
+- **Target Files (OpenCode Locked):**
+  - `src/lib/rate-limit.ts` (create)
+  - `src/app/api/auth/hmac-challenge/route.ts` (nonce invalidation)
+  - `src/app/api/telemetry/github/route.ts`, `hackerrank/route.ts`, `leetcode/route.ts` (integrate rate limiter)
+- **Technical Requirements:**
+  1. **Sliding-Window Rate Limiter:** Lightweight in-memory rate limiter tracking IP and query handle. Return `429 Too Many Requests` with `Retry-After` headers when limits are reached (e.g. 15 requests / 60 seconds per IP) to protect `GITHUB_TOKEN` quota and avoid provider bans.
+  2. **Single-Use Nonce Store:** In `src/app/api/auth/hmac-challenge/route.ts`, register consumed nonces once successfully verified so that the same token cannot be re-verified inside its 15-minute TTL.
+  3. **Verification:** Test both create & verify flows; test rate-limiting with rapid curl calls; verify `npx tsc --noEmit` is clean.
 
-### Allocated Tasks for OpenCode:
+### 📊 Stream B: Handled by Antigravity (Dynamic Leaderboard & §9.6 Tie Engine)
+- **Target Files (Antigravity Locked):**
+  - `src/lib/leaderboard.ts` (create deterministic ranking utility)
+  - `src/app/leaderboard/page.tsx` (wire live ranks & ties)
+- **Technical Requirements:**
+  1. Pure deterministic tie policy (`1, 2, 2, 4` scheme per §9.6) with alphabetical secondary sort.
+  2. Dynamic integration of `currentUser` live synced telemetry (active days, LeetCode solved problems).
+  3. HackerRank tab with Section 5.6 & 9.3 capability gating badge and rationale.
 
-1. **Task 1: Asset Optimization & Cleanup (`public/`)**
-   - **Goal:** Known debt #4 — remove or optimize unreferenced heavy assets in `public/` (`logo.svg` 2.4MB, `logo.png` 1.8MB, `twm_perfect_landing.png` 761KB).
-   - **Recommended Approach:** Use vector optimization or lightweight WebP/AVIF equivalents if required for metadata/OG cards.
-2. **Task 2: Token Consolidation Sweep (`globals.css` / components)**
-   - **Goal:** Known debt #5 — audit remaining literal hex colours (`#8D94A5`, `#636A7E`) and ensure 100% of body text and borders consume `--muted`, `--muted-soft`, and `--surface-*` variables.
-3. **Task 3: Landing Section Layout Rhythm Polish**
-   - **Goal:** Known debt #3 — apply differentiated layout patterns to `MotionShowcase`, `PlatformMatrix`, and `CockpitPreview` so consecutive sections do not repeat the 3-column card formula.
-   - **Skills/MCPs to leverage:** Use frontend design systems & motion guidance (`creative-motion-frontend`, `design-taste-frontend`), respecting `MotionConfig` reduced-motion preferences.
-4. **Task 4: Phase 0 Backend Foundation (Next Major Milestone)**
-   - **Goal:** Create the initial Next.js Route Handlers in `src/app/api/` (e.g. `/api/telemetry/github/route.ts` and `/api/auth/hmac-challenge/route.ts`) to transition from mock state to real provider verification.
+### Invariants for Both Agents:
+- **No File Overlaps:** Antigravity will NOT touch `src/lib/rate-limit.ts` or `/api/auth/hmac-challenge`. OpenCode should NOT touch `src/lib/leaderboard.ts` or `/app/leaderboard/`.
+- **Explicit Git Staging:** Never run `git add -A`. Stage only files you own before committing.
+
 
 ### Coordination Rules for Both Agents:
 - **No Concurrent Overwrites:** Check open files and git diff before editing.
