@@ -6,10 +6,15 @@
   color-scheme: dark;
   /* --font-sans / --font-mono are set by next/font on <html>; don't redefine them here. */
 
-  /* Anti-Slop Precision Telemetry Tokens */
+  /* Palette: single source of truth.
+     Hex vars feed the CSS below; the *-rgb triplets let Tailwind apply opacity
+     modifiers (bg-surface/90) without a second copy of each colour. */
   --bg: #090A0E;
+  --bg-rgb: 9 10 14;
   --surface: #111319;
+  --surface-rgb: 17 19 25;
   --surface-elevated: #181B23;
+  --surface-elevated-rgb: 24 27 35;
   --surface-card: #14171F;
   --surface-highlight: #202430;
 
@@ -18,23 +23,37 @@
   --border-active: rgba(245, 158, 11, 0.4);
 
   --ink: #F5F6F8;
+  --ink-rgb: 245 246 248;
   --ink-secondary: #C8CDD6;
-  --muted: #828A99;
+  --ink-secondary-rgb: 200 205 214;
+  /* muted is the de-facto body grey used in components */
+  --muted: #8D94A5;
+  --muted-rgb: 141 148 165;
+  --muted-soft: #636A7E;
+  --muted-soft-rgb: 99 106 126;
   --muted-dark: #4B5262;
+  --muted-dark-rgb: 75 82 98;
 
   /* Decisive Instrument Accents */
   --accent: #F59E0B;
+  --accent-rgb: 245 158 11;
   --accent-hover: #D97706;
+  --accent-hover-rgb: 217 119 6;
   --accent-subtle: rgba(245, 158, 11, 0.12);
 
   /* Provider Telemetry Identifiers */
   --provider-github: #60A5FA;
+  --provider-github-rgb: 96 165 250;
   --provider-leetcode: #FBBF24;
+  --provider-leetcode-rgb: 251 191 36;
   --provider-hackerrank: #34D399;
+  --provider-hackerrank-rgb: 52 211 153;
 
   --status-verified: #10B981;
+  --status-verified-rgb: 16 185 129;
   --status-warning: #F59E0B;
   --status-error: #EF4444;
+  --status-error-rgb: 239 68 68;
 }
 
 body {

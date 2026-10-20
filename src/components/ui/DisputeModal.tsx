@@ -45,7 +45,7 @@ export function DisputeModal() {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
         transition={{ duration: 0.2 }}
-        className="w-full max-w-lg rounded-2xl bg-[#111319] border border-white/10 p-6 shadow-2xl overflow-hidden"
+        className="w-full max-w-lg rounded-2xl bg-surface border border-white/10 p-6 shadow-2xl overflow-hidden"
       >
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
@@ -54,10 +54,10 @@ export function DisputeModal() {
               <ShieldAlert className="h-4 w-4" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#F5F6F8] font-sans">
+              <h3 className="text-base font-bold text-ink font-sans">
                 Lodge Telemetry Score Dispute
               </h3>
-              <p className="text-xs text-[#8D94A5] font-mono">
+              <p className="text-xs text-muted font-mono">
                 Two-Person Co-Admin Review Queue • Rule §9.7
               </p>
             </div>
@@ -75,13 +75,13 @@ export function DisputeModal() {
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] font-mono text-[#8D94A5] mb-1">
+              <label className="block text-[11px] font-mono text-muted mb-1">
                 Platform
               </label>
               <select
                 value={platform}
                 onChange={(e) => setPlatform(e.target.value as any)}
-                className="w-full px-3 py-2 rounded-xl bg-[#181B23] border border-white/10 text-xs font-mono text-[#F5F6F8] focus:border-[#F59E0B] focus:outline-none"
+                className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs font-mono text-ink focus:border-accent focus:outline-none"
               >
                 <option value="GitHub">GitHub</option>
                 <option value="LeetCode">LeetCode</option>
@@ -90,13 +90,13 @@ export function DisputeModal() {
             </div>
 
             <div>
-              <label className="block text-[11px] font-mono text-[#8D94A5] mb-1">
+              <label className="block text-[11px] font-mono text-muted mb-1">
                 Affected Metric
               </label>
               <select
                 value={metric}
                 onChange={(e) => setMetric(e.target.value as any)}
-                className="w-full px-3 py-2 rounded-xl bg-[#181B23] border border-white/10 text-xs font-mono text-[#F5F6F8] focus:border-[#F59E0B] focus:outline-none"
+                className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs font-mono text-ink focus:border-accent focus:outline-none"
               >
                 <option value="github_active_days">Active Contribution Days</option>
                 <option value="leetcode_delta">LeetCode Delta</option>
@@ -106,7 +106,7 @@ export function DisputeModal() {
           </div>
 
           <div>
-            <label className="block text-[11px] font-mono text-[#8D94A5] mb-1">
+            <label className="block text-[11px] font-mono text-muted mb-1">
               Dispute Rationale &amp; Claim Details
             </label>
             <textarea
@@ -115,12 +115,12 @@ export function DisputeModal() {
               value={claim}
               onChange={(e) => setClaim(e.target.value)}
               placeholder="e.g. Commit 8f1e pushed at 23:51 IST was recorded in git reflog but omitted from public contribution graph due to default branch merge delay."
-              className="w-full px-3 py-2 rounded-xl bg-[#181B23] border border-white/10 text-xs text-[#F5F6F8] focus:border-[#F59E0B] focus:outline-none placeholder:text-slate-600"
+              className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs text-ink focus:border-accent focus:outline-none placeholder:text-slate-600"
             />
           </div>
 
           <div>
-            <label className="block text-[11px] font-mono text-[#8D94A5] mb-1">
+            <label className="block text-[11px] font-mono text-muted mb-1">
               Public Evidence URL
             </label>
             <div className="relative">
@@ -130,20 +130,20 @@ export function DisputeModal() {
                 value={evidenceUrl}
                 onChange={(e) => setEvidenceUrl(e.target.value)}
                 placeholder="https://github.com/.../commit/... or https://leetcode.com/submissions/..."
-                className="w-full pl-8 pr-3 py-2 rounded-xl bg-[#181B23] border border-white/10 text-xs font-mono text-[#F5F6F8] focus:border-[#F59E0B] focus:outline-none placeholder:text-slate-600"
+                className="w-full pl-8 pr-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs font-mono text-ink focus:border-accent focus:outline-none placeholder:text-slate-600"
               />
               <LinkIcon className="h-3.5 w-3.5 text-slate-500 absolute left-2.5 top-2.5" />
             </div>
           </div>
 
           <div>
-            <label className="block text-[11px] font-mono text-[#8D94A5] mb-1">
+            <label className="block text-[11px] font-mono text-muted mb-1">
               Governing Rule Clause
             </label>
             <select
               value={ruleReference}
               onChange={(e) => setRuleReference(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl bg-[#181B23] border border-white/10 text-xs font-mono text-[#F5F6F8] focus:border-[#F59E0B] focus:outline-none"
+              className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs font-mono text-ink focus:border-accent focus:outline-none"
             >
               <option value="Rule §9.4: Timezone Normalization (IST 23:59:59)">
                 Rule §9.4: Timezone Normalization (IST 23:59:59)
@@ -165,7 +165,7 @@ export function DisputeModal() {
             <button
               type="button"
               onClick={closeDisputeModal}
-              className="px-4 py-2 rounded-xl text-xs font-mono text-[#8D94A5] hover:text-white hover:bg-white/5 transition-colors"
+              className="px-4 py-2 rounded-xl text-xs font-mono text-muted hover:text-white hover:bg-white/5 transition-colors"
             >
               Cancel
             </button>

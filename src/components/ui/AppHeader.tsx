@@ -56,7 +56,7 @@ export function AppHeader() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-[#090A0E]/90 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-canvas/90 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand & Navigation */}
         <div className="flex items-center gap-6">
@@ -71,8 +71,8 @@ export function AppHeader() {
                   href={link.href}
                   className={`px-3 py-1.5 rounded-lg transition-colors ${
                     isActive
-                      ? "bg-[#181B23] text-[#F5F6F8] font-semibold border border-white/10"
-                      : "text-[#8D94A5] hover:text-[#F5F6F8] hover:bg-white/5"
+                      ? "bg-surface-raised text-ink font-semibold border border-white/10"
+                      : "text-muted hover:text-ink hover:bg-white/5"
                   }`}
                 >
                   {link.label}
@@ -87,11 +87,11 @@ export function AppHeader() {
           {/* Quick Search / Cmd+K Pill */}
           <button
             onClick={openCommandPalette}
-            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#111319] hover:bg-[#181B23] border border-white/10 text-xs text-[#8D94A5] hover:text-[#F5F6F8] transition-all font-mono shadow-sm group"
+            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-xs text-muted hover:text-ink transition-all font-mono shadow-sm group"
           >
-            <Search className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#F59E0B] transition-colors" />
+            <Search className="h-3.5 w-3.5 text-slate-400 group-hover:text-accent transition-colors" />
             <span className="text-slate-400 group-hover:text-slate-200">Search or command...</span>
-            <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] rounded bg-white/5 border border-white/10 text-[#8D94A5]">
+            <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] rounded bg-white/5 border border-white/10 text-muted">
               <Command className="h-2.5 w-2.5" /> K
             </kbd>
           </button>
@@ -100,11 +100,11 @@ export function AppHeader() {
           <button
             onClick={triggerLiveSync}
             disabled={isSyncing}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#111319] hover:bg-[#181B23] border border-white/10 text-xs font-mono text-[#F5F6F8] transition-all disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-xs font-mono text-ink transition-all disabled:opacity-50"
             title="Execute Live Telemetry Crawl"
           >
-            <RotateCw className={`h-3.5 w-3.5 text-[#F59E0B] ${isSyncing ? "animate-spin" : ""}`} />
-            <span className="hidden sm:inline text-[#8D94A5]">
+            <RotateCw className={`h-3.5 w-3.5 text-accent ${isSyncing ? "animate-spin" : ""}`} />
+            <span className="hidden sm:inline text-muted">
               {isSyncing ? "Syncing..." : lastSyncTime}
             </span>
           </button>
@@ -113,16 +113,16 @@ export function AppHeader() {
           <div className="relative" ref={profileRef}>
             <button
               onClick={() => setIsProfileOpen((prev) => !prev)}
-              className="flex items-center gap-2 p-1.5 sm:px-2.5 rounded-xl bg-[#111319] hover:bg-[#181B23] border border-white/10 transition-colors"
+              className="flex items-center gap-2 p-1.5 sm:px-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 transition-colors"
             >
-              <div className="w-7 h-7 rounded-lg bg-[#181B23] border border-[#F59E0B]/30 flex items-center justify-center font-mono text-xs font-bold text-[#F59E0B]">
+              <div className="w-7 h-7 rounded-lg bg-surface-raised border border-accent/30 flex items-center justify-center font-mono text-xs font-bold text-accent">
                 AS
               </div>
               <div className="hidden lg:block text-left">
-                <div className="text-xs font-semibold text-[#F5F6F8] leading-tight">
+                <div className="text-xs font-semibold text-ink leading-tight">
                   {currentUser.name}
                 </div>
-                <div className="text-[10px] font-mono text-[#8D94A5]">
+                <div className="text-[10px] font-mono text-muted">
                   {currentUser.role === "co-admin" ? "Co-Admin" : currentUser.rollNo}
                 </div>
               </div>
@@ -131,11 +131,11 @@ export function AppHeader() {
 
             {/* Profile Dropdown */}
             {isProfileOpen && (
-              <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-[#111319] border border-white/10 shadow-2xl p-2 z-50 text-xs font-sans">
+              <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-surface border border-white/10 shadow-2xl p-2 z-50 text-xs font-sans">
                 <div className="px-3 py-2 border-b border-white/[0.08]">
-                  <div className="font-semibold text-[#F5F6F8]">{currentUser.name}</div>
-                  <div className="text-[11px] font-mono text-[#8D94A5] truncate">{currentUser.email}</div>
-                  <div className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-mono bg-white/5 border border-white/10 text-[#F59E0B]">
+                  <div className="font-semibold text-ink">{currentUser.name}</div>
+                  <div className="text-[11px] font-mono text-muted truncate">{currentUser.email}</div>
+                  <div className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-mono bg-white/5 border border-white/10 text-accent">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                     <span>Role: {currentUser.role === "co-admin" ? "Co-Admin Reviewer" : "Verified Student"}</span>
                   </div>
@@ -167,10 +167,10 @@ export function AppHeader() {
                       setIsProfileOpen(false);
                       switchRole(currentUser.role === "student" ? "co-admin" : "student");
                     }}
-                    className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:text-[#F59E0B] hover:bg-white/5 transition-colors text-left"
+                    className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:text-accent hover:bg-white/5 transition-colors text-left"
                   >
                     <div className="flex items-center gap-2.5">
-                      <Shield className="h-3.5 w-3.5 text-[#F59E0B]" />
+                      <Shield className="h-3.5 w-3.5 text-accent" />
                       <span>Switch to {currentUser.role === "student" ? "Co-Admin View" : "Student View"}</span>
                     </div>
                   </button>
@@ -193,7 +193,7 @@ export function AppHeader() {
           {/* Mobile Menu Trigger */}
           <button
             onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-            className="md:hidden p-2 rounded-xl bg-[#111319] border border-white/10 text-slate-400 hover:text-white"
+            className="md:hidden p-2 rounded-xl bg-surface border border-white/10 text-slate-400 hover:text-white"
           >
             {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -202,7 +202,7 @@ export function AppHeader() {
 
       {/* Mobile Nav Drawer */}
       {isMobileMenuOpen && (
-        <div className="md:hidden px-4 pt-2 pb-4 border-t border-white/[0.08] bg-[#090A0E] space-y-1">
+        <div className="md:hidden px-4 pt-2 pb-4 border-t border-white/[0.08] bg-canvas space-y-1">
           {navLinks.map((link) => (
             <NextLink
               key={link.href}
@@ -220,7 +220,7 @@ export function AppHeader() {
             }}
             className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-mono text-slate-300 hover:text-white hover:bg-white/5 text-left"
           >
-            <Search className="h-3.5 w-3.5 text-[#F59E0B]" />
+            <Search className="h-3.5 w-3.5 text-accent" />
             <span>Search or command (Cmd+K)</span>
           </button>
         </div>

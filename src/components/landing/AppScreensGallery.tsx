@@ -43,7 +43,7 @@ const SCREENS: ScreenItem[] = [
     tabLabel: "Cockpit",
     title: "Live Developer Cockpit",
     badge: "Personal Telemetry",
-    badgeColor: "bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/20",
+    badgeColor: "bg-accent/10 text-accent border-accent/20",
     route: "/dashboard",
     icon: Activity,
     description: "Real-time activity observation, weekly AI developer recaps, streak consistency tracker, and provider-native UTC/IST time stamps.",
@@ -164,14 +164,14 @@ export function AppScreensGallery() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#111319] border border-white/10 text-xs font-mono text-[#8D94A5] mb-4">
-            <Layers className="h-3.5 w-3.5 text-[#F59E0B]" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface border border-white/10 text-xs font-mono text-muted mb-4">
+            <Layers className="h-3.5 w-3.5 text-accent" />
             <span>Interactive Screen Showcase</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#F5F6F8] tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-ink tracking-tight">
             Designed for Trust and Clarity
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-[#8D94A5]">
+          <p className="mt-3 text-sm sm:text-base text-muted">
             Explore every module and state of the platform. Clean interfaces crafted with Tailwind, Framer Motion, and accessibility first.
           </p>
 
@@ -186,16 +186,16 @@ export function AppScreensGallery() {
                   onClick={() => setActiveTab(screen.id)}
                   className={`relative flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono transition-all ${
                     isSelected
-                      ? "text-[#F5F6F8] bg-[#181B23] border border-[#F59E0B]/40"
+                      ? "text-ink bg-surface-raised border border-accent/40"
                       : "text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] border border-transparent"
                   }`}
                 >
-                  <Icon className={`h-3.5 w-3.5 ${isSelected ? "text-[#F59E0B]" : "text-slate-500"}`} />
+                  <Icon className={`h-3.5 w-3.5 ${isSelected ? "text-accent" : "text-slate-500"}`} />
                   <span className="font-medium">{screen.tabLabel}</span>
                   {isSelected && (
                     <motion.div
                       layoutId="active-screen-pill"
-                      className="absolute inset-0 rounded-xl bg-[#F59E0B]/10 border border-[#F59E0B]/40 -z-10"
+                      className="absolute inset-0 rounded-xl bg-accent/10 border border-accent/40 -z-10"
                       transition={{ type: "spring", stiffness: 380, damping: 28 }}
                     />
                   )}
@@ -213,7 +213,7 @@ export function AppScreensGallery() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
-            className="rounded-2xl border border-white/10 bg-[#111319] p-6 sm:p-8 shadow-2xl overflow-hidden"
+            className="rounded-2xl border border-white/10 bg-surface p-6 sm:p-8 shadow-2xl overflow-hidden"
           >
             {/* Top Bar with Screen Meta & View Toggles */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between pb-6 mb-6 border-b border-white/[0.08] gap-4">
@@ -222,11 +222,11 @@ export function AppScreensGallery() {
                   <span className={`text-[10px] font-mono px-2.5 py-0.5 rounded-full border ${currentScreen.badgeColor}`}>
                     {currentScreen.badge}
                   </span>
-                  <h3 className="text-xl sm:text-2xl font-bold text-[#F5F6F8] tracking-tight">
+                  <h3 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
                     {currentScreen.title}
                   </h3>
                 </div>
-                <p className="mt-1.5 text-xs sm:text-sm text-[#8D94A5] max-w-2xl leading-relaxed">
+                <p className="mt-1.5 text-xs sm:text-sm text-muted max-w-2xl leading-relaxed">
                   {currentScreen.description}
                 </p>
               </div>
@@ -234,7 +234,7 @@ export function AppScreensGallery() {
               {/* Multi-view Toggles (if screen has multiple captures) */}
               <div className="flex flex-wrap items-center gap-2">
                 {currentScreen.views.length > 1 && (
-                  <div className="inline-flex p-1 rounded-xl bg-[#181B23] border border-white/10">
+                  <div className="inline-flex p-1 rounded-xl bg-surface-raised border border-white/10">
                     {currentScreen.views.map((v, i) => {
                       const isActive = i === activeViewIdx;
                       return (
@@ -243,11 +243,11 @@ export function AppScreensGallery() {
                           onClick={() => handleSelectSubView(i)}
                           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
                             isActive
-                              ? "bg-[#111319] text-[#F5F6F8] font-semibold border border-white/10 shadow-sm"
+                              ? "bg-surface text-ink font-semibold border border-white/10 shadow-sm"
                               : "text-slate-400 hover:text-slate-200"
                           }`}
                         >
-                          <Eye className="h-3 w-3 text-[#F59E0B]" />
+                          <Eye className="h-3 w-3 text-accent" />
                           <span>{v.label}</span>
                         </button>
                       );
@@ -257,7 +257,7 @@ export function AppScreensGallery() {
 
                 <Link
                   href={currentScreen.route}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] text-[#090A0E] font-mono text-xs font-bold transition-all hover:scale-105 active:scale-95 shrink-0"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-mono text-xs font-bold transition-all hover:scale-105 active:scale-95 shrink-0"
                 >
                   <span>Open Page</span>
                   <ExternalLink className="h-3.5 w-3.5" />
@@ -266,31 +266,31 @@ export function AppScreensGallery() {
             </div>
 
             {/* Browser Preview Frame */}
-            <div className="relative rounded-xl border border-white/10 bg-[#090A0E] overflow-hidden shadow-2xl">
+            <div className="relative rounded-xl border border-white/10 bg-canvas overflow-hidden shadow-2xl">
               {/* Fake Browser Toolbar */}
-              <div className="px-4 py-2.5 bg-[#181B23] border-b border-white/[0.08] flex items-center justify-between">
+              <div className="px-4 py-2.5 bg-surface-raised border-b border-white/[0.08] flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
                   <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
                 </div>
-                <div className="px-4 py-0.5 rounded-md bg-[#111319] border border-white/10 text-[11px] font-mono text-slate-300 flex items-center gap-1.5 max-w-xs w-full justify-center">
-                  <span className="text-[#8D94A5]">Preview</span>
-                  <span className="text-[#8D94A5]">{currentScreen.route}</span>
+                <div className="px-4 py-0.5 rounded-md bg-surface border border-white/10 text-[11px] font-mono text-slate-300 flex items-center gap-1.5 max-w-xs w-full justify-center">
+                  <span className="text-muted">Preview</span>
+                  <span className="text-muted">{currentScreen.route}</span>
                 </div>
                 <div className="flex items-center gap-2 text-[10px] font-mono text-slate-500">
                   <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-slate-300">
                     {currentView.tag}
                   </span>
                   <span className="hidden sm:inline-flex items-center gap-1">
-                    <Sparkles className="h-3 w-3 text-[#F59E0B]" />
+                    <Sparkles className="h-3 w-3 text-accent" />
                     <span>2560x1385 HD</span>
                   </span>
                 </div>
               </div>
 
               {/* High-Resolution Screenshot Image with AnimatePresence */}
-              <div className="relative aspect-[16/9] w-full bg-[#090A0E]">
+              <div className="relative aspect-[16/9] w-full bg-canvas">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={currentView.image}
@@ -318,7 +318,7 @@ export function AppScreensGallery() {
               {currentScreen.highlightPoints.map((point, index) => (
                 <div
                   key={index}
-                  className="flex items-start gap-2 p-2.5 rounded-lg bg-[#181B23]/70 border border-white/[0.06] text-xs font-mono text-[#8D94A5]"
+                  className="flex items-start gap-2 p-2.5 rounded-lg bg-surface-raised/70 border border-white/[0.06] text-xs font-mono text-muted"
                 >
                   <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0 mt-0.5" />
                   <span>{point}</span>

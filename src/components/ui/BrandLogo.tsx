@@ -69,7 +69,7 @@ export function BrandLogo({
   const markContent = (
     <div className={`inline-flex items-center gap-2.5 group ${className}`}>
       <div
-        className="relative rounded-lg overflow-hidden border border-white/10 flex items-center justify-center bg-[#090A0E] group-hover:border-[#F59E0B]/40 transition-all duration-300 group-hover:shadow-[0_0_16px_rgba(245,158,11,0.2)]"
+        className="relative rounded-lg overflow-hidden border border-white/10 flex items-center justify-center bg-canvas group-hover:border-accent/40 transition-all duration-300 group-hover:shadow-[0_0_16px_rgba(245,158,11,0.2)]"
         style={{ width: px, height: px }}
       >
         <Image
@@ -83,8 +83,8 @@ export function BrandLogo({
       </div>
 
       {showText && (
-        <span className="font-bold text-[#F5F6F8] text-sm tracking-tight font-sans">
-          TWM <span className="text-[#F59E0B] font-mono text-xs">3.0</span>
+        <span className="font-bold text-ink text-sm tracking-tight font-sans">
+          TWM <span className="text-accent font-mono text-xs">3.0</span>
         </span>
       )}
 

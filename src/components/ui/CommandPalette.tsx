@@ -138,18 +138,18 @@ export function CommandPalette() {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: -10 }}
         transition={{ duration: 0.15 }}
-        className="w-full max-w-xl rounded-2xl bg-[#111319] border border-white/10 shadow-2xl overflow-hidden flex flex-col"
+        className="w-full max-w-xl rounded-2xl bg-surface border border-white/10 shadow-2xl overflow-hidden flex flex-col"
       >
         {/* Search Input Bar */}
-        <div className="flex items-center px-4 py-3.5 border-b border-white/[0.08] gap-3 bg-[#181B23]">
-          <Search className="h-4 w-4 text-[#F59E0B] shrink-0" />
+        <div className="flex items-center px-4 py-3.5 border-b border-white/[0.08] gap-3 bg-surface-raised">
+          <Search className="h-4 w-4 text-accent shrink-0" />
           <input
             ref={inputRef}
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Type a command, page, or classmate name..."
-            className="flex-1 bg-transparent text-sm text-[#F5F6F8] placeholder:text-slate-500 focus:outline-none font-sans"
+            className="flex-1 bg-transparent text-sm text-ink placeholder:text-slate-500 focus:outline-none font-sans"
           />
           <div className="flex items-center gap-1 font-mono text-[10px] text-slate-400 px-2 py-0.5 rounded bg-white/5 border border-white/10">
             <span>ESC</span>
@@ -161,7 +161,7 @@ export function CommandPalette() {
           {/* Navigation group */}
           {filteredNav.length > 0 && (
             <div>
-              <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-[#8D94A5]">
+              <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-muted">
                 Navigation
               </div>
               <div className="space-y-0.5">
@@ -171,13 +171,13 @@ export function CommandPalette() {
                     <button
                       key={item.id}
                       onClick={() => navigateTo(item.path)}
-                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-sans text-[#F5F6F8] hover:bg-white/[0.06] hover:text-[#F59E0B] transition-colors group text-left"
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-sans text-ink hover:bg-white/[0.06] hover:text-accent transition-colors group text-left"
                     >
                       <div className="flex items-center gap-2.5">
-                        <Icon className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#F59E0B] transition-colors" />
+                        <Icon className="h-3.5 w-3.5 text-slate-400 group-hover:text-accent transition-colors" />
                         <span>{item.label}</span>
                       </div>
-                      <ArrowRight className="h-3 w-3 text-slate-600 group-hover:text-[#F59E0B] opacity-0 group-hover:opacity-100 transition-all -translate-x-1 group-hover:translate-x-0" />
+                      <ArrowRight className="h-3 w-3 text-slate-600 group-hover:text-accent opacity-0 group-hover:opacity-100 transition-all -translate-x-1 group-hover:translate-x-0" />
                     </button>
                   );
                 })}
@@ -188,7 +188,7 @@ export function CommandPalette() {
           {/* Actions group */}
           {filteredActions.length > 0 && (
             <div>
-              <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-[#8D94A5]">
+              <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-muted">
                 Platform Actions
               </div>
               <div className="space-y-0.5">
@@ -198,10 +198,10 @@ export function CommandPalette() {
                     <button
                       key={item.id}
                       onClick={item.action}
-                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-sans text-[#F5F6F8] hover:bg-white/[0.06] hover:text-[#F59E0B] transition-colors group text-left"
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-sans text-ink hover:bg-white/[0.06] hover:text-accent transition-colors group text-left"
                     >
                       <div className="flex items-center gap-2.5">
-                        <Icon className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#F59E0B] transition-colors" />
+                        <Icon className="h-3.5 w-3.5 text-slate-400 group-hover:text-accent transition-colors" />
                         <span>{item.label}</span>
                       </div>
                       <span className="text-[10px] font-mono text-slate-500 group-hover:text-slate-300">Run</span>
@@ -215,7 +215,7 @@ export function CommandPalette() {
           {/* Students Directory quick match */}
           {q.length > 0 && filteredStudents.length > 0 && (
             <div>
-              <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-[#8D94A5]">
+              <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-muted">
                 Classmates
               </div>
               <div className="space-y-0.5">
@@ -223,16 +223,16 @@ export function CommandPalette() {
                   <button
                     key={s.rollNo}
                     onClick={() => navigateTo(`/search?q=${encodeURIComponent(s.name)}`)}
-                    className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-sans text-[#F5F6F8] hover:bg-white/[0.06] hover:text-[#F59E0B] transition-colors group text-left"
+                    className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-sans text-ink hover:bg-white/[0.06] hover:text-accent transition-colors group text-left"
                   >
                     <div className="flex items-center gap-2.5">
-                      <div className="w-5 h-5 rounded-full bg-[#181B23] border border-white/10 flex items-center justify-center font-mono text-[9px] text-[#F59E0B] font-bold">
+                      <div className="w-5 h-5 rounded-full bg-surface-raised border border-white/10 flex items-center justify-center font-mono text-[9px] text-accent font-bold">
                         {s.avatarInitial}
                       </div>
                       <span>{s.name}</span>
                       <span className="font-mono text-[10px] text-slate-500">@{s.handle}</span>
                     </div>
-                    <span className="font-mono text-[10px] text-[#8D94A5]">{s.rollNo}</span>
+                    <span className="font-mono text-[10px] text-muted">{s.rollNo}</span>
                   </button>
                 ))}
               </div>
@@ -247,9 +247,9 @@ export function CommandPalette() {
         </div>
 
         {/* Footer info strip */}
-        <div className="px-4 py-2 border-t border-white/[0.08] bg-[#090A0E] flex items-center justify-between text-[11px] font-mono text-[#8D94A5]">
+        <div className="px-4 py-2 border-t border-white/[0.08] bg-canvas flex items-center justify-between text-[11px] font-mono text-muted">
           <div className="flex items-center gap-2">
-            <Command className="h-3 w-3 text-[#F59E0B]" />
+            <Command className="h-3 w-3 text-accent" />
             <span>TWM 3.0 Telemetry Command Palette</span>
           </div>
           <span>Active: {currentUser.name} ({currentUser.role})</span>

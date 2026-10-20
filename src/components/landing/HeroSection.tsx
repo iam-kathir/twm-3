@@ -29,12 +29,12 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#111319] border border-white/[0.08] text-xs font-mono text-[#C8CDD6] mb-8"
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-surface border border-white/[0.08] text-xs font-mono text-ink-secondary mb-8"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#F59E0B]" />
+          <span className="w-1.5 h-1.5 rounded-full bg-accent" />
           <span>Classroom Developer Telemetry</span>
           <span className="text-white/20">•</span>
-          <span className="text-[#8D94A5]">GitHub, LeetCode &amp; HackerRank</span>
+          <span className="text-muted">GitHub, LeetCode &amp; HackerRank</span>
         </motion.div>
 
         {/* Solid Authoritative Headline */}
@@ -42,10 +42,10 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-          className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-[#F5F6F8] tracking-tight leading-[1.08]"
+          className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-ink tracking-tight leading-[1.08]"
         >
           Track your code. <br />
-          <span className="text-[#8D94A5]">Win your consistency.</span>
+          <span className="text-muted">Win your consistency.</span>
         </motion.h1>
 
         {/* Informative Subtitle */}
@@ -53,7 +53,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-          className="mt-6 text-base sm:text-lg text-[#8D94A5] max-w-xl mx-auto font-normal leading-relaxed"
+          className="mt-6 text-base sm:text-lg text-muted max-w-xl mx-auto font-normal leading-relaxed"
         >
           The peer progress platform for engineering classes. Connect your developer profiles, track real active days, and compare verified progress without toxic gamification.
         </motion.p>
@@ -68,9 +68,9 @@ export function HeroSection() {
         >
           <form
             onSubmit={handleSubmit}
-            className="flex items-center gap-2 p-1.5 rounded-xl border border-white/10 bg-[#111319] shadow-xl focus-within:border-[#F59E0B] transition-all"
+            className="flex items-center gap-2 p-1.5 rounded-xl border border-white/10 bg-surface shadow-xl focus-within:border-accent transition-all"
           >
-            <div className="pl-3.5 text-[#8D94A5]">
+            <div className="pl-3.5 text-muted">
               <KeyRound className="h-4 w-4" />
             </div>
             <input
@@ -82,11 +82,11 @@ export function HeroSection() {
               onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
               placeholder="CLASS CODE (e.g. CS2026)"
               maxLength={10}
-              className="w-full bg-transparent border-none text-xs sm:text-sm font-mono text-white placeholder:text-[#4B5262] focus:outline-none uppercase tracking-wider"
+              className="w-full bg-transparent border-none text-xs sm:text-sm font-mono text-white placeholder:text-muted-dark focus:outline-none uppercase tracking-wider"
             />
             <button
               type="submit"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#F59E0B] hover:bg-[#D97706] text-[#090A0E] font-mono text-xs font-bold transition-all hover:scale-105 active:scale-95 shrink-0"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover text-canvas font-mono text-xs font-bold transition-all hover:scale-105 active:scale-95 shrink-0"
             >
               Join
               <ArrowRight className="h-3 w-3" />
@@ -99,23 +99,23 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-          className="mt-14 relative rounded-2xl border border-white/[0.08] bg-[#111319] p-2 sm:p-2.5 shadow-2xl overflow-hidden hover:border-white/[0.14] transition-colors"
+          className="mt-14 relative rounded-2xl border border-white/[0.08] bg-surface p-2 sm:p-2.5 shadow-2xl overflow-hidden hover:border-white/[0.14] transition-colors"
         >
           {/* Browser Bar */}
-          <div className="px-4 py-2 bg-[#181B23] rounded-t-xl border-b border-white/[0.06] flex items-center justify-between">
+          <div className="px-4 py-2 bg-surface-raised rounded-t-xl border-b border-white/[0.06] flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-[#2E3440]" />
               <span className="w-2.5 h-2.5 rounded-full bg-[#2E3440]" />
               <span className="w-2.5 h-2.5 rounded-full bg-[#2E3440]" />
             </div>
-            <div className="px-4 py-0.5 rounded-md bg-[#111319] border border-white/[0.06] text-[10px] font-mono text-[#8D94A5]">
+            <div className="px-4 py-0.5 rounded-md bg-surface border border-white/[0.06] text-[10px] font-mono text-muted">
               Dashboard preview
             </div>
-            <span className="text-[10px] font-mono text-[#8D94A5]">Illustrative data</span>
+            <span className="text-[10px] font-mono text-muted">Illustrative data</span>
           </div>
 
           {/* Screenshot Image Container */}
-          <div className="relative aspect-[16/9] w-full rounded-b-xl overflow-hidden bg-[#090A0E]">
+          <div className="relative aspect-[16/9] w-full rounded-b-xl overflow-hidden bg-canvas">
             <Image
               src="/twm_dashboard_view.png"
               alt="TWM Live Cockpit Dashboard"

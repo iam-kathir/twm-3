@@ -44,7 +44,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`dark ${sora.variable} ${jetbrainsMono.variable}`}>
-      <body className="bg-[#090A0E] text-[#F5F6F8] min-h-screen antialiased selection:bg-[#F59E0B] selection:text-[#090A0E]">
+      <body className="bg-canvas text-ink min-h-screen antialiased selection:bg-accent selection:text-canvas">
         <MotionProvider>
           <AppProvider>
             {children}

@@ -158,32 +158,32 @@ export default function LeaderboardPage() {
   const entries = platform === "github" ? githubEntries : leetcodeEntries;
 
   return (
-    <div className="min-h-screen bg-[#090A0E] text-[#F5F6F8] flex flex-col selection:bg-[#F59E0B] selection:text-[#090A0E]">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col selection:bg-accent selection:text-canvas">
       <AppHeader />
 
       {/* Main Container */}
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         {/* Title & 70% Threshold Banner (§3.3) */}
-        <div className="rounded-2xl border border-white/[0.08] bg-[#111319] p-6 space-y-4">
+        <div className="rounded-2xl border border-white/[0.08] bg-surface p-6 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <Trophy className="h-5 w-5 text-[#F59E0B]" />
-                <h1 className="text-xl sm:text-2xl font-bold text-[#F5F6F8] tracking-tight">
+                <Trophy className="h-5 w-5 text-accent" />
+                <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
                   {isRepresentative ? "CSE 2026 Class Leaderboard" : "Participating Members Leaderboard"}
                 </h1>
               </div>
-              <p className="text-xs text-[#8D94A5] font-mono">
+              <p className="text-xs text-muted font-mono">
                 Class: B.Tech CSE 2026 • Period: Week 42 (Mon 00:00 to Sun 23:59 IST)
               </p>
             </div>
 
             {/* 70% Participation Ratio Badge */}
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-[#181B23] border border-white/[0.06] self-start sm:self-auto font-mono text-xs">
-              <Users className="h-4 w-4 text-[#F59E0B]" />
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-surface-raised border border-white/[0.06] self-start sm:self-auto font-mono text-xs">
+              <Users className="h-4 w-4 text-accent" />
               <div>
-                <span className="text-[#636A7E] block text-[10px]">PARTICIPATION RATIO</span>
-                <span className="text-[#F5F6F8] font-bold">{participatingCount} / {totalRoster} students ({participationPercentage}%)</span>
+                <span className="text-muted-soft block text-[10px]">PARTICIPATION RATIO</span>
+                <span className="text-ink font-bold">{participatingCount} / {totalRoster} students ({participationPercentage}%)</span>
               </div>
               <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                 Representative (&ge;70%)
@@ -196,14 +196,14 @@ export default function LeaderboardPage() {
             <div
               role="group"
               aria-label="Leaderboard platform"
-              className="inline-flex p-1 rounded-xl bg-[#090A0E] border border-white/10 text-xs font-mono"
+              className="inline-flex p-1 rounded-xl bg-canvas border border-white/10 text-xs font-mono"
             >
               <button
                 type="button"
                 aria-pressed={platform === "github"}
                 onClick={() => setPlatform("github")}
                 className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg transition-colors ${
-                  platform === "github" ? "bg-[#F59E0B] text-[#090A0E] font-bold" : "text-[#8D94A5] hover:text-white"
+                  platform === "github" ? "bg-accent text-canvas font-bold" : "text-muted hover:text-white"
                 }`}
               >
                 <Github className="h-3.5 w-3.5" />
@@ -214,7 +214,7 @@ export default function LeaderboardPage() {
                 aria-pressed={platform === "leetcode"}
                 onClick={() => setPlatform("leetcode")}
                 className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg transition-colors ${
-                  platform === "leetcode" ? "bg-[#F59E0B] text-[#090A0E] font-bold" : "text-[#8D94A5] hover:text-white"
+                  platform === "leetcode" ? "bg-accent text-canvas font-bold" : "text-muted hover:text-white"
                 }`}
               >
                 <Code2 className="h-3.5 w-3.5" />
@@ -236,9 +236,9 @@ export default function LeaderboardPage() {
                 type="button"
                 aria-expanded={showCalculationInfo}
                 onClick={() => setShowCalculationInfo(!showCalculationInfo)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/10 bg-[#181B23] text-xs font-mono text-[#C8CDD6] hover:bg-[#111319] transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/10 bg-surface-raised text-xs font-mono text-ink-secondary hover:bg-surface transition-colors"
               >
-                <Info className="h-3.5 w-3.5 text-[#F59E0B]" />
+                <Info className="h-3.5 w-3.5 text-accent" />
                 <span>Rules</span>
               </button>
             </div>
@@ -251,17 +251,17 @@ export default function LeaderboardPage() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="p-5 rounded-2xl border border-amber-500/20 bg-[#181B23] text-xs font-mono space-y-2 text-[#C8CDD6]"
+            className="p-5 rounded-2xl border border-amber-500/20 bg-surface-raised text-xs font-mono space-y-2 text-ink-secondary"
           >
             <div className="flex items-center justify-between text-white font-bold">
-              <span className="flex items-center gap-2 text-[#F59E0B]">
+              <span className="flex items-center gap-2 text-accent">
                 <Info className="h-4 w-4" />
                 Leaderboard Calculation Rules
               </span>
               <button
                 type="button"
                 onClick={() => setShowCalculationInfo(false)}
-                className="text-[#8D94A5] hover:text-white text-xs"
+                className="text-muted hover:text-white text-xs"
               >
                 Close &times;
               </button>
@@ -279,10 +279,10 @@ export default function LeaderboardPage() {
         )}
 
         {/* Deterministic Leaderboard Table */}
-        <div className="rounded-2xl border border-white/[0.08] bg-[#111319] overflow-hidden">
+        <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left font-mono text-xs">
-              <thead className="bg-[#181B23] border-b border-white/[0.08] text-[#8D94A5] uppercase tracking-wider text-[11px]">
+              <thead className="bg-surface-raised border-b border-white/[0.08] text-muted uppercase tracking-wider text-[11px]">
                 <tr>
                   <th scope="col" className="py-3.5 px-6">Rank</th>
                   <th scope="col" className="py-3.5 px-6">Participant</th>
@@ -299,7 +299,7 @@ export default function LeaderboardPage() {
                   <tr
                     key={idx}
                     className={`transition-colors ${
-                      item.isCurrentUser ? "bg-[#181B23] border-l-2 border-[#F59E0B]" : "hover:bg-white/[0.02]"
+                      item.isCurrentUser ? "bg-surface-raised border-l-2 border-accent" : "hover:bg-white/[0.02]"
                     }`}
                   >
                     {/* Rank */}
@@ -314,7 +314,7 @@ export default function LeaderboardPage() {
                             2
                           </span>
                         ) : (
-                          <span className="text-[#8D94A5] pl-1.5">{item.rank}</span>
+                          <span className="text-muted pl-1.5">{item.rank}</span>
                         )}
                       </div>
                     </td>
@@ -322,25 +322,25 @@ export default function LeaderboardPage() {
                     {/* Participant */}
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-2.5">
-                        <div className="h-7 w-7 rounded-full bg-[#181B23] border border-white/10 flex items-center justify-center text-[10px] font-bold text-white">
+                        <div className="h-7 w-7 rounded-full bg-surface-raised border border-white/10 flex items-center justify-center text-[10px] font-bold text-white">
                           {item.name.substring(0, 2).toUpperCase()}
                         </div>
                         <div>
-                          <div className="font-sans font-semibold text-[#F5F6F8] flex items-center gap-1.5">
+                          <div className="font-sans font-semibold text-ink flex items-center gap-1.5">
                             <span>{item.name}</span>
                             {item.isCurrentUser && (
-                              <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#F59E0B] text-[#090A0E] font-bold">
+                              <span className="text-[9px] px-1.5 py-0.2 rounded bg-accent text-canvas font-bold">
                                 YOU
                               </span>
                             )}
                           </div>
-                          <span className="text-[#636A7E] text-[10px]">{item.handle}</span>
+                          <span className="text-muted-soft text-[10px]">{item.handle}</span>
                         </div>
                       </div>
                     </td>
 
                     {/* Metric Value */}
-                    <td className="py-4 px-6 font-bold text-[#F5F6F8] text-sm">
+                    <td className="py-4 px-6 font-bold text-ink text-sm">
                       {item.value}
                     </td>
 
@@ -352,7 +352,7 @@ export default function LeaderboardPage() {
                     </td>
 
                     {/* Last Freshness */}
-                    <td className="py-4 px-6 text-[#8D94A5]">
+                    <td className="py-4 px-6 text-muted">
                       {item.freshness}
                     </td>
 
@@ -389,10 +389,10 @@ export default function LeaderboardPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.08] bg-[#090A0E] py-6 text-xs text-[#636A7E] font-mono">
+      <footer className="border-t border-white/[0.08] bg-canvas py-6 text-xs text-muted-soft font-mono">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>TWM 3.0 Platform • Deterministic Ranks &amp; Roster Denominator</div>
-          <div className="text-[#8D94A5]">
+          <div className="text-muted">
             Rule §9.6: Competition Ranking (1, 2, 2, 4 ties)
           </div>
         </div>

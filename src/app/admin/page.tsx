@@ -22,7 +22,7 @@ import {
   ArrowUpRight,
   Info
 } from "lucide-react";
-import { BrandLogo } from "@/components/ui/BrandLogo";
+import { AppHeader } from "@/components/ui/AppHeader";
 
 
 interface AuditLogEntry {
@@ -178,67 +178,17 @@ export default function AdminHubPage() {
 
   return (
     <div className="min-h-screen bg-[#090A0E] text-[#F5F6F8] flex flex-col font-sans selection:bg-[#F59E0B] selection:text-[#090A0E]">
-      {/* Navigation */}
-      <header className="sticky top-0 z-40 bg-[#090A0E]/90 backdrop-blur-md border-b border-white/[0.08] px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-6">
-            <BrandLogo showLivePulse={true} />
-
-            <nav className="hidden md:flex items-center gap-1.5 text-xs font-mono">
-              <Link
-                href="/dashboard"
-                className="px-3 py-1.5 rounded-lg text-[#8D94A5] hover:text-white hover:bg-white/5 transition-colors"
-              >
-                Dashboard
-              </Link>
-              <Link
-                href="/leaderboard"
-                className="px-3 py-1.5 rounded-lg text-[#8D94A5] hover:text-white hover:bg-white/5 transition-colors"
-              >
-                Leaderboards
-              </Link>
-              <Link
-                href="/search"
-                className="px-3 py-1.5 rounded-lg text-[#8D94A5] hover:text-white hover:bg-white/5 transition-colors"
-              >
-                Discover
-              </Link>
-              <Link
-                href="/admin"
-                className="px-3 py-1.5 rounded-lg bg-[#181B23] text-white font-semibold border border-white/10"
-              >
-                Admin Hub
-              </Link>
-              <Link
-                href="/onboarding"
-                className="px-3 py-1.5 rounded-lg text-[#8D94A5] hover:text-white hover:bg-white/5 transition-colors"
-              >
-                Preferences
-              </Link>
-            </nav>
-          </div>
-
-          <div className="flex items-center space-x-3">
-            <div className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded bg-[#F59E0B]/10 border border-[#F59E0B]/20 text-[#F59E0B] text-xs font-mono">
-              <Shield className="w-3.5 h-3.5" />
-              <span>CO-ADMIN MODE</span>
-            </div>
-            <div className="w-8 h-8 rounded-full bg-[#181B23] border border-amber-500/30 flex items-center justify-center text-xs font-semibold text-[#F59E0B]">
-              DR
-            </div>
-          </div>
-        </div>
-      </header>
+      <AppHeader />
 
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Header Title with Sync Button */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-[#F5F6F8] flex items-center space-x-2.5">
+            <h1 className="text-3xl font-bold tracking-tight text-ink flex items-center space-x-2.5">
               <span>Class Administrator &amp; Audit Hub</span>
             </h1>
-            <p className="text-sm text-[#8D94A5] mt-1">
+            <p className="text-sm text-muted mt-1">
               Deterministic roster governance, sync connector monitors, and tamper-resistant dispute logging.
             </p>
           </div>
@@ -247,9 +197,9 @@ export default function AdminHubPage() {
             <button
               onClick={handleTriggerGlobalSync}
               disabled={isSyncing}
-              className="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-[#111319] hover:bg-[#181B23] border border-white/10 text-xs font-mono text-[#C8CDD6] transition-colors disabled:opacity-50"
+              className="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-xs font-mono text-ink-secondary transition-colors disabled:opacity-50"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? "animate-spin text-[#F59E0B]" : "text-[#8D94A5]"}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? "animate-spin text-accent" : "text-muted"}`} />
               <span>{isSyncing ? "Auditing Connectors..." : "Audit Telemetry Connectors"}</span>
             </button>
           </div>
@@ -261,8 +211,8 @@ export default function AdminHubPage() {
             onClick={() => setActiveTab("overview")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors ${
               activeTab === "overview"
-                ? "bg-[#F59E0B] text-[#090A0E] font-bold"
-                : "text-[#8D94A5] hover:text-white"
+                ? "bg-accent text-canvas font-bold"
+                : "text-muted hover:text-white"
             }`}
           >
             System Overview &amp; Roster Quorum
@@ -271,8 +221,8 @@ export default function AdminHubPage() {
             onClick={() => setActiveTab("disputes")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors flex items-center space-x-1.5 ${
               activeTab === "disputes"
-                ? "bg-[#F59E0B] text-[#090A0E] font-bold"
-                : "text-[#8D94A5] hover:text-white"
+                ? "bg-accent text-canvas font-bold"
+                : "text-muted hover:text-white"
             }`}
           >
             <span>Telemetry Disputes</span>
@@ -286,8 +236,8 @@ export default function AdminHubPage() {
             onClick={() => setActiveTab("logs")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors ${
               activeTab === "logs"
-                ? "bg-[#F59E0B] text-[#090A0E] font-bold"
-                : "text-[#8D94A5] hover:text-white"
+                ? "bg-accent text-canvas font-bold"
+                : "text-muted hover:text-white"
             }`}
           >
             Immutable Audit Trail
@@ -298,16 +248,16 @@ export default function AdminHubPage() {
         {activeTab === "overview" && (
           <div className="space-y-6">
             {/* Roster & Threshold Progress Card */}
-            <div className="bg-[#111319] border border-white/[0.08] rounded-2xl p-6 space-y-5">
+            <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 space-y-5">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center space-x-2">
-                    <Users className="w-5 h-5 text-[#F59E0B]" />
-                    <h2 className="text-lg font-bold text-[#F5F6F8]">
+                    <Users className="w-5 h-5 text-accent" />
+                    <h2 className="text-lg font-bold text-ink">
                       Roster Quorum &amp; Participation Denominator
                     </h2>
                   </div>
-                  <p className="text-xs text-[#8D94A5] mt-1">
+                  <p className="text-xs text-muted mt-1">
                     Rule §3.3 Invariant: Class leaderboards require ≥70% verified cohort opt-in to represent class standing.
                   </p>
                 </div>
@@ -321,7 +271,7 @@ export default function AdminHubPage() {
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>{meetsQuorum ? "Quorum Satisfied (≥70%)" : "Quorum Incomplete"}</span>
                   </div>
-                  <button className="px-3 py-1.5 rounded-lg bg-[#181B23] hover:bg-white/10 text-xs font-mono text-[#C8CDD6] border border-white/10 flex items-center space-x-1.5">
+                  <button className="px-3 py-1.5 rounded-lg bg-surface-raised hover:bg-white/10 text-xs font-mono text-ink-secondary border border-white/10 flex items-center space-x-1.5">
                     <FileSpreadsheet className="w-3.5 h-3.5" />
                     <span>Update Roster (CSV)</span>
                   </button>
@@ -331,14 +281,14 @@ export default function AdminHubPage() {
               {/* Progress Bar */}
               <div className="space-y-2">
                 <div className="flex justify-between text-xs font-mono">
-                  <span className="text-[#C8CDD6]">
-                    Verified Students: <strong className="text-[#F59E0B]">{verifiedCount}</strong> / {totalEnrolled} total
+                  <span className="text-ink-secondary">
+                    Verified Students: <strong className="text-accent">{verifiedCount}</strong> / {totalEnrolled} total
                   </span>
-                  <span className="text-[#8D94A5]">
+                  <span className="text-muted">
                     Threshold: <strong className="text-white">70.0%</strong> (Current: <strong className="text-emerald-400">{quorumPercentage}%</strong>)
                   </span>
                 </div>
-                <div className="w-full h-3 bg-[#090A0E] rounded-full overflow-hidden p-0.5 border border-white/[0.08]">
+                <div className="w-full h-3 bg-canvas rounded-full overflow-hidden p-0.5 border border-white/[0.08]">
                   <div
                     className="h-full bg-emerald-400 rounded-full transition-all duration-500"
                     style={{ width: `${quorumPercentage}%` }}
@@ -347,20 +297,20 @@ export default function AdminHubPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-                <div className="p-3.5 rounded-xl bg-[#181B23] border border-white/[0.06] text-xs space-y-1">
-                  <span className="text-[#636A7E] font-mono text-[11px] block">TOTAL ENROLLED</span>
-                  <span className="text-lg font-bold text-[#F5F6F8] font-mono">60 Students</span>
-                  <p className="text-[11px] text-[#8D94A5]">Official registry for CSE 2026</p>
+                <div className="p-3.5 rounded-xl bg-surface-raised border border-white/[0.06] text-xs space-y-1">
+                  <span className="text-muted-soft font-mono text-[11px] block">TOTAL ENROLLED</span>
+                  <span className="text-lg font-bold text-ink font-mono">60 Students</span>
+                  <p className="text-[11px] text-muted">Official registry for CSE 2026</p>
                 </div>
-                <div className="p-3.5 rounded-xl bg-[#181B23] border border-white/[0.06] text-xs space-y-1">
-                  <span className="text-[#636A7E] font-mono text-[11px] block">OPTED-IN &amp; VERIFIED</span>
-                  <span className="text-lg font-bold text-[#F59E0B] font-mono">42 Students</span>
-                  <p className="text-[11px] text-[#8D94A5]">Completed OAuth &amp; HMAC proof</p>
+                <div className="p-3.5 rounded-xl bg-surface-raised border border-white/[0.06] text-xs space-y-1">
+                  <span className="text-muted-soft font-mono text-[11px] block">OPTED-IN &amp; VERIFIED</span>
+                  <span className="text-lg font-bold text-accent font-mono">42 Students</span>
+                  <p className="text-[11px] text-muted">Completed OAuth &amp; HMAC proof</p>
                 </div>
-                <div className="p-3.5 rounded-xl bg-[#181B23] border border-white/[0.06] text-xs space-y-1">
-                  <span className="text-[#636A7E] font-mono text-[11px] block">UNCLAIMED SEATS</span>
-                  <span className="text-lg font-bold text-[#8D94A5] font-mono">18 Pending</span>
-                  <p className="text-[11px] text-[#8D94A5]">Invite tokens active &amp; unexpired</p>
+                <div className="p-3.5 rounded-xl bg-surface-raised border border-white/[0.06] text-xs space-y-1">
+                  <span className="text-muted-soft font-mono text-[11px] block">UNCLAIMED SEATS</span>
+                  <span className="text-lg font-bold text-muted font-mono">18 Pending</span>
+                  <p className="text-[11px] text-muted">Invite tokens active &amp; unexpired</p>
                 </div>
               </div>
             </div>
@@ -368,93 +318,93 @@ export default function AdminHubPage() {
             {/* Provider Sync Health Monitor */}
             <div className="space-y-3">
               <div className="flex items-center space-x-2">
-                <Activity className="w-4 h-4 text-[#F59E0B]" />
-                <h3 className="text-base font-semibold text-[#F5F6F8]">
+                <Activity className="w-4 h-4 text-accent" />
+                <h3 className="text-base font-semibold text-ink">
                   Telemetry Provider Sync Health
                 </h3>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* GitHub Connector */}
-                <div className="bg-[#111319] border border-white/[0.08] rounded-2xl p-5 space-y-3">
+                <div className="bg-surface border border-white/[0.08] rounded-2xl p-5 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-[#F5F6F8] text-sm">GitHub Connector</span>
+                    <span className="font-semibold text-ink text-sm">GitHub Connector</span>
                     <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono">
                       OPERATIONAL
                     </span>
                   </div>
                   <div className="space-y-1.5 text-xs font-mono">
-                    <div className="flex justify-between text-[#8D94A5]">
+                    <div className="flex justify-between text-muted">
                       <span>Rate Limit:</span>
-                      <span className="text-[#C8CDD6]">4,812 / 5,000 req/hr</span>
+                      <span className="text-ink-secondary">4,812 / 5,000 req/hr</span>
                     </div>
-                    <div className="flex justify-between text-[#8D94A5]">
+                    <div className="flex justify-between text-muted">
                       <span>Avg Latency:</span>
                       <span className="text-emerald-400">142 ms</span>
                     </div>
-                    <div className="flex justify-between text-[#8D94A5]">
+                    <div className="flex justify-between text-muted">
                       <span>Last Audited:</span>
-                      <span className="text-[#C8CDD6]">3m ago</span>
+                      <span className="text-ink-secondary">3m ago</span>
                     </div>
                   </div>
                   <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between text-[11px]">
-                    <span className="text-[#636A7E]">Rule §9.1: Commit attribution</span>
+                    <span className="text-muted-soft">Rule §9.1: Commit attribution</span>
                     <span className="text-emerald-400 font-mono">Passing</span>
                   </div>
                 </div>
 
                 {/* LeetCode Bridge */}
-                <div className="bg-[#111319] border border-white/[0.08] rounded-2xl p-5 space-y-3">
+                <div className="bg-surface border border-white/[0.08] rounded-2xl p-5 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-[#F5F6F8] text-sm">LeetCode Bridge</span>
+                    <span className="font-semibold text-ink text-sm">LeetCode Bridge</span>
                     <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono">
                       OPERATIONAL
                     </span>
                   </div>
                   <div className="space-y-1.5 text-xs font-mono">
-                    <div className="flex justify-between text-[#8D94A5]">
+                    <div className="flex justify-between text-muted">
                       <span>API Protocol:</span>
-                      <span className="text-[#C8CDD6]">GraphQL Scraper</span>
+                      <span className="text-ink-secondary">GraphQL Scraper</span>
                     </div>
-                    <div className="flex justify-between text-[#8D94A5]">
+                    <div className="flex justify-between text-muted">
                       <span>Avg Latency:</span>
                       <span className="text-emerald-400">318 ms</span>
                     </div>
-                    <div className="flex justify-between text-[#8D94A5]">
+                    <div className="flex justify-between text-muted">
                       <span>Boundary Check:</span>
-                      <span className="text-[#C8CDD6]">Sunday 23:45 IST</span>
+                      <span className="text-ink-secondary">Sunday 23:45 IST</span>
                     </div>
                   </div>
                   <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between text-[11px]">
-                    <span className="text-[#636A7E]">Rule §9.7: Cumulative-only</span>
+                    <span className="text-muted-soft">Rule §9.7: Cumulative-only</span>
                     <span className="text-emerald-400 font-mono">Passing</span>
                   </div>
                 </div>
 
                 {/* HackerRank Connector */}
-                <div className="bg-[#111319] border border-white/[0.08] rounded-2xl p-5 space-y-3">
+                <div className="bg-surface border border-white/[0.08] rounded-2xl p-5 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-[#F5F6F8] text-sm">HackerRank Sync</span>
+                    <span className="font-semibold text-ink text-sm">HackerRank Sync</span>
                     <span className="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-mono">
                       LIMITED_READONLY
                     </span>
                   </div>
                   <div className="space-y-1.5 text-xs font-mono">
-                    <div className="flex justify-between text-[#8D94A5]">
+                    <div className="flex justify-between text-muted">
                       <span>Mode:</span>
-                      <span className="text-[#C8CDD6]">Badge Display Only</span>
+                      <span className="text-ink-secondary">Badge Display Only</span>
                     </div>
-                    <div className="flex justify-between text-[#8D94A5]">
+                    <div className="flex justify-between text-muted">
                       <span>Leaderboard State:</span>
                       <span className="text-amber-400">Excluded (No Delta)</span>
                     </div>
-                    <div className="flex justify-between text-[#8D94A5]">
+                    <div className="flex justify-between text-muted">
                       <span>Last Audited:</span>
-                      <span className="text-[#C8CDD6]">12m ago</span>
+                      <span className="text-ink-secondary">12m ago</span>
                     </div>
                   </div>
                   <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between text-[11px]">
-                    <span className="text-[#636A7E]">Phase 0 Guardrail</span>
+                    <span className="text-muted-soft">Phase 0 Guardrail</span>
                     <span className="text-amber-400 font-mono">Enforced</span>
                   </div>
                 </div>
@@ -468,14 +418,14 @@ export default function AdminHubPage() {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-bold text-[#F5F6F8]">
+                <h2 className="text-lg font-bold text-ink">
                   Student Telemetry Dispute Queue
                 </h2>
-                <p className="text-xs text-[#8D94A5] mt-0.5">
+                <p className="text-xs text-muted mt-0.5">
                   Inspect raw platform timestamps, time-boundary evaluations, and log verified adjustments.
                 </p>
               </div>
-              <span className="text-xs font-mono text-[#8D94A5]">
+              <span className="text-xs font-mono text-muted">
                 Rule §12: Transparent Student Recourse
               </span>
             </div>
@@ -489,21 +439,21 @@ export default function AdminHubPage() {
                     onClick={() => setSelectedDispute(dispute)}
                     className={`p-4 rounded-xl border transition-all cursor-pointer ${
                       selectedDispute?.id === dispute.id
-                        ? "bg-[#181B23] border-[#F59E0B]"
-                        : "bg-[#111319] border-white/[0.08] hover:border-white/20"
+                        ? "bg-surface-raised border-accent"
+                        : "bg-surface border-white/[0.08] hover:border-white/20"
                     }`}
                   >
                     <div className="flex items-start justify-between">
                       <div>
                         <div className="flex items-center space-x-2">
-                          <span className="font-semibold text-[#F5F6F8] text-sm">
+                          <span className="font-semibold text-ink text-sm">
                             {dispute.studentName}
                           </span>
-                          <span className="text-xs text-[#8D94A5] font-mono">
+                          <span className="text-xs text-muted font-mono">
                             @{dispute.githubHandle}
                           </span>
                         </div>
-                        <p className="text-xs text-[#C8CDD6] mt-1">
+                        <p className="text-xs text-ink-secondary mt-1">
                           {dispute.reportedIssue}
                         </p>
                       </div>
@@ -519,44 +469,44 @@ export default function AdminHubPage() {
                       </span>
                     </div>
 
-                    <div className="mt-3 pt-2 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono text-[#8D94A5]">
+                    <div className="mt-3 pt-2 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono text-muted">
                       <span>Platform: {dispute.platform}</span>
-                      <span className="text-[#F59E0B]">Click to Inspect Payload →</span>
+                      <span className="text-accent">Click to Inspect Payload →</span>
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* Inspector Pane */}
-              <div className="bg-[#111319] border border-white/[0.08] rounded-2xl p-5 flex flex-col justify-between">
+              <div className="bg-surface border border-white/[0.08] rounded-2xl p-5 flex flex-col justify-between">
                 {selectedDispute ? (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
                       <div>
-                        <h3 className="font-bold text-[#F5F6F8] text-sm">
+                        <h3 className="font-bold text-ink text-sm">
                           Dispute Audit: #{selectedDispute.id}
                         </h3>
-                        <p className="text-xs text-[#8D94A5] font-mono">
+                        <p className="text-xs text-muted font-mono">
                           {selectedDispute.studentName} ({selectedDispute.platform})
                         </p>
                       </div>
-                      <span className="text-xs text-[#F59E0B] font-mono">
+                      <span className="text-xs text-accent font-mono">
                         {selectedDispute.calculatedPeriod}
                       </span>
                     </div>
 
                     <div className="space-y-1">
-                      <span className="text-xs font-mono text-[#8D94A5] block">
+                      <span className="text-xs font-mono text-muted block">
                         Raw Provider Payload (Audited):
                       </span>
-                      <pre className="p-3 bg-[#090A0E] rounded-xl border border-white/[0.08] font-mono text-[11px] text-[#F59E0B] overflow-x-auto max-h-48">
+                      <pre className="p-3 bg-canvas rounded-xl border border-white/[0.08] font-mono text-[11px] text-accent overflow-x-auto max-h-48">
                         {selectedDispute.rawPayload}
                       </pre>
                     </div>
 
                     {selectedDispute.status === "PENDING_REVIEW" && (
                       <div className="space-y-3 pt-2">
-                        <label className="text-xs font-mono text-[#C8CDD6] block">
+                        <label className="text-xs font-mono text-ink-secondary block">
                           Mandatory Resolution Justification:
                         </label>
                         <input
@@ -564,19 +514,19 @@ export default function AdminHubPage() {
                           value={resolutionNote}
                           onChange={(e) => setResolutionNote(e.target.value)}
                           placeholder="e.g. Verified UTC to IST boundary offset under Rule §9.7"
-                          className="w-full px-3 py-2 bg-[#090A0E] border border-white/[0.08] rounded-lg text-xs text-white placeholder-[#636A7E] focus:outline-none focus:border-[#F59E0B]"
+                          className="w-full px-3 py-2 bg-canvas border border-white/[0.08] rounded-lg text-xs text-white placeholder-muted-soft focus:outline-none focus:border-accent"
                         />
                         <div className="flex items-center space-x-2 pt-1">
                           <button
                             onClick={() => handleResolveDispute(selectedDispute.id, "RESOLVED")}
-                            className="flex-1 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-[#090A0E] font-bold text-xs flex items-center justify-center space-x-1.5 transition-colors"
+                            className="flex-1 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-canvas font-bold text-xs flex items-center justify-center space-x-1.5 transition-colors"
                           >
                             <Check className="w-3.5 h-3.5" />
                             <span>Accept &amp; Backfill Telemetry</span>
                           </button>
                           <button
                             onClick={() => handleResolveDispute(selectedDispute.id, "REJECTED")}
-                            className="flex-1 py-2 rounded-lg bg-[#181B23] hover:bg-white/10 text-[#C8CDD6] font-medium text-xs flex items-center justify-center space-x-1.5 transition-colors border border-white/10"
+                            className="flex-1 py-2 rounded-lg bg-surface-raised hover:bg-white/10 text-ink-secondary font-medium text-xs flex items-center justify-center space-x-1.5 transition-colors border border-white/10"
                           >
                             <X className="w-3.5 h-3.5" />
                             <span>Reject Appeal</span>
@@ -586,14 +536,14 @@ export default function AdminHubPage() {
                     )}
 
                     {selectedDispute.status !== "PENDING_REVIEW" && (
-                      <div className="p-3 rounded-xl bg-[#090A0E] border border-white/[0.08] text-xs font-mono text-[#8D94A5]">
+                      <div className="p-3 rounded-xl bg-canvas border border-white/[0.08] text-xs font-mono text-muted">
                         This dispute has been marked as <strong className="text-white">{selectedDispute.status}</strong>. An immutable audit record has been appended to the system log.
                       </div>
                     )}
                   </div>
                 ) : (
-                  <div className="h-64 flex flex-col items-center justify-center text-center text-[#8D94A5] space-y-2">
-                    <Database className="w-8 h-8 text-[#636A7E]" />
+                  <div className="h-64 flex flex-col items-center justify-center text-center text-muted space-y-2">
+                    <Database className="w-8 h-8 text-muted-soft" />
                     <p className="text-xs">Select a dispute from the queue to inspect raw payload and execute an audited decision.</p>
                   </div>
                 )}
@@ -607,21 +557,21 @@ export default function AdminHubPage() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-bold text-[#F5F6F8]">
+                <h2 className="text-lg font-bold text-ink">
                   Immutable Governance Log
                 </h2>
-                <p className="text-xs text-[#8D94A5] mt-0.5">
+                <p className="text-xs text-muted mt-0.5">
                   Append-only administrative trail capturing all cohort adjustments and scheduler milestones.
                 </p>
               </div>
-              <span className="text-xs font-mono text-[#8D94A5]">
+              <span className="text-xs font-mono text-muted">
                 Rule §11.4: Immutable Ledger
               </span>
             </div>
 
-            <div className="bg-[#111319] border border-white/[0.08] rounded-2xl overflow-hidden divide-y divide-white/[0.06]">
+            <div className="bg-surface border border-white/[0.08] rounded-2xl overflow-hidden divide-y divide-white/[0.06]">
               {logs.map((log) => (
-                <div key={log.id} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs hover:bg-[#181B23] transition-colors">
+                <div key={log.id} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs hover:bg-surface-raised transition-colors">
                   <div className="space-y-1">
                     <div className="flex items-center space-x-2">
                       <span className={`px-2 py-0.5 rounded text-[10px] font-mono border ${
@@ -633,16 +583,16 @@ export default function AdminHubPage() {
                       }`}>
                         {log.action}
                       </span>
-                      <span className="font-mono text-[#8D94A5] text-[11px]">
-                        Actor: <strong className="text-[#C8CDD6]">{log.actor}</strong>
+                      <span className="font-mono text-muted text-[11px]">
+                        Actor: <strong className="text-ink-secondary">{log.actor}</strong>
                       </span>
                     </div>
-                    <p className="text-[#C8CDD6] text-xs">
+                    <p className="text-ink-secondary text-xs">
                       {log.details}
                     </p>
                   </div>
 
-                  <div className="flex items-center space-x-2 text-[#8D94A5] font-mono text-[11px] whitespace-nowrap">
+                  <div className="flex items-center space-x-2 text-muted font-mono text-[11px] whitespace-nowrap">
                     <Clock className="w-3.5 h-3.5" />
                     <span>{log.timestamp}</span>
                   </div>
@@ -654,7 +604,7 @@ export default function AdminHubPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.08] bg-[#090A0E] px-6 py-4 text-xs text-[#636A7E]">
+      <footer className="border-t border-white/[0.08] bg-canvas px-6 py-4 text-xs text-muted-soft">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>TWM 3.0 Platform • Administrator Governance &amp; Audit Registry</span>
           <span className="font-mono text-[11px]">Rule §3.3 &amp; §9.7 Compliance Enforced</span>

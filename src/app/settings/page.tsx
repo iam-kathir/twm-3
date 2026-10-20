@@ -64,21 +64,21 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#090A0E] text-[#F5F6F8] flex flex-col font-sans selection:bg-[#F59E0B] selection:text-[#090A0E]">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans selection:bg-accent selection:text-canvas">
       <AppHeader />
 
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Title & Description */}
         <div className="mb-8">
-          <div className="flex items-center gap-2 text-xs font-mono text-[#F59E0B] mb-1">
+          <div className="flex items-center gap-2 text-xs font-mono text-accent mb-1">
             <span>PLATFORM SETTINGS</span>
             <span>•</span>
             <span>RULE §10.3 COMPLIANT</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#F5F6F8] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-ink tracking-tight">
             Account &amp; Telemetry Preferences
           </h1>
-          <p className="mt-1 text-sm text-[#8D94A5]">
+          <p className="mt-1 text-sm text-muted">
             Manage your verified provider adapters, privacy visibility tiers, and export verifiable observation artifacts.
           </p>
         </div>
@@ -99,11 +99,11 @@ export default function SettingsPage() {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono transition-all whitespace-nowrap ${
                   isSelected
-                    ? "bg-[#181B23] text-[#F5F6F8] font-semibold border border-[#F59E0B]/40 shadow-sm"
-                    : "text-[#8D94A5] hover:text-[#F5F6F8] hover:bg-white/5 border border-transparent"
+                    ? "bg-surface-raised text-ink font-semibold border border-accent/40 shadow-sm"
+                    : "text-muted hover:text-ink hover:bg-white/5 border border-transparent"
                 }`}
               >
-                <Icon className={`h-3.5 w-3.5 ${isSelected ? "text-[#F59E0B]" : "text-slate-500"}`} />
+                <Icon className={`h-3.5 w-3.5 ${isSelected ? "text-accent" : "text-slate-500"}`} />
                 <span>{tab.label}</span>
               </button>
             );
@@ -117,56 +117,56 @@ export default function SettingsPage() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6 max-w-3xl"
           >
-            <div className="p-6 rounded-2xl bg-[#111319] border border-white/10 space-y-5">
-              <h3 className="text-base font-bold text-[#F5F6F8]">College Roster Identity</h3>
-              <p className="text-xs text-[#8D94A5]">
+            <div className="p-6 rounded-2xl bg-surface border border-white/10 space-y-5">
+              <h3 className="text-base font-bold text-ink">College Roster Identity</h3>
+              <p className="text-xs text-muted">
                 Your profile is cryptographically matched with official class enrollment lists. Roll numbers are immutable under Rule §3.3.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[11px] font-mono text-[#8D94A5] mb-1">Full Legal Name</label>
+                  <label className="block text-[11px] font-mono text-muted mb-1">Full Legal Name</label>
                   <input
                     type="text"
                     disabled
                     value={currentUser.name}
-                    className="w-full px-3 py-2 rounded-xl bg-[#181B23] border border-white/10 text-xs font-mono text-slate-300 cursor-not-allowed"
+                    className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs font-mono text-slate-300 cursor-not-allowed"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-mono text-[#8D94A5] mb-1">Registration / Roll Number</label>
+                  <label className="block text-[11px] font-mono text-muted mb-1">Registration / Roll Number</label>
                   <input
                     type="text"
                     disabled
                     value={currentUser.rollNo}
-                    className="w-full px-3 py-2 rounded-xl bg-[#181B23] border border-white/10 text-xs font-mono text-slate-300 cursor-not-allowed"
+                    className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs font-mono text-slate-300 cursor-not-allowed"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-mono text-[#8D94A5] mb-1">Class Section &amp; Degree</label>
+                  <label className="block text-[11px] font-mono text-muted mb-1">Class Section &amp; Degree</label>
                   <input
                     type="text"
                     disabled
                     value={currentUser.classSection}
-                    className="w-full px-3 py-2 rounded-xl bg-[#181B23] border border-white/10 text-xs font-mono text-slate-300 cursor-not-allowed"
+                    className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs font-mono text-slate-300 cursor-not-allowed"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-mono text-[#8D94A5] mb-1">Institutional Email</label>
+                  <label className="block text-[11px] font-mono text-muted mb-1">Institutional Email</label>
                   <input
                     type="text"
                     disabled
                     value={currentUser.email}
-                    className="w-full px-3 py-2 rounded-xl bg-[#181B23] border border-white/10 text-xs font-mono text-slate-300 cursor-not-allowed"
+                    className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs font-mono text-slate-300 cursor-not-allowed"
                   />
                 </div>
               </div>
 
               <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono">
-                <span className="text-[#8D94A5]">Roster Verification Status:</span>
+                <span className="text-muted">Roster Verification Status:</span>
                 <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
                   <CheckCircle2 className="h-3.5 w-3.5" />
                   <span>Verified by Faculty Co-Admin</span>
@@ -174,9 +174,9 @@ export default function SettingsPage() {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-[#181B23]/70 border border-white/[0.06] flex items-start gap-3">
-              <Lock className="h-4 w-4 text-[#F59E0B] shrink-0 mt-0.5" />
-              <div className="text-xs text-[#8D94A5] leading-relaxed">
+            <div className="p-4 rounded-xl bg-surface-raised/70 border border-white/[0.06] flex items-start gap-3">
+              <Lock className="h-4 w-4 text-accent shrink-0 mt-0.5" />
+              <div className="text-xs text-muted leading-relaxed">
                 Need to correct a misspelled name or update class section? Per Rule §3.3, student identity modifications require two-person integrity approval from the faculty co-admin. Please file a ticket from the Admin Hub.
               </div>
             </div>
@@ -191,15 +191,15 @@ export default function SettingsPage() {
             className="space-y-6 max-w-3xl"
           >
             {/* GitHub Card */}
-            <div className="p-6 rounded-2xl bg-[#111319] border border-white/10 space-y-4">
+            <div className="p-6 rounded-2xl bg-surface border border-white/10 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white">
                     <Github className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-[#F5F6F8]">GitHub Developer Adapter</h3>
-                    <p className="text-xs text-[#8D94A5] font-mono">
+                    <h3 className="text-sm font-bold text-ink">GitHub Developer Adapter</h3>
+                    <p className="text-xs text-muted font-mono">
                       OAuth v2 • Public Activity Calendar &amp; Commit Boundaries
                     </p>
                   </div>
@@ -219,16 +219,16 @@ export default function SettingsPage() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                <div className="p-3 rounded-xl bg-[#181B23] border border-white/[0.06]">
-                  <span className="text-[10px] font-mono text-[#8D94A5] block">Tracked Repos</span>
-                  <span className="text-base font-bold font-mono text-[#F5F6F8]">4 Course Repos</span>
+                <div className="p-3 rounded-xl bg-surface-raised border border-white/[0.06]">
+                  <span className="text-[10px] font-mono text-muted block">Tracked Repos</span>
+                  <span className="text-base font-bold font-mono text-ink">4 Course Repos</span>
                 </div>
-                <div className="p-3 rounded-xl bg-[#181B23] border border-white/[0.06]">
-                  <span className="text-[10px] font-mono text-[#8D94A5] block">Boundary Enforcement</span>
+                <div className="p-3 rounded-xl bg-surface-raised border border-white/[0.06]">
+                  <span className="text-[10px] font-mono text-muted block">Boundary Enforcement</span>
                   <span className="text-base font-bold font-mono text-emerald-400">Sun 23:59 IST</span>
                 </div>
-                <div className="p-3 rounded-xl bg-[#181B23] border border-white/[0.06]">
-                  <span className="text-[10px] font-mono text-[#8D94A5] block">Code Surveillance</span>
+                <div className="p-3 rounded-xl bg-surface-raised border border-white/[0.06]">
+                  <span className="text-[10px] font-mono text-muted block">Code Surveillance</span>
                   <span className="text-base font-bold font-mono text-slate-300">0% (Timestamps Only)</span>
                 </div>
               </div>
@@ -239,7 +239,7 @@ export default function SettingsPage() {
                   className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-colors ${
                     currentUser.github.connected
                       ? "bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20"
-                      : "bg-[#F59E0B] hover:bg-[#D97706] text-[#090A0E] font-bold"
+                      : "bg-accent hover:bg-accent-hover text-canvas font-bold"
                   }`}
                 >
                   {currentUser.github.connected ? "Disconnect Adapter" : "Connect GitHub Account"}
@@ -248,15 +248,15 @@ export default function SettingsPage() {
             </div>
 
             {/* LeetCode Card */}
-            <div className="p-6 rounded-2xl bg-[#111319] border border-white/10 space-y-4">
+            <div className="p-6 rounded-2xl bg-surface border border-white/10 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="p-2.5 rounded-xl bg-[#FFA116]/10 border border-[#FFA116]/20 text-[#FFA116]">
                     <Code2 className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-[#F5F6F8]">LeetCode Telemetry Adapter</h3>
-                    <p className="text-xs text-[#8D94A5] font-mono">
+                    <h3 className="text-sm font-bold text-ink">LeetCode Telemetry Adapter</h3>
+                    <p className="text-xs text-muted font-mono">
                       GraphQL Public Profile Scraper • 15m HMAC Bio Challenge
                     </p>
                   </div>
@@ -267,7 +267,7 @@ export default function SettingsPage() {
                 </span>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#181B23] border border-white/[0.06] flex items-center justify-between text-xs font-mono">
+              <div className="p-3 rounded-xl bg-surface-raised border border-white/[0.06] flex items-center justify-between text-xs font-mono">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 text-emerald-400" />
                   <span className="text-slate-300">Bio Challenge Token: Valid &amp; Signed</span>
@@ -296,15 +296,15 @@ export default function SettingsPage() {
             </div>
 
             {/* HackerRank Card */}
-            <div className="p-6 rounded-2xl bg-[#111319] border border-white/10 space-y-4">
+            <div className="p-6 rounded-2xl bg-surface border border-white/10 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="p-2.5 rounded-xl bg-[#00EA64]/10 border border-[#00EA64]/20 text-[#00EA64]">
                     <Award className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-[#F5F6F8]">HackerRank Badges Adapter</h3>
-                    <p className="text-xs text-[#8D94A5] font-mono">
+                    <h3 className="text-sm font-bold text-ink">HackerRank Badges Adapter</h3>
+                    <p className="text-xs text-muted font-mono">
                       Domain Stars • Display Only (Excluded from Weekly Competition)
                     </p>
                   </div>
@@ -315,7 +315,7 @@ export default function SettingsPage() {
                 </span>
               </div>
 
-              <div className="text-xs font-mono text-[#8D94A5] leading-relaxed">
+              <div className="text-xs font-mono text-muted leading-relaxed">
                 Rule §4.2 Guarantee: Cumulative badges on HackerRank do not convey timestamped weekly deltas and are held strictly for profile display.
               </div>
             </div>
@@ -329,12 +329,12 @@ export default function SettingsPage() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6 max-w-3xl"
           >
-            <div className="p-6 rounded-2xl bg-[#111319] border border-white/10 space-y-6">
-              <h3 className="text-base font-bold text-[#F5F6F8]">Telemetry Visibility Controls</h3>
+            <div className="p-6 rounded-2xl bg-surface border border-white/10 space-y-6">
+              <h3 className="text-base font-bold text-ink">Telemetry Visibility Controls</h3>
 
               {/* Leaderboard visibility mode */}
               <div className="space-y-3">
-                <label className="block text-xs font-mono text-[#8D94A5]">
+                <label className="block text-xs font-mono text-muted">
                   Leaderboard Identity Tier
                 </label>
 
@@ -361,12 +361,12 @@ export default function SettingsPage() {
                       onClick={() => setVisibility(tier.id as any)}
                       className={`p-4 rounded-xl text-left border transition-all ${
                         visibility === tier.id
-                          ? "bg-[#181B23] border-[#F59E0B] shadow-sm"
-                          : "bg-[#111319] border-white/10 hover:border-white/20"
+                          ? "bg-surface-raised border-accent shadow-sm"
+                          : "bg-surface border-white/10 hover:border-white/20"
                       }`}
                     >
-                      <div className="text-xs font-bold text-[#F5F6F8] font-sans">{tier.title}</div>
-                      <div className="text-[11px] text-[#8D94A5] mt-1 leading-snug">{tier.desc}</div>
+                      <div className="text-xs font-bold text-ink font-sans">{tier.title}</div>
+                      <div className="text-[11px] text-muted mt-1 leading-snug">{tier.desc}</div>
                     </button>
                   ))}
                 </div>
@@ -375,8 +375,8 @@ export default function SettingsPage() {
               {/* Discovery Toggle */}
               <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-bold text-[#F5F6F8]">Semantic Peer Discovery Listing</div>
-                  <div className="text-[11px] text-[#8D94A5] mt-0.5">
+                  <div className="text-xs font-bold text-ink">Semantic Peer Discovery Listing</div>
+                  <div className="text-[11px] text-muted mt-0.5">
                     Allow classmates to find your profile in `/search` using verified skills &amp; repositories.
                   </div>
                 </div>
@@ -385,15 +385,15 @@ export default function SettingsPage() {
                   type="checkbox"
                   checked={publicDiscovery}
                   onChange={(e) => setPublicDiscovery(e.target.checked)}
-                  className="w-4 h-4 rounded accent-[#F59E0B] cursor-pointer"
+                  className="w-4 h-4 rounded accent-accent cursor-pointer"
                 />
               </div>
 
               {/* AI Recap Toggle */}
               <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-bold text-[#F5F6F8]">Weekly AI Developer Recap Synthesis</div>
-                  <div className="text-[11px] text-[#8D94A5] mt-0.5">
+                  <div className="text-xs font-bold text-ink">Weekly AI Developer Recap Synthesis</div>
+                  <div className="text-[11px] text-muted mt-0.5">
                     Generate an objective, non-judgmental natural language summary of weekly activity.
                   </div>
                 </div>
@@ -401,7 +401,7 @@ export default function SettingsPage() {
                 <select
                   value={recapPref}
                   onChange={(e) => setRecapPref(e.target.value as any)}
-                  className="px-3 py-1.5 rounded-xl bg-[#181B23] border border-white/10 text-xs font-mono text-[#F5F6F8] focus:border-[#F59E0B] focus:outline-none"
+                  className="px-3 py-1.5 rounded-xl bg-surface-raised border border-white/10 text-xs font-mono text-ink focus:border-accent focus:outline-none"
                 >
                   <option value="ai">AI Narrative Synthesis</option>
                   <option value="deterministic">Raw Deterministic Breakdown</option>
@@ -410,7 +410,7 @@ export default function SettingsPage() {
 
               {/* Notification preferences */}
               <div className="pt-4 border-t border-white/[0.08] space-y-3">
-                <div className="text-xs font-mono text-[#8D94A5]">Automated Notifications</div>
+                <div className="text-xs font-mono text-muted">Automated Notifications</div>
 
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-slate-300">Sunday 23:59 IST calculation wrap notification</span>
@@ -418,7 +418,7 @@ export default function SettingsPage() {
                     type="checkbox"
                     checked={notifyRecap}
                     onChange={(e) => setNotifyRecap(e.target.checked)}
-                    className="w-4 h-4 rounded accent-[#F59E0B] cursor-pointer"
+                    className="w-4 h-4 rounded accent-accent cursor-pointer"
                   />
                 </div>
 
@@ -428,7 +428,7 @@ export default function SettingsPage() {
                     type="checkbox"
                     checked={notifyDispute}
                     onChange={(e) => setNotifyDispute(e.target.checked)}
-                    className="w-4 h-4 rounded accent-[#F59E0B] cursor-pointer"
+                    className="w-4 h-4 rounded accent-accent cursor-pointer"
                   />
                 </div>
               </div>
@@ -436,7 +436,7 @@ export default function SettingsPage() {
               <div className="pt-4 border-t border-white/[0.08] flex justify-end">
                 <button
                   onClick={handleSavePrivacy}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] text-[#090A0E] text-xs font-mono font-bold transition-all shadow-md active:scale-95"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-accent hover:bg-accent-hover text-canvas text-xs font-mono font-bold transition-all shadow-md active:scale-95"
                 >
                   <Save className="h-3.5 w-3.5" />
                   <span>Save Privacy Settings</span>
@@ -453,19 +453,19 @@ export default function SettingsPage() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6 max-w-3xl"
           >
-            <div className="p-6 rounded-2xl bg-[#111319] border border-white/10 space-y-6">
+            <div className="p-6 rounded-2xl bg-surface border border-white/10 space-y-6">
               <div>
-                <h3 className="text-base font-bold text-[#F5F6F8]">Data Sovereignty &amp; Verification Artifacts</h3>
-                <p className="text-xs text-[#8D94A5] mt-1">
+                <h3 className="text-base font-bold text-ink">Data Sovereignty &amp; Verification Artifacts</h3>
+                <p className="text-xs text-muted mt-1">
                   In compliance with Rule §10.3, students have unencumbered access to their raw telemetry logs and class competition standings.
                 </p>
               </div>
 
               <div className="space-y-4">
-                <div className="p-4 rounded-xl bg-[#181B23] border border-white/[0.06] flex items-center justify-between">
+                <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] flex items-center justify-between">
                   <div>
-                    <div className="text-xs font-bold text-[#F5F6F8]">Observation Ledger (JSON)</div>
-                    <div className="text-[11px] text-[#8D94A5] mt-0.5">
+                    <div className="text-xs font-bold text-ink">Observation Ledger (JSON)</div>
+                    <div className="text-[11px] text-muted mt-0.5">
                       Contains raw commit timestamps, LeetCode delta certificates, and HMAC proof records.
                     </div>
                   </div>
@@ -473,15 +473,15 @@ export default function SettingsPage() {
                     onClick={exportTelemetryJSON}
                     className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 text-xs font-mono font-medium border border-white/10 transition-colors"
                   >
-                    <FileDown className="h-3.5 w-3.5 text-[#F59E0B]" />
+                    <FileDown className="h-3.5 w-3.5 text-accent" />
                     <span>Download JSON</span>
                   </button>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#181B23] border border-white/[0.06] flex items-center justify-between">
+                <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] flex items-center justify-between">
                   <div>
-                    <div className="text-xs font-bold text-[#F5F6F8]">Class Leaderboard Standings (CSV)</div>
-                    <div className="text-[11px] text-[#8D94A5] mt-0.5">
+                    <div className="text-xs font-bold text-ink">Class Leaderboard Standings (CSV)</div>
+                    <div className="text-[11px] text-muted mt-0.5">
                       Spreadsheet of verified active days, delta counts, and audit statuses for Section A.
                     </div>
                   </div>
@@ -497,7 +497,7 @@ export default function SettingsPage() {
                 <div className="p-4 rounded-xl bg-rose-500/5 border border-rose-500/15 flex items-center justify-between">
                   <div>
                     <div className="text-xs font-bold text-rose-400">Purge Local Browser Cache</div>
-                    <div className="text-[11px] text-[#8D94A5] mt-0.5">
+                    <div className="text-[11px] text-muted mt-0.5">
                       Wipes local mock overrides, re-authenticates token challenges, and resyncs from adapters.
                     </div>
                   </div>

@@ -12,19 +12,19 @@ export function MotionShowcase() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="text-center mb-8">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#F5F6F8] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-ink tracking-tight">
             Live Telemetry Demo
           </h2>
-          <p className="mt-2 text-sm text-[#8D94A5]">
+          <p className="mt-2 text-sm text-muted">
             Click a platform to explore how real observations are rendered.
           </p>
 
           {/* Animated Tab Switcher */}
-          <div className="mt-6 inline-flex p-1 rounded-xl border border-white/[0.08] bg-[#111319]">
+          <div className="mt-6 inline-flex p-1 rounded-xl border border-white/[0.08] bg-surface">
             {[
-              { id: "github", label: "GitHub", icon: Github, color: "text-[#60A5FA]" },
-              { id: "leetcode", label: "LeetCode", icon: Code2, color: "text-[#FBBF24]" },
-              { id: "hackerrank", label: "HackerRank", icon: Award, color: "text-[#34D399]" },
+              { id: "github", label: "GitHub", icon: Github, color: "text-provider-github" },
+              { id: "leetcode", label: "LeetCode", icon: Code2, color: "text-provider-leetcode" },
+              { id: "hackerrank", label: "HackerRank", icon: Award, color: "text-provider-hackerrank" },
             ].map((tab) => {
               const Icon = tab.icon;
               const isSelected = activeTab === tab.id;
@@ -33,7 +33,7 @@ export function MotionShowcase() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`relative flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-mono transition-colors ${
-                    isSelected ? "text-white" : "text-[#8D94A5] hover:text-white"
+                    isSelected ? "text-white" : "text-muted hover:text-white"
                   }`}
                 >
                   {isSelected && (
@@ -52,16 +52,16 @@ export function MotionShowcase() {
         </div>
 
         {/* Animated Card Container */}
-        <div className="relative rounded-2xl border border-white/[0.08] bg-[#111319] p-6 sm:p-8 shadow-2xl overflow-hidden min-h-[300px] flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-4 border-b border-white/[0.06] text-xs font-mono text-[#8D94A5]">
+        <div className="relative rounded-2xl border border-white/[0.08] bg-surface p-6 sm:p-8 shadow-2xl overflow-hidden min-h-[300px] flex flex-col justify-between">
+          <div className="flex items-center justify-between pb-4 border-b border-white/[0.06] text-xs font-mono text-muted">
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-emerald-400" />
-              <span className="text-[#F5F6F8] font-medium">Aarav Sharma</span>
-              <span className="text-[#4B5262]">•</span>
+              <span className="text-ink font-medium">Aarav Sharma</span>
+              <span className="text-muted-dark">•</span>
               <span>CSE 2026</span>
             </div>
-            <div className="flex items-center gap-1.5 text-[#8D94A5]">
-              <Clock className="h-3.5 w-3.5 text-[#F59E0B]" />
+            <div className="flex items-center gap-1.5 text-muted">
+              <Clock className="h-3.5 w-3.5 text-accent" />
               <span>Synced 12m ago (IST)</span>
             </div>
           </div>
@@ -103,7 +103,7 @@ export function MotionShowcase() {
                             transition={{ delay: i * 0.05, duration: 0.3 }}
                             className={`h-8 w-full rounded-md flex items-center justify-center font-mono text-[10px] font-bold ${
                               active
-                                ? "bg-emerald-400 text-[#090A0E] shadow-sm"
+                                ? "bg-emerald-400 text-canvas shadow-sm"
                                 : "bg-white/[0.04] text-slate-500 border border-white/5"
                             }`}
                           >
@@ -117,7 +117,7 @@ export function MotionShowcase() {
 
                   <div className="pt-2 flex justify-between text-xs font-mono">
                     <span className="text-slate-400">API Date Retrieval:</span>
-                    <span className="text-[#F59E0B] font-semibold">94.2% Coverage (Passes &gt;90% rule)</span>
+                    <span className="text-accent font-semibold">94.2% Coverage (Passes &gt;90% rule)</span>
                   </div>
                 </motion.div>
               )}
@@ -138,7 +138,7 @@ export function MotionShowcase() {
                         184 <span className="text-emerald-400 text-sm font-medium">(+12 this week)</span>
                       </div>
                     </div>
-                    <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/20">
+                    <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-accent/10 text-accent border border-accent/20">
                       HMAC_VERIFIED
                     </span>
                   </div>
@@ -195,7 +195,7 @@ export function MotionShowcase() {
           {/* Minimalist Bottom Pulse Strip */}
           <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-slate-400">
             <div className="flex items-center gap-1.5 text-slate-300">
-              <Sparkles className="h-3.5 w-3.5 text-[#F59E0B]" />
+              <Sparkles className="h-3.5 w-3.5 text-accent" />
               <span>Sunday Recap: 85.7% consistency rate</span>
             </div>
             <span className="text-emerald-400">No fake stats</span>

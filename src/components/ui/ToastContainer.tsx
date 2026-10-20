@@ -47,27 +47,27 @@ export function ToastContainer() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className={`pointer-events-auto p-3.5 rounded-xl bg-[#111319]/95 backdrop-blur-md border ${borderColor} shadow-2xl flex items-start gap-3 relative overflow-hidden`}
+              className={`pointer-events-auto p-3.5 rounded-xl bg-surface/95 backdrop-blur-md border ${borderColor} shadow-2xl flex items-start gap-3 relative overflow-hidden`}
             >
               <Icon className={`h-5 w-5 ${iconColor} shrink-0 mt-0.5`} />
 
               <div className="flex-1 pr-4">
-                <div className="text-xs font-semibold text-[#F5F6F8] font-sans">
+                <div className="text-xs font-semibold text-ink font-sans">
                   {toast.title}
                 </div>
                 {toast.description && (
-                  <div className="text-[11px] text-[#8D94A5] mt-0.5 leading-relaxed font-sans">
+                  <div className="text-[11px] text-muted mt-0.5 leading-relaxed font-sans">
                     {toast.description}
                   </div>
                 )}
-                <div className="text-[9px] font-mono text-[#636A7E] mt-1">
+                <div className="text-[9px] font-mono text-muted-soft mt-1">
                   {toast.timestamp}
                 </div>
               </div>
 
               <button
                 onClick={() => dismissToast(toast.id)}
-                className="text-[#636A7E] hover:text-[#F5F6F8] p-1 rounded-md hover:bg-white/5 transition-colors absolute top-2.5 right-2.5"
+                className="text-muted-soft hover:text-ink p-1 rounded-md hover:bg-white/5 transition-colors absolute top-2.5 right-2.5"
                 aria-label="Dismiss notification"
               >
                 <X className="h-3.5 w-3.5" />

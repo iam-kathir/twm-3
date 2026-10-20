@@ -27,16 +27,16 @@ export function HowItWorks() {
   ];
 
   return (
-    <section id="workflow" className="py-16 md:py-24 relative border-t border-white/[0.08] bg-[#090A0E]">
+    <section id="workflow" className="py-16 md:py-24 relative border-t border-white/[0.08] bg-canvas">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/20 text-xs font-mono mb-3">
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-accent/10 text-accent border border-accent/20 text-xs font-mono mb-3">
             <span>Deterministic Flow</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#F5F6F8] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-ink tracking-tight">
             How It Works
           </h2>
-          <p className="mt-2 text-sm text-[#8D94A5]">
+          <p className="mt-2 text-sm text-muted">
             A frictionless, privacy-conscious 3-step onboarding.
           </p>
         </div>
@@ -48,22 +48,22 @@ export function HowItWorks() {
               <motion.div
                 key={idx}
                 whileHover={{ y: -3, transition: { duration: 0.2 } }}
-                className="p-6 rounded-2xl border border-white/[0.08] bg-[#111319] hover:border-white/20 transition-colors flex flex-col justify-between"
+                className="p-6 rounded-2xl border border-white/[0.08] bg-surface hover:border-white/20 transition-colors flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs font-mono font-bold text-[#F59E0B]">
+                    <span className="text-xs font-mono font-bold text-accent">
                       STEP {step.num}
                     </span>
-                    <div className="h-8 w-8 rounded-lg bg-[#181B23] border border-white/[0.06] flex items-center justify-center text-[#8D94A5]">
+                    <div className="h-8 w-8 rounded-lg bg-surface-raised border border-white/[0.06] flex items-center justify-center text-muted">
                       <Icon className="h-4 w-4" />
                     </div>
                   </div>
-                  <h3 className="text-base font-bold text-[#F5F6F8] mb-2">{step.title}</h3>
-                  <p className="text-xs text-[#8D94A5] leading-relaxed">{step.desc}</p>
+                  <h3 className="text-base font-bold text-ink mb-2">{step.title}</h3>
+                  <p className="text-xs text-muted leading-relaxed">{step.desc}</p>
                 </div>
 
-                <div className="mt-6 flex items-center gap-1.5 text-[11px] font-mono text-[#F59E0B]">
+                <div className="mt-6 flex items-center gap-1.5 text-[11px] font-mono text-accent">
                   <span>Ready</span>
                   <ArrowRight className="h-3 w-3" />
                 </div>
