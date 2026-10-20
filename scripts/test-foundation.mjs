@@ -2,7 +2,7 @@ import { test, describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { computeCompetitionRanks } from "../src/lib/leaderboard.ts";
 import { checkRateLimit } from "../src/lib/rate-limit.ts";
-import { getDb, getAllRosterMembers, registerHmacNonce, verifyAndConsumeNonce, insertDispute, resolveDisputeInDb, getAllDisputes, getWeeklyStandingsFromDb } from "../src/lib/db.ts";
+import { getDb, getAllRosterMembers, insertRosterMember, getRosterQuorumStats, registerHmacNonce, verifyAndConsumeNonce, insertDispute, resolveDisputeInDb, getAllDisputes, getWeeklyStandingsFromDb } from "../src/lib/db.ts";
 import { executeWeeklyFinalization } from "../src/lib/finalizer.ts";
 
 describe("TWM Foundation Suite", () => {
@@ -169,6 +169,50 @@ describe("TWM Foundation Suite", () => {
       assert.ok(resolved);
       assert.equal(resolved.status, "approved");
       assert.equal(resolved.reviewed_by, "Faculty Co-Admin");
+    });
+  });
+
+  describe("Section 3.3 Quorum & Class Roster Management", () => {
+    it("computes live quorum percentage and determines representative label", () => {
+      const stats = getRosterQuorumStats();
+      assert.ok(stats.totalEnrolled >= 7, "Total enrolled denominator must be at least 7");
+      assert.ok(stats.verifiedOptedIn >= 7, "Verified opted in count must match seeded count");
+      assert.ok(stats.quorumPercentage >= 70, "Initial seeded cohort should meet 70% quorum");
+      assert.equal(stats.meetsQuorum, true);
+      assert.equal(stats.label, "Representative Class Leaderboard");
+    });
+
+    it("inserts a new roster member into SQLite and verifies uniqueness", () => {
+      const uniqueSuffix = Date.now().toString().slice(-4);
+      const testRollNo = `2026TEST${uniqueSuffix}`;
+      const newMember = insertRosterMember({
+        rollNo: testRollNo,
+        name: "Test Enrollee",
+        email: `test.${uniqueSuffix}@college.edu`,
+        classSection: "B.Tech CSE 2026 (Sec B)",
+        handleGithub: `test-gh-${uniqueSuffix}`,
+        handleLeetcode: `test-lc-${uniqueSuffix}`,
+        handleHackerrank: `test-hr-${uniqueSuffix}`,
+      });
+
+      assert.ok(newMember.id);
+      assert.equal(newMember.roll_no, testRollNo);
+      assert.equal(newMember.is_active, 1);
+
+      // Verify member is listed in all members
+      const all = getAllRosterMembers();
+      const found = all.find((m) => m.roll_no === testRollNo);
+      assert.ok(found, "Newly enrolled member should be in roster list");
+      assert.equal(found.name, "Test Enrollee");
+
+      // Attempting duplicate roll number must throw SQLITE_CONSTRAINT
+      assert.throws(() => {
+        insertRosterMember({
+          rollNo: testRollNo,
+          name: "Duplicate Roll",
+          email: `duplicate.${uniqueSuffix}@college.edu`,
+        });
+      });
     });
   });
 });

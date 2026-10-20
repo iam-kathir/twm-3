@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -23,7 +23,14 @@ import {
   Info,
   Download,
   ShieldAlert,
-  ExternalLink
+  ExternalLink,
+  UserPlus,
+  Plus,
+  Github,
+  Code2,
+  Award,
+  Mail,
+  Hash
 } from "lucide-react";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useApp } from "@/context/AppContext";
@@ -83,20 +90,152 @@ export default function AdminHubPage() {
     exportLeaderboardCSV 
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<"overview" | "disputes" | "logs">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "roster" | "disputes" | "logs">("overview");
   const [logs, setLogs] = useState<AuditLogEntry[]>(INITIAL_LOGS);
   const [selectedDisputeId, setSelectedDisputeId] = useState<string | null>(disputes[0]?.id || null);
   const [resolutionNote, setResolutionNote] = useState("");
   const [isSyncing, setIsSyncing] = useState(false);
   const [isFinalizing, setIsFinalizing] = useState(false);
 
+  // Live Roster & Quorum State (§3.3)
+  const [rosterMembers, setRosterMembers] = useState<any[]>([]);
+  const [quorumStats, setQuorumStats] = useState<{
+    totalEnrolled: number;
+    verifiedOptedIn: number;
+    quorumPercentage: number;
+    meetsQuorum: boolean;
+    quorumThreshold: number;
+    label: string;
+  } | null>(null);
+  const [isLoadingRoster, setIsLoadingRoster] = useState(true);
+  const [rosterSearch, setRosterSearch] = useState("");
+  const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+  const [isSubmittingEnrollment, setIsSubmittingEnrollment] = useState(false);
+  const [enrollForm, setEnrollForm] = useState({
+    rollNo: "",
+    name: "",
+    email: "",
+    classSection: "B.Tech CSE 2026 (Sec A)",
+    handleGithub: "",
+    handleLeetcode: "",
+    handleHackerrank: ""
+  });
+
+  const fetchRosterData = async () => {
+    setIsLoadingRoster(true);
+    try {
+      const res = await fetch("/api/roster");
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setRosterMembers(data.roster || []);
+        if (data.quorum) {
+          setQuorumStats(data.quorum);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to fetch roster:", err);
+    } finally {
+      setIsLoadingRoster(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRosterData();
+  }, []);
+
   const selectedDispute = disputes.find((d) => d.id === selectedDisputeId) || disputes[0] || null;
 
-  // Roster metrics
-  const totalEnrolled = 60;
-  const verifiedCount = 42;
-  const quorumPercentage = ((verifiedCount / totalEnrolled) * 100).toFixed(1);
-  const meetsQuorum = (verifiedCount / totalEnrolled) >= 0.70;
+  // Real or fallback Roster metrics (§3.3)
+  const totalEnrolled = quorumStats?.totalEnrolled ?? rosterMembers.length;
+  const verifiedCount = quorumStats?.verifiedOptedIn ?? rosterMembers.length;
+  const quorumPercentage = quorumStats?.quorumPercentage ?? (totalEnrolled > 0 ? Number(((verifiedCount / totalEnrolled) * 100).toFixed(1)) : 100);
+  const meetsQuorum = quorumStats?.meetsQuorum ?? (quorumPercentage >= 70);
+  const quorumLabel = quorumStats?.label ?? (meetsQuorum ? "Representative Class Leaderboard" : "Participating Members Leaderboard");
+
+  const handleEnrollSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!enrollForm.rollNo.trim() || !enrollForm.name.trim() || !enrollForm.email.trim()) {
+      addToast({
+        title: "Validation Error",
+        description: "Roll Number, Full Name, and College Email are required.",
+        type: "warning"
+      });
+      return;
+    }
+
+    setIsSubmittingEnrollment(true);
+    try {
+      const res = await fetch("/api/roster", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(enrollForm)
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        addToast({
+          title: "Student Enrolled (§3.3)",
+          description: data.message || `Successfully registered ${enrollForm.name}.`,
+          type: "success"
+        });
+        
+        await fetchRosterData();
+        
+        const newLog: AuditLogEntry = {
+          id: `log-${Date.now()}`,
+          timestamp: "Just now",
+          action: "STUDENT_ROSTER_ENROLLED",
+          actor: `${currentUser.name} (Admin)`,
+          details: `Enrolled ${enrollForm.name} (${enrollForm.rollNo.toUpperCase()}) into class roster. Quorum updated.`,
+          severity: "INFO"
+        };
+        setLogs(prev => [newLog, ...prev]);
+
+        setEnrollForm({
+          rollNo: "",
+          name: "",
+          email: "",
+          classSection: "B.Tech CSE 2026 (Sec A)",
+          handleGithub: "",
+          handleLeetcode: "",
+          handleHackerrank: ""
+        });
+        setIsEnrollModalOpen(false);
+      } else {
+        addToast({
+          title: "Enrollment Failed",
+          description: data.error || "Could not register student in SQLite.",
+          type: "error"
+        });
+      }
+    } catch {
+      addToast({
+        title: "Network Error",
+        description: "Failed to connect to roster enrollment endpoint.",
+        type: "error"
+      });
+    } finally {
+      setIsSubmittingEnrollment(false);
+    }
+  };
+
+  const handleExportRosterCSV = () => {
+    const csvContent = "data:text/csv;charset=utf-8," +
+      ["Roll Number,Full Name,Email,Class Section,GitHub Handle,LeetCode Handle,HackerRank Handle,Latest Active Days"].concat(
+        rosterMembers.map(m => `"${m.rollNo}","${m.name}","${m.email}","${m.classSection}","${m.handleGithub || ''}","${m.handleLeetcode || ''}","${m.handleHackerrank || ''}","${m.latestGithubActiveDays ?? 'Pending'}"`)
+      ).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `twm3_class_roster_${new Date().toISOString().split("T")[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    addToast({
+      title: "Class Roster Exported",
+      description: `Downloaded ${rosterMembers.length} enrolled student records as CSV.`,
+      type: "info"
+    });
+  };
 
   const handleResolveDispute = (id: string, decision: "approved" | "rejected") => {
     const note = resolutionNote.trim() || (decision === "approved" 
@@ -265,20 +404,31 @@ export default function AdminHubPage() {
         </div>
 
         {/* Tab Controls */}
-        <div className="flex items-center space-x-3 border-b border-white/[0.08] pb-3">
+        <div className="flex items-center space-x-3 border-b border-white/[0.08] pb-3 overflow-x-auto">
           <button
             onClick={() => setActiveTab("overview")}
-            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shrink-0 ${
               activeTab === "overview"
                 ? "bg-accent text-canvas font-bold shadow-md shadow-accent/20"
                 : "text-muted hover:text-white bg-surface/50 hover:bg-surface border border-transparent hover:border-white/10"
             }`}
           >
-            System Overview &amp; Roster Quorum
+            System Overview &amp; Quorum
+          </button>
+          <button
+            onClick={() => setActiveTab("roster")}
+            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center space-x-2 shrink-0 ${
+              activeTab === "roster"
+                ? "bg-accent text-canvas font-bold shadow-md shadow-accent/20"
+                : "text-muted hover:text-white bg-surface/50 hover:bg-surface border border-transparent hover:border-white/10"
+            }`}
+          >
+            <Users className="w-4 h-4" />
+            <span>Class Roster ({totalEnrolled})</span>
           </button>
           <button
             onClick={() => setActiveTab("disputes")}
-            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center space-x-2 ${
+            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center space-x-2 shrink-0 ${
               activeTab === "disputes"
                 ? "bg-accent text-canvas font-bold shadow-md shadow-accent/20"
                 : "text-muted hover:text-white bg-surface/50 hover:bg-surface border border-transparent hover:border-white/10"
@@ -293,7 +443,7 @@ export default function AdminHubPage() {
           </button>
           <button
             onClick={() => setActiveTab("logs")}
-            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shrink-0 ${
               activeTab === "logs"
                 ? "bg-accent text-canvas font-bold shadow-md shadow-accent/20"
                 : "text-muted hover:text-white bg-surface/50 hover:bg-surface border border-transparent hover:border-white/10"
@@ -380,32 +530,40 @@ export default function AdminHubPage() {
                     Verified Students: <strong className="text-accent font-bold">{verifiedCount}</strong> / {totalEnrolled} total
                   </span>
                   <span className="text-muted">
-                    Threshold: <strong className="text-white">70.0%</strong> (Current: <strong className="text-emerald-400 font-bold">{quorumPercentage}%</strong>)
+                    Threshold: <strong className="text-white">70.0%</strong> (Current: <strong className={meetsQuorum ? "text-emerald-400 font-bold" : "text-amber-400 font-bold"}>{quorumPercentage}%</strong>)
                   </span>
                 </div>
                 <div className="w-full h-4 bg-canvas rounded-full overflow-hidden p-0.5 border border-white/[0.08]">
                   <div
-                    className="h-full bg-emerald-400 rounded-full transition-all duration-500"
-                    style={{ width: `${quorumPercentage}%` }}
+                    className={`h-full rounded-full transition-all duration-500 ${meetsQuorum ? "bg-emerald-400" : "bg-amber-400"}`}
+                    style={{ width: `${Math.min(quorumPercentage, 100)}%` }}
                   />
+                </div>
+                <div className="text-xs font-mono text-muted flex items-center gap-2">
+                  <span className="text-muted-soft">Active Leaderboard Classification (§3.3):</span>
+                  <span className={`font-bold ${meetsQuorum ? "text-emerald-400" : "text-amber-400"}`}>
+                    {quorumLabel}
+                  </span>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
                 <div className="p-5 rounded-2xl bg-surface-raised border border-white/[0.06] space-y-2">
                   <span className="text-muted-soft font-mono text-xs font-bold tracking-wider block uppercase">TOTAL ENROLLED</span>
-                  <span className="text-2xl sm:text-3xl font-extrabold text-white font-mono">60 Students</span>
-                  <p className="text-xs sm:text-sm text-muted">Official registry for CSE 2026</p>
+                  <span className="text-2xl sm:text-3xl font-extrabold text-white font-mono">{totalEnrolled} Students</span>
+                  <p className="text-xs sm:text-sm text-muted">Authoritative class denominator</p>
                 </div>
                 <div className="p-5 rounded-2xl bg-surface-raised border border-white/[0.06] space-y-2">
-                  <span className="text-muted-soft font-mono text-xs font-bold tracking-wider block uppercase">OPTED-IN &amp; VERIFIED</span>
-                  <span className="text-2xl sm:text-3xl font-extrabold text-accent font-mono">42 Students</span>
-                  <p className="text-xs sm:text-sm text-muted">Completed OAuth &amp; HMAC proof</p>
+                  <span className="text-muted-soft font-mono text-xs font-bold tracking-wider block uppercase">OPTED-IN &amp; PARTICIPATING</span>
+                  <span className="text-2xl sm:text-3xl font-extrabold text-accent font-mono">{verifiedCount} Students</span>
+                  <p className="text-xs sm:text-sm text-muted">Connected GitHub/LeetCode profiles</p>
                 </div>
                 <div className="p-5 rounded-2xl bg-surface-raised border border-white/[0.06] space-y-2">
-                  <span className="text-muted-soft font-mono text-xs font-bold tracking-wider block uppercase">UNCLAIMED SEATS</span>
-                  <span className="text-2xl sm:text-3xl font-extrabold text-muted font-mono">18 Pending</span>
-                  <p className="text-xs sm:text-sm text-muted">Invite tokens active &amp; unexpired</p>
+                  <span className="text-muted-soft font-mono text-xs font-bold tracking-wider block uppercase">PARTICIPATION STATUS</span>
+                  <span className={`text-2xl sm:text-3xl font-extrabold font-mono ${meetsQuorum ? "text-emerald-400" : "text-amber-400"}`}>
+                    {meetsQuorum ? "Quorum Met" : "Below 70%"}
+                  </span>
+                  <p className="text-xs sm:text-sm text-muted">{meetsQuorum ? "Qualifies as Class Representative" : "Labelled as Participating Only"}</p>
                 </div>
               </div>
             </div>
@@ -503,6 +661,233 @@ export default function AdminHubPage() {
                     <span className="text-amber-400 font-mono font-semibold">Enforced</span>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB: CLASS ROSTER & QUORUM (§3.3) */}
+        {activeTab === "roster" && (
+          <div className="space-y-8">
+            {/* Header and Controls */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+              <div>
+                <h2 className="text-2xl font-bold text-white flex items-center space-x-3">
+                  <span>Class Roster &amp; Quorum Governance</span>
+                  <span className={`px-3 py-1 rounded-full text-xs font-mono font-bold border ${
+                    meetsQuorum
+                      ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                      : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                  }`}>
+                    {meetsQuorum ? "70% Quorum Satisfied" : "Quorum Deficit"}
+                  </span>
+                </h2>
+                <p className="text-sm sm:text-base text-muted mt-1 max-w-3xl">
+                  Rule §3.3 Quorum Rule: Active denominator requires $\ge 70\%$ verified participation to designate the cohort as a &quot;Representative Class Leaderboard&quot;.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  onClick={handleExportRosterCSV}
+                  className="px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm font-semibold font-mono text-ink-secondary hover:text-white flex items-center space-x-2 transition-colors"
+                >
+                  <Download className="w-4 h-4 text-accent" />
+                  <span>Export CSV</span>
+                </button>
+
+                <button
+                  onClick={() => setIsEnrollModalOpen(true)}
+                  className="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-light text-canvas font-bold text-sm flex items-center space-x-2 shadow-lg shadow-accent/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  <UserPlus className="w-4 h-4" />
+                  <span>Enroll Student</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Quorum Visual Meter Card */}
+            <div className="p-6 rounded-2xl bg-surface border border-white/[0.08] space-y-4 shadow-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm">
+                <div>
+                  <span className="text-muted text-xs font-mono font-bold tracking-wider uppercase block">
+                    CURRENT LEADERBOARD CLASSIFICATION
+                  </span>
+                  <span className="text-lg font-bold text-white font-mono mt-0.5 block">
+                    {quorumLabel}
+                  </span>
+                </div>
+                <div className="sm:text-right">
+                  <span className="text-muted text-xs font-mono font-bold tracking-wider uppercase block">
+                    PARTICIPATION RATIO
+                  </span>
+                  <span className="text-lg font-bold font-mono text-accent">
+                    {verifiedCount} / {totalEnrolled} ({quorumPercentage}%)
+                  </span>
+                </div>
+              </div>
+
+              {/* Progress bar with 70% threshold tick */}
+              <div className="relative pt-2">
+                <div className="w-full h-3 rounded-full bg-surface-raised border border-white/10 overflow-hidden">
+                  <div
+                    className={`h-full transition-all duration-500 rounded-full ${
+                      meetsQuorum ? "bg-gradient-to-r from-emerald-500 to-accent" : "bg-gradient-to-r from-amber-600 to-amber-400"
+                    }`}
+                    style={{ width: `${Math.min(quorumPercentage, 100)}%` }}
+                  />
+                </div>
+                {/* 70% Threshold Marker */}
+                <div
+                  className="absolute top-0 bottom-0 flex flex-col items-center pointer-events-none"
+                  style={{ left: "70%" }}
+                >
+                  <div className="w-0.5 h-full bg-white/40 shadow-sm" />
+                  <span className="text-[10px] font-mono text-muted-soft mt-1 -translate-x-1/2">
+                    70% Quorum Line
+                  </span>
+                </div>
+              </div>
+
+              <div className="pt-2 flex items-center justify-between text-xs text-muted-soft">
+                <span>Threshold: Rule §3.3 Requires ≥ 70.0%</span>
+                <span>{meetsQuorum ? "Eligible for institutional certificate generation" : "Leaderboard automatically designated as Participating Only"}</span>
+              </div>
+            </div>
+
+            {/* Search Filter Bar */}
+            <div className="flex items-center space-x-3 bg-surface border border-white/[0.08] px-4 py-2.5 rounded-xl">
+              <Search className="w-4 h-4 text-muted shrink-0" />
+              <input
+                type="text"
+                value={rosterSearch}
+                onChange={(e) => setRosterSearch(e.target.value)}
+                placeholder="Search students by roll number, name, email, or GitHub/LeetCode handle..."
+                className="w-full bg-transparent text-sm text-white placeholder-muted-soft focus:outline-none font-mono"
+              />
+              {rosterSearch && (
+                <button
+                  onClick={() => setRosterSearch("")}
+                  className="text-xs text-muted hover:text-white font-mono px-2 py-0.5 rounded bg-white/5"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+
+            {/* Roster Table */}
+            <div className="bg-surface border border-white/[0.08] rounded-2xl overflow-hidden shadow-xl">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                  <thead className="bg-surface-raised border-b border-white/[0.08] text-xs font-mono uppercase tracking-wider text-muted">
+                    <tr>
+                      <th className="py-3.5 px-5 font-semibold">Student / Roll No</th>
+                      <th className="py-3.5 px-4 font-semibold">Class Section</th>
+                      <th className="py-3.5 px-4 font-semibold">Connected Handles</th>
+                      <th className="py-3.5 px-4 font-semibold">Observation Status</th>
+                      <th className="py-3.5 px-4 font-semibold text-right">Quorum Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/[0.06]">
+                    {isLoadingRoster ? (
+                      <tr>
+                        <td colSpan={5} className="py-12 text-center text-muted font-mono">
+                          <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-2 text-accent" />
+                          Loading authoritative class roster from SQLite...
+                        </td>
+                      </tr>
+                    ) : rosterMembers.filter(m => {
+                        if (!rosterSearch.trim()) return true;
+                        const query = rosterSearch.toLowerCase();
+                        return (
+                          m.rollNo?.toLowerCase().includes(query) ||
+                          m.name?.toLowerCase().includes(query) ||
+                          m.email?.toLowerCase().includes(query) ||
+                          m.handleGithub?.toLowerCase().includes(query) ||
+                          m.handleLeetcode?.toLowerCase().includes(query) ||
+                          m.handleHackerrank?.toLowerCase().includes(query)
+                        );
+                      }).length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="py-12 text-center text-muted">
+                          <Users className="w-8 h-8 mx-auto mb-2 text-muted-soft" />
+                          <p className="font-semibold text-white">No enrolled students found</p>
+                          <p className="text-xs text-muted-soft mt-1">Try refining your search query or enroll a new student.</p>
+                        </td>
+                      </tr>
+                    ) : (
+                      rosterMembers
+                        .filter(m => {
+                          if (!rosterSearch.trim()) return true;
+                          const query = rosterSearch.toLowerCase();
+                          return (
+                            m.rollNo?.toLowerCase().includes(query) ||
+                            m.name?.toLowerCase().includes(query) ||
+                            m.email?.toLowerCase().includes(query) ||
+                            m.handleGithub?.toLowerCase().includes(query) ||
+                            m.handleLeetcode?.toLowerCase().includes(query) ||
+                            m.handleHackerrank?.toLowerCase().includes(query)
+                          );
+                        })
+                        .map((member) => (
+                          <tr key={member.id} className="hover:bg-surface-raised transition-colors">
+                            <td className="py-4 px-5">
+                              <div className="font-bold text-white text-base">{member.name}</div>
+                              <div className="flex items-center space-x-2 text-xs text-muted font-mono mt-0.5">
+                                <span className="text-accent">{member.rollNo}</span>
+                                <span>•</span>
+                                <span>{member.email}</span>
+                              </div>
+                            </td>
+                            <td className="py-4 px-4 text-xs font-mono text-ink-secondary">
+                              {member.classSection}
+                            </td>
+                            <td className="py-4 px-4">
+                              <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs">
+                                {member.handleGithub ? (
+                                  <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded bg-white/[0.04] border border-white/10 text-white">
+                                    <Github className="w-3 h-3 text-muted" />
+                                    <span>{member.handleGithub}</span>
+                                  </span>
+                                ) : (
+                                  <span className="text-muted-soft text-[11px]">—</span>
+                                )}
+                                {member.handleLeetcode && (
+                                  <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-300">
+                                    <Code2 className="w-3 h-3 text-amber-400" />
+                                    <span>{member.handleLeetcode}</span>
+                                  </span>
+                                )}
+                                {member.handleHackerrank && (
+                                  <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-300">
+                                    <Award className="w-3 h-3 text-emerald-400" />
+                                    <span>{member.handleHackerrank}</span>
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                            <td className="py-4 px-4">
+                              <div className="space-y-1">
+                                <div className="text-xs font-mono text-white flex items-center space-x-1.5">
+                                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                                  <span>{member.latestGithubActiveDays !== null && member.latestGithubActiveDays !== undefined ? `${member.latestGithubActiveDays} Active Days` : "Active Telemetry"}</span>
+                                </div>
+                                <div className="text-[11px] text-muted-soft font-mono">
+                                  Boundary: Sun 23:59:59 IST
+                                </div>
+                              </div>
+                            </td>
+                            <td className="py-4 px-4 text-right">
+                              <span className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span>Opted-In</span>
+                              </span>
+                            </td>
+                          </tr>
+                        ))
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -739,6 +1124,189 @@ export default function AdminHubPage() {
             </div>
           </div>
         )}
+
+        {/* ENROLLMENT MODAL (§3.3) */}
+        <AnimatePresence>
+          {isEnrollModalOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsEnrollModalOpen(false)}
+                className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+              />
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                className="relative w-full max-w-lg bg-surface border border-white/10 rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6 z-10 max-h-[90vh] overflow-y-auto"
+              >
+                <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
+                  <div>
+                    <h3 className="text-xl font-bold text-white flex items-center space-x-2">
+                      <UserPlus className="w-5 h-5 text-accent" />
+                      <span>Enroll Classmate</span>
+                    </h3>
+                    <p className="text-xs text-muted mt-1 font-mono">
+                      Rule §3.3: Register official student denominator in SQLite
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setIsEnrollModalOpen(false)}
+                    className="p-1 rounded-lg text-muted hover:text-white hover:bg-white/5 transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <form onSubmit={handleEnrollSubmit} className="space-y-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-mono font-semibold text-muted flex items-center space-x-1">
+                      <Hash className="w-3.5 h-3.5 text-accent" />
+                      <span>Roll Number *</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. 22CS101"
+                      value={enrollForm.rollNo}
+                      onChange={(e) => setEnrollForm(prev => ({ ...prev, rollNo: e.target.value }))}
+                      className="w-full bg-surface-raised border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-muted-soft focus:outline-none focus:border-accent font-mono"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-mono font-semibold text-muted flex items-center space-x-1">
+                      <Users className="w-3.5 h-3.5 text-accent" />
+                      <span>Full Student Name *</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Anandha Krishnan"
+                      value={enrollForm.name}
+                      onChange={(e) => setEnrollForm(prev => ({ ...prev, name: e.target.value }))}
+                      className="w-full bg-surface-raised border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-muted-soft focus:outline-none focus:border-accent"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-mono font-semibold text-muted flex items-center space-x-1">
+                      <Mail className="w-3.5 h-3.5 text-accent" />
+                      <span>College Email Address *</span>
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="e.g. anand.k@college.edu"
+                      value={enrollForm.email}
+                      onChange={(e) => setEnrollForm(prev => ({ ...prev, email: e.target.value }))}
+                      className="w-full bg-surface-raised border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-muted-soft focus:outline-none focus:border-accent font-mono"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-mono font-semibold text-muted">
+                      Class Section / Cohort
+                    </label>
+                    <input
+                      type="text"
+                      value={enrollForm.classSection}
+                      onChange={(e) => setEnrollForm(prev => ({ ...prev, classSection: e.target.value }))}
+                      className="w-full bg-surface-raised border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-accent font-mono"
+                    />
+                  </div>
+
+                  <div className="pt-2 border-t border-white/[0.08] space-y-3">
+                    <span className="text-xs font-mono text-muted-soft block uppercase font-bold tracking-wider">
+                      Initial Telemetry Handles (Optional)
+                    </span>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-mono text-muted flex items-center space-x-1">
+                          <Github className="w-3 h-3" />
+                          <span>GitHub</span>
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="username"
+                          value={enrollForm.handleGithub}
+                          onChange={(e) => setEnrollForm(prev => ({ ...prev, handleGithub: e.target.value }))}
+                          className="w-full bg-surface-raised border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-muted-soft focus:outline-none focus:border-accent font-mono"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-mono text-muted flex items-center space-x-1">
+                          <Code2 className="w-3 h-3 text-amber-400" />
+                          <span>LeetCode</span>
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="username"
+                          value={enrollForm.handleLeetcode}
+                          onChange={(e) => setEnrollForm(prev => ({ ...prev, handleLeetcode: e.target.value }))}
+                          className="w-full bg-surface-raised border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-muted-soft focus:outline-none focus:border-accent font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-mono text-muted flex items-center space-x-1">
+                        <Award className="w-3 h-3 text-emerald-400" />
+                        <span>HackerRank</span>
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="username"
+                        value={enrollForm.handleHackerrank}
+                        onChange={(e) => setEnrollForm(prev => ({ ...prev, handleHackerrank: e.target.value }))}
+                        className="w-full bg-surface-raised border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-muted-soft focus:outline-none focus:border-accent font-mono"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs text-muted flex items-start space-x-2">
+                    <Info className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                    <span>
+                      Zero Fabrication Principle (§1.2): Enrolling establishes the official cohort member. Telemetry metrics will only be populated after verified API observations.
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-end space-x-3 pt-3">
+                    <button
+                      type="button"
+                      onClick={() => setIsEnrollModalOpen(false)}
+                      className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-muted hover:text-white text-xs font-mono font-bold transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSubmittingEnrollment}
+                      className="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-light text-canvas text-xs font-mono font-bold flex items-center space-x-2 transition-all disabled:opacity-50"
+                    >
+                      {isSubmittingEnrollment ? (
+                        <>
+                          <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                          <span>Enrolling...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>Complete Enrollment</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
       </main>
 
       {/* Footer */}

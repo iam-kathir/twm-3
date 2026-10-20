@@ -67,6 +67,27 @@ adapters. The plan's Phase 0 (provider evidence) has not started.
 
 ## Session log
 
+### 2026-10-21 — Live Roster & 70% Quorum Console (§3.3) + Boundary Background Scheduler (Antigravity)
+
+- **Live Roster & 70% Quorum Governance (Task P2-3, Rule §3.3)**:
+  - `src/lib/db.ts`: Added `insertRosterMember(member: NewRosterMemberInput): RosterMemberRow` and `getRosterQuorumStats(): QuorumStats`. Real cohort denominator in SQLite determines the Section 3.3 public label: "Representative Class Leaderboard" ($\ge 70\%$) vs "Participating Members Leaderboard" ($< 70\%$).
+  - `src/app/api/roster/route.ts`: Implemented `POST /api/roster` with rate-limiting, field sanitization, and SQLite uniqueness constraint handling. Updated `GET /api/roster` to provide real-time quorum denominator analytics.
+  - `src/app/admin/page.tsx`: Added Class Roster tab with visual quorum threshold meter (70% demarcation line), real-time student search filtering, live observation indicators, CSV export, and an animated student enrollment modal with zero-fabrication disclosures.
+- **Boundary Background Scheduler & Daemon (Task P2-4, Rules §9.1 & §9.7)**:
+  - Created [`scripts/boundary-scheduler.mjs`](scripts/boundary-scheduler.mjs): Standalone Node scheduler utility and daemon.
+  - Computes exact IST date (`Asia/Kolkata` / UTC+5:30), target week number, and gap to Sunday 23:59:59 IST boundary.
+  - CLI flags: `--once` (single audit cycle), `--finalize` (immediate closeout trigger), and continuous daemon (3-hour loop).
+  - Automatically triggers `POST http://localhost:3000/api/cron/boundary-finalize` with zero-downtime direct SQLite finalization fallback.
+- **Automated Verification & Test Suite**:
+  - `scripts/test-foundation.mjs`: Added unit tests for Section 3.3 quorum calculation and unique roll-number roster insertion.
+  - `npm test`: Exits 0 (9/9 tests pass across 7 suites in 34ms).
+  - `npx tsc --noEmit`: Exits 0 (0 errors, clean).
+  - Verified `node scripts/boundary-scheduler.mjs --once` (exited 0 with accurate IST boundary metrics).
+  - Verified `node scripts/boundary-scheduler.mjs --finalize` (HTTP 200 from live server on port 3000).
+- **Remaining / Next**:
+  - Phase 2 tasks (P2-1, P2-2, P2-DESIGN, P2-3, P2-4) are all **DONE**.
+  - Ready for Phase 3: Multi-Provider Verification & Audits (`P3-1` GitHub commit author verification, `P3-2` LeetCode historical baseline tracking, `P3-3` HackerRank badge evidence disclosure).
+
 ### 2026-10-21 — Frontend Motion, Typography & SaaS Aesthetics Overhaul (Antigravity)
 
 - **Skills Enabled & Integrated**:

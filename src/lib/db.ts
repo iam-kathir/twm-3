@@ -298,6 +298,79 @@ export function getCurrentUserMember(): RosterMemberRow | undefined {
   return db.prepare("SELECT * FROM roster_members WHERE is_current_user = 1 LIMIT 1").get() as unknown as RosterMemberRow | undefined;
 }
 
+export interface NewRosterMemberInput {
+  rollNo: string;
+  name: string;
+  email: string;
+  classSection?: string;
+  handleGithub?: string | null;
+  handleLeetcode?: string | null;
+  handleHackerrank?: string | null;
+  isCurrentUser?: boolean;
+}
+
+export interface QuorumStats {
+  totalEnrolled: number;
+  verifiedOptedIn: number;
+  quorumPercentage: number;
+  meetsQuorum: boolean;
+  quorumThreshold: number; // 0.70
+  label: "Representative Class Leaderboard" | "Participating Members Leaderboard";
+}
+
+export function insertRosterMember(member: NewRosterMemberInput): RosterMemberRow {
+  const db = getDb();
+  const id = `usr-${member.rollNo.toLowerCase().replace(/[^a-z0-9]/g, "")}-${Date.now().toString(36)}`;
+  const classSection = member.classSection || "B.Tech CSE 2026 (Sec A)";
+
+  const stmt = db.prepare(`
+    INSERT INTO roster_members (
+      id, roll_no, name, email, class_section,
+      handle_github, handle_leetcode, handle_hackerrank, is_current_user
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `);
+
+  stmt.run(
+    id,
+    member.rollNo.trim().toUpperCase(),
+    member.name.trim(),
+    member.email.trim().toLowerCase(),
+    classSection,
+    member.handleGithub?.trim() || null,
+    member.handleLeetcode?.trim() || null,
+    member.handleHackerrank?.trim() || null,
+    member.isCurrentUser ? 1 : 0
+  );
+
+  return db.prepare("SELECT * FROM roster_members WHERE id = ?").get(id) as unknown as RosterMemberRow;
+}
+
+export function getRosterQuorumStats(): QuorumStats {
+  const db = getDb();
+  const members = db.prepare("SELECT * FROM roster_members WHERE is_active = 1").all() as unknown as RosterMemberRow[];
+  const totalEnrolled = members.length;
+
+  // Participating members are those with linked accounts
+  const participatingMembers = members.filter(
+    (m) => (m.handle_github && m.handle_github.trim() !== "") ||
+           (m.handle_leetcode && m.handle_leetcode.trim() !== "") ||
+           (m.handle_hackerrank && m.handle_hackerrank.trim() !== "")
+  );
+  const verifiedOptedIn = participatingMembers.length;
+
+  const quorumPercentage = totalEnrolled > 0 ? Number(((verifiedOptedIn / totalEnrolled) * 100).toFixed(1)) : 0;
+  const meetsQuorum = totalEnrolled > 0 && (verifiedOptedIn / totalEnrolled) >= 0.70;
+
+  return {
+    totalEnrolled,
+    verifiedOptedIn,
+    quorumPercentage,
+    meetsQuorum,
+    quorumThreshold: 0.70,
+    label: meetsQuorum ? "Representative Class Leaderboard" : "Participating Members Leaderboard",
+  };
+}
+
 export interface ObservationRecord {
   id: string;
   studentId: string;
