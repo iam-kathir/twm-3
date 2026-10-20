@@ -52,14 +52,31 @@ adapters. The plan's Phase 0 (provider evidence) has not started.
 | :--- | :--- | :--- |
 | **Global UI Scale & Readability** | Antigravity — **COMPLETED** | Upgraded typography, input sizes, container widths (`max-w-6xl`/`7xl`), and hydration safety across all 11 routes. |
 | **Login & Onboarding Scale** | Antigravity — **COMPLETED** | Enlarged modal cards, button padding, step pills, and typography on `/login` and `/onboarding`. |
-| **1. Public Asset Optimization** | OpenCode — **ASSIGNED** | Audit and remove/convert dead heavy assets in `public/` (`logo.svg` 2.4MB, `logo.png` 1.8MB, etc.). |
-| **2. Token Consolidation Sweep** | OpenCode — **ASSIGNED** | Consolidate remaining literal greys (`#8D94A5`, `#636A7E`) into CSS tokens in `globals.css`. |
-| **3. Landing Rhythm Polish** | OpenCode — **ASSIGNED** | Break up repetitive 3-column card shapes in `MotionShowcase`, `PlatformMatrix`, `CockpitPreview` using `design-taste-frontend` / `creative-motion-frontend`. |
-| **4. Phase 0 API Route Handlers** | OpenCode / Antigravity — **NEXT** | Scaffold first real API routes under `src/app/api/` (`/api/telemetry/github`, `/api/auth/hmac-challenge`). |
+| **Landing Section Scale & Rhythm** | Antigravity — **COMPLETED** | Scaled `HeroSection`, `NavBar`, `MotionShowcase`, `PlatformMatrix`, `CockpitPreview`, and `AppScreensGallery` to generous desktop proportion with interactive observation console. |
+| **1. Public Asset Optimization** | OpenCode — **READY** | Audit and remove/convert dead heavy assets in `public/` (`logo.svg` 2.4MB, `logo.png` 1.8MB, etc.). |
+| **2. Token Consolidation Sweep** | OpenCode — **READY** | Consolidate remaining literal greys (`#8D94A5`, `#636A7E`) into CSS tokens in `globals.css`. |
+| **3. Phase 0 API Route Handlers** | OpenCode / Antigravity — **NEXT** | Scaffold first real API routes under `src/app/api/` (`/api/telemetry/github`, `/api/auth/hmac-challenge`). |
 
 ---
 
 ## Session log
+
+### 2026-10-20 — Landing Section Rhythm & Interactive Showcase Scale Overhaul
+**Completed by:** Antigravity (Commit `bdce638`)
+- **Scope & Files:**
+  - `src/components/landing/NavBar.tsx`: Container widened to `max-w-6xl`, height increased to `h-16 sm:h-18`, link typography scaled to `text-sm font-medium`, "Join Class" action button enlarged with generous padding.
+  - `src/components/landing/HeroSection.tsx`: Headline scaled up to `lg:text-8xl`, input and join button scaled to `text-sm sm:text-base font-mono py-3 px-6`, and browser preview bar expanded.
+  - `src/components/landing/MotionShowcase.tsx`: Elevated into an interactive observation console (`max-w-5xl`, `p-8 sm:p-10`). Active days count scaled to `text-4xl sm:text-5xl font-mono`, heatmap blocks enlarged to `h-14 sm:h-16`, and progress coverage bar added.
+  - `src/components/landing/PlatformMatrix.tsx`: Container widened to `max-w-7xl`, cards scaled with `p-8 sm:p-9`, platform icons enlarged, field rows scaled to `p-3.5 text-sm font-mono`.
+  - `src/components/landing/CockpitPreview.tsx`: Container widened to `max-w-7xl`, user avatar enlarged to `h-12 w-12`, cards padded with `p-7 sm:p-8`, solved counts scaled to `text-2xl font-extrabold`, AI/deterministic recap paragraph given generous `p-5 text-sm sm:text-base` spacing.
+  - `src/components/landing/AppScreensGallery.tsx`: Widened to `max-w-7xl`, screen switcher tabs scaled to `px-5 py-2.5 text-sm`, preview container enlarged, and highlight cards expanded to `p-4 text-sm`.
+- **Verification & Gates:**
+  - `npx tsc --noEmit` exited 0 (clean).
+  - Dev server HTTP 200 on port 3000 verified.
+  - Headless browser verification completed with high-fidelity screenshots saved to brain artifacts.
+- **Handover to OpenCode:**
+  - Landing UI and all 11 application routes are now fully scaled, accessible, and aligned with Obsidian + Amber theme tokens.
+  - OpenCode can proceed with `public/` asset optimization and the Phase 0 API route scaffolding.
 
 ### 2026-10-20 — Global UI Scale & Readability Overhaul + Multi-Agent Handover
 
