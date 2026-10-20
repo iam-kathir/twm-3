@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { checkRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -12,13 +13,22 @@ interface HackerRankBadge {
 }
 
 export async function GET(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for") || "local";
+  const rateLimit = checkRateLimit(`hackerrank:${ip}`, { limit: 30, windowMs: 60000 });
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: "Too many telemetry requests. Please wait a moment." },
+      { status: 429, headers: getRateLimitHeaders(rateLimit) }
+    );
+  }
+
   const { searchParams } = new URL(req.url);
   const username = searchParams.get("username");
 
   if (!username) {
     return NextResponse.json(
       { error: "Query parameter 'username' is required (e.g. /api/telemetry/hackerrank?username=alice)" },
-      { status: 400 }
+      { status: 400, headers: getRateLimitHeaders(rateLimit) }
     );
   }
 

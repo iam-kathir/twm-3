@@ -16,3 +16,7 @@ next-env.d.ts
 # os
 .DS_Store
 Thumbs.db
+
+# sqlite databases
+/data/*.sqlite*
+/data/*.db*

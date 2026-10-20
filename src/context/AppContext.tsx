@@ -507,6 +507,32 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
       saveUser(updatedUser);
 
+      // Persist to server SQLite observation database (§9.7)
+      try {
+        await fetch("/api/telemetry/sync", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            platform: "github",
+            metricName: "active_days",
+            metricValue: updatedUser.github.activeDaysWeek,
+            displayValue: `${updatedUser.github.activeDaysWeek} / 7 Days`,
+          }),
+        });
+        await fetch("/api/telemetry/sync", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            platform: "leetcode",
+            metricName: "total_solved",
+            metricValue: updatedUser.leetcode.totalSolved,
+            displayValue: `${updatedUser.leetcode.totalSolved} Solved`,
+          }),
+        });
+      } catch {
+        // Non-blocking background persistence
+      }
+
       addToast({
         title: "All 3 Telemetry Feeds Synced",
         description: `GitHub: ${updatedUser.github.activeDaysWeek} active days • LeetCode: ${updatedUser.leetcode.totalSolved} solved • HackerRank: ${updatedUser.hackerrank.problemSolvingStars}★ verified.`,

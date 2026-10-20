@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
+import { checkRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
+import { registerHmacNonce, verifyAndConsumeNonce } from "@/lib/db";
 
 // 15-minute challenge TTL (Section 6.2 rule)
 const CHALLENGE_TTL_MS = 15 * 60 * 1000;
@@ -54,6 +56,7 @@ function createChallenge(userId: string, provider: Provider, handle: string) {
   const nonce = crypto.randomBytes(8).toString("hex");
   const expiresAt = Date.now() + CHALLENGE_TTL_MS;
   const sig = signToken(userId, provider, handle, nonce, expiresAt);
+  registerHmacNonce(nonce, userId, provider, handle, expiresAt);
   return {
     challengeCode: `twm-verify-${expiresAt.toString(36)}-${nonce}-${sig}`,
     expiresAt: new Date(expiresAt).toISOString(),
@@ -69,9 +72,6 @@ function parseToken(code: string): ParsedToken | null {
 }
 
 type TokenCheck = { ok: true } | { ok: false; status: number; reason: string };
-
-// shortcut: tokens are bound to user+provider+handle but not single-use. Without a store, a
-// replay inside the 15-minute TTL resolves to the same handle. Add a nonce table when a DB lands.
 
 function checkToken(
   code: string,
@@ -91,6 +91,13 @@ function checkToken(
   if (expected.length !== received.length || !crypto.timingSafeEqual(expected, received)) {
     return { ok: false, status: 400, reason: "SIGNATURE_MISMATCH" };
   }
+
+  // Nonce single-use check (§6.2 replay protection)
+  const nonceCheck = verifyAndConsumeNonce(parsed.nonce);
+  if (!nonceCheck.valid) {
+    return { ok: false, status: 400, reason: nonceCheck.reason || "NONCE_INVALID" };
+  }
+
   return { ok: true };
 }
 
@@ -134,6 +141,15 @@ async function fetchPublicBio(provider: Provider, handle: string): Promise<strin
 }
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for") || "local";
+  const rateLimit = checkRateLimit(`hmac:${ip}`, { limit: 15, windowMs: 60000 });
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: "Too many requests. Please wait a moment before trying again." },
+      { status: 429, headers: getRateLimitHeaders(rateLimit) }
+    );
+  }
+
   let body: ChallengeRequest;
   try {
     body = await req.json();

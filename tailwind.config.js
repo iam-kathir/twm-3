@@ -21,6 +21,7 @@ module.exports = {
         "accent-hover": "rgb(var(--accent-hover-rgb) / <alpha-value>)",
         "provider-github": "rgb(var(--provider-github-rgb) / <alpha-value>)",
         "provider-leetcode": "rgb(var(--provider-leetcode-rgb) / <alpha-value>)",
+        "provider-leetcode-brand": "rgb(var(--provider-leetcode-brand-rgb) / <alpha-value>)",
         "provider-hackerrank": "rgb(var(--provider-hackerrank-rgb) / <alpha-value>)",
         "status-verified": "rgb(var(--status-verified-rgb) / <alpha-value>)",
         "status-error": "rgb(var(--status-error-rgb) / <alpha-value>)",
