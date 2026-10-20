@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Trophy, 
   Github, 
@@ -17,145 +17,248 @@ import {
   ExternalLink,
   CheckCircle2,
   Users,
-  FileDown
+  FileDown,
+  Star,
+  ShieldAlert
 } from "lucide-react";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useApp } from "@/context/AppContext";
-
-interface LeaderboardEntry {
-  rank: number;
-  name: string;
-  handle: string;
-  value: string;
-  numericVal: number;
-  coverage: string;
-  coveragePass: boolean;
-  freshness: string;
-  status: "Finalized" | "Provisional";
-  isCurrentUser?: boolean;
-}
+import { computeCompetitionRanks, RawParticipant, RankedParticipant } from "@/lib/leaderboard";
 
 export default function LeaderboardPage() {
-  const { exportLeaderboardCSV, openDisputeModal } = useApp();
-  const [platform, setPlatform] = useState<"github" | "leetcode">("github");
-  const [period, setPeriod] = useState<"current" | "past">("current");
+  const { exportLeaderboardCSV, openDisputeModal, currentUser } = useApp();
+  const [platform, setPlatform] = useState<"github" | "leetcode" | "hackerrank">("github");
   const [showCalculationInfo, setShowCalculationInfo] = useState(false);
 
-  // 70% threshold calculation
+  // 70% threshold calculation (§3.3)
   const totalRoster = 60;
   const participatingCount = 42;
   const participationPercentage = Math.round((participatingCount / totalRoster) * 100);
   const isRepresentative = participationPercentage >= 70; // 70%
 
-  // Sample deterministic data with 1, 2, 2, 4 competition ties (§9.6)
-  const githubEntries: LeaderboardEntry[] = [
-    {
-      rank: 1,
-      name: "Rohan Varma",
-      handle: "@rohan-code",
-      value: "7 / 7 Days",
-      numericVal: 7,
-      coverage: "96.5%",
-      coveragePass: true,
-      freshness: "18m ago",
-      status: "Finalized",
-    },
-    {
-      rank: 2,
-      name: "Aarav Sharma",
-      handle: "@aarav-dev",
-      value: "6 / 7 Days",
-      numericVal: 6,
+  // Raw GitHub participants (with currentUser dynamically bound)
+  const rawGithubParticipants: RawParticipant[] = useMemo(() => {
+    const peers: RawParticipant[] = [
+      {
+        id: "p-rohan",
+        name: "Rohan Varma",
+        handle: "@rohan-code",
+        numericVal: 7,
+        value: "7 / 7 Days",
+        coverage: "96.5%",
+        coveragePass: true,
+        freshness: "18m ago",
+        status: "Finalized",
+      },
+      {
+        id: "p-priya",
+        name: "Priya Nair",
+        handle: "@priya-n",
+        numericVal: 6,
+        value: "6 / 7 Days",
+        coverage: "92.8%",
+        coveragePass: true,
+        freshness: "24m ago",
+        status: "Finalized",
+      },
+      {
+        id: "p-aditya",
+        name: "Aditya Kumar",
+        handle: "@aditya-k",
+        numericVal: 5,
+        value: "5 / 7 Days",
+        coverage: "91.0%",
+        coveragePass: true,
+        freshness: "35m ago",
+        status: "Finalized",
+      },
+      {
+        id: "p-sneha",
+        name: "Sneha Patel",
+        handle: "@sneha-p",
+        numericVal: 4,
+        value: "4 / 7 Days",
+        coverage: "88.4%",
+        coveragePass: false,
+        freshness: "1h ago",
+        status: "Provisional",
+      },
+      {
+        id: "p-vikram",
+        name: "Vikram Singh",
+        handle: "@vikram-s",
+        numericVal: 5,
+        value: "5 / 7 Days",
+        coverage: "93.1%",
+        coveragePass: true,
+        freshness: "42m ago",
+        status: "Finalized",
+      },
+      {
+        id: "p-ananya",
+        name: "Ananya Roy",
+        handle: "@ananya-r",
+        numericVal: 6,
+        value: "6 / 7 Days",
+        coverage: "94.0%",
+        coveragePass: true,
+        freshness: "5m ago",
+        status: "Finalized",
+      }
+    ];
+
+    // Current user dynamically inserted from live context
+    const currentActiveDays = currentUser?.github?.activeDaysWeek ?? 6;
+    const userEntry: RawParticipant = {
+      id: "p-current-user",
+      name: currentUser?.name || "Aarav Sharma",
+      handle: currentUser?.handle ? `@${currentUser.handle}` : "@aarav-dev",
+      numericVal: currentActiveDays,
+      value: `${currentActiveDays} / 7 Days`,
       coverage: "94.2%",
       coveragePass: true,
-      freshness: "12m ago",
+      freshness: currentUser?.github?.lastCommitTime || "12m ago",
       status: "Finalized",
       isCurrentUser: true,
-    },
-    {
-      rank: 2,
-      name: "Priya Nair",
-      handle: "@priya-n",
-      value: "6 / 7 Days",
-      numericVal: 6,
-      coverage: "92.8%",
-      coveragePass: true,
-      freshness: "24m ago",
-      status: "Finalized",
-    },
-    {
-      rank: 4,
-      name: "Aditya Kumar",
-      handle: "@aditya-k",
-      value: "5 / 7 Days",
-      numericVal: 5,
-      coverage: "91.0%",
-      coveragePass: true,
-      freshness: "35m ago",
-      status: "Finalized",
-    },
-    {
-      rank: 5,
-      name: "Sneha Patel",
-      handle: "@sneha-p",
-      value: "4 / 7 Days",
-      numericVal: 4,
-      coverage: "88.4%",
-      coveragePass: false,
-      freshness: "1h ago",
-      status: "Provisional",
-    },
-  ];
+    };
 
-  const leetcodeEntries: LeaderboardEntry[] = [
-    {
-      rank: 1,
-      name: "Priya Nair",
-      handle: "@priya-n",
-      value: "+16 Solved",
-      numericVal: 16,
-      coverage: "Pre-boundary check",
-      coveragePass: true,
-      freshness: "Sun 23:45",
-      status: "Finalized",
-    },
-    {
-      rank: 2,
-      name: "Aarav Sharma",
-      handle: "@aarav-dev",
-      value: "+12 Solved",
-      numericVal: 12,
+    return [...peers, userEntry];
+  }, [currentUser]);
+
+  // Raw LeetCode participants (with currentUser dynamically bound)
+  const rawLeetCodeParticipants: RawParticipant[] = useMemo(() => {
+    const peers: RawParticipant[] = [
+      {
+        id: "p-priya",
+        name: "Priya Nair",
+        handle: "@priya-n",
+        numericVal: 16,
+        value: "+16 Solved",
+        coverage: "Pre-boundary check",
+        coveragePass: true,
+        freshness: "Sun 23:45",
+        status: "Finalized",
+      },
+      {
+        id: "p-rohan",
+        name: "Rohan Varma",
+        handle: "@rohan-code",
+        numericVal: 12,
+        value: "+12 Solved",
+        coverage: "Pre-boundary check",
+        coveragePass: true,
+        freshness: "Sun 23:45",
+        status: "Finalized",
+      },
+      {
+        id: "p-aditya",
+        name: "Aditya Kumar",
+        handle: "@aditya-k",
+        numericVal: 8,
+        value: "+8 Solved",
+        coverage: "Pre-boundary check",
+        coveragePass: true,
+        freshness: "Sun 23:45",
+        status: "Finalized",
+      },
+      {
+        id: "p-vikram",
+        name: "Vikram Singh",
+        handle: "@vikram-s",
+        numericVal: 12,
+        value: "+12 Solved",
+        coverage: "Pre-boundary check",
+        coveragePass: true,
+        freshness: "Sun 23:45",
+        status: "Finalized",
+      },
+      {
+        id: "p-sneha",
+        name: "Sneha Patel",
+        handle: "@sneha-p",
+        numericVal: 6,
+        value: "+6 Solved",
+        coverage: "Pre-boundary check",
+        coveragePass: true,
+        freshness: "Sun 23:45",
+        status: "Finalized",
+      }
+    ];
+
+    const currentDelta = currentUser?.leetcode?.weeklyDelta ?? 12;
+    const userEntry: RawParticipant = {
+      id: "p-current-user",
+      name: currentUser?.name || "Aarav Sharma",
+      handle: currentUser?.leetcode?.username ? `@${currentUser.leetcode.username}` : "@aarav_algo",
+      numericVal: currentDelta,
+      value: `+${currentDelta} Solved`,
       coverage: "Pre-boundary check",
       coveragePass: true,
       freshness: "Sun 23:45",
       status: "Finalized",
       isCurrentUser: true,
-    },
-    {
-      rank: 3,
-      name: "Rohan Varma",
-      handle: "@rohan-code",
-      value: "+10 Solved",
-      numericVal: 10,
-      coverage: "Pre-boundary check",
-      coveragePass: true,
-      freshness: "Sun 23:45",
-      status: "Finalized",
-    },
-    {
-      rank: 4,
-      name: "Aditya Kumar",
-      handle: "@aditya-k",
-      value: "+8 Solved",
-      numericVal: 8,
-      coverage: "Pre-boundary check",
-      coveragePass: true,
-      freshness: "Sun 23:45",
-      status: "Finalized",
-    },
-  ];
+    };
 
-  const entries = platform === "github" ? githubEntries : leetcodeEntries;
+    return [...peers, userEntry];
+  }, [currentUser]);
+
+  // HackerRank capability participants (Display Only - Section 5.6)
+  const hackerRankParticipants = useMemo(() => {
+    return [
+      {
+        id: "p-priya",
+        name: "Priya Nair",
+        handle: "@priya-n",
+        pythonStars: 5,
+        problemSolvingStars: 5,
+        status: "Verified Badges",
+        freshness: "Observed",
+      },
+      {
+        id: "p-current-user",
+        name: currentUser?.name || "Aarav Sharma",
+        handle: currentUser?.hackerrank?.username ? `@${currentUser.hackerrank.username}` : "@aarav_code",
+        pythonStars: currentUser?.hackerrank?.pythonStars ?? 5,
+        problemSolvingStars: currentUser?.hackerrank?.problemSolvingStars ?? 4,
+        status: "Verified Badges",
+        freshness: "Observed",
+        isCurrentUser: true,
+      },
+      {
+        id: "p-rohan",
+        name: "Rohan Varma",
+        handle: "@rohan-code",
+        pythonStars: 4,
+        problemSolvingStars: 4,
+        status: "Verified Badges",
+        freshness: "Observed",
+      },
+      {
+        id: "p-vikram",
+        name: "Vikram Singh",
+        handle: "@vikram-s",
+        pythonStars: 5,
+        problemSolvingStars: 3,
+        status: "Verified Badges",
+        freshness: "Observed",
+      },
+      {
+        id: "p-aditya",
+        name: "Aditya Kumar",
+        handle: "@aditya-k",
+        pythonStars: 3,
+        problemSolvingStars: 3,
+        status: "Verified Badges",
+        freshness: "Observed",
+      }
+    ];
+  }, [currentUser]);
+
+  // Dynamically compute Section 9.6 deterministic competition ranks
+  const githubRanked = useMemo(() => computeCompetitionRanks(rawGithubParticipants), [rawGithubParticipants]);
+  const leetcodeRanked = useMemo(() => computeCompetitionRanks(rawLeetCodeParticipants), [rawLeetCodeParticipants]);
+
+  const activeRankedEntries = platform === "github" ? githubRanked : leetcodeRanked;
 
   return (
     <div className="min-h-screen bg-canvas text-ink flex flex-col selection:bg-accent selection:text-canvas">
@@ -191,12 +294,12 @@ export default function LeaderboardPage() {
             </div>
           </div>
 
-          {/* Platform Tab Switchers & Period Filter */}
+          {/* Platform Tab Switchers & Controls */}
           <div className="pt-5 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-4">
             <div
               role="group"
               aria-label="Leaderboard platform"
-              className="inline-flex p-1.5 rounded-xl bg-canvas border border-white/10 text-sm font-mono"
+              className="inline-flex p-1.5 rounded-xl bg-canvas border border-white/10 text-sm font-mono flex-wrap"
             >
               <button
                 type="button"
@@ -220,6 +323,17 @@ export default function LeaderboardPage() {
                 <Code2 className="h-4 w-4" />
                 <span>LeetCode (Solved Delta)</span>
               </button>
+              <button
+                type="button"
+                aria-pressed={platform === "hackerrank"}
+                onClick={() => setPlatform("hackerrank")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors font-semibold ${
+                  platform === "hackerrank" ? "bg-accent text-canvas font-bold" : "text-muted hover:text-white"
+                }`}
+              >
+                <Award className="h-4 w-4" />
+                <span>HackerRank (Verified Badges)</span>
+              </button>
             </div>
 
             <div className="flex items-center gap-3 text-sm font-mono">
@@ -239,153 +353,292 @@ export default function LeaderboardPage() {
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 bg-surface-raised text-sm font-mono text-ink-secondary hover:bg-surface transition-colors font-semibold"
               >
                 <Info className="h-4 w-4 text-accent" />
-                <span>Rules</span>
+                <span>Rules (§9.6)</span>
               </button>
             </div>
           </div>
         </div>
 
         {/* Calculation Rule Explanation Modal / Drawer */}
-        {showCalculationInfo && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="p-6 rounded-2xl border border-amber-500/20 bg-surface-raised text-sm font-mono space-y-2.5 text-ink-secondary shadow-md"
-          >
-            <div className="flex items-center justify-between text-white font-bold">
-              <span className="flex items-center gap-2 text-accent text-base">
-                <Info className="h-5 w-5" />
-                Leaderboard Calculation Rules
-              </span>
-              <button
-                type="button"
-                onClick={() => setShowCalculationInfo(false)}
-                className="text-muted hover:text-white text-sm"
-              >
-                Close &times;
-              </button>
+        <AnimatePresence>
+          {showCalculationInfo && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="p-6 rounded-2xl border border-amber-500/20 bg-surface-raised text-sm font-mono space-y-3 text-ink-secondary shadow-md overflow-hidden"
+            >
+              <div className="flex items-center justify-between text-white font-bold">
+                <span className="flex items-center gap-2 text-accent text-base">
+                  <Info className="h-5 w-5" />
+                  Deterministic Competition Rules &amp; Tie Policy (§9.6)
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowCalculationInfo(false)}
+                  className="text-muted hover:text-white text-sm"
+                >
+                  Close &times;
+                </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                <div className="p-3.5 rounded-xl bg-surface border border-white/5 space-y-1">
+                  <span className="text-white font-semibold block text-xs text-accent">§9.6 TIE POLICY</span>
+                  <p className="text-xs text-muted">
+                    Equal metric values share the same rank (e.g. 1, 2, 2, 4). Secondary display sort is strictly alphabetical by name without altering rank.
+                  </p>
+                </div>
+                <div className="p-3.5 rounded-xl bg-surface border border-white/5 space-y-1">
+                  <span className="text-white font-semibold block text-xs text-accent">§9.7 BOUNDARY RULE</span>
+                  <p className="text-xs text-muted">
+                    Cumulative deltas use only observations taken at or before Sunday 23:59:59 IST. Late observations are never rewound.
+                  </p>
+                </div>
+                <div className="p-3.5 rounded-xl bg-surface border border-white/5 space-y-1">
+                  <span className="text-white font-semibold block text-xs text-accent">§5.6 CAPABILITY GATING</span>
+                  <p className="text-xs text-muted">
+                    HackerRank lacks public event timestamps; badges &amp; stars are displayed for verification only and excluded from weekly ranking deltas.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Platform Display: HackerRank Capability Gating View */}
+        {platform === "hackerrank" ? (
+          <div className="space-y-6">
+            {/* Capability Gating Notice (§5.6) */}
+            <div className="p-5 rounded-2xl border border-amber-500/30 bg-amber-500/10 text-amber-200 text-sm font-mono flex items-start gap-4 shadow-sm">
+              <ShieldAlert className="h-6 w-6 text-amber-400 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <span className="font-bold text-amber-300 block">
+                  Section 5.6 Capability Gating Enforced: Display-Only Telemetry
+                </span>
+                <p className="text-xs text-amber-200/90 leading-relaxed">
+                  HackerRank’s public profile endpoint does not expose event timestamps or submission histories. Under TWM’s Zero-Fabrication Rule, cumulative badges and domain stars cannot be attributed to a specific weekly competition window. These metrics are verified and displayed below for individual capability auditing, but excluded from weekly delta rankings.
+                </p>
+              </div>
             </div>
-            <p>
-              • <strong>Deterministic Ties (§9.6):</strong> Equal metric values share the same rank (e.g. 1, 2, 2, 4). Secondary sort is alphabetical without changing rank.
-            </p>
-            <p>
-              • <strong>Boundary Rule (§9.1, §9.7):</strong> Cumulative deltas are computed from observations taken at or before Sunday 23:59:59 IST. Late observations are never rewound.
-            </p>
-            <p>
-              • <strong>Coverage Threshold (§7.4):</strong> GitHub active days require at least 90% API date-level coverage to receive a &ldquo;Finalized&rdquo; standing.
-            </p>
-          </motion.div>
-        )}
 
-        {/* Deterministic Leaderboard Table */}
-        <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden shadow-xl">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left font-mono text-sm">
-              <thead className="bg-surface-raised border-b border-white/[0.08] text-muted uppercase tracking-wider text-xs">
-                <tr>
-                  <th scope="col" className="py-4 px-6">Rank</th>
-                  <th scope="col" className="py-4 px-6">Participant</th>
-                  <th scope="col" className="py-4 px-6">
-                    {platform === "github" ? "Observed Active Days" : "Weekly Solved Delta"}
-                  </th>
-                  <th scope="col" className="py-4 px-6">Retrieval Coverage</th>
-                  <th scope="col" className="py-4 px-6">Last Freshness</th>
-                  <th scope="col" className="py-4 px-6 text-right">Standing</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/[0.05]">
-                {entries.map((item, idx) => (
-                  <tr
-                    key={idx}
-                    className={`transition-colors ${
-                      item.isCurrentUser ? "bg-surface-raised border-l-4 border-accent" : "hover:bg-white/[0.02]"
-                    }`}
-                  >
-                    {/* Rank */}
-                    <td className="py-4 px-6 font-bold text-base">
-                      <div className="flex items-center gap-2">
-                        {item.rank === 1 ? (
-                          <span className="h-7 w-7 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 flex items-center justify-center text-sm font-bold">
-                            1
-                          </span>
-                        ) : item.rank === 2 ? (
-                          <span className="h-7 w-7 rounded-full bg-slate-300/20 text-slate-200 border border-slate-300/40 flex items-center justify-center text-sm font-bold">
-                            2
-                          </span>
-                        ) : (
-                          <span className="text-muted pl-2 text-sm">{item.rank}</span>
-                        )}
-                      </div>
-                    </td>
-
-                    {/* Participant */}
-                    <td className="py-4 px-6">
-                      <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-full bg-surface-raised border border-white/10 flex items-center justify-center text-xs font-bold text-white shadow-sm">
-                          {item.name.substring(0, 2).toUpperCase()}
-                        </div>
-                        <div>
-                          <div className="font-sans font-semibold text-white text-base flex items-center gap-2">
-                            <span>{item.name}</span>
-                            {item.isCurrentUser && (
-                              <span className="text-[10px] px-2 py-0.5 rounded bg-accent text-canvas font-bold">
-                                YOU
-                              </span>
-                            )}
+            {/* HackerRank Verified Badges Table */}
+            <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden shadow-xl">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left font-mono text-sm">
+                  <thead className="bg-surface-raised border-b border-white/[0.08] text-muted uppercase tracking-wider text-xs">
+                    <tr>
+                      <th scope="col" className="py-4 px-6">Participant</th>
+                      <th scope="col" className="py-4 px-6">Python Domain</th>
+                      <th scope="col" className="py-4 px-6">Problem Solving</th>
+                      <th scope="col" className="py-4 px-6">Audit Status</th>
+                      <th scope="col" className="py-4 px-6 text-right">Attribution Policy</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/[0.05]">
+                    {hackerRankParticipants.map((item) => (
+                      <tr
+                        key={item.id}
+                        className={`transition-colors ${
+                          item.isCurrentUser ? "bg-surface-raised border-l-4 border-accent" : "hover:bg-white/[0.02]"
+                        }`}
+                      >
+                        <td className="py-4 px-6">
+                          <div className="flex items-center gap-3">
+                            <div className="h-9 w-9 rounded-full bg-surface-raised border border-white/10 flex items-center justify-center text-xs font-bold text-white shadow-sm">
+                              {item.name.substring(0, 2).toUpperCase()}
+                            </div>
+                            <div>
+                              <div className="font-sans font-semibold text-white text-base flex items-center gap-2">
+                                <span>{item.name}</span>
+                                {item.isCurrentUser && (
+                                  <span className="text-[10px] px-2 py-0.5 rounded bg-accent text-canvas font-bold">
+                                    YOU
+                                  </span>
+                                )}
+                              </div>
+                              <span className="text-muted-soft text-xs font-mono">{item.handle}</span>
+                            </div>
                           </div>
-                          <span className="text-muted-soft text-xs font-mono">{item.handle}</span>
-                        </div>
-                      </div>
-                    </td>
+                        </td>
 
-                    {/* Metric Value */}
-                    <td className="py-4 px-6 font-bold text-white text-base">
-                      {item.value}
-                    </td>
+                        {/* Python Stars */}
+                        <td className="py-4 px-6">
+                          <div className="flex items-center gap-1.5 text-amber-400 font-bold">
+                            <span className="text-white text-base">{item.pythonStars}</span>
+                            <div className="flex items-center">
+                              {Array.from({ length: 5 }).map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`h-3.5 w-3.5 ${
+                                    i < item.pythonStars ? "fill-amber-400 text-amber-400" : "text-white/20"
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </td>
 
-                    {/* Retrieval Coverage */}
-                    <td className="py-4 px-6">
-                      <span className={item.coveragePass ? "text-emerald-400 font-semibold" : "text-amber-400"}>
-                        {item.coverage}
-                      </span>
-                    </td>
+                        {/* Problem Solving Stars */}
+                        <td className="py-4 px-6">
+                          <div className="flex items-center gap-1.5 text-amber-400 font-bold">
+                            <span className="text-white text-base">{item.problemSolvingStars}</span>
+                            <div className="flex items-center">
+                              {Array.from({ length: 5 }).map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`h-3.5 w-3.5 ${
+                                    i < item.problemSolvingStars ? "fill-amber-400 text-amber-400" : "text-white/20"
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </td>
 
-                    {/* Last Freshness */}
-                    <td className="py-4 px-6 text-muted">
-                      {item.freshness}
-                    </td>
+                        {/* Status */}
+                        <td className="py-4 px-6">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            <ShieldCheck className="h-3.5 w-3.5" />
+                            {item.status}
+                          </span>
+                        </td>
 
-                    {/* Standing Badge & Dispute Action */}
-                    <td className="py-4 px-6 text-right">
-                      <div className="flex items-center justify-end gap-2.5">
-                        <span
-                          className={`inline-block px-2.5 py-1 rounded text-xs font-medium border ${
-                            item.status === "Finalized"
-                              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                              : "bg-amber-500/10 text-amber-400 border-amber-500/20"
-                          }`}
-                        >
-                          {item.status}
-                        </span>
-
-                        {item.isCurrentUser && (
-                          <button
-                            onClick={() => openDisputeModal(platform === "github" ? "github_active_days" : "leetcode_delta")}
-                            className="text-xs text-rose-400 hover:text-rose-300 px-2.5 py-1 rounded bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 font-semibold transition-colors"
-                            title="Dispute calculation under Rule §9.7"
-                          >
-                            Dispute
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                        {/* Policy */}
+                        <td className="py-4 px-6 text-right">
+                          <span className="inline-block px-2.5 py-1 rounded text-xs font-mono bg-white/5 text-muted border border-white/10">
+                            Excluded from Weekly Delta (§5.6)
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          /* Deterministic Competition Leaderboard Table (§9.6) */
+          <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden shadow-xl">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left font-mono text-sm">
+                <thead className="bg-surface-raised border-b border-white/[0.08] text-muted uppercase tracking-wider text-xs">
+                  <tr>
+                    <th scope="col" className="py-4 px-6">Rank (§9.6)</th>
+                    <th scope="col" className="py-4 px-6">Participant</th>
+                    <th scope="col" className="py-4 px-6">
+                      {platform === "github" ? "Observed Active Days" : "Weekly Solved Delta"}
+                    </th>
+                    <th scope="col" className="py-4 px-6">Retrieval Coverage</th>
+                    <th scope="col" className="py-4 px-6">Last Freshness</th>
+                    <th scope="col" className="py-4 px-6 text-right">Standing</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/[0.05]">
+                  {activeRankedEntries.map((item) => (
+                    <tr
+                      key={item.id}
+                      className={`transition-colors ${
+                        item.isCurrentUser ? "bg-surface-raised border-l-4 border-accent" : "hover:bg-white/[0.02]"
+                      }`}
+                    >
+                      {/* Rank & Tied Indicator */}
+                      <td className="py-4 px-6 font-bold text-base">
+                        <div className="flex items-center gap-2">
+                          {item.rank === 1 ? (
+                            <span className="h-7 w-7 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 flex items-center justify-center text-sm font-bold shadow-sm">
+                              1
+                            </span>
+                          ) : item.rank === 2 ? (
+                            <span className="h-7 w-7 rounded-full bg-slate-300/20 text-slate-200 border border-slate-300/40 flex items-center justify-center text-sm font-bold shadow-sm">
+                              2
+                            </span>
+                          ) : item.rank === 3 ? (
+                            <span className="h-7 w-7 rounded-full bg-amber-700/20 text-amber-600 border border-amber-700/40 flex items-center justify-center text-sm font-bold shadow-sm">
+                              3
+                            </span>
+                          ) : (
+                            <span className="text-muted pl-2 text-sm">{item.rank}</span>
+                          )}
+
+                          {item.isTied && (
+                            <span
+                              className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-muted-soft font-mono font-normal"
+                              title="Tied score (§9.6: standard competition ranking 1, 2, 2, 4)"
+                            >
+                              Tied
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Participant */}
+                      <td className="py-4 px-6">
+                        <div className="flex items-center gap-3">
+                          <div className="h-9 w-9 rounded-full bg-surface-raised border border-white/10 flex items-center justify-center text-xs font-bold text-white shadow-sm">
+                            {item.name.substring(0, 2).toUpperCase()}
+                          </div>
+                          <div>
+                            <div className="font-sans font-semibold text-white text-base flex items-center gap-2">
+                              <span>{item.name}</span>
+                              {item.isCurrentUser && (
+                                <span className="text-[10px] px-2 py-0.5 rounded bg-accent text-canvas font-bold">
+                                  YOU
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-muted-soft text-xs font-mono">{item.handle}</span>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Metric Value */}
+                      <td className="py-4 px-6 font-bold text-white text-base">
+                        {item.value}
+                      </td>
+
+                      {/* Retrieval Coverage */}
+                      <td className="py-4 px-6">
+                        <span className={item.coveragePass ? "text-emerald-400 font-semibold" : "text-amber-400"}>
+                          {item.coverage}
+                        </span>
+                      </td>
+
+                      {/* Last Freshness */}
+                      <td className="py-4 px-6 text-muted">
+                        {item.freshness}
+                      </td>
+
+                      {/* Standing Badge & Dispute Action */}
+                      <td className="py-4 px-6 text-right">
+                        <div className="flex items-center justify-end gap-2.5">
+                          <span
+                            className={`inline-block px-2.5 py-1 rounded text-xs font-medium border ${
+                              item.status === "Finalized"
+                                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                                : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                            }`}
+                          >
+                            {item.status}
+                          </span>
+
+                          {item.isCurrentUser && (
+                            <button
+                              onClick={() => openDisputeModal(platform === "github" ? "github_active_days" : "leetcode_delta")}
+                              className="text-xs text-rose-400 hover:text-rose-300 px-2.5 py-1 rounded bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 font-semibold transition-colors"
+                              title="Dispute calculation under Rule §9.7"
+                            >
+                              Dispute
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </main>
 
       {/* Footer */}
@@ -393,7 +646,7 @@ export default function LeaderboardPage() {
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>TWM 3.0 Platform • Deterministic Ranks &amp; Roster Denominator</div>
           <div className="text-muted">
-            Rule §9.6: Competition Ranking (1, 2, 2, 4 ties)
+            Rule §9.6: Competition Ranking (1, 2, 2, 4 ties) • Section 5.6 Capability Gating
           </div>
         </div>
       </footer>
