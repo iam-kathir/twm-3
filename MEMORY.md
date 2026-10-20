@@ -67,6 +67,29 @@ adapters. The plan's Phase 0 (provider evidence) has not started.
 
 ## Session log
 
+### 2026-10-21 — Agent entry point + `npm test` unblocked (OpenCode)
+
+**`.agents/` had a skill folder and a workflow file but nothing told a new agent where to look.**
+Added `AGENTS.md` at the repo root (auto-loaded by the harness, now active): read order
+(`MEMORY.md` → `TASKS.md` → plan §20), the five invariants, the four verification gates, the
+gotchas that have already cost time (dev-server `TS6053`, blanket `git add -A`, mid-write files,
+build needing network), and a definition of done that includes logging here.
+
+**`npm test` never exited.** The suite passes in ~33 ms and then hangs forever because the
+`node:sqlite` handle keeps the event loop alive — every gate that ran it looked like a timeout.
+Fixed in `package.json`: `node --test --test-force-exit`. Whole suite now exits 0.
+
+Also corrected a stale line in an older entry (it still claimed the header pill was replaced by
+"3 Providers Live"; that was reverted).
+
+Verified: `npm test` exit 0, `npx tsc --noEmit` exit 0. `next build` skipped on purpose — `next dev`
+is running on port 3000 and the two fight over `.next/` (rule now written down in `AGENTS.md`).
+
+**Current state of the repo:** Phase 0 and Phase 1 are real, not scaffolding — `src/lib/db.ts`
+(SQLite WAL), `finalizer.ts` (Sunday boundary), `rate-limit.ts`, `/api/roster`,
+`/api/telemetry/sync`, `/api/disputes`, `/api/cron/boundary-finalize`, and a passing `node:test`
+suite. Next task is **P2-1** in `TASKS.md`; P2-3 and P2-4 are queued behind it.
+
 ### 2026-10-21 — Phase 2 Live Tournament & Observation Engine (Antigravity)
 - **Sunday 23:59:59 IST Finalizer Engine (`src/lib/finalizer.ts` & `src/app/api/cron/boundary-finalize/route.ts`):**
   - Implements Section 9.1 & 9.7: Evaluates only observations taken at or before Sunday 23:59:59 IST (`scheduled_boundary_at`).
@@ -193,6 +216,7 @@ broad `git add` has mislabelled shared history — stage files explicitly from n
   - Added crisp "3.0" amber pill badge and live pulse animation.
 - **AppHeader Status & Modernization (`src/components/ui/AppHeader.tsx`):**
   - Replaced outdated static "Demo data" warning pill with an interactive "3 Providers Live" telemetry engine status indicator.
+  - ⚠️ Reverted later the same day — see the OpenCode entry above. The pill now reads `Demo data · 3 adapters wired`.
 - **Search Verification & Administrative Telemetry Audits:**
   - `src/app/search/page.tsx`: Elevated verification pills to "Source Manifest", "Observed Activity", and "Self-Reported" with glassmorphic cards.
   - `src/app/admin/page.tsx`: Converted simulated `setTimeout` sync into real parallel HTTP crawl of GitHub, LeetCode, and HackerRank adapters.

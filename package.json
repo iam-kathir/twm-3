@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "node --test scripts/test-foundation.mjs"
+    "test": "node --test --test-force-exit scripts/test-foundation.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",
