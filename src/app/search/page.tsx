@@ -576,13 +576,8 @@ export default function SearchPage() {
                 </Link>
                 <button
                   onClick={() => {
-                    const devToDispute = selectedDev;
                     setSelectedDev(null);
-                    openDisputeModal({
-                      studentName: devToDispute.name,
-                      handle: devToDispute.githubHandle,
-                      metric: "github_active_days"
-                    });
+                    openDisputeModal("github_active_days");
                   }}
                   className="px-4 py-2.5 rounded-xl bg-surface-raised hover:bg-white/10 text-xs font-mono text-ink-secondary border border-white/10 flex items-center space-x-1.5 transition-colors"
                 >
