@@ -107,6 +107,23 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 
 ---
 
+## 🐛 Discovered — Colour/Contrast Quality Backlog (2026-10-21 01:07 IST audit, OpenCode)
+
+WCAG math on the real `globals.css` token pairs. Foundation verdict: **GOOD** (dark neutral + one accent, all functional roles pass AA). Three small-text failures + one spelling debt to fix. Full numbers, method, and call-site lists in `MEMORY.md` session log.
+
+⚠️ **Do NOT "fix" solid `bg-emerald-500` (33 uses) to `text-white`** — it correctly pairs with `text-canvas` (7.8:1). That was verified intentionally.
+
+| Task ID | Fix | Scope | Status |
+| :--- | :--- | :--- | :--- |
+| **QP-1** | DisputeModal.tsx:175 `text-white` → `text-canvas` on `bg-rose-500` (3.67 → 5.3:1) | 1 line | ⏳ QUEUED |
+| **QP-2** | `text-muted-soft` small-text spots → `text-muted` (3.67 → 6.51:1) — stage-tag cases only, NOT a blanket swap | ~45 call sites | ⏳ QUEUED |
+| **QP-3** | Audit 30 `--muted-dark` placeholder hits (2.53:1); bump the hex where any are real (non-placeholder) text | 30 hits, file list in MEMORY.md | ⏳ QUEUED |
+| **QP-4** | ⚠️ Consolidate Tailwind stock spellings to tokens (`bg-amber-500` → `bg-accent`, `text-emerald-400` → status tokens, …) — hex-identical today, so it is a maintainability fix, not a visual one. Requires approval + Antigravity coordination | ~180 sites, every component file | ⏳ QUEUED (blocked on approval) |
+| **QP-5** | 13 literal hexes in tsx (`#FFA116` ×7, `#00EA64` ×6) → `var(--provider-*)` tokens | 2 files | ⏳ QUEUED |
+| **QP-6** | Delete the single `from-emerald-500` gradient (gradient fills are the weak-page signature in the colour study) | 1 site | ⏳ QUEUED |
+
+---
+
 ## 🛠️ Commands & Verification Reference
 
 ```powershell
