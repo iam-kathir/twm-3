@@ -2,7 +2,8 @@ import { test, describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { computeCompetitionRanks } from "../src/lib/leaderboard.ts";
 import { checkRateLimit } from "../src/lib/rate-limit.ts";
-import { getDb, getAllRosterMembers, registerHmacNonce, verifyAndConsumeNonce } from "../src/lib/db.ts";
+import { getDb, getAllRosterMembers, registerHmacNonce, verifyAndConsumeNonce, insertDispute, resolveDisputeInDb, getAllDisputes, getWeeklyStandingsFromDb } from "../src/lib/db.ts";
+import { executeWeeklyFinalization } from "../src/lib/finalizer.ts";
 
 describe("TWM Foundation Suite", () => {
   describe("Section 9.6 Competition Ranking & Tie Policy", () => {
@@ -113,4 +114,62 @@ describe("TWM Foundation Suite", () => {
       assert.equal(check2.reason, "NONCE_ALREADY_USED");
     });
   });
+
+  describe("Section 9.7 Sunday 23:59:59 IST Finalizer Engine", () => {
+    it("executes weekly finalization and commits standings to SQLite", () => {
+      const report = executeWeeklyFinalization({
+        weekNumber: 42,
+        year: 2026,
+        platform: "github",
+      });
+
+      assert.equal(report.weekNumber, 42);
+      assert.equal(report.platform, "github");
+      assert.ok(report.totalEnrolled >= 7);
+      assert.ok(report.participatingCount >= 7);
+      assert.equal(report.meetsQuorum, true);
+      assert.ok(report.standings.length > 0);
+
+      // Verify that rank 1 exists
+      const winner = report.standings.find((s) => s.rank === 1);
+      assert.ok(winner, "Rank 1 winner must exist");
+
+      // Verify records are written into SQLite weekly_standings table
+      const stored = getWeeklyStandingsFromDb(42, 2026, "github");
+      assert.ok(stored.length >= 7, "Standings must be retrieved from SQLite");
+      assert.equal(stored[0].rank, 1);
+    });
+  });
+
+  describe("Dispute Resolution & Audit Trail (§10.1)", () => {
+    it("records, queries, and approves disputes in SQLite", () => {
+      const testId = `DSP-TEST-${Date.now()}`;
+      insertDispute({
+        id: testId,
+        studentId: "usr-aarav",
+        studentName: "Aarav Sharma",
+        rollNo: "2022BCSE042",
+        metric: "github_active_days",
+        platform: "GitHub",
+        claim: "Late commit verified via PGP signature.",
+        evidenceUrl: "https://github.com/test",
+        ruleReference: "Rule §9.7",
+      });
+
+      const listBefore = getAllDisputes();
+      const created = listBefore.find((d) => d.id === testId);
+      assert.ok(created);
+      assert.equal(created.status, "pending");
+
+      // Resolve dispute
+      resolveDisputeInDb(testId, "approved", "Valid signature", "Faculty Co-Admin");
+
+      const listAfter = getAllDisputes();
+      const resolved = listAfter.find((d) => d.id === testId);
+      assert.ok(resolved);
+      assert.equal(resolved.status, "approved");
+      assert.equal(resolved.reviewed_by, "Faculty Co-Admin");
+    });
+  });
 });
+

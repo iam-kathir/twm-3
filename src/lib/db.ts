@@ -93,12 +93,39 @@ function initSchema(db: DatabaseSync): void {
       evidence_url TEXT NOT NULL,
       rule_reference TEXT NOT NULL,
       status TEXT NOT NULL DEFAULT 'pending', -- 'pending' | 'approved' | 'rejected'
+      reviewed_by TEXT,
+      reviewed_at TEXT,
       resolution_note TEXT,
       submitted_at TEXT NOT NULL DEFAULT (datetime('now')),
       resolved_at TEXT,
       FOREIGN KEY (student_id) REFERENCES roster_members(id) ON DELETE CASCADE
     );
+
+    -- 5. Finalized Weekly Competition Standings (§9.1, §9.7)
+    CREATE TABLE IF NOT EXISTS weekly_standings (
+      id TEXT PRIMARY KEY,
+      week_number INTEGER NOT NULL,
+      year INTEGER NOT NULL,
+      platform TEXT NOT NULL, -- 'github' | 'leetcode'
+      student_id TEXT NOT NULL,
+      rank INTEGER NOT NULL,
+      score_value REAL NOT NULL,
+      display_value TEXT NOT NULL,
+      is_tied INTEGER NOT NULL DEFAULT 0,
+      boundary_observed_at TEXT NOT NULL,
+      boundary_gap_seconds INTEGER NOT NULL,
+      status TEXT NOT NULL DEFAULT 'Finalized', -- 'Finalized' | 'Provisional'
+      finalized_at TEXT NOT NULL DEFAULT (datetime('now')),
+      FOREIGN KEY (student_id) REFERENCES roster_members(id) ON DELETE CASCADE
+    );
+
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_standing_week_platform_student
+      ON weekly_standings (week_number, year, platform, student_id);
   `);
+
+  // Idempotent column migrations for existing databases
+  try { db.exec("ALTER TABLE disputes ADD COLUMN reviewed_by TEXT;"); } catch {}
+  try { db.exec("ALTER TABLE disputes ADD COLUMN reviewed_at TEXT;"); } catch {}
 }
 
 function seedInitialRosterIfEmpty(db: DatabaseSync): void {
@@ -368,3 +395,119 @@ export function verifyAndConsumeNonce(nonce: string): { valid: boolean; reason?:
   db.prepare("UPDATE hmac_nonces SET consumed_at = datetime('now') WHERE nonce = ?").run(nonce);
   return { valid: true };
 }
+
+// ---------------------------------------------------------------------------
+// Disputes Accessors (§10.1)
+// ---------------------------------------------------------------------------
+
+export interface DisputeRow {
+  id: string;
+  student_id: string;
+  student_name: string;
+  roll_no: string;
+  metric: string;
+  platform: string;
+  claim: string;
+  evidence_url: string;
+  rule_reference: string;
+  status: "pending" | "approved" | "rejected";
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+  resolution_note: string | null;
+  submitted_at: string;
+  resolved_at: string | null;
+}
+
+export function getAllDisputes(): DisputeRow[] {
+  const db = getDb();
+  return db.prepare("SELECT * FROM disputes ORDER BY submitted_at DESC").all() as unknown as DisputeRow[];
+}
+
+export function insertDispute(d: {
+  id: string;
+  studentId: string;
+  studentName: string;
+  rollNo: string;
+  metric: string;
+  platform: string;
+  claim: string;
+  evidenceUrl: string;
+  ruleReference: string;
+}): void {
+  const db = getDb();
+  const stmt = db.prepare(`
+    INSERT INTO disputes (id, student_id, student_name, roll_no, metric, platform, claim, evidence_url, rule_reference, status)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')
+  `);
+  stmt.run(d.id, d.studentId, d.studentName, d.rollNo, d.metric, d.platform, d.claim, d.evidenceUrl, d.ruleReference);
+}
+
+export function resolveDisputeInDb(id: string, status: "approved" | "rejected", note: string, reviewer: string): void {
+  const db = getDb();
+  const now = new Date().toISOString();
+  db.prepare(`
+    UPDATE disputes 
+    SET status = ?, resolution_note = ?, reviewed_by = ?, reviewed_at = ?, resolved_at = ?
+    WHERE id = ?
+  `).run(status, note, reviewer, now, now, id);
+}
+
+// ---------------------------------------------------------------------------
+// Weekly Finalized Standings (§9.1, §9.7)
+// ---------------------------------------------------------------------------
+
+export interface WeeklyStandingRow {
+  id: string;
+  week_number: number;
+  year: number;
+  platform: "github" | "leetcode";
+  student_id: string;
+  student_name?: string;
+  rank: number;
+  score_value: number;
+  display_value: string;
+  is_tied: number;
+  boundary_observed_at: string;
+  boundary_gap_seconds: number;
+  status: "Finalized" | "Provisional";
+  finalized_at: string;
+}
+
+export function saveWeeklyFinalizedStandings(rows: WeeklyStandingRow[]): void {
+  const db = getDb();
+  const stmt = db.prepare(`
+    INSERT OR REPLACE INTO weekly_standings (
+      id, week_number, year, platform, student_id, rank, score_value, display_value,
+      is_tied, boundary_observed_at, boundary_gap_seconds, status, finalized_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+  `);
+
+  for (const r of rows) {
+    stmt.run(
+      r.id,
+      r.week_number,
+      r.year,
+      r.platform,
+      r.student_id,
+      r.rank,
+      r.score_value,
+      r.display_value,
+      r.is_tied,
+      r.boundary_observed_at,
+      r.boundary_gap_seconds,
+      r.status
+    );
+  }
+}
+
+export function getWeeklyStandingsFromDb(weekNumber: number, year: number, platform: string): (WeeklyStandingRow & { name: string; roll_no: string; handle_github: string; handle_leetcode: string })[] {
+  const db = getDb();
+  return db.prepare(`
+    SELECT s.*, m.name, m.roll_no, m.handle_github, m.handle_leetcode
+    FROM weekly_standings s
+    JOIN roster_members m ON s.student_id = m.id
+    WHERE s.week_number = ? AND s.year = ? AND s.platform = ?
+    ORDER BY s.rank ASC, m.name ASC
+  `).all(weekNumber, year, platform) as unknown as (WeeklyStandingRow & { name: string; roll_no: string; handle_github: string; handle_leetcode: string })[];
+}
+

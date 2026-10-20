@@ -88,6 +88,7 @@ export default function AdminHubPage() {
   const [selectedDisputeId, setSelectedDisputeId] = useState<string | null>(disputes[0]?.id || null);
   const [resolutionNote, setResolutionNote] = useState("");
   const [isSyncing, setIsSyncing] = useState(false);
+  const [isFinalizing, setIsFinalizing] = useState(false);
 
   const selectedDispute = disputes.find((d) => d.id === selectedDisputeId) || disputes[0] || null;
 
@@ -104,6 +105,18 @@ export default function AdminHubPage() {
     
     resolveDispute(id, decision, note);
 
+    // Persist resolution to SQLite backend
+    fetch("/api/disputes", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id,
+        status: decision,
+        resolutionNote: note,
+        reviewer: `${currentUser.name} (Co-Admin)`
+      })
+    }).catch(() => null);
+
     const dispute = disputes.find(d => d.id === id);
     const newLog: AuditLogEntry = {
       id: `log-${Date.now()}`,
@@ -115,6 +128,52 @@ export default function AdminHubPage() {
     };
     setLogs(prev => [newLog, ...prev]);
     setResolutionNote("");
+  };
+
+  const handleTriggerSundayFinalize = async () => {
+    setIsFinalizing(true);
+    try {
+      const res = await fetch("/api/cron/boundary-finalize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ weekNumber: 42, year: 2026, platform: "all" })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        const ghReport = data.reports?.find((r: any) => r.platform === "github");
+        const lcReport = data.reports?.find((r: any) => r.platform === "leetcode");
+        
+        const newLog: AuditLogEntry = {
+          id: `log-${Date.now()}`,
+          timestamp: "Just now",
+          action: "WEEKLY_SNAPSHOT_FINALIZED",
+          actor: `${currentUser.name} (Faculty Co-Admin)`,
+          details: `Week 42 observation window finalized under Rule §9.7. GitHub: ${ghReport?.finalizedCount || 0} finalized; LeetCode: ${lcReport?.finalizedCount || 0} finalized. Standings committed to SQLite.`,
+          severity: "INFO"
+        };
+        setLogs(prev => [newLog, ...prev]);
+
+        addToast({
+          title: "Sunday 23:59:59 IST Boundary Finalized",
+          description: `Week 42 closed: GitHub (${ghReport?.finalizedCount || 0} finalized), LeetCode (${lcReport?.finalizedCount || 0} finalized).`,
+          type: "success"
+        });
+      } else {
+        addToast({
+          title: "Finalization Error",
+          description: data.error || "Failed to finalize week.",
+          type: "warning"
+        });
+      }
+    } catch {
+      addToast({
+        title: "Network Error",
+        description: "Could not reach finalizer endpoint.",
+        type: "error"
+      });
+    } finally {
+      setIsFinalizing(false);
+    }
   };
 
   const handleTriggerGlobalSync = async () => {
@@ -299,7 +358,17 @@ export default function AdminHubPage() {
                     className="px-4 py-2 rounded-xl bg-surface-raised hover:bg-white/10 text-sm font-semibold font-mono text-ink-secondary hover:text-white border border-white/10 flex items-center space-x-2 transition-colors"
                   >
                     <Download className="w-4 h-4" />
-                    <span>Export Roster Standings</span>
+                    <span>Export Standings</span>
+                  </button>
+
+                  <button 
+                    onClick={handleTriggerSundayFinalize}
+                    disabled={isFinalizing}
+                    className="px-4 py-2 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-bold text-sm font-mono flex items-center space-x-2 transition-all shadow-md shadow-accent/20 disabled:opacity-50"
+                    title="Close and finalize competition under Rule §9.1 and §9.7"
+                  >
+                    <Clock className={`w-4 h-4 ${isFinalizing ? "animate-spin" : ""}`} />
+                    <span>{isFinalizing ? "Finalizing Week..." : "Finalize Sunday Boundary (§9.7)"}</span>
                   </button>
                 </div>
               </div>
