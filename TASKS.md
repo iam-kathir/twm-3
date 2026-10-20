@@ -79,10 +79,11 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 
 | Task ID | Task Description | Scope & Requirements | Target Files | Owner / Status |
 | :--- | :--- | :--- | :--- | :--- |
-| **P2-1** | **Sunday Boundary Finalizer Engine (§9.1, §9.7)** | Compute weekly deltas strictly from observations at or before Sunday 23:59:59 IST. Verify `boundary_gap <= 3h`. Compute §9.6 ranks and persist to `weekly_standings`. | `src/lib/finalizer.ts`<br>`src/app/api/cron/boundary-finalize/route.ts` | **NEXT UP** |
-| **P2-2** | **Persistent Disputes & Two-Person Audit System (§10.1)** | Wire dispute submission and faculty/co-admin resolution to SQLite `disputes` table with audit logging and resolution notes. | `src/app/api/disputes/route.ts`<br>`src/app/admin/page.tsx` | **QUEUED** |
-| **P2-3** | **Live Roster & 70% Quorum Management Console (§3.3)** | Upgrade `/admin` roster tab to load live from `/api/roster`. Add classmate registration form and dynamic quorum calculation. | `src/app/admin/page.tsx`<br>`src/context/AppContext.tsx` | **QUEUED** |
+| **P2-1** | **Sunday Boundary Finalizer Engine (§9.1, §9.7)** | Compute weekly deltas strictly from observations at or before Sunday 23:59:59 IST. Verify `boundary_gap <= 3h`. Compute §9.6 ranks and persist to `weekly_standings`. | [`src/lib/finalizer.ts`](src/lib/finalizer.ts)<br>[`src/app/api/cron/boundary-finalize/route.ts`](src/app/api/cron/boundary-finalize/route.ts) | ✅ **DONE** |
+| **P2-2** | **Persistent Disputes & Two-Person Audit System (§10.1)** | Wire dispute submission and faculty/co-admin resolution to SQLite `disputes` table with audit logging and resolution notes. | [`src/app/api/disputes/route.ts`](src/app/api/disputes/route.ts)<br>[`src/app/admin/page.tsx`](src/app/admin/page.tsx) | ✅ **DONE** |
+| **P2-3** | **Live Roster & 70% Quorum Management Console (§3.3)** | Upgrade `/admin` roster tab to load live from `/api/roster`. Add classmate registration form and dynamic quorum calculation. | `src/app/admin/page.tsx`<br>`src/context/AppContext.tsx` | **NEXT UP** |
 | **P2-4** | **Scheduled Cron Background Worker Script** | Background script / scheduled runner to automatically poll providers every 3 hours and execute pre-boundary snapshot at Sunday 23:45 IST. | `scripts/boundary-scheduler.mjs` | **QUEUED** |
+
 
 ---
 

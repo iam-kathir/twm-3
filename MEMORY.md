@@ -67,7 +67,23 @@ adapters. The plan's Phase 0 (provider evidence) has not started.
 
 ## Session log
 
+### 2026-10-21 — Phase 2 Live Tournament & Observation Engine (Antigravity)
+- **Sunday 23:59:59 IST Finalizer Engine (`src/lib/finalizer.ts` & `src/app/api/cron/boundary-finalize/route.ts`):**
+  - Implements Section 9.1 & 9.7: Evaluates only observations taken at or before Sunday 23:59:59 IST (`scheduled_boundary_at`).
+  - Observations with `boundary_gap <= 3h` marked `Finalized`; stale observations marked `Provisional`.
+  - Sorts with Section 9.6 tie engine (`1, 2, 2, 4`), computes quorum percentage, and commits finalized standings to `weekly_standings` table in SQLite.
+  - Exposes `POST /api/cron/boundary-finalize` for automated schedulers or manual administrative closeouts.
+- **Persistent Disputes API & Audit Trail (`src/app/api/disputes/route.ts` & `src/app/admin/page.tsx`):**
+  - Added `GET /api/disputes`, `POST /api/disputes` (student filing), and `PATCH /api/disputes` (faculty/co-admin resolution).
+  - Disputes and audit notes persist to SQLite `disputes` table with reviewer attribution and resolution timestamps.
+  - Upgraded `/admin` console with "Finalize Sunday Boundary (§9.7)" live trigger and SQLite-backed dispute approval flow.
+- **Verification & Gates:**
+  - `npm test`: 100% green (10 assertions across 5 suites in 33ms).
+  - `npx tsc --noEmit`: 0 errors (clean).
+  - Tested `/api/cron/boundary-finalize` (HTTP 200) and `PATCH /api/disputes` (HTTP 200).
+
 ### 2026-10-20 — Phase 1 Project Foundation ("Basement"): SQLite WAL Store, Security & Automated Tests (Antigravity)
+
 - **SQLite WAL Observation Store (`src/lib/db.ts` & `src/types/sqlite.d.ts`):**
   - Integrated native `node:sqlite` in WAL mode with foreign keys enabled at `data/twm.sqlite` (gitignored).
   - Implemented 4 core tables: `roster_members` (seeded with 7 class students), `telemetry_observations` (historical snapshots with §9.7 boundary gap tracking), `hmac_nonces` (single-use registry), and `disputes`.
