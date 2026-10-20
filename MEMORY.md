@@ -55,16 +55,31 @@ adapters. The plan's Phase 0 (provider evidence) has not started.
 | **Landing Section Scale & Rhythm** | Antigravity — **COMPLETED** | Scaled `HeroSection`, `NavBar`, `MotionShowcase`, `PlatformMatrix`, `CockpitPreview`, and `AppScreensGallery` to generous desktop proportion with interactive observation console. |
 | **Public Asset Optimization** | Antigravity — **COMPLETED** | Deleted 5.7MB unreferenced dead assets in `public/` (`logo.svg` 2.4MB base64 raster, `logo.png` 1.8MB, `twm_perfect_landing.png` 761KB, etc.). |
 | **Token Consolidation Sweep** | Antigravity — **COMPLETED** | Fixed residual raw hex classes in `admin/page.tsx`, `CockpitPreview.tsx`, and `HeroSection.tsx` to strictly consume `--canvas`, `--surface`, `--accent` tokens. |
-| **Phase 0 API Route Handlers (All 3 Providers)** | Antigravity — **COMPLETED** | Scaffolded live Next.js route handlers `/api/auth/hmac-challenge`, `/api/telemetry/github`, `/api/telemetry/hackerrank`, and `/api/telemetry/leetcode` (Section 5.4, 5.5, 5.6, 9.1 & 9.7). |
+| **Phase 0 API Route Handlers (All 3 Providers)** | Antigravity & OpenCode — **COMPLETED** | Scaffolded live Next.js route handlers `/api/auth/hmac-challenge`, `/api/telemetry/github`, `/api/telemetry/hackerrank`, and `/api/telemetry/leetcode` with real bio scrapers and rate limit protections. |
 | **UI Chore Polish & SaaS Elevation** | Antigravity — **COMPLETED** | Redesigned `BrandLogo` mark with ambient glow, upgraded `AppHeader` "Demo data" pill to live "3 Providers Live" telemetry monitor, polished `/search` evidence standards, and wired real API audits in `/admin` & `/settings`. |
-| **Phase 1 Leaderboard Live Integration** | OpenCode / Antigravity — **NEXT** | Wire `/dashboard` and `/leaderboard` live cards to consume `/api/telemetry/leetcode` and `/api/telemetry/hackerrank` endpoints dynamically. |
+| **Phase 1 Multi-Provider Live Sync & Dynamic Dashboard** | Antigravity & OpenCode — **COMPLETED** | Connected `triggerLiveSync` to query GitHub, LeetCode, and HackerRank in real-time; dynamically wired `/dashboard` KPI and Provider cards to live `currentUser` state. |
+| **Phase 1 Multi-Platform Standings & Tie-Break Computation** | Antigravity & OpenCode — **NEXT** | Connect `/leaderboard` table to dynamically calculate live ranks, handle ties under Section 9.6 (1, 2, 2, 4 scheme), and support platform-specific tabs. |
 
 ---
 
 ## Session log
 
-### 2026-10-20 — Phase 0 LeetCode Snapshot Adapter & UI Chore Modernization
-**Completed by:** Antigravity
+### 2026-10-20 — Phase 1 Multi-Provider Live Sync & Dynamic Dashboard Integration
+**Completed by:** Antigravity & OpenCode (Joint Stream)
+- **Multi-Provider Live Sync (`src/context/AppContext.tsx`):**
+  - Upgraded `triggerLiveSync` from single-provider GitHub check to full parallel crawl across GitHub REST, LeetCode GraphQL, and HackerRank REST.
+  - Dynamically merges observed active days, problem counts (easy, medium, hard), and HackerRank domain stars into persistent `currentUser` state.
+- **Dynamic Cockpit UI (`src/app/dashboard/page.tsx`):**
+  - Bound all 4 KPI cards and 3 Provider cards dynamically to `currentUser`:
+    - GitHub: active days week, UTC day heatmap, tracked course repos.
+    - LeetCode: total solved, easy/medium/hard breakdown, Sunday boundary rule indicator, and delta.
+    - HackerRank: live star rendering for Python domain and Problem Solving domain, with Section 5.6 capability gating notices.
+- **HMAC Challenge Hardening (`src/app/api/auth/hmac-challenge/route.ts` & `src/app/onboarding/page.tsx` by OpenCode):**
+  - Integrated public bio scrapers for LeetCode and HackerRank with pre-network signature and TTL validation.
+  - Added user error feedback and non-empty bio validation.
+- **Gates:**
+  - `npx tsc --noEmit` exited 0 (clean).
+  - Dev server HTTP 200 on `/dashboard` and `/leaderboard`.
 - **LeetCode Snapshot Adapter (`src/app/api/telemetry/leetcode/route.ts`):**
   - Integrated public GraphQL endpoint (`https://leetcode.com/graphql`) fetching profile, ranking, reputation, and problem count breakdown (`all`, `easy`, `medium`, `hard`).
   - Implements Section 9.7 & 16.3 Sunday 23:59:59 IST pre-boundary rule with zero-fabrication guarantees (`weeklyDeltaStatus: "NO_PRIOR_SUNDAY_BASELINE"`).

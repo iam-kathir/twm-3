@@ -35,6 +35,7 @@ export default function OnboardingPage() {
   const [copied, setCopied] = useState(false);
   const [verifyingLeetCode, setVerifyingLeetCode] = useState(false);
   const [leetCodeVerified, setLeetCodeVerified] = useState(false);
+  const [leetCodeError, setLeetCodeError] = useState<string | null>(null);
   const [hackerRankUsername, setHackerRankUsername] = useState("aarav_codes");
 
   // Fetch real cryptographic HMAC challenge token upon entering Step 3
@@ -68,6 +69,7 @@ export default function OnboardingPage() {
 
   const verifyLeetCode = async () => {
     setVerifyingLeetCode(true);
+    setLeetCodeError(null);
     try {
       const res = await fetch("/api/auth/hmac-challenge", {
         method: "POST",
@@ -78,15 +80,17 @@ export default function OnboardingPage() {
           provider: "leetcode",
           handle: "aarav_coder",
           challenge: challengeCode,
-          profileText: `Full stack student developer. Algorithms and systems. ${challengeCode}`
         })
       });
       const data = await res.json();
       if (data.verified) {
         setLeetCodeVerified(true);
+      } else {
+        setLeetCodeError(data.error ?? data.message ?? "Verification failed.");
       }
     } catch {
-      setLeetCodeVerified(true);
+      // A network failure is not proof of ownership.
+      setLeetCodeError("Could not reach the verification route. Try again.");
     } finally {
       setVerifyingLeetCode(false);
     }
@@ -339,6 +343,15 @@ export default function OnboardingPage() {
                           <span>Verify Challenge Now</span>
                         )}
                       </button>
+
+                      {leetCodeError && (
+                        <p
+                          role="alert"
+                          className="text-xs font-mono text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl p-3 leading-relaxed"
+                        >
+                          {leetCodeError}
+                        </p>
+                      )}
                     </div>
                   ) : (
                     <div className="text-sm font-mono text-emerald-400 bg-emerald-500/10 p-3 rounded-xl border border-emerald-500/20 font-semibold">

@@ -140,16 +140,23 @@ export default function SettingsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "create",
-          studentRoll: currentUser.rollNo || "22CS104",
+          userId: currentUser.rollNo,
           provider: "leetcode",
+          handle: currentUser.leetcode.username,
         }),
       });
       const data = await res.json();
-      if (res.ok && data.challengeString) {
+      if (res.ok && data.challengeCode) {
         addToast({
           title: "Cryptographic HMAC Generated",
-          description: `Token: ${data.challengeString.slice(0, 24)}... (Valid for 15 minutes)`,
+          description: `Token: ${data.challengeCode.slice(0, 24)}... (Valid for 15 minutes)`,
           type: "success",
+        });
+      } else {
+        addToast({
+          title: "HMAC Service Notice",
+          description: data.error ?? "Challenge token generation failed.",
+          type: "error",
         });
       }
     } catch {

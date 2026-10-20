@@ -90,13 +90,13 @@ export default function DashboardPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           <div className="p-6 rounded-2xl border border-white/[0.08] bg-surface space-y-2 shadow-lg">
             <span className="text-xs sm:text-sm font-mono text-muted uppercase tracking-wider block font-semibold">WEEKLY ACTIVE DAYS</span>
-            <div className="text-3xl sm:text-4xl font-bold font-mono text-white">6 / 7 Days</div>
+            <div className="text-3xl sm:text-4xl font-bold font-mono text-white">{currentUser.github.activeDaysWeek} / 7 Days</div>
             <span className="text-xs font-mono text-emerald-400 block font-medium">Qualifying consistency</span>
           </div>
 
           <div className="p-6 rounded-2xl border border-white/[0.08] bg-surface space-y-2 shadow-lg">
             <span className="text-xs sm:text-sm font-mono text-muted uppercase tracking-wider block font-semibold">CONSISTENCY RATE</span>
-            <div className="text-3xl sm:text-4xl font-bold font-mono text-accent">85.7%</div>
+            <div className="text-3xl sm:text-4xl font-bold font-mono text-accent">{Math.round((currentUser.github.activeDaysWeek / 7) * 100)}%</div>
             <span className="text-xs font-mono text-muted-soft block">Rule §9.4 enforced</span>
           </div>
 
@@ -108,7 +108,9 @@ export default function DashboardPage() {
 
           <div className="p-6 rounded-2xl border border-white/[0.08] bg-surface space-y-2 shadow-lg">
             <span className="text-xs sm:text-sm font-mono text-muted uppercase tracking-wider block font-semibold">LEETCODE DELTA</span>
-            <div className="text-3xl sm:text-4xl font-bold font-mono text-accent">+12 Solved</div>
+            <div className="text-3xl sm:text-4xl font-bold font-mono text-accent">
+              {currentUser.leetcode.weeklyDelta ? `+${currentUser.leetcode.weeklyDelta} Solved` : `${currentUser.leetcode.totalSolved} Solved`}
+            </div>
             <span className="text-xs font-mono text-muted-soft block">Boundary rule compliant</span>
           </div>
         </div>
@@ -133,7 +135,7 @@ export default function DashboardPage() {
                 <span className="text-xs font-mono text-muted block uppercase tracking-wider">This Week (Provider UTC):</span>
                 <div className="grid grid-cols-7 gap-2 text-center">
                   {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => {
-                    const active = i !== 4;
+                    const active = i < currentUser.github.activeDaysWeek;
                     return (
                       <div key={i}>
                         <div
@@ -155,7 +157,7 @@ export default function DashboardPage() {
               <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] text-sm font-mono space-y-2">
                 <div className="flex justify-between">
                   <span className="text-muted">Tracked Repositories:</span>
-                  <span className="text-white font-bold">4 Course Repos</span>
+                  <span className="text-white font-bold">{currentUser.github.reposTracked || 4} Course Repos</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted">Date Attribution:</span>
@@ -165,7 +167,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between text-sm font-mono">
-              <span className="text-muted">Freshness: Current</span>
+              <span className="text-muted">Account: @{currentUser.github.username || "iam-kathir"}</span>
               <span className="text-emerald-400 font-bold">Audited</span>
             </div>
           </div>
@@ -185,20 +187,20 @@ export default function DashboardPage() {
 
               <div className="mb-5">
                 <span className="text-xs font-mono text-muted uppercase tracking-wider">Cumulative Solved:</span>
-                <div className="text-3xl sm:text-4xl font-extrabold font-mono text-white mt-1">184 Problems</div>
+                <div className="text-3xl sm:text-4xl font-extrabold font-mono text-white mt-1">{currentUser.leetcode.totalSolved} Problems</div>
               </div>
 
               <div className="grid grid-cols-3 gap-3 text-center text-sm font-mono mb-5">
                 <div className="p-3.5 rounded-xl bg-surface-raised border border-emerald-500/20">
-                  <span className="text-emerald-400 font-bold text-lg block">92</span>
+                  <span className="text-emerald-400 font-bold text-lg block">{currentUser.leetcode.easyCount}</span>
                   <span className="text-xs text-muted">Easy</span>
                 </div>
                 <div className="p-3.5 rounded-xl bg-surface-raised border border-amber-500/20">
-                  <span className="text-amber-400 font-bold text-lg block">78</span>
+                  <span className="text-amber-400 font-bold text-lg block">{currentUser.leetcode.mediumCount}</span>
                   <span className="text-xs text-muted">Medium</span>
                 </div>
                 <div className="p-3.5 rounded-xl bg-surface-raised border border-rose-500/20">
-                  <span className="text-rose-400 font-bold text-lg block">14</span>
+                  <span className="text-rose-400 font-bold text-lg block">{currentUser.leetcode.hardCount}</span>
                   <span className="text-xs text-muted">Hard</span>
                 </div>
               </div>
@@ -206,49 +208,55 @@ export default function DashboardPage() {
               <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] text-sm font-mono">
                 <div className="flex justify-between">
                   <span className="text-muted">Observation Rule:</span>
-                  <span className="text-emerald-400 font-semibold">Pre-close (Sun 23:45 IST)</span>
+                  <span className="text-emerald-400 font-semibold">Sunday 23:59:59 IST</span>
                 </div>
               </div>
             </div>
 
             <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between text-sm font-mono">
-              <span className="text-muted">Weekly Delta:</span>
-              <span className="text-accent font-bold">+12 Solved</span>
+              <span className="text-muted">Account: @{currentUser.leetcode.username || "neal_wu"}</span>
+              <span className="text-accent font-bold">
+                {currentUser.leetcode.weeklyDelta ? `+${currentUser.leetcode.weeklyDelta} Solved` : "Baseline Active"}
+              </span>
             </div>
           </div>
 
           {/* 3. HackerRank Card */}
-          <div className="rounded-2xl border border-white/[0.08] bg-surface p-6 flex flex-col justify-between space-y-6">
+          <div className="rounded-2xl border border-white/[0.08] bg-surface p-7 flex flex-col justify-between space-y-6 shadow-xl">
             <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2 text-ink font-bold text-sm">
-                  <Award className="h-4 w-4 text-[#00EA64]" />
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-2.5 text-white font-bold text-base sm:text-lg">
+                  <Award className="h-5 w-5 text-[#00EA64]" />
                   <span>HackerRank Badges</span>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                  LIMITED
+                <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">
+                  DISPLAY_ONLY
                 </span>
               </div>
 
-              <div className="space-y-3 mb-4">
-                <div className="flex items-center justify-between p-3 rounded-xl bg-surface-raised border border-white/[0.06]">
-                  <span className="text-xs font-mono text-ink">Python Domain</span>
-                  <span className="text-xs font-mono font-bold text-amber-400">5 Stars ★★★★★</span>
+              <div className="space-y-3 mb-5">
+                <div className="flex items-center justify-between p-4 rounded-xl bg-surface-raised border border-white/[0.06]">
+                  <span className="text-sm font-mono text-white">Python Domain</span>
+                  <span className="text-sm font-mono font-bold text-amber-400">
+                    {"★".repeat(currentUser.hackerrank.pythonStars || 5)}{"☆".repeat(Math.max(0, 5 - (currentUser.hackerrank.pythonStars || 5)))}
+                  </span>
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-xl bg-surface-raised border border-white/[0.06]">
-                  <span className="text-xs font-mono text-ink">Problem Solving</span>
-                  <span className="text-xs font-mono font-bold text-emerald-400">4 Stars ★★★★☆</span>
+                <div className="flex items-center justify-between p-4 rounded-xl bg-surface-raised border border-white/[0.06]">
+                  <span className="text-sm font-mono text-white">Problem Solving</span>
+                  <span className="text-sm font-mono font-bold text-emerald-400">
+                    {"★".repeat(currentUser.hackerrank.problemSolvingStars || 4)}{"☆".repeat(Math.max(0, 5 - (currentUser.hackerrank.problemSolvingStars || 4)))}
+                  </span>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-surface-raised border border-amber-500/20 text-xs font-mono text-amber-300 leading-snug">
-                Cumulative display only. Excluded from period delta leaderboard until Phase 0 boundary evidence is documented.
+              <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] text-xs font-mono text-muted">
+                Section 5.6: Excluded from weekly competition deltas to maintain unassailable attribution.
               </div>
             </div>
 
-            <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono">
-              <span className="text-muted">Period Ranking:</span>
-              <span className="text-accent font-bold">Excluded</span>
+            <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between text-sm font-mono">
+              <span className="text-muted">Account: @{currentUser.hackerrank.username || "alice"}</span>
+              <span className="text-emerald-400 font-bold">Verified</span>
             </div>
           </div>
         </div>

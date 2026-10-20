@@ -1,98 +1,176 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 
-// Secret key for HMAC signing (uses env var or secure fallback for development)
-const HMAC_SECRET = process.env.TWM_HMAC_SECRET || "twm-dev-secret-key-3.1-master-baseline";
-
-// 15-minute challenge TTL in milliseconds (Section 6.2 rule)
+// 15-minute challenge TTL (Section 6.2 rule)
 const CHALLENGE_TTL_MS = 15 * 60 * 1000;
+
+// Known development secret. In production an unset TWM_HMAC_SECRET must fail closed —
+// otherwise anyone reading this repo can mint valid challenge tokens.
+const DEV_SECRET = "twm-dev-secret-key-3.1-master-baseline";
+function getSecret(): string {
+  const fromEnv = process.env.TWM_HMAC_SECRET;
+  if (fromEnv) return fromEnv;
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("TWM_HMAC_SECRET is not configured");
+  }
+  return DEV_SECRET;
+}
+
+type Provider = "leetcode" | "hackerrank";
 
 interface ChallengeRequest {
   action: "create" | "verify";
   userId: string;
-  provider: "leetcode" | "hackerrank";
+  provider: Provider;
   handle: string;
   challenge?: string;
-  profileText?: string;
+}
+
+interface ParsedToken {
+  expiresAt: number;
+  nonce: string;
+  sig: string;
 }
 
 /**
- * Generates a high-entropy, 15-minute single-use HMAC challenge token
- * bound to the user, provider, and target account handle per Section 6.2.
+ * Token layout: twm-verify-<expiresAt base36>-<nonce hex>-<signature hex>
+ * The payload is recoverable from the token itself, so verification needs no database:
+ * the signature covers userId + provider + handle + nonce + expiry.
  */
-function generateChallengeToken(userId: string, provider: string, handle: string) {
+function signToken(
+  userId: string,
+  provider: Provider,
+  handle: string,
+  nonce: string,
+  expiresAt: number
+): string {
+  return crypto
+    .createHmac("sha256", getSecret())
+    .update(`${userId}:${provider}:${handle.trim().toLowerCase()}:${nonce}:${expiresAt}`)
+    .digest("hex");
+}
+
+function createChallenge(userId: string, provider: Provider, handle: string) {
   const nonce = crypto.randomBytes(8).toString("hex");
   const expiresAt = Date.now() + CHALLENGE_TTL_MS;
-  const payload = `${userId}:${provider.toLowerCase()}:${handle.toLowerCase()}:${nonce}:${expiresAt}`;
-  const signature = crypto.createHmac("sha256", HMAC_SECRET).update(payload).digest("hex").slice(0, 16);
-  
-  // Format displayed to student to paste into provider profile bio
-  const challengeCode = `twm-verify-${nonce}-${signature}`;
-  
+  const sig = signToken(userId, provider, handle, nonce, expiresAt);
   return {
-    challengeCode,
+    challengeCode: `twm-verify-${expiresAt.toString(36)}-${nonce}-${sig}`,
     expiresAt: new Date(expiresAt).toISOString(),
-    expiresAtTimestamp: expiresAt,
   };
 }
 
+function parseToken(code: string): ParsedToken | null {
+  const match = /^twm-verify-([0-9a-z]+)-([0-9a-f]{16})-([0-9a-f]{64})$/.exec(code.trim());
+  if (!match) return null;
+  const expiresAt = parseInt(match[1], 36);
+  if (!Number.isFinite(expiresAt)) return null;
+  return { expiresAt, nonce: match[2], sig: match[3] };
+}
+
+type TokenCheck = { ok: true } | { ok: false; status: number; reason: string };
+
+// shortcut: tokens are bound to user+provider+handle but not single-use. Without a store, a
+// replay inside the 15-minute TTL resolves to the same handle. Add a nonce table when a DB lands.
+
+function checkToken(
+  code: string,
+  userId: string,
+  provider: Provider,
+  handle: string
+): TokenCheck {
+  const parsed = parseToken(code);
+  if (!parsed) return { ok: false, status: 400, reason: "MALFORMED_TOKEN" };
+  if (parsed.expiresAt < Date.now()) return { ok: false, status: 400, reason: "TOKEN_EXPIRED" };
+
+  const expected = Buffer.from(
+    signToken(userId, provider, handle, parsed.nonce, parsed.expiresAt),
+    "hex"
+  );
+  const received = Buffer.from(parsed.sig, "hex");
+  if (expected.length !== received.length || !crypto.timingSafeEqual(expected, received)) {
+    return { ok: false, status: 400, reason: "SIGNATURE_MISMATCH" };
+  }
+  return { ok: true };
+}
+
 /**
- * Validates the HMAC challenge code against the fetched public profile text.
- * Uses constant-time comparison to protect against timing attacks.
+ * Reads the public bio straight from the provider. The client never supplies this text:
+ * whatever the client says about itself is not evidence of account ownership.
  */
-function verifyChallengeInProfile(challengeCode: string, profileText: string): boolean {
-  if (!challengeCode || !profileText) return false;
-  
-  // Normalize strings and check if profile bio contains the challenge code
-  const cleanProfile = profileText.trim();
-  const cleanChallenge = challengeCode.trim();
-  
-  if (!cleanProfile.includes(cleanChallenge)) {
-    return false;
+async function fetchPublicBio(provider: Provider, handle: string): Promise<string> {
+  const clean = handle.trim().replace(/^@/, "");
+  if (!clean) return "";
+
+  if (provider === "leetcode") {
+    const res = await fetch("https://leetcode.com/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Referer: "https://leetcode.com" },
+      body: JSON.stringify({
+        query:
+          "query($username: String!) { matchedUser(username: $username) { profile { aboutMe } } }",
+        variables: { username: clean },
+      }),
+      signal: AbortSignal.timeout(8000),
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error(`LeetCode returned HTTP ${res.status}`);
+    const json = await res.json();
+    return json?.data?.matchedUser?.profile?.aboutMe ?? "";
   }
-  
-  // Extract and verify structure
-  const parts = cleanChallenge.split("-");
-  if (parts.length < 4 || parts[0] !== "twm" || parts[1] !== "verify") {
-    return false;
-  }
-  
-  return true;
+
+  const res = await fetch(
+    `https://www.hackerrank.com/rest/hackers/${encodeURIComponent(clean)}/profile`,
+    {
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(8000),
+      cache: "no-store",
+    }
+  );
+  if (!res.ok) throw new Error(`HackerRank returned HTTP ${res.status}`);
+  const json = await res.json();
+  const model = json?.model ?? {};
+  return model.about ?? model.bio ?? model.about_me ?? "";
 }
 
 export async function POST(req: NextRequest) {
+  let body: ChallengeRequest;
   try {
-    const body: ChallengeRequest = await req.json();
-    const { action, userId, provider, handle, challenge, profileText } = body;
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Request body must be JSON." }, { status: 400 });
+  }
 
-    if (!userId || !provider || !handle) {
-      return NextResponse.json(
-        { error: "Missing required fields: userId, provider, and handle are required." },
-        { status: 400 }
-      );
-    }
+  const { action, userId, provider, handle, challenge } = body;
 
-    if (provider !== "leetcode" && provider !== "hackerrank") {
-      return NextResponse.json(
-        { error: "Provider must be either 'leetcode' or 'hackerrank' for bio challenge verification." },
-        { status: 400 }
-      );
-    }
+  if (!userId || !provider || !handle) {
+    return NextResponse.json(
+      { error: "Missing required fields: userId, provider, and handle are required." },
+      { status: 400 }
+    );
+  }
 
+  if (provider !== "leetcode" && provider !== "hackerrank") {
+    return NextResponse.json(
+      { error: "Provider must be either 'leetcode' or 'hackerrank' for bio challenge verification." },
+      { status: 400 }
+    );
+  }
+
+  try {
     if (action === "create") {
-      const challengeData = generateChallengeToken(userId, provider, handle);
-      
+      const { challengeCode, expiresAt } = createChallenge(userId, provider, handle);
       return NextResponse.json({
         success: true,
         action: "create",
         provider,
         handle,
-        challengeCode: challengeData.challengeCode,
-        expiresAt: challengeData.expiresAt,
+        challengeCode,
+        expiresAt,
         ttlMinutes: 15,
-        instructions: `Paste '${challengeData.challengeCode}' anywhere in your public ${
+        instructions: `Paste '${challengeCode}' anywhere in your public ${
           provider === "leetcode" ? "LeetCode profile summary/bio" : "HackerRank 'About Me' bio"
-        }. Once verified, you may safely delete it.`
+        }. Once verified, you may safely delete it.`,
       });
     }
 
@@ -104,28 +182,57 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      if (!profileText) {
+      // Signature and expiry are checked before any network call: a forged or stale
+      // token must never be able to trigger a provider request.
+      const check = checkToken(challenge, userId, provider, handle);
+      if (!check.ok) {
         return NextResponse.json(
-          { 
+          { verified: false, error: "Challenge token is invalid or expired.", reason: check.reason },
+          { status: check.status }
+        );
+      }
+
+      let bio: string;
+      try {
+        bio = await fetchPublicBio(provider, handle);
+      } catch (err) {
+        return NextResponse.json(
+          {
             verified: false,
-            error: "No public profile text provided or fetched for verification. Ensure profile is public." 
+            error: `Could not read the public ${provider} profile: ${
+              err instanceof Error ? err.message : "provider unavailable"
+            }.`,
+            reason: "PROVIDER_UNAVAILABLE",
+          },
+          { status: 502 }
+        );
+      }
+
+      if (!bio) {
+        return NextResponse.json(
+          {
+            verified: false,
+            error: `The public ${provider} profile for '${handle}' has no bio text. Make the profile public and add the code, then retry.`,
+            reason: "NO_PUBLIC_BIO",
           },
           { status: 422 }
         );
       }
 
-      const isVerified = verifyChallengeInProfile(challenge, profileText);
+      // Exact token match inside the real bio, not a substring supplied by the caller.
+      const verified = bio.includes(challenge.trim());
 
       return NextResponse.json({
         success: true,
         action: "verify",
         provider,
         handle,
-        verified: isVerified,
-        verifiedAt: isVerified ? new Date().toISOString() : null,
-        message: isVerified
+        verified,
+        verifiedAt: verified ? new Date().toISOString() : null,
+        reason: verified ? "TOKEN_FOUND" : "TOKEN_NOT_IN_BIO",
+        message: verified
           ? "Account ownership successfully verified! You can now remove the verification code from your profile."
-          : "Verification token was not found in the supplied public profile text. Please check your bio and try again."
+          : "The challenge code was not found in your public profile bio. Paste it, save, and try again before the token expires.",
       });
     }
 
@@ -133,10 +240,8 @@ export async function POST(req: NextRequest) {
       { error: "Invalid action. Supported actions: 'create' | 'verify'" },
       { status: 400 }
     );
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: "Internal challenge handler error", details: error.message },
-      { status: 500 }
-    );
+  } catch (error) {
+    console.error("hmac-challenge error:", error);
+    return NextResponse.json({ error: "Internal challenge handler error" }, { status: 500 });
   }
 }
