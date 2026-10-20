@@ -55,13 +55,27 @@ adapters. The plan's Phase 0 (provider evidence) has not started.
 | **Landing Section Scale & Rhythm** | Antigravity — **COMPLETED** | Scaled `HeroSection`, `NavBar`, `MotionShowcase`, `PlatformMatrix`, `CockpitPreview`, and `AppScreensGallery` to generous desktop proportion with interactive observation console. |
 | **Public Asset Optimization** | Antigravity — **COMPLETED** | Deleted 5.7MB unreferenced dead assets in `public/` (`logo.svg` 2.4MB base64 raster, `logo.png` 1.8MB, `twm_perfect_landing.png` 761KB, etc.). |
 | **Token Consolidation Sweep** | Antigravity — **COMPLETED** | Fixed residual raw hex classes in `admin/page.tsx`, `CockpitPreview.tsx`, and `HeroSection.tsx` to strictly consume `--canvas`, `--surface`, `--accent` tokens. |
-| **Phase 0 API Route Handlers** | Antigravity — **COMPLETED** | Scaffolded live Next.js route handlers `/api/auth/hmac-challenge` (Section 6.2 single-use 15m HMAC token) and `/api/telemetry/github` (Section 5.4 & 9.1 UTC day bucketing, rate limits). |
+| **Phase 0 API Route Handlers (Auth & GitHub)** | Antigravity — **COMPLETED** | Scaffolded live Next.js route handlers `/api/auth/hmac-challenge` (Section 6.2 single-use 15m HMAC token) and `/api/telemetry/github` (Section 5.4 & 9.1 UTC day bucketing, rate limits). |
 | **Phase 0 Live UI Integration** | Antigravity — **COMPLETED** | Connected Onboarding Step 3 to real `/api/auth/hmac-challenge` lifecycle and wired `AppContext.tsx` `triggerLiveSync` to real `/api/telemetry/github` endpoint. |
-| **Phase 0 LeetCode Snapshot Adapter** | OpenCode / Antigravity — **NEXT** | Scaffold `/api/telemetry/leetcode` route handler conforming to Section 5.5 & Section 9.7 (verified Sunday snapshot boundary rules). |
+| **Phase 0 HackerRank Adapter** | Antigravity — **COMPLETED** | Implemented `src/app/api/telemetry/hackerrank/route.ts` with domain stars extraction, AbortSignal timeout, and honest Section 5.6 `DISPLAY_ONLY_EXCLUDED_FROM_DELTA` capability gating. |
+| **Phase 0 LeetCode Snapshot Adapter** | OpenCode — **IN PROGRESS / ASSIGNED** | Scaffold `src/app/api/telemetry/leetcode/route.ts` implementing Section 5.5 & Section 9.7 (Sunday 23:59:59 IST pre-boundary snapshot rule, problem breakdown, delta against previous verified baseline snapshot). |
 
 ---
 
 ## Session log
+
+### 2026-10-20 — Phase 0 HackerRank Capability Gating Adapter (Parallel Stream B)
+**Completed by:** Antigravity
+- **HackerRank Telemetry Adapter (`src/app/api/telemetry/hackerrank/route.ts`):**
+  - Connects to public HackerRank REST endpoints (`/rest/hackers/:username/profile` and `/badges`) with 5-second `AbortSignal` timeouts and anti-hang guarantees.
+  - Implements Plan Section 5.6: extracts verified domain badges (Problem Solving, Python, Algorithms) and star tallies.
+  - Enforces mandatory capability gating: returns `status: "DISPLAY_ONLY_VERIFIED"` with `isEligibleForWeeklyCompetition: false` and explanatory capability gating notice (HackerRank lacks public event timestamps and is strictly excluded from weekly competition deltas to prevent unverified attribution).
+  - Handles 404, rate limits, and network errors gracefully with honest status reporting (`NOT_FOUND` / `PROVIDER_UNREACHABLE`).
+- **Gates:**
+  - `npx tsc --noEmit` exited 0 (clean).
+  - Dev server HTTP 200 verified with live curl queries on `http://localhost:3000/api/telemetry/hackerrank`.
+- **Parallel Assignment for OpenCode (Stream A):**
+  - Implement `src/app/api/telemetry/leetcode/route.ts` adhering to Section 5.5 and Section 9.7. See specification details below.
 
 ### 2026-10-20 — Phase 0 Live UI Integration (Onboarding + Live Telemetry Sync)
 **Completed by:** Antigravity (Commit `229d5de`)
