@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  /* --font-sans / --font-mono are set by next/font on <html>; don't redefine them here. */
+
+  /* Anti-Slop Precision Telemetry Tokens */
+  --bg: #090A0E;
+  --surface: #111319;
+  --surface-elevated: #181B23;
+  --surface-card: #14171F;
+  --surface-highlight: #202430;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-active: rgba(245, 158, 11, 0.4);
+
+  --ink: #F5F6F8;
+  --ink-secondary: #C8CDD6;
+  --muted: #828A99;
+  --muted-dark: #4B5262;
+
+  /* Decisive Instrument Accents */
+  --accent: #F59E0B;
+  --accent-hover: #D97706;
+  --accent-subtle: rgba(245, 158, 11, 0.12);
+
+  /* Provider Telemetry Identifiers */
+  --provider-github: #60A5FA;
+  --provider-leetcode: #FBBF24;
+  --provider-hackerrank: #34D399;
+
+  --status-verified: #10B981;
+  --status-warning: #F59E0B;
+  --status-error: #EF4444;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans, system-ui, sans-serif);
+  overflow-x: hidden;
+  selection-background-color: #F59E0B;
+  selection-color: #090A0E;
+  letter-spacing: -0.011em;
+}
+
+/* Custom precision scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1F2430;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3B4252;
+}
+
+/* Precision Panels (Told apart by surface tone, not fake blur) */
+.instrument-panel {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.instrument-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.instrument-card:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+  background-color: var(--surface-elevated);
+}
+
+/* Subtle Technical Dot Matrix (replacing generic glowing grids) */
+.bg-tech-dots {
+  background-size: 24px 24px;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+}
+
+/* Skeleton Loading State */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.02) 25%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.02) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+/* Accessibility: keyboard focus. !important because components set
+   `focus:outline-none` on inputs; focus must never be silenced. */
+:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px;
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
