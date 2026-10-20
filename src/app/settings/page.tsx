@@ -43,6 +43,125 @@ export default function SettingsPage() {
   const [publicDiscovery, setPublicDiscovery] = useState(currentUser.settings.publicDiscovery);
   const [notifyDispute, setNotifyDispute] = useState(currentUser.settings.notifyOnDispute);
   const [notifyRecap, setNotifyRecap] = useState(currentUser.settings.notifyOnWeeklyRecap);
+  const [testingAdapter, setTestingAdapter] = useState<string | null>(null);
+
+  const testGitHubAdapter = async () => {
+    setTestingAdapter("github");
+    try {
+      const res = await fetch(`/api/telemetry/github?username=${encodeURIComponent(currentUser.github.username || "octocat")}`);
+      const data = await res.json();
+      if (res.ok) {
+        addToast({
+          title: "GitHub Adapter Verified",
+          description: `Observed ${data.metrics?.activeDaysWeek || 0} active days in trailing 7 UTC days. Rate limit: ${data.rateLimit?.remaining || "ok"}.`,
+          type: "success",
+        });
+      } else {
+        addToast({
+          title: "GitHub Observation Notice",
+          description: data.error || "Unable to reach public profile.",
+          type: "warning",
+        });
+      }
+    } catch {
+      addToast({
+        title: "Network Notice",
+        description: "Failed to connect to GitHub telemetry route.",
+        type: "error",
+      });
+    } finally {
+      setTestingAdapter(null);
+    }
+  };
+
+  const testLeetCodeAdapter = async () => {
+    setTestingAdapter("leetcode");
+    try {
+      const res = await fetch(`/api/telemetry/leetcode?username=${encodeURIComponent(currentUser.leetcode.username || "neal_wu")}`);
+      const data = await res.json();
+      if (res.ok && data.isVerified) {
+        addToast({
+          title: "LeetCode Snapshot Live",
+          description: `Verified ${data.metrics?.totalSolved || 0} solved problems (Easy: ${data.metrics?.easySolved}, Med: ${data.metrics?.mediumSolved}, Hard: ${data.metrics?.hardSolved}).`,
+          type: "success",
+        });
+      } else {
+        addToast({
+          title: "LeetCode Adapter Notice",
+          description: data.error || data.capabilityNotice || "Unable to retrieve public profile.",
+          type: "warning",
+        });
+      }
+    } catch {
+      addToast({
+        title: "Network Notice",
+        description: "Failed to query LeetCode snapshot service.",
+        type: "error",
+      });
+    } finally {
+      setTestingAdapter(null);
+    }
+  };
+
+  const testHackerRankAdapter = async () => {
+    setTestingAdapter("hackerrank");
+    try {
+      const res = await fetch(`/api/telemetry/hackerrank?username=${encodeURIComponent(currentUser.hackerrank.username || "alice")}`);
+      const data = await res.json();
+      if (res.ok && data.isVerified) {
+        addToast({
+          title: "HackerRank Gated Verified",
+          description: `Verified ${data.metrics?.totalStars || 0} domain stars (${data.metrics?.badgesCount || 0} badges). Status: DISPLAY_ONLY_EXCLUDED_FROM_DELTA.`,
+          type: "success",
+        });
+      } else {
+        addToast({
+          title: "HackerRank Capability Status",
+          description: data.capabilityNotice || data.error || "HackerRank profile query complete.",
+          type: "info",
+        });
+      }
+    } catch {
+      addToast({
+        title: "Network Notice",
+        description: "Failed to connect to HackerRank adapter route.",
+        type: "error",
+      });
+    } finally {
+      setTestingAdapter(null);
+    }
+  };
+
+  const testHmacChallenge = async () => {
+    setTestingAdapter("hmac");
+    try {
+      const res = await fetch("/api/auth/hmac-challenge", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "create",
+          studentRoll: currentUser.rollNo || "22CS104",
+          provider: "leetcode",
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.challengeString) {
+        addToast({
+          title: "Cryptographic HMAC Generated",
+          description: `Token: ${data.challengeString.slice(0, 24)}... (Valid for 15 minutes)`,
+          type: "success",
+        });
+      }
+    } catch {
+      addToast({
+        title: "HMAC Service Notice",
+        description: "Challenge token generation failed.",
+        type: "error",
+      });
+    } finally {
+      setTestingAdapter(null);
+    }
+  };
 
   const handleSavePrivacy = () => {
     updateUserSettings({
@@ -253,7 +372,15 @@ export default function SettingsPage() {
                 </div>
               </div>
 
-              <div className="pt-3 flex justify-end">
+              <div className="pt-3 flex flex-wrap justify-end gap-3">
+                <button
+                  onClick={testGitHubAdapter}
+                  disabled={testingAdapter === "github"}
+                  className="px-5 py-3 rounded-xl bg-surface-raised hover:bg-white/10 text-slate-200 text-sm font-mono transition-colors border border-white/10 font-medium disabled:opacity-50 flex items-center gap-2"
+                >
+                  <RotateCw className={`h-4 w-4 text-accent ${testingAdapter === "github" ? "animate-spin" : ""}`} />
+                  <span>{testingAdapter === "github" ? "Querying GitHub..." : "Test GitHub Connection"}</span>
+                </button>
                 <button
                   onClick={() => updateConnectedAccount("github", !currentUser.github.connected)}
                   className={`px-5 py-3 rounded-xl text-sm font-mono font-semibold transition-all ${
@@ -299,14 +426,20 @@ export default function SettingsPage() {
 
               <div className="pt-2 flex flex-wrap justify-end gap-3">
                 <button
-                  onClick={() => addToast({
-                    title: "HMAC Challenge Verified",
-                    description: "Re-queried LeetCode public bio. Signature matches current student session.",
-                    type: "success"
-                  })}
-                  className="px-5 py-3 rounded-xl bg-surface-raised hover:bg-white/10 text-slate-200 text-sm font-mono transition-colors border border-white/10 font-medium"
+                  onClick={testHmacChallenge}
+                  disabled={testingAdapter === "hmac"}
+                  className="px-5 py-3 rounded-xl bg-surface-raised hover:bg-white/10 text-slate-200 text-sm font-mono transition-colors border border-white/10 font-medium flex items-center gap-2"
                 >
-                  Test Challenge Token
+                  <Lock className="h-4 w-4 text-accent" />
+                  <span>{testingAdapter === "hmac" ? "Generating..." : "Generate New Challenge"}</span>
+                </button>
+                <button
+                  onClick={testLeetCodeAdapter}
+                  disabled={testingAdapter === "leetcode"}
+                  className="px-5 py-3 rounded-xl bg-surface-raised hover:bg-white/10 text-slate-200 text-sm font-mono transition-colors border border-white/10 font-medium flex items-center gap-2"
+                >
+                  <RotateCw className={`h-4 w-4 text-amber-400 ${testingAdapter === "leetcode" ? "animate-spin" : ""}`} />
+                  <span>{testingAdapter === "leetcode" ? "Fetching..." : "Query Live Snapshot"}</span>
                 </button>
                 <button
                   onClick={() => updateConnectedAccount("leetcode", !currentUser.leetcode.connected)}
@@ -339,6 +472,17 @@ export default function SettingsPage() {
 
               <div className="text-sm sm:text-base font-mono text-muted leading-relaxed p-4 rounded-xl bg-surface-raised/50 border border-white/5">
                 Rule §4.2 Guarantee: Cumulative badges on HackerRank do not convey timestamped weekly deltas and are held strictly for profile display.
+              </div>
+
+              <div className="pt-2 flex justify-end">
+                <button
+                  onClick={testHackerRankAdapter}
+                  disabled={testingAdapter === "hackerrank"}
+                  className="px-5 py-3 rounded-xl bg-surface-raised hover:bg-white/10 text-slate-200 text-sm font-mono transition-colors border border-white/10 font-medium flex items-center gap-2"
+                >
+                  <RotateCw className={`h-4 w-4 text-emerald-400 ${testingAdapter === "hackerrank" ? "animate-spin" : ""}`} />
+                  <span>{testingAdapter === "hackerrank" ? "Querying..." : "Verify HackerRank Profile"}</span>
+                </button>
               </div>
             </div>
           </motion.div>

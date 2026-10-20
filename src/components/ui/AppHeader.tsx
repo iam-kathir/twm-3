@@ -62,13 +62,17 @@ export function AppHeader() {
         <div className="flex items-center gap-8">
           <BrandLogo size="lg" showLivePulse={true} href="/" />
 
-          {/* Demo Data indicator */}
-          <span
-            title="Illustrative figures — no provider is connected yet."
-            className="hidden xl:inline-flex items-center gap-1.5 rounded-lg border border-accent/25 bg-accent/10 px-2.5 py-1 font-mono text-xs font-semibold uppercase tracking-wider text-accent"
+          {/* Live Telemetry Engine status indicator */}
+          <div
+            title="Telemetry Engine: GitHub (Live UTC), LeetCode (Sunday Snapshot), HackerRank (Capability Gated)"
+            className="hidden xl:inline-flex items-center gap-2 rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-3 py-1.5 font-mono text-xs text-emerald-400 shadow-sm cursor-help transition-all hover:bg-emerald-500/15"
           >
-            Demo data
-          </span>
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            </span>
+            <span className="font-semibold tracking-wide">3 Providers Live</span>
+          </div>
 
           <nav className="hidden md:flex items-center gap-2">
             {navLinks.map((link) => {

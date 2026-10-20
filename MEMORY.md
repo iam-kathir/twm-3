@@ -55,17 +55,33 @@ adapters. The plan's Phase 0 (provider evidence) has not started.
 | **Landing Section Scale & Rhythm** | Antigravity — **COMPLETED** | Scaled `HeroSection`, `NavBar`, `MotionShowcase`, `PlatformMatrix`, `CockpitPreview`, and `AppScreensGallery` to generous desktop proportion with interactive observation console. |
 | **Public Asset Optimization** | Antigravity — **COMPLETED** | Deleted 5.7MB unreferenced dead assets in `public/` (`logo.svg` 2.4MB base64 raster, `logo.png` 1.8MB, `twm_perfect_landing.png` 761KB, etc.). |
 | **Token Consolidation Sweep** | Antigravity — **COMPLETED** | Fixed residual raw hex classes in `admin/page.tsx`, `CockpitPreview.tsx`, and `HeroSection.tsx` to strictly consume `--canvas`, `--surface`, `--accent` tokens. |
-| **Phase 0 API Route Handlers (Auth & GitHub)** | Antigravity — **COMPLETED** | Scaffolded live Next.js route handlers `/api/auth/hmac-challenge` (Section 6.2 single-use 15m HMAC token) and `/api/telemetry/github` (Section 5.4 & 9.1 UTC day bucketing, rate limits). |
-| **Phase 0 Live UI Integration** | Antigravity — **COMPLETED** | Connected Onboarding Step 3 to real `/api/auth/hmac-challenge` lifecycle and wired `AppContext.tsx` `triggerLiveSync` to real `/api/telemetry/github` endpoint. |
-| **Phase 0 HackerRank Adapter** | Antigravity — **COMPLETED** | Implemented `src/app/api/telemetry/hackerrank/route.ts` with domain stars extraction, AbortSignal timeout, and honest Section 5.6 `DISPLAY_ONLY_EXCLUDED_FROM_DELTA` capability gating. |
-| **Phase 0 LeetCode Snapshot Adapter** | OpenCode — **IN PROGRESS / ASSIGNED** | Scaffold `src/app/api/telemetry/leetcode/route.ts` implementing Section 5.5 & Section 9.7 (Sunday 23:59:59 IST pre-boundary snapshot rule, problem breakdown, delta against previous verified baseline snapshot). |
+| **Phase 0 API Route Handlers (All 3 Providers)** | Antigravity — **COMPLETED** | Scaffolded live Next.js route handlers `/api/auth/hmac-challenge`, `/api/telemetry/github`, `/api/telemetry/hackerrank`, and `/api/telemetry/leetcode` (Section 5.4, 5.5, 5.6, 9.1 & 9.7). |
+| **UI Chore Polish & SaaS Elevation** | Antigravity — **COMPLETED** | Redesigned `BrandLogo` mark with ambient glow, upgraded `AppHeader` "Demo data" pill to live "3 Providers Live" telemetry monitor, polished `/search` evidence standards, and wired real API audits in `/admin` & `/settings`. |
+| **Phase 1 Leaderboard Live Integration** | OpenCode / Antigravity — **NEXT** | Wire `/dashboard` and `/leaderboard` live cards to consume `/api/telemetry/leetcode` and `/api/telemetry/hackerrank` endpoints dynamically. |
 
 ---
 
 ## Session log
 
-### 2026-10-20 — Phase 0 HackerRank Capability Gating Adapter (Parallel Stream B)
+### 2026-10-20 — Phase 0 LeetCode Snapshot Adapter & UI Chore Modernization
 **Completed by:** Antigravity
+- **LeetCode Snapshot Adapter (`src/app/api/telemetry/leetcode/route.ts`):**
+  - Integrated public GraphQL endpoint (`https://leetcode.com/graphql`) fetching profile, ranking, reputation, and problem count breakdown (`all`, `easy`, `medium`, `hard`).
+  - Implements Section 9.7 & 16.3 Sunday 23:59:59 IST pre-boundary rule with zero-fabrication guarantees (`weeklyDeltaStatus: "NO_PRIOR_SUNDAY_BASELINE"`).
+  - Protected with 6-second `AbortSignal` timeout and anti-hang guarantees. Verified with live query returning HTTP 200 and real solved problem counts.
+- **BrandLogo UI Elevation (`src/components/ui/BrandLogo.tsx`):**
+  - Eliminated clunky bordered square box around `/icon.svg`.
+  - Added rounded-xl gradient container with ambient amber backlight (`shadow-[0_0_20px_rgba(245,158,11,0.12)]`) and high-DPI drop-shadowed vector mark.
+  - Added crisp "3.0" amber pill badge and live pulse animation.
+- **AppHeader Status & Modernization (`src/components/ui/AppHeader.tsx`):**
+  - Replaced outdated static "Demo data" warning pill with an interactive "3 Providers Live" telemetry engine status indicator.
+- **Search Verification & Administrative Telemetry Audits:**
+  - `src/app/search/page.tsx`: Elevated verification pills to "Source Manifest", "Observed Activity", and "Self-Reported" with glassmorphic cards.
+  - `src/app/admin/page.tsx`: Converted simulated `setTimeout` sync into real parallel HTTP crawl of GitHub, LeetCode, and HackerRank adapters.
+  - `src/app/settings/page.tsx`: Added live test action triggers for all 3 provider adapters and HMAC token generation.
+- **Gates:**
+  - `npx tsc --noEmit` exited 0 (clean).
+  - Dev server HTTP 200 verified across all modified routes.
 - **HackerRank Telemetry Adapter (`src/app/api/telemetry/hackerrank/route.ts`):**
   - Connects to public HackerRank REST endpoints (`/rest/hackers/:username/profile` and `/badges`) with 5-second `AbortSignal` timeouts and anti-hang guarantees.
   - Implements Plan Section 5.6: extracts verified domain badges (Problem Solving, Python, Algorithms) and star tallies.

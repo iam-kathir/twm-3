@@ -67,35 +67,40 @@ export function BrandLogo({
   }
 
   const markContent = (
-    <div className={`inline-flex items-center gap-2.5 group ${className}`}>
+    <div className={`inline-flex items-center gap-3 group select-none ${className}`}>
       <div
-        className="relative rounded-lg overflow-hidden border border-white/10 flex items-center justify-center bg-canvas group-hover:border-accent/40 transition-all duration-300 group-hover:shadow-[0_0_16px_rgba(245,158,11,0.2)]"
+        className="relative rounded-xl overflow-hidden border border-accent/25 flex items-center justify-center bg-gradient-to-b from-surface-elevated to-surface group-hover:border-accent/60 transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.12)] group-hover:shadow-[0_0_25px_rgba(245,158,11,0.3)]"
         style={{ width: px, height: px }}
       >
         <Image
           src="/icon.svg"
           alt="TWM Logo"
-          width={px - 6}
-          height={px - 6}
-          className="group-hover:scale-105 transition-transform duration-300"
+          width={Math.round(px * 0.72)}
+          height={Math.round(px * 0.72)}
+          className="group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_2px_8px_rgba(245,158,11,0.3)]"
           priority
         />
+        <div className="absolute inset-0 bg-gradient-to-tr from-accent/10 via-transparent to-white/5 pointer-events-none" />
       </div>
 
       {showText && (
-        <span className={`font-bold text-ink tracking-tight font-sans ${
-          size === "lg" || size === "xl" ? "text-base sm:text-lg" : "text-sm"
-        }`}>
-          TWM <span className={`text-accent font-mono ${
-            size === "lg" || size === "xl" ? "text-xs sm:text-sm font-semibold" : "text-xs"
-          }`}>3.0</span>
-        </span>
+        <div className="flex items-center gap-2">
+          <span className={`font-black text-white tracking-tight font-sans ${
+            size === "lg" || size === "xl" ? "text-lg sm:text-xl" : "text-base"
+          }`}>
+            TWM
+          </span>
+          <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-accent/15 border border-accent/30 text-accent font-mono text-[11px] sm:text-xs font-bold uppercase tracking-wider shadow-sm">
+            3.0
+          </span>
+        </div>
       )}
 
       {showLivePulse && (
-        <span className={`rounded-full bg-emerald-400 animate-ping ml-0.5 ${
-          size === "lg" || size === "xl" ? "h-2 w-2" : "h-1.5 w-1.5"
-        }`} />
+        <span className="relative flex h-2.5 w-2.5 ml-0.5" title="Telemetry Engine Active">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+        </span>
       )}
     </div>
   );

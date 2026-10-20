@@ -224,20 +224,22 @@ export default function SearchPage() {
             </div>
 
             {/* Evidence Legend Pill */}
-            <div className="flex flex-wrap items-center gap-2.5 text-xs sm:text-sm bg-surface border border-white/[0.08] p-3 rounded-xl shadow-sm">
-              <span className="text-muted font-mono mr-1">Evidence Standard:</span>
-              <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-xs font-semibold">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>EXPLICIT</span>
-              </span>
-              <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-md bg-amber-500/10 text-accent border border-amber-500/20 font-mono text-xs font-semibold">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>SUPPORTED</span>
-              </span>
-              <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-md bg-surface-raised text-muted border border-white/10 font-mono text-xs font-semibold">
-                <AlertCircle className="w-3.5 h-3.5" />
-                <span>SELF-DECLARED</span>
-              </span>
+            <div className="flex items-center gap-2 bg-gradient-to-r from-surface to-surface-elevated border border-white/[0.08] px-4 py-2.5 rounded-2xl shadow-lg">
+              <span className="text-xs text-muted-soft font-mono uppercase tracking-wider font-semibold mr-1">Verification Standard:</span>
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 font-mono text-xs font-semibold shadow-sm">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Source Manifest</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/10 text-accent border border-amber-500/25 font-mono text-xs font-semibold shadow-sm">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Observed Activity</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/5 text-muted border border-white/10 font-mono text-xs font-semibold">
+                  <AlertCircle className="w-3.5 h-3.5" />
+                  <span>Self-Reported</span>
+                </span>
+              </div>
             </div>
           </div>
         </div>
