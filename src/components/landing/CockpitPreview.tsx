@@ -68,7 +68,7 @@ export function CockpitPreview() {
           </div>
 
           {/* Provider Grid */}
-          <div className="p-8 grid grid-cols-1 md:grid-cols-3 gap-8 bg-[#0B0D13]">
+          <div className="p-8 grid grid-cols-1 md:grid-cols-3 gap-8 bg-canvas">
             {/* 1. GitHub Provider Card */}
             <div className="rounded-2xl border border-white/[0.08] bg-surface p-7 sm:p-8 flex flex-col justify-between hover:border-white/20 transition-all shadow-md">
               <div>

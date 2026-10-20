@@ -104,9 +104,9 @@ export function HeroSection() {
           {/* Browser Bar */}
           <div className="px-5 py-3 bg-surface-raised rounded-t-xl border-b border-white/[0.06] flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-[#2E3440]" />
-              <span className="w-3 h-3 rounded-full bg-[#2E3440]" />
-              <span className="w-3 h-3 rounded-full bg-[#2E3440]" />
+              <span className="w-3 h-3 rounded-full bg-white/15 border border-white/10" />
+              <span className="w-3 h-3 rounded-full bg-white/15 border border-white/10" />
+              <span className="w-3 h-3 rounded-full bg-white/15 border border-white/10" />
             </div>
             <div className="px-5 py-1 rounded-md bg-surface border border-white/[0.06] text-xs font-mono text-ink-secondary">
               Dashboard preview
