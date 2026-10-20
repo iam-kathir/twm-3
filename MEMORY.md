@@ -1,7 +1,8 @@
 # MEMORY — TWM 3.1 working notes
 
 Running log of decisions and changes. Newest session at the top of *Session log*.
-Plan of record: `TWM_Final_Project_Plan_v3.1.md` (read its Section 20 roadmap before scoping work).
+Plan of record: `TWM_Final_Project_Plan_v3.1.md` (read Section 20 roadmap).
+Master task ledger & delivery roadmap: [`TASKS.md`](TASKS.md).
 
 ---
 
