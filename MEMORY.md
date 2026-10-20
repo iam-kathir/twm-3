@@ -56,11 +56,29 @@ adapters. The plan's Phase 0 (provider evidence) has not started.
 | **Public Asset Optimization** | Antigravity — **COMPLETED** | Deleted 5.7MB unreferenced dead assets in `public/` (`logo.svg` 2.4MB base64 raster, `logo.png` 1.8MB, `twm_perfect_landing.png` 761KB, etc.). |
 | **Token Consolidation Sweep** | Antigravity — **COMPLETED** | Fixed residual raw hex classes in `admin/page.tsx`, `CockpitPreview.tsx`, and `HeroSection.tsx` to strictly consume `--canvas`, `--surface`, `--accent` tokens. |
 | **Phase 0 API Route Handlers** | Antigravity — **COMPLETED** | Scaffolded live Next.js route handlers `/api/auth/hmac-challenge` (Section 6.2 single-use 15m HMAC token) and `/api/telemetry/github` (Section 5.4 & 9.1 UTC day bucketing, rate limits). |
-| **Phase 0 Live UI Integration** | OpenCode / Antigravity — **NEXT** | Connect the Onboarding HMAC challenge flow and Dashboard Sync button directly to `/api/auth/hmac-challenge` and `/api/telemetry/github`. |
+| **Phase 0 Live UI Integration** | Antigravity — **COMPLETED** | Connected Onboarding Step 3 to real `/api/auth/hmac-challenge` lifecycle and wired `AppContext.tsx` `triggerLiveSync` to real `/api/telemetry/github` endpoint. |
+| **Phase 0 LeetCode Snapshot Adapter** | OpenCode / Antigravity — **NEXT** | Scaffold `/api/telemetry/leetcode` route handler conforming to Section 5.5 & Section 9.7 (verified Sunday snapshot boundary rules). |
 
 ---
 
 ## Session log
+
+### 2026-10-20 — Phase 0 Live UI Integration (Onboarding + Live Telemetry Sync)
+**Completed by:** Antigravity (Commit `229d5de`)
+- **Onboarding HMAC Integration (`src/app/onboarding/page.tsx`):**
+  - Replaced hardcoded challenge strings with dynamic calls to `POST /api/auth/hmac-challenge` (`action: "create"`).
+  - Wired "Verify Challenge Now" button to execute live constant-time cryptographic bio verification against `POST /api/auth/hmac-challenge` (`action: "verify"`).
+- **Dashboard Telemetry Sync (`src/context/AppContext.tsx`):**
+  - Replaced simulation timeouts in `triggerLiveSync` with real fetch to `GET /api/telemetry/github?username=${user}`.
+  - Updates student active days (`activeDaysWeek`), UTC calendar day buckets, and last commit status directly from live provider data while honoring Rule §9.1 and Section 5.7 provider failure policies.
+- **Gates:**
+  - `npx tsc --noEmit` exited 0 (clean).
+  - Dev server HTTP 200 on port 3000 verified.
+- **Handover to OpenCode:**
+  - Onboarding and Dashboard live sync are now truly integrated with the backend API.
+  - Next milestone is the Phase 0 LeetCode snapshot adapter route.
+
+### 2026-10-20 — Phase 0 Backend Scaffolding, Asset Optimization & Token Discipline
 
 ### 2026-10-20 — Phase 0 Backend Scaffolding, Asset Optimization & Token Discipline
 **Completed by:** Antigravity (Commits `926bb00`, `e0ee88d`, `0df993d`)
