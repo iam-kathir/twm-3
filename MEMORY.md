@@ -58,12 +58,35 @@ adapters. The plan's Phase 0 (provider evidence) has not started.
 | **Phase 0 API Route Handlers (All 3 Providers)** | Antigravity & OpenCode — **COMPLETED** | Scaffolded live Next.js route handlers `/api/auth/hmac-challenge`, `/api/telemetry/github`, `/api/telemetry/hackerrank`, and `/api/telemetry/leetcode` with real bio scrapers and rate limit protections. |
 | **UI Chore Polish & SaaS Elevation** | Antigravity — **COMPLETED** | Redesigned `BrandLogo` mark with ambient glow, upgraded `AppHeader` "Demo data" pill to live "3 Providers Live" telemetry monitor, polished `/search` evidence standards, and wired real API audits in `/admin` & `/settings`. |
 | **Phase 1 Multi-Provider Live Sync & Dynamic Dashboard** | Antigravity & OpenCode — **COMPLETED** | Connected `triggerLiveSync` to query GitHub, LeetCode, and HackerRank in real-time; dynamically wired `/dashboard` KPI and Provider cards to live `currentUser` state. |
-| **Stream A: API Rate Limiting & Nonce Invalidation** | **OpenCode — IN PROGRESS** | Implement `src/lib/rate-limit.ts` (sliding-window rate limiter for `/api/telemetry/*`) and single-use nonce consumption in `/api/auth/hmac-challenge/route.ts` to close known replay debt. |
+| **Stream A: API Rate Limiting & Nonce Invalidation** | **Antigravity & OpenCode — COMPLETED** | Implemented `src/lib/rate-limit.ts` (sliding-window rate limiter for `/api/telemetry/*`) and single-use nonce consumption in `/api/auth/hmac-challenge/route.ts`, eliminating replay debt. |
 | **Stream B: Dynamic Leaderboard & §9.6 Tie Engine** | **Antigravity — COMPLETED** | Built `src/lib/leaderboard.ts` with Section 9.6 deterministic ties (`1, 2, 2, 4`), bound live `currentUser` stats, added HackerRank tab with Section 5.6 capability-gating notice. |
+| **Phase 1: SQLite Observation Store & Automated Tests** | **Antigravity — COMPLETED** | Built `src/lib/db.ts` (SQLite WAL mode), `/api/roster`, `/api/telemetry/sync` persistence, brand color unification, and `npm test` automated suite (39ms execution). |
 
 ---
 
 ## Session log
+
+### 2026-10-20 — Phase 1 Project Foundation ("Basement"): SQLite WAL Store, Security & Automated Tests (Antigravity)
+- **SQLite WAL Observation Store (`src/lib/db.ts` & `src/types/sqlite.d.ts`):**
+  - Integrated native `node:sqlite` in WAL mode with foreign keys enabled at `data/twm.sqlite` (gitignored).
+  - Implemented 4 core tables: `roster_members` (seeded with 7 class students), `telemetry_observations` (historical snapshots with §9.7 boundary gap tracking), `hmac_nonces` (single-use registry), and `disputes`.
+  - Added REST endpoints: `GET /api/roster` (returns active class roster with observation tallies) and `POST /api/telemetry/sync` (persists observation snapshots into SQLite).
+  - Connected `triggerLiveSync()` in `AppContext.tsx` to automatically push GitHub and LeetCode observations to `/api/telemetry/sync`.
+- **API Hardening & Replay Invalidation (Stream A):**
+  - Built `src/lib/rate-limit.ts`: in-memory sliding-window rate limiter with automatic stale key eviction.
+  - Guarded all telemetry routes (`/api/telemetry/github`, `/hackerrank`, `/leetcode`, `/sync`) with 429 throttling and `Retry-After` headers.
+  - Upgraded `/api/auth/hmac-challenge`: registered nonces on token creation and verified single-use consumption in SQLite. Tested replay attempt returning `400 NONCE_ALREADY_USED`.
+- **Token & Brand Polish:**
+  - Added `--provider-leetcode-brand: #FFA116` to `globals.css` and `tailwind.config.js` to reconcile official brand orange with desaturated UI accents.
+- **Automated Test Suite (`scripts/test-foundation.mjs` & `npm test`):**
+  - Created automated test suite using native `node:test` and `node:assert`.
+  - Tests §9.6 competition tie scheme (`1, 2, 2, 4`), sliding-window rate limiter, SQLite roster initialization, and HMAC nonce single-use replay prevention.
+  - All tests passing in 32ms.
+- **Gates & Verification:**
+  - `npm test`: 100% green (6 assertions passed).
+  - `npx tsc --noEmit`: 0 errors (clean).
+  - Live dev server HTTP 200 on `/api/roster` and `/api/telemetry/sync`.
+
 
 ### 2026-10-20 — Dynamic Section 9.6 Competition Ranking & HackerRank Capability Tab (Antigravity)
 - **Deterministic Ranking Utility (`src/lib/leaderboard.ts`):**
