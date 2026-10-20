@@ -20,3 +20,9 @@ Thumbs.db
 # sqlite databases
 /data/*.sqlite*
 /data/*.db*
+
+# agent skills junctions & local harness hooks
+.agents/skills/awesome-design-md/
+.agents/skills/img2threejs/
+.agents/skills/impeccable/
+.codex/
