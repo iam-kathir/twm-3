@@ -59,12 +59,27 @@ adapters. The plan's Phase 0 (provider evidence) has not started.
 | **UI Chore Polish & SaaS Elevation** | Antigravity — **COMPLETED** | Redesigned `BrandLogo` mark with ambient glow, upgraded `AppHeader` "Demo data" pill to live "3 Providers Live" telemetry monitor, polished `/search` evidence standards, and wired real API audits in `/admin` & `/settings`. |
 | **Phase 1 Multi-Provider Live Sync & Dynamic Dashboard** | Antigravity & OpenCode — **COMPLETED** | Connected `triggerLiveSync` to query GitHub, LeetCode, and HackerRank in real-time; dynamically wired `/dashboard` KPI and Provider cards to live `currentUser` state. |
 | **Stream A: API Rate Limiting & Nonce Invalidation** | **OpenCode — IN PROGRESS** | Implement `src/lib/rate-limit.ts` (sliding-window rate limiter for `/api/telemetry/*`) and single-use nonce consumption in `/api/auth/hmac-challenge/route.ts` to close known replay debt. |
-| **Stream B: Dynamic Leaderboard & §9.6 Tie Engine** | **Antigravity — IN PROGRESS** | Build `src/lib/leaderboard.ts` with Section 9.6 deterministic ties (`1, 2, 2, 4`), bind live `currentUser` stats, add HackerRank tab with Section 5.6 capability-gating notice. |
-
+| **Stream B: Dynamic Leaderboard & §9.6 Tie Engine** | **Antigravity — COMPLETED** | Built `src/lib/leaderboard.ts` with Section 9.6 deterministic ties (`1, 2, 2, 4`), bound live `currentUser` stats, added HackerRank tab with Section 5.6 capability-gating notice. |
 
 ---
 
 ## Session log
+
+### 2026-10-20 — Dynamic Section 9.6 Competition Ranking & HackerRank Capability Tab (Antigravity)
+- **Deterministic Ranking Utility (`src/lib/leaderboard.ts`):**
+  - Implemented `computeCompetitionRanks` following Section 9.6: equal scores share identical ranks (`1, 2, 2, 4` competition tie scheme).
+  - Secondary sort is deterministic and alphabetical by participant name without modifying rank.
+  - Automatically identifies tied participants with `isTied: true` and flags tiering (`top3` vs `standard`).
+- **Dynamic Context Binding (`src/app/leaderboard/page.tsx`):**
+  - Integrated `currentUser` directly from `useApp()`, dynamically placing the user into both GitHub (`activeDaysWeek`) and LeetCode (`weeklyDelta`) competition tables.
+  - Added visual `(Tied)` chips on rank badges for transparency under §9.6.
+- **HackerRank Telemetry Tab & Capability Gating (§5.6 & §9.3):**
+  - Added dedicated HackerRank tab displaying verified badges and domain star tallies (Python, Problem Solving).
+  - Displays prominent Section 5.6 Capability Gating notice: explicitly clarifies that HackerRank lacks public event timestamps and is strictly display-only, excluded from weekly competition ranking deltas.
+- **Verification & Gates:**
+  - `npx tsc --noEmit` exited 0 (clean).
+  - Explicit staging commit `0c9219b` with zero cross-file interference.
+
 
 ### 2026-10-20 — Ownership proof was fake; now it verifies (OpenCode)
 
