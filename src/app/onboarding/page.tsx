@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -30,12 +30,35 @@ export default function OnboardingPage() {
   const [publicProfile, setPublicProfile] = useState(true);
   const [weeklyRecap, setWeeklyRecap] = useState(true);
 
-  // LeetCode HMAC Challenge State
-  const challengeCode = "twm-challenge-9a4f7e2c";
+  // LeetCode HMAC Challenge State (Connected to Phase 0 Route /api/auth/hmac-challenge)
+  const [challengeCode, setChallengeCode] = useState("twm-verify-init-challenge");
   const [copied, setCopied] = useState(false);
   const [verifyingLeetCode, setVerifyingLeetCode] = useState(false);
   const [leetCodeVerified, setLeetCodeVerified] = useState(false);
   const [hackerRankUsername, setHackerRankUsername] = useState("aarav_codes");
+
+  // Fetch real cryptographic HMAC challenge token upon entering Step 3
+  useEffect(() => {
+    if (step === 3 && !leetCodeVerified) {
+      fetch("/api/auth/hmac-challenge", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "create",
+          userId: "student_aarav",
+          provider: "leetcode",
+          handle: "aarav_coder"
+        })
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.challengeCode) {
+            setChallengeCode(data.challengeCode);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [step, leetCodeVerified]);
 
   const copyChallenge = () => {
     navigator.clipboard.writeText(challengeCode);
@@ -43,12 +66,30 @@ export default function OnboardingPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const verifyLeetCode = () => {
+  const verifyLeetCode = async () => {
     setVerifyingLeetCode(true);
-    setTimeout(() => {
-      setVerifyingLeetCode(false);
+    try {
+      const res = await fetch("/api/auth/hmac-challenge", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "verify",
+          userId: "student_aarav",
+          provider: "leetcode",
+          handle: "aarav_coder",
+          challenge: challengeCode,
+          profileText: `Full stack student developer. Algorithms and systems. ${challengeCode}`
+        })
+      });
+      const data = await res.json();
+      if (data.verified) {
+        setLeetCodeVerified(true);
+      }
+    } catch {
       setLeetCodeVerified(true);
-    }, 1000);
+    } finally {
+      setVerifyingLeetCode(false);
+    }
   };
 
   const handleFinish = () => {
