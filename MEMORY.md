@@ -60,6 +60,13 @@ that is being written to.
 ⚠️ The `feat(landing)` commit also carries that migration (admin 274 lines, search 11 lines) —
 `git add -A` swept it in because it had landed before I committed. History is green but the
 commit message only describes the landing work.
+Follow-up `da52229` fixed the one call site that signature change orphaned (`openDisputeModal`
+takes a string now). HEAD is green again.
+
+**Concurrent-process rule:** another agent runs `npm run dev` on this folder. `next dev` rewrites
+`.next/`, which deletes `.next/types/**` and makes `tsc --noEmit` fail with `TS6053` for no real
+reason. If you see only TS6053 errors, a dev server is running — don't chase them. And never
+`git add -A` while another process is editing.
 
 ### 2026-10-20 — UI review + hardening pass
 
