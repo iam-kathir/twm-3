@@ -30,7 +30,69 @@ adapters. The plan's Phase 0 (provider evidence) has not started.
 
 ---
 
+## 🤝 Team Working Protocol (Antigravity + OpenCode)
+
+**Core Mandate:** Antigravity and OpenCode operate as a unified engineering team. We share context, respect locks, avoid stepping on each other's files, and treat this file (`MEMORY.md`) as our single live collaboration ledger.
+
+### 📋 Invariants for Both Agents:
+1. **Mandatory Log After Every Work Unit:**
+   - Whenever either agent (Antigravity or OpenCode) finishes a task, fix, or refactor, **you must immediately update `MEMORY.md`** under `Session log` with:
+     - What was changed (files + line ranges if helpful)
+     - What was verified (`npx tsc --noEmit`, browser inspect, or test outputs)
+     - What is handed off or remaining
+2. **Read Before Writing:**
+   - Before starting any new task, read the latest entries in `MEMORY.md` to see what your teammate just completed.
+3. **Never Overwrite Concurrent In-Flight Work:**
+   - Check `git status` or file diffs before making changes. If a file is being actively edited by the other process, coordinate or pick an orthogonal task from the task board.
+4. **Dev Server & Build Hygiene:**
+   - `npm run dev` runs on port 3000. Do not execute concurrent `npm run build` while `next dev` is reading `.next/` without coordinating or temporarily pausing.
+
+### 🎯 Live Active Task Board:
+| Task | Owner / Status | Scope & Notes |
+| :--- | :--- | :--- |
+| **Global UI Scale & Readability** | Antigravity — **COMPLETED** | Upgraded typography, input sizes, container widths (`max-w-6xl`/`7xl`), and hydration safety across all 11 routes. |
+| **Login & Onboarding Scale** | Antigravity — **COMPLETED** | Enlarged modal cards, button padding, step pills, and typography on `/login` and `/onboarding`. |
+| **1. Public Asset Optimization** | OpenCode — **ASSIGNED** | Audit and remove/convert dead heavy assets in `public/` (`logo.svg` 2.4MB, `logo.png` 1.8MB, etc.). |
+| **2. Token Consolidation Sweep** | OpenCode — **ASSIGNED** | Consolidate remaining literal greys (`#8D94A5`, `#636A7E`) into CSS tokens in `globals.css`. |
+| **3. Landing Rhythm Polish** | OpenCode — **ASSIGNED** | Break up repetitive 3-column card shapes in `MotionShowcase`, `PlatformMatrix`, `CockpitPreview` using `design-taste-frontend` / `creative-motion-frontend`. |
+| **4. Phase 0 API Route Handlers** | OpenCode / Antigravity — **NEXT** | Scaffold first real API routes under `src/app/api/` (`/api/telemetry/github`, `/api/auth/hmac-challenge`). |
+
+---
+
 ## Session log
+
+### 2026-10-20 — Global UI Scale & Readability Overhaul + Multi-Agent Handover
+
+**Frontend Status:** Fully completed, scaled, and green across all routes.
+- **Root Scale & Layout:** Base typography scaled from `text-xs`/`text-[11px]` to `text-sm`/`text-base` with root responsive rem scaling (`html { font-size: 16px; }` / 16.5px on 1440p+). Container widths expanded to `max-w-6xl` and `max-w-7xl` so desktop viewports look generous, rich, and readable.
+- **Screens Covered:** `/` (landing), `/dashboard` (KPIs + heatmaps), `/leaderboard` (standings table), `/search` (developer discovery), `/admin` (roster governance & disputes), `/settings` (adapter console), `/login`, and `/onboarding`.
+- **Hydration & Reliability:** Stored profile schema mismatch fixed in `AppContext.tsx` with deep-merge defaults.
+- **Gates:** `npx tsc --noEmit` exits 0; `npm run build` exits 0 (11 routes compiled cleanly).
+
+---
+
+## Multi-Agent Coordination & OpenCode Work Allocation
+
+OpenCode and Antigravity coordinate concurrently in `d:\Track. Win. Maintain\TWM 3.O`. To maintain zero regressions and ship a world-class application, work is allocated as follows:
+
+### Allocated Tasks for OpenCode:
+
+1. **Task 1: Asset Optimization & Cleanup (`public/`)**
+   - **Goal:** Known debt #4 — remove or optimize unreferenced heavy assets in `public/` (`logo.svg` 2.4MB, `logo.png` 1.8MB, `twm_perfect_landing.png` 761KB).
+   - **Recommended Approach:** Use vector optimization or lightweight WebP/AVIF equivalents if required for metadata/OG cards.
+2. **Task 2: Token Consolidation Sweep (`globals.css` / components)**
+   - **Goal:** Known debt #5 — audit remaining literal hex colours (`#8D94A5`, `#636A7E`) and ensure 100% of body text and borders consume `--muted`, `--muted-soft`, and `--surface-*` variables.
+3. **Task 3: Landing Section Layout Rhythm Polish**
+   - **Goal:** Known debt #3 — apply differentiated layout patterns to `MotionShowcase`, `PlatformMatrix`, and `CockpitPreview` so consecutive sections do not repeat the 3-column card formula.
+   - **Skills/MCPs to leverage:** Use frontend design systems & motion guidance (`creative-motion-frontend`, `design-taste-frontend`), respecting `MotionConfig` reduced-motion preferences.
+4. **Task 4: Phase 0 Backend Foundation (Next Major Milestone)**
+   - **Goal:** Create the initial Next.js Route Handlers in `src/app/api/` (e.g. `/api/telemetry/github/route.ts` and `/api/auth/hmac-challenge/route.ts`) to transition from mock state to real provider verification.
+
+### Coordination Rules for Both Agents:
+- **No Concurrent Overwrites:** Check open files and git diff before editing.
+- **Dev Server Awareness:** When dev server is running on port 3000, avoid parallel production build writes to `.next/` without coordinating server restart.
+- **Theme Integrity:** Keep the single palette source of truth: Obsidian `#090A0E` canvas with Amber `#F59E0B` telemetry instrument accents.
+
 
 ### 2026-10-20 (later) — landing composition + demo labelling
 

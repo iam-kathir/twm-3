@@ -46,172 +46,172 @@ export default function DashboardPage() {
         {/* Welcome & Metadata Banner */}
         <div className="rounded-2xl border border-white/[0.08] bg-surface p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
           <div className="space-y-2 relative z-10">
-            <div className="flex flex-wrap items-center gap-2.5">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-ink tracking-tight">
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
                 {currentUser.name}
               </h1>
-              <span className="text-xs font-mono text-muted">@{currentUser.handle}</span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span className="text-sm font-mono text-muted">@{currentUser.handle}</span>
+              <span className="text-xs font-mono px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
                 ● Leaderboard Opted-In
               </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-accent/10 text-accent border border-accent/20">
+              <span className="text-xs font-mono px-3 py-1 rounded-full bg-accent/10 text-accent border border-accent/20 font-semibold">
                 {currentUser.activeTrack}
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-muted font-mono">
-              Class: {currentUser.classSection} • Register No: {currentUser.rollNo}
+            <p className="text-sm sm:text-base text-muted font-mono">
+              Class: {currentUser.classSection} • Register No: <strong className="text-white">{currentUser.rollNo}</strong>
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 relative z-10 text-xs font-mono">
+          <div className="flex flex-wrap items-center gap-3 relative z-10 text-sm font-mono">
             <button
               onClick={() => openDisputeModal()}
-              className="p-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 transition-colors text-xs font-mono flex items-center gap-1.5"
+              className="px-4 py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 transition-colors text-sm font-mono flex items-center gap-2 font-medium"
             >
-              <AlertCircle className="h-3.5 w-3.5" />
+              <AlertCircle className="h-4 w-4" />
               <span>Lodge Dispute</span>
             </button>
 
             <button
               onClick={exportTelemetryJSON}
-              className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 transition-colors text-xs font-mono flex items-center gap-1.5"
+              className="px-4 py-2.5 rounded-xl bg-surface-raised hover:bg-white/10 text-slate-200 border border-white/10 transition-colors text-sm font-mono flex items-center gap-2 font-medium"
             >
               <span>Export Ledger</span>
             </button>
 
-            <div className="p-2.5 px-3 rounded-xl bg-surface-raised border border-white/[0.06] text-right">
-              <span className="text-muted-soft block text-[9px]">LAST SYNC</span>
-              <span className="text-emerald-400 font-semibold">{lastSyncTime}</span>
+            <div className="px-4 py-2 rounded-xl bg-surface-raised border border-white/[0.08] text-right">
+              <span className="text-muted-soft block text-[10px] uppercase font-mono tracking-wider">LAST SYNC</span>
+              <span className="text-emerald-400 font-semibold text-sm">{lastSyncTime}</span>
             </div>
           </div>
         </div>
 
         {/* 4 Quick Telemetry KPI Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          <div className="p-5 rounded-xl border border-white/[0.08] bg-surface space-y-1">
-            <span className="text-[11px] font-mono text-muted">WEEKLY ACTIVE DAYS</span>
-            <div className="text-2xl font-bold font-mono text-ink">6 / 7 Days</div>
-            <span className="text-[10px] font-mono text-emerald-400 block">Qualifying consistency</span>
+          <div className="p-6 rounded-2xl border border-white/[0.08] bg-surface space-y-2 shadow-lg">
+            <span className="text-xs sm:text-sm font-mono text-muted uppercase tracking-wider block font-semibold">WEEKLY ACTIVE DAYS</span>
+            <div className="text-3xl sm:text-4xl font-bold font-mono text-white">6 / 7 Days</div>
+            <span className="text-xs font-mono text-emerald-400 block font-medium">Qualifying consistency</span>
           </div>
 
-          <div className="p-5 rounded-xl border border-white/[0.08] bg-surface space-y-1">
-            <span className="text-[11px] font-mono text-muted">CONSISTENCY RATE</span>
-            <div className="text-2xl font-bold font-mono text-accent">85.7%</div>
-            <span className="text-[10px] font-mono text-muted-soft block">Rule §9.4 enforced</span>
+          <div className="p-6 rounded-2xl border border-white/[0.08] bg-surface space-y-2 shadow-lg">
+            <span className="text-xs sm:text-sm font-mono text-muted uppercase tracking-wider block font-semibold">CONSISTENCY RATE</span>
+            <div className="text-3xl sm:text-4xl font-bold font-mono text-accent">85.7%</div>
+            <span className="text-xs font-mono text-muted-soft block">Rule §9.4 enforced</span>
           </div>
 
-          <div className="p-5 rounded-xl border border-white/[0.08] bg-surface space-y-1">
-            <span className="text-[11px] font-mono text-muted">RETRIEVAL COVERAGE</span>
-            <div className="text-2xl font-bold font-mono text-emerald-400">94.2%</div>
-            <span className="text-[10px] font-mono text-muted-soft block">Passes &gt;90% threshold</span>
+          <div className="p-6 rounded-2xl border border-white/[0.08] bg-surface space-y-2 shadow-lg">
+            <span className="text-xs sm:text-sm font-mono text-muted uppercase tracking-wider block font-semibold">RETRIEVAL COVERAGE</span>
+            <div className="text-3xl sm:text-4xl font-bold font-mono text-emerald-400">94.2%</div>
+            <span className="text-xs font-mono text-muted-soft block">Passes &gt;90% threshold</span>
           </div>
 
-          <div className="p-5 rounded-xl border border-white/[0.08] bg-surface space-y-1">
-            <span className="text-[11px] font-mono text-muted">LEETCODE DELTA</span>
-            <div className="text-2xl font-bold font-mono text-accent">+12 Solved</div>
-            <span className="text-[10px] font-mono text-muted-soft block">Boundary rule compliant</span>
+          <div className="p-6 rounded-2xl border border-white/[0.08] bg-surface space-y-2 shadow-lg">
+            <span className="text-xs sm:text-sm font-mono text-muted uppercase tracking-wider block font-semibold">LEETCODE DELTA</span>
+            <div className="text-3xl sm:text-4xl font-bold font-mono text-accent">+12 Solved</div>
+            <span className="text-xs font-mono text-muted-soft block">Boundary rule compliant</span>
           </div>
         </div>
 
         {/* 3 Active Provider Adapters */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* 1. GitHub Card */}
-          <div className="rounded-2xl border border-white/[0.08] bg-surface p-6 flex flex-col justify-between space-y-6">
+          <div className="rounded-2xl border border-white/[0.08] bg-surface p-7 flex flex-col justify-between space-y-6 shadow-xl">
             <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2 text-ink font-bold text-sm">
-                  <Github className="h-4 w-4" />
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-2.5 text-white font-bold text-base sm:text-lg">
+                  <Github className="h-5 w-5" />
                   <span>GitHub Activity</span>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
                   SUPPORTED_LIVE
                 </span>
               </div>
 
               {/* Day Heatmap Row */}
-              <div className="space-y-2 mb-4">
-                <span className="text-xs font-mono text-muted block">This Week (Provider UTC):</span>
-                <div className="grid grid-cols-7 gap-1.5 text-center">
+              <div className="space-y-2.5 mb-5">
+                <span className="text-xs font-mono text-muted block uppercase tracking-wider">This Week (Provider UTC):</span>
+                <div className="grid grid-cols-7 gap-2 text-center">
                   {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => {
                     const active = i !== 4;
                     return (
                       <div key={i}>
                         <div
-                          className={`h-8 rounded-lg flex items-center justify-center font-mono text-xs font-bold ${
+                          className={`h-10 rounded-xl flex items-center justify-center font-mono text-sm font-bold ${
                             active
-                              ? "bg-emerald-400 text-canvas"
+                              ? "bg-emerald-400 text-canvas shadow-sm"
                               : "bg-surface-raised text-muted-soft border border-white/[0.04]"
                           }`}
                         >
                           {active ? "1" : "0"}
                         </div>
-                        <span className="text-[10px] font-mono text-muted-soft mt-1 block">{d}</span>
+                        <span className="text-xs font-mono text-muted-soft mt-1.5 block">{d}</span>
                       </div>
                     );
                   })}
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-surface-raised border border-white/[0.05] text-xs font-mono space-y-1.5">
+              <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] text-sm font-mono space-y-2">
                 <div className="flex justify-between">
                   <span className="text-muted">Tracked Repositories:</span>
-                  <span className="text-ink font-bold">4 Course Repos</span>
+                  <span className="text-white font-bold">4 Course Repos</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted">Date Attribution:</span>
-                  <span className="text-accent">Provider Native UTC</span>
+                  <span className="text-accent font-semibold">Provider Native UTC</span>
                 </div>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono">
+            <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between text-sm font-mono">
               <span className="text-muted">Freshness: Current</span>
               <span className="text-emerald-400 font-bold">Audited</span>
             </div>
           </div>
 
           {/* 2. LeetCode Card */}
-          <div className="rounded-2xl border border-white/[0.08] bg-surface p-6 flex flex-col justify-between space-y-6">
+          <div className="rounded-2xl border border-white/[0.08] bg-surface p-7 flex flex-col justify-between space-y-6 shadow-xl">
             <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2 text-ink font-bold text-sm">
-                  <Code2 className="h-4 w-4 text-[#FFA116]" />
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-2.5 text-white font-bold text-base sm:text-lg">
+                  <Code2 className="h-5 w-5 text-[#FFA116]" />
                   <span>LeetCode Telemetry</span>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-accent border border-amber-500/20">
+                <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-amber-500/10 text-accent border border-amber-500/20 font-semibold">
                   HMAC_VERIFIED
                 </span>
               </div>
 
-              <div className="mb-4">
-                <span className="text-xs font-mono text-muted">Cumulative Solved:</span>
-                <div className="text-3xl font-extrabold font-mono text-ink mt-1">184 Problems</div>
+              <div className="mb-5">
+                <span className="text-xs font-mono text-muted uppercase tracking-wider">Cumulative Solved:</span>
+                <div className="text-3xl sm:text-4xl font-extrabold font-mono text-white mt-1">184 Problems</div>
               </div>
 
-              <div className="grid grid-cols-3 gap-2 text-center text-xs font-mono mb-4">
-                <div className="p-2.5 rounded-xl bg-surface-raised border border-emerald-500/20">
-                  <span className="text-emerald-400 font-bold block">92</span>
-                  <span className="text-[10px] text-muted">Easy</span>
+              <div className="grid grid-cols-3 gap-3 text-center text-sm font-mono mb-5">
+                <div className="p-3.5 rounded-xl bg-surface-raised border border-emerald-500/20">
+                  <span className="text-emerald-400 font-bold text-lg block">92</span>
+                  <span className="text-xs text-muted">Easy</span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-surface-raised border border-amber-500/20">
-                  <span className="text-amber-400 font-bold block">78</span>
-                  <span className="text-[10px] text-muted">Medium</span>
+                <div className="p-3.5 rounded-xl bg-surface-raised border border-amber-500/20">
+                  <span className="text-amber-400 font-bold text-lg block">78</span>
+                  <span className="text-xs text-muted">Medium</span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-surface-raised border border-rose-500/20">
-                  <span className="text-rose-400 font-bold block">14</span>
-                  <span className="text-[10px] text-muted">Hard</span>
+                <div className="p-3.5 rounded-xl bg-surface-raised border border-rose-500/20">
+                  <span className="text-rose-400 font-bold text-lg block">14</span>
+                  <span className="text-xs text-muted">Hard</span>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-surface-raised border border-white/[0.05] text-xs font-mono">
+              <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] text-sm font-mono">
                 <div className="flex justify-between">
                   <span className="text-muted">Observation Rule:</span>
-                  <span className="text-emerald-400">Pre-close (Sun 23:45 IST)</span>
+                  <span className="text-emerald-400 font-semibold">Pre-close (Sun 23:45 IST)</span>
                 </div>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono">
+            <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between text-sm font-mono">
               <span className="text-muted">Weekly Delta:</span>
               <span className="text-accent font-bold">+12 Solved</span>
             </div>

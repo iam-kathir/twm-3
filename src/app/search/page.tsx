@@ -209,33 +209,33 @@ export default function SearchPage() {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Title & Philosophy Banner */}
         <div className="space-y-3">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <div className="inline-flex items-center space-x-2 px-2.5 py-1 rounded bg-accent/10 border border-accent/20 text-accent text-xs font-mono mb-2">
-                <Sparkles className="w-3.5 h-3.5" />
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="space-y-2">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-accent/10 border border-accent/20 text-accent text-xs sm:text-sm font-mono font-semibold">
+                <Sparkles className="w-4 h-4" />
                 <span>Audited Peer Discovery</span>
               </div>
-              <h1 className="text-3xl font-bold tracking-tight text-ink">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
                 Class Developer &amp; Skill Directory
               </h1>
-              <p className="text-sm text-muted mt-1">
-                Explore peer capabilities grounded in verified telemetry and tamper-resistant evidence classifications.
+              <p className="text-base sm:text-lg text-muted max-w-3xl leading-relaxed">
+                Explore peer capabilities grounded in verified telemetry, code manifest artifacts, and tamper-resistant evidence classifications.
               </p>
             </div>
 
             {/* Evidence Legend Pill */}
-            <div className="flex flex-wrap items-center gap-2 text-xs bg-surface border border-white/[0.08] p-2.5 rounded-xl">
-              <span className="text-muted font-mono text-[11px] mr-1">Evidence Standard:</span>
-              <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-[10px]">
-                <CheckCircle2 className="w-3 h-3" />
+            <div className="flex flex-wrap items-center gap-2.5 text-xs sm:text-sm bg-surface border border-white/[0.08] p-3 rounded-xl shadow-sm">
+              <span className="text-muted font-mono mr-1">Evidence Standard:</span>
+              <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-xs font-semibold">
+                <CheckCircle2 className="w-3.5 h-3.5" />
                 <span>EXPLICIT</span>
               </span>
-              <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-amber-500/10 text-accent border border-amber-500/20 font-mono text-[10px]">
-                <ShieldCheck className="w-3 h-3" />
+              <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-md bg-amber-500/10 text-accent border border-amber-500/20 font-mono text-xs font-semibold">
+                <ShieldCheck className="w-3.5 h-3.5" />
                 <span>SUPPORTED</span>
               </span>
-              <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-surface-raised text-muted border border-white/10 font-mono text-[10px]">
-                <AlertCircle className="w-3 h-3" />
+              <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-md bg-surface-raised text-muted border border-white/10 font-mono text-xs font-semibold">
+                <AlertCircle className="w-3.5 h-3.5" />
                 <span>SELF-DECLARED</span>
               </span>
             </div>
@@ -243,11 +243,11 @@ export default function SearchPage() {
         </div>
 
         {/* Search & Filter Controls */}
-        <div className="bg-surface border border-white/[0.08] rounded-2xl p-5 space-y-4">
-          <div className="flex flex-col md:flex-row gap-3">
+        <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 sm:p-7 space-y-5 shadow-xl">
+          <div className="flex flex-col md:flex-row gap-4">
             {/* Input Field */}
             <div className="relative flex-1">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-soft" />
+              <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-muted-soft" />
               <input
                 id="developer-search-input"
                 name="developer-search"
@@ -255,13 +255,13 @@ export default function SearchPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by student name, GitHub handle, or technology (e.g. Next.js, Go)..."
-                className="w-full pl-10 pr-4 py-2.5 bg-canvas border border-white/[0.08] rounded-xl text-sm text-ink placeholder-muted-soft focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all font-sans"
+                className="w-full pl-12 pr-4 py-3.5 bg-canvas border border-white/[0.08] rounded-xl text-base text-white placeholder-muted-soft focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all font-sans shadow-inner"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted hover:text-white"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-muted hover:text-white"
                 >
                   Clear
                 </button>
@@ -277,7 +277,7 @@ export default function SearchPage() {
                 value={evidenceFilter}
                 onChange={(e) => setEvidenceFilter(e.target.value as any)}
                 aria-label="Filter by Evidence Standard"
-                className="bg-canvas border border-white/[0.08] text-ink-secondary text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-accent"
+                className="bg-canvas border border-white/[0.08] text-white text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:border-accent font-mono cursor-pointer"
               >
                 <option value="ALL">All Evidence Standards</option>
                 <option value="EXPLICIT_SOURCE">Explicit Source Only</option>
@@ -288,15 +288,15 @@ export default function SearchPage() {
           </div>
 
           {/* Popular Tag Pills */}
-          <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-white/[0.06]">
-            <span className="text-xs text-muted font-mono flex items-center space-x-1 mr-1">
-              <Tag className="w-3 h-3" />
+          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-white/[0.06]">
+            <span className="text-xs text-muted font-mono flex items-center space-x-1.5 mr-1 font-semibold uppercase tracking-wider">
+              <Tag className="w-3.5 h-3.5" />
               <span>Filter by Tag:</span>
             </span>
             {selectedTag && (
               <button
                 onClick={() => setSelectedTag(null)}
-                className="px-2.5 py-1 rounded-lg bg-accent text-canvas font-bold text-xs font-mono flex items-center space-x-1"
+                className="px-3 py-1.5 rounded-lg bg-accent text-canvas font-bold text-xs font-mono flex items-center space-x-1 shadow-sm"
               >
                 <span>✕ {selectedTag}</span>
               </button>
@@ -305,7 +305,7 @@ export default function SearchPage() {
               <button
                 key={tag}
                 onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-mono transition-all duration-200 ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all duration-200 ${
                   selectedTag === tag
                     ? "bg-accent text-canvas font-bold border border-accent"
                     : "bg-surface-raised text-muted hover:text-white border border-white/[0.06] hover:border-white/20"
@@ -318,17 +318,17 @@ export default function SearchPage() {
         </div>
 
         {/* Results Count & Empty State */}
-        <div className="flex items-center justify-between text-xs text-muted px-1">
+        <div className="flex items-center justify-between text-sm text-muted px-1 font-mono">
           <span>
-            Found <strong className="text-white">{filteredDevelopers.length}</strong> matching developer{filteredDevelopers.length === 1 ? "" : "s"}
+            Found <strong className="text-white font-bold">{filteredDevelopers.length}</strong> verified classmate{filteredDevelopers.length === 1 ? "" : "s"}
           </span>
-          <span className="font-mono text-[11px] text-muted-soft">
+          <span className="text-xs text-muted-soft">
             Rule §10.3: Telemetry evidence verified
           </span>
         </div>
 
         {/* Developer Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence>
             {filteredDevelopers.map((dev) => (
               <motion.div
@@ -338,21 +338,21 @@ export default function SearchPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.25 }}
-                className="bg-surface border border-white/[0.08] rounded-2xl p-5 hover:border-white/20 transition-all duration-300 flex flex-col justify-between group"
+                className="bg-surface border border-white/[0.08] rounded-2xl p-7 hover:border-white/20 transition-all duration-300 flex flex-col justify-between group shadow-xl"
               >
-                <div className="space-y-4">
+                <div className="space-y-5">
                   {/* Header Row */}
                   <div className="flex items-start justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 rounded-xl bg-surface-raised border border-white/10 flex items-center justify-center font-bold text-sm text-accent">
+                    <div className="flex items-center space-x-3.5">
+                      <div className="w-12 h-12 rounded-xl bg-surface-raised border border-white/10 flex items-center justify-center font-bold text-base text-accent shadow-sm">
                         {dev.avatarInitials}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-ink group-hover:text-white transition-colors flex items-center space-x-1.5">
+                        <h3 className="font-bold text-lg text-white group-hover:text-accent transition-colors flex items-center space-x-1.5">
                           <span>{dev.name}</span>
-                          <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
+                          <UserCheck className="w-4 h-4 text-emerald-400" />
                         </h3>
-                        <p className="text-xs text-muted font-mono">
+                        <p className="text-xs sm:text-sm text-muted font-mono">
                           @{dev.githubHandle} • {dev.classBatch}
                         </p>
                       </div>
@@ -360,22 +360,22 @@ export default function SearchPage() {
                   </div>
 
                   {/* Focus & Rhythm */}
-                  <div className="space-y-1">
-                    <p className="text-xs font-medium text-ink-secondary">
+                  <div className="space-y-1.5">
+                    <p className="text-sm sm:text-base font-medium text-slate-200">
                       {dev.roleInterest}
                     </p>
-                    <div className="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-md bg-surface-raised border border-white/[0.06] text-[11px] font-mono text-accent">
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                    <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-md bg-surface-raised border border-white/[0.06] text-xs font-mono text-accent">
+                      <span className="w-2 h-2 rounded-full bg-accent" />
                       <span>{dev.activeRhythm}</span>
                     </div>
                   </div>
 
                   {/* Tags & Evidence Badges */}
-                  <div className="space-y-1.5 pt-2">
-                    <span className="text-[11px] font-mono text-muted-soft uppercase tracking-wider block">
+                  <div className="space-y-2 pt-2">
+                    <span className="text-xs font-mono text-muted-soft uppercase tracking-wider block font-semibold">
                       Verified Capabilities:
                     </span>
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="flex flex-wrap gap-2">
                       {dev.tags.map((tag) => {
                         const isExplicit = tag.evidence === "EXPLICIT_SOURCE";
                         const isSupported = tag.evidence === "SUPPORTED_INFERENCE";
@@ -383,7 +383,7 @@ export default function SearchPage() {
                           <div
                             key={tag.id}
                             title={`${tag.name}: ${tag.sourceDetail} (${tag.evidence})`}
-                            className={`px-2 py-0.5 rounded-md text-[11px] font-mono border flex items-center space-x-1 cursor-help transition-colors ${
+                            className={`px-2.5 py-1 rounded-md text-xs font-mono border flex items-center space-x-1.5 cursor-help transition-colors ${
                               isExplicit
                                 ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:border-emerald-500/40"
                                 : isSupported
@@ -393,11 +393,11 @@ export default function SearchPage() {
                           >
                             <span>#{tag.name}</span>
                             {isExplicit ? (
-                              <CheckCircle2 className="w-2.5 h-2.5 text-emerald-400" />
+                              <CheckCircle2 className="w-3 h-3 text-emerald-400" />
                             ) : isSupported ? (
-                              <ShieldCheck className="w-2.5 h-2.5 text-accent" />
+                              <ShieldCheck className="w-3 h-3 text-accent" />
                             ) : (
-                              <AlertCircle className="w-2.5 h-2.5 text-amber-400" />
+                              <AlertCircle className="w-3 h-3 text-amber-400" />
                             )}
                           </div>
                         );
@@ -407,24 +407,24 @@ export default function SearchPage() {
                 </div>
 
                 {/* Footer Telemetry Stats */}
-                <div className="mt-5 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono text-muted">
-                  <div className="flex items-center space-x-3">
-                    <span className="flex items-center space-x-1 text-ink-secondary" title="GitHub Verified Repos">
-                      <Github className="w-3.5 h-3.5 text-muted" />
+                <div className="mt-6 pt-4 border-t border-white/[0.06] flex items-center justify-between text-sm font-mono text-muted">
+                  <div className="flex items-center space-x-4">
+                    <span className="flex items-center space-x-1.5 text-white" title="GitHub Verified Repos">
+                      <Github className="w-4 h-4 text-muted" />
                       <span>{dev.platforms.github.repos} repos</span>
                     </span>
-                    <span className="flex items-center space-x-1 text-ink-secondary" title="LeetCode Solved Problems">
-                      <Code2 className="w-3.5 h-3.5 text-[#FFA116]" />
+                    <span className="flex items-center space-x-1.5 text-white" title="LeetCode Solved Problems">
+                      <Code2 className="w-4 h-4 text-[#FFA116]" />
                       <span>{dev.platforms.leetcode.solved}</span>
                     </span>
                   </div>
 
                   <button
                     onClick={() => setSelectedDev(dev)}
-                    className="inline-flex items-center space-x-1 text-accent hover:underline text-xs font-sans font-medium"
+                    className="inline-flex items-center space-x-1 text-accent hover:underline text-sm font-sans font-semibold"
                   >
                     <span>Inspect Profile</span>
-                    <ExternalLink className="w-3 h-3" />
+                    <ExternalLink className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </motion.div>

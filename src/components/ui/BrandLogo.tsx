@@ -83,13 +83,19 @@ export function BrandLogo({
       </div>
 
       {showText && (
-        <span className="font-bold text-ink text-sm tracking-tight font-sans">
-          TWM <span className="text-accent font-mono text-xs">3.0</span>
+        <span className={`font-bold text-ink tracking-tight font-sans ${
+          size === "lg" || size === "xl" ? "text-base sm:text-lg" : "text-sm"
+        }`}>
+          TWM <span className={`text-accent font-mono ${
+            size === "lg" || size === "xl" ? "text-xs sm:text-sm font-semibold" : "text-xs"
+          }`}>3.0</span>
         </span>
       )}
 
       {showLivePulse && (
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping ml-0.5" />
+        <span className={`rounded-full bg-emerald-400 animate-ping ml-0.5 ${
+          size === "lg" || size === "xl" ? "h-2 w-2" : "h-1.5 w-1.5"
+        }`} />
       )}
     </div>
   );

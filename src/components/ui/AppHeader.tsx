@@ -56,32 +56,31 @@ export function AppHeader() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-canvas/90 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-canvas/95 backdrop-blur-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Brand & Navigation */}
-        <div className="flex items-center gap-6">
-          <BrandLogo showLivePulse={true} href="/" />
+        <div className="flex items-center gap-8">
+          <BrandLogo size="lg" showLivePulse={true} href="/" />
 
-          {/* Every screen under this header renders illustrative data until a provider is
-              connected. Saying so is part of the product's honesty rule. */}
+          {/* Demo Data indicator */}
           <span
             title="Illustrative figures — no provider is connected yet."
-            className="hidden lg:inline-flex items-center gap-1.5 rounded-md border border-accent/25 bg-accent/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-accent"
+            className="hidden xl:inline-flex items-center gap-1.5 rounded-lg border border-accent/25 bg-accent/10 px-2.5 py-1 font-mono text-xs font-semibold uppercase tracking-wider text-accent"
           >
             Demo data
           </span>
 
-          <nav className="hidden md:flex items-center gap-1.5 text-xs font-mono">
+          <nav className="hidden md:flex items-center gap-2">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
                 <NextLink
                   key={link.href}
                   href={link.href}
-                  className={`px-3 py-1.5 rounded-lg transition-colors ${
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                     isActive
-                      ? "bg-surface-raised text-ink font-semibold border border-white/10"
-                      : "text-muted hover:text-ink hover:bg-white/5"
+                      ? "bg-surface-raised text-white font-semibold border border-white/10 shadow-sm"
+                      : "text-muted hover:text-white hover:bg-white/5"
                   }`}
                 >
                   {link.label}
@@ -92,16 +91,16 @@ export function AppHeader() {
         </div>
 
         {/* Global Utilities & Profile */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3.5">
           {/* Quick Search / Cmd+K Pill */}
           <button
             onClick={openCommandPalette}
-            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-xs text-muted hover:text-ink transition-all font-mono shadow-sm group"
+            className="hidden sm:flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm text-muted hover:text-ink transition-all font-mono shadow-sm group"
           >
-            <Search className="h-3.5 w-3.5 text-slate-400 group-hover:text-accent transition-colors" />
+            <Search className="h-4 w-4 text-slate-400 group-hover:text-accent transition-colors" />
             <span className="text-slate-400 group-hover:text-slate-200">Search or command...</span>
-            <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] rounded bg-white/5 border border-white/10 text-muted">
-              <Command className="h-2.5 w-2.5" /> K
+            <kbd className="hidden lg:inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-md bg-white/5 border border-white/10 text-muted font-sans font-semibold">
+              <Command className="h-3 w-3" /> K
             </kbd>
           </button>
 
@@ -109,11 +108,11 @@ export function AppHeader() {
           <button
             onClick={triggerLiveSync}
             disabled={isSyncing}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-xs font-mono text-ink transition-all disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm font-mono text-ink transition-all disabled:opacity-50"
             title="Execute Live Telemetry Crawl"
           >
-            <RotateCw className={`h-3.5 w-3.5 text-accent ${isSyncing ? "animate-spin" : ""}`} />
-            <span className="hidden sm:inline text-muted">
+            <RotateCw className={`h-4 w-4 text-accent ${isSyncing ? "animate-spin" : ""}`} />
+            <span className="hidden sm:inline text-muted font-medium">
               {isSyncing ? "Syncing..." : lastSyncTime}
             </span>
           </button>
@@ -122,41 +121,41 @@ export function AppHeader() {
           <div className="relative" ref={profileRef}>
             <button
               onClick={() => setIsProfileOpen((prev) => !prev)}
-              className="flex items-center gap-2 p-1.5 sm:px-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 transition-colors"
+              className="flex items-center gap-3 p-1.5 sm:px-3 sm:py-2 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 transition-colors"
             >
-              <div className="w-7 h-7 rounded-lg bg-surface-raised border border-accent/30 flex items-center justify-center font-mono text-xs font-bold text-accent">
+              <div className="w-9 h-9 rounded-xl bg-surface-raised border border-accent/40 flex items-center justify-center font-mono text-sm font-bold text-accent shadow-sm">
                 AS
               </div>
               <div className="hidden lg:block text-left">
-                <div className="text-xs font-semibold text-ink leading-tight">
+                <div className="text-sm font-semibold text-ink leading-tight">
                   {currentUser.name}
                 </div>
-                <div className="text-[10px] font-mono text-muted">
-                  {currentUser.role === "co-admin" ? "Co-Admin" : currentUser.rollNo}
+                <div className="text-xs font-mono text-muted">
+                  {currentUser.role === "co-admin" ? "Faculty Co-Admin" : currentUser.rollNo}
                 </div>
               </div>
-              <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
+              <ChevronDown className="h-4 w-4 text-slate-400 ml-0.5" />
             </button>
 
             {/* Profile Dropdown */}
             {isProfileOpen && (
-              <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-surface border border-white/10 shadow-2xl p-2 z-50 text-xs font-sans">
-                <div className="px-3 py-2 border-b border-white/[0.08]">
-                  <div className="font-semibold text-ink">{currentUser.name}</div>
-                  <div className="text-[11px] font-mono text-muted truncate">{currentUser.email}</div>
-                  <div className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-mono bg-white/5 border border-white/10 text-accent">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <div className="absolute right-0 mt-2 w-72 rounded-2xl bg-surface border border-white/10 shadow-2xl p-2.5 z-50 text-sm font-sans">
+                <div className="px-3.5 py-3 border-b border-white/[0.08]">
+                  <div className="font-bold text-base text-ink">{currentUser.name}</div>
+                  <div className="text-xs font-mono text-muted truncate mt-0.5">{currentUser.email}</div>
+                  <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono bg-white/5 border border-white/10 text-accent">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
                     <span>Role: {currentUser.role === "co-admin" ? "Co-Admin Reviewer" : "Verified Student"}</span>
                   </div>
                 </div>
 
-                <div className="py-1">
+                <div className="py-1.5 space-y-0.5">
                   <NextLink
                     href="/settings"
                     onClick={() => setIsProfileOpen(false)}
-                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
+                    className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
                   >
-                    <Settings className="h-3.5 w-3.5 text-slate-400" />
+                    <Settings className="h-4 w-4 text-slate-400" />
                     <span>Account Settings</span>
                   </NextLink>
 
@@ -165,9 +164,9 @@ export function AppHeader() {
                       setIsProfileOpen(false);
                       openDisputeModal();
                     }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-300 hover:text-rose-400 hover:bg-white/5 transition-colors text-left"
+                    className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-rose-400 hover:bg-white/5 transition-colors text-left font-medium"
                   >
-                    <ShieldAlert className="h-3.5 w-3.5 text-rose-400" />
+                    <ShieldAlert className="h-4 w-4 text-rose-400" />
                     <span>Lodge Score Dispute</span>
                   </button>
 
@@ -176,22 +175,22 @@ export function AppHeader() {
                       setIsProfileOpen(false);
                       switchRole(currentUser.role === "student" ? "co-admin" : "student");
                     }}
-                    className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:text-accent hover:bg-white/5 transition-colors text-left"
+                    className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-accent hover:bg-white/5 transition-colors text-left font-medium"
                   >
-                    <div className="flex items-center gap-2.5">
-                      <Shield className="h-3.5 w-3.5 text-accent" />
+                    <div className="flex items-center gap-3">
+                      <Shield className="h-4 w-4 text-accent" />
                       <span>Switch to {currentUser.role === "student" ? "Co-Admin View" : "Student View"}</span>
                     </div>
                   </button>
                 </div>
 
-                <div className="pt-1 border-t border-white/[0.08]">
+                <div className="pt-1.5 border-t border-white/[0.08]">
                   <NextLink
                     href="/login"
                     onClick={() => setIsProfileOpen(false)}
-                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-white/5 transition-colors"
+                    className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-white/5 transition-colors font-medium"
                   >
-                    <LogOut className="h-3.5 w-3.5" />
+                    <LogOut className="h-4 w-4" />
                     <span>Sign Out</span>
                   </NextLink>
                 </div>

@@ -276,7 +276,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       const savedUser = localStorage.getItem("twm_user_profile");
-      if (savedUser) setCurrentUser(JSON.parse(savedUser));
+      if (savedUser) {
+        const parsed = JSON.parse(savedUser);
+        setCurrentUser({
+          ...DEFAULT_USER,
+          ...parsed,
+          github: { ...DEFAULT_USER.github, ...(parsed.github || {}) },
+          leetcode: { ...DEFAULT_USER.leetcode, ...(parsed.leetcode || {}) },
+          hackerrank: { ...DEFAULT_USER.hackerrank, ...(parsed.hackerrank || {}) },
+          settings: { ...DEFAULT_USER.settings, ...(parsed.settings || {}) }
+        });
+      }
 
       const savedDisputes = localStorage.getItem("twm_disputes");
       if (savedDisputes) setDisputes(JSON.parse(savedDisputes));
