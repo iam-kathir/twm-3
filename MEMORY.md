@@ -53,13 +53,31 @@ adapters. The plan's Phase 0 (provider evidence) has not started.
 | **Global UI Scale & Readability** | Antigravity — **COMPLETED** | Upgraded typography, input sizes, container widths (`max-w-6xl`/`7xl`), and hydration safety across all 11 routes. |
 | **Login & Onboarding Scale** | Antigravity — **COMPLETED** | Enlarged modal cards, button padding, step pills, and typography on `/login` and `/onboarding`. |
 | **Landing Section Scale & Rhythm** | Antigravity — **COMPLETED** | Scaled `HeroSection`, `NavBar`, `MotionShowcase`, `PlatformMatrix`, `CockpitPreview`, and `AppScreensGallery` to generous desktop proportion with interactive observation console. |
-| **1. Public Asset Optimization** | OpenCode — **READY** | Audit and remove/convert dead heavy assets in `public/` (`logo.svg` 2.4MB, `logo.png` 1.8MB, etc.). |
-| **2. Token Consolidation Sweep** | OpenCode — **READY** | Consolidate remaining literal greys (`#8D94A5`, `#636A7E`) into CSS tokens in `globals.css`. |
-| **3. Phase 0 API Route Handlers** | OpenCode / Antigravity — **NEXT** | Scaffold first real API routes under `src/app/api/` (`/api/telemetry/github`, `/api/auth/hmac-challenge`). |
+| **Public Asset Optimization** | Antigravity — **COMPLETED** | Deleted 5.7MB unreferenced dead assets in `public/` (`logo.svg` 2.4MB base64 raster, `logo.png` 1.8MB, `twm_perfect_landing.png` 761KB, etc.). |
+| **Token Consolidation Sweep** | Antigravity — **COMPLETED** | Fixed residual raw hex classes in `admin/page.tsx`, `CockpitPreview.tsx`, and `HeroSection.tsx` to strictly consume `--canvas`, `--surface`, `--accent` tokens. |
+| **Phase 0 API Route Handlers** | Antigravity — **COMPLETED** | Scaffolded live Next.js route handlers `/api/auth/hmac-challenge` (Section 6.2 single-use 15m HMAC token) and `/api/telemetry/github` (Section 5.4 & 9.1 UTC day bucketing, rate limits). |
+| **Phase 0 Live UI Integration** | OpenCode / Antigravity — **NEXT** | Connect the Onboarding HMAC challenge flow and Dashboard Sync button directly to `/api/auth/hmac-challenge` and `/api/telemetry/github`. |
 
 ---
 
 ## Session log
+
+### 2026-10-20 — Phase 0 Backend Scaffolding, Asset Optimization & Token Discipline
+**Completed by:** Antigravity (Commits `926bb00`, `e0ee88d`, `0df993d`)
+- **Asset Cleanup (`public/`):**
+  - Removed 5 unreferenced dead assets saving 5.7 MB: `public/logo.svg` (2.4MB embedded base64 raster), `public/logo.png` (1.8MB), `public/logo-horizontal.png` (257KB), `public/twm_perfect_landing.png` (761KB), `public/twm_streamlined_motion.png` (503KB).
+  - Production logos and favicons intact via crisp `/icon.svg` (432 bytes) and `/logo-horizontal.svg`.
+- **Token Discipline:**
+  - Audited and eliminated residual literal hex occurrences in `src/app/admin/page.tsx` (`bg-canvas text-ink selection:bg-accent`), `src/components/landing/CockpitPreview.tsx` (`bg-canvas`), and `src/components/landing/HeroSection.tsx`.
+- **Phase 0 Backend Handlers:**
+  - `src/app/api/auth/hmac-challenge/route.ts`: Implemented Section 6.2 cryptographic bio challenge protocol (`twm-verify-${nonce}-${signature}`) with 15-minute TTL, constant-time validation, and single-use expiry. Tested both `create` and `verify` actions with HTTP 200.
+  - `src/app/api/telemetry/github/route.ts`: Implemented Section 5.4 and Section 9.1 live GitHub public telemetry fetcher. Calculates observed active days across trailing 7 UTC calendar days (never disguised as IST), returns rate limit headers (`x-ratelimit-*`), and enforces zero-fabrication guarantees. Tested live with HTTP 200.
+- **Gates:**
+  - `npx tsc --noEmit` exited 0 (clean).
+  - Live REST invocations verified on `http://localhost:3000/api/...`.
+- **Handover to OpenCode:**
+  - Backend foundation is live and operational.
+  - Next task is wiring onboarding step 1 and the manual sync modal to call these routes live.
 
 ### 2026-10-20 — Landing Section Rhythm & Interactive Showcase Scale Overhaul
 **Completed by:** Antigravity (Commit `bdce638`)
