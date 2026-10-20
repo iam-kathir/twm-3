@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { KeyRound, ShieldCheck, Trophy, ArrowRight } from "lucide-react";
+import { KeyRound, ShieldCheck, Trophy } from "lucide-react";
 
 export function HowItWorks() {
   const steps = [
@@ -28,49 +28,54 @@ export function HowItWorks() {
 
   return (
     <section id="workflow" className="py-16 md:py-24 relative border-t border-white/[0.08] bg-canvas">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-accent/10 text-accent border border-accent/20 text-xs font-mono mb-3">
-            <span>Deterministic Flow</span>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Left-aligned header: deliberately not centred, so this section does not
+            repeat the rhythm of the platform matrix above it. */}
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-14">
+          <div>
+            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
+              Deterministic flow
+            </span>
+            <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold text-ink tracking-tight">
+              Three steps. No passwords.
+            </h2>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-ink tracking-tight">
-            How It Works
-          </h2>
-          <p className="mt-2 text-sm text-muted">
-            A frictionless, privacy-conscious 3-step onboarding.
+          <p className="text-sm text-muted leading-relaxed max-w-sm md:text-right">
+            Every claim is verified against a provider before it counts on a leaderboard.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Horizontal rail on desktop, stacked on mobile. Hairlines replace card chrome. */}
+        <ol className="relative grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-8">
+          <div
+            aria-hidden
+            className="hidden md:block absolute top-[22px] left-6 right-6 h-px bg-white/[0.08]"
+          />
           {steps.map((step, idx) => {
             const Icon = step.icon;
             return (
-              <motion.div
-                key={idx}
-                whileHover={{ y: -3, transition: { duration: 0.2 } }}
-                className="p-6 rounded-2xl border border-white/[0.08] bg-surface hover:border-white/20 transition-colors flex flex-col justify-between"
+              <motion.li
+                key={step.num}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 0.5, delay: idx * 0.08, ease: "easeOut" }}
+                className="relative flex flex-col"
               >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs font-mono font-bold text-accent">
-                      STEP {step.num}
-                    </span>
-                    <div className="h-8 w-8 rounded-lg bg-surface-raised border border-white/[0.06] flex items-center justify-center text-muted">
-                      <Icon className="h-4 w-4" />
-                    </div>
-                  </div>
-                  <h3 className="text-base font-bold text-ink mb-2">{step.title}</h3>
-                  <p className="text-xs text-muted leading-relaxed">{step.desc}</p>
-                </div>
-
-                <div className="mt-6 flex items-center gap-1.5 text-[11px] font-mono text-accent">
-                  <span>Ready</span>
-                  <ArrowRight className="h-3 w-3" />
-                </div>
-              </motion.div>
+                <span className="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/10 bg-surface font-mono text-xs font-bold text-accent">
+                  {step.num}
+                </span>
+                <h3 className="mt-5 flex items-center gap-2 text-base font-bold text-ink">
+                  <Icon className="h-4 w-4 text-muted" />
+                  {step.title}
+                </h3>
+                <p className="mt-2 text-xs text-muted leading-relaxed max-w-xs">
+                  {step.desc}
+                </p>
+              </motion.li>
             );
           })}
-        </div>
+        </ol>
       </div>
     </section>
   );

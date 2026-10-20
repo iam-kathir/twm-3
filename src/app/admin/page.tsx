@@ -20,10 +20,14 @@ import {
   ChevronRight,
   Database,
   ArrowUpRight,
-  Info
+  Info,
+  Download,
+  ShieldAlert,
+  ExternalLink
 } from "lucide-react";
 import { AppHeader } from "@/components/ui/AppHeader";
-
+import { useApp } from "@/context/AppContext";
+import { TelemetryDispute } from "@/types/saas";
 
 interface AuditLogEntry {
   id: string;
@@ -33,64 +37,6 @@ interface AuditLogEntry {
   details: string;
   severity: "INFO" | "WARNING" | "CRITICAL";
 }
-
-interface DisputeItem {
-  id: string;
-  studentName: string;
-  githubHandle: string;
-  platform: "GitHub" | "LeetCode";
-  reportedIssue: string;
-  providerTimestamp: string;
-  calculatedPeriod: string;
-  status: "PENDING_REVIEW" | "RESOLVED" | "REJECTED";
-  rawPayload: string;
-}
-
-const INITIAL_DISPUTES: DisputeItem[] = [
-  {
-    id: "disp-101",
-    studentName: "Sneha Patel",
-    githubHandle: "sneha-p",
-    platform: "GitHub",
-    reportedIssue: "Commit pushed Sunday 23:58 IST attributed to next week",
-    providerTimestamp: "2026-10-18T18:28:15Z (UTC)",
-    calculatedPeriod: "Sunday 23:58:15 IST (Eligible for Week 42 under Rule §9.7)",
-    status: "PENDING_REVIEW",
-    rawPayload: JSON.stringify(
-      {
-        commit_sha: "7f9a2b8e4c1d",
-        author: "sneha-p",
-        timestamp_utc: "2026-10-18T18:28:15Z",
-        calculated_ist: "2026-10-18T23:58:15+05:30",
-        boundary_deadline: "2026-10-18T23:59:59+05:30",
-        diff_seconds: -104
-      },
-      null,
-      2
-    )
-  },
-  {
-    id: "disp-102",
-    studentName: "Aditya Kumar",
-    githubHandle: "aditya-k",
-    platform: "LeetCode",
-    reportedIssue: "Weekly delta missed 1 problem closed right before midnight",
-    providerTimestamp: "2026-10-18T18:15:00Z (UTC)",
-    calculatedPeriod: "Sunday 23:45:00 IST (Boundary observation validated)",
-    status: "PENDING_REVIEW",
-    rawPayload: JSON.stringify(
-      {
-        problem_id: 1482,
-        slug: "minimum-number-of-days-to-make-m-bouquets",
-        submission_time: "2026-10-18T18:15:00Z",
-        snapshot_time: "2026-10-18T18:15:30Z",
-        status: "Accepted"
-      },
-      null,
-      2
-    )
-  }
-];
 
 const INITIAL_LOGS: AuditLogEntry[] = [
   {
@@ -114,7 +60,7 @@ const INITIAL_LOGS: AuditLogEntry[] = [
     timestamp: "2026-10-19 14:10 IST",
     action: "DISPUTE_RESOLVED",
     actor: "admin_dr_rao",
-    details: "Approved timestamp timezone adjustment for student Rohan Varma (#disp-099).",
+    details: "Approved timestamp timezone adjustment for student Rohan Varma (#DSP-1048).",
     severity: "WARNING"
   },
   {
@@ -128,12 +74,22 @@ const INITIAL_LOGS: AuditLogEntry[] = [
 ];
 
 export default function AdminHubPage() {
+  const { 
+    currentUser, 
+    switchRole, 
+    disputes, 
+    resolveDispute, 
+    addToast,
+    exportLeaderboardCSV 
+  } = useApp();
+
   const [activeTab, setActiveTab] = useState<"overview" | "disputes" | "logs">("overview");
-  const [disputes, setDisputes] = useState<DisputeItem[]>(INITIAL_DISPUTES);
   const [logs, setLogs] = useState<AuditLogEntry[]>(INITIAL_LOGS);
-  const [selectedDispute, setSelectedDispute] = useState<DisputeItem | null>(null);
+  const [selectedDisputeId, setSelectedDisputeId] = useState<string | null>(disputes[0]?.id || null);
   const [resolutionNote, setResolutionNote] = useState("");
   const [isSyncing, setIsSyncing] = useState(false);
+
+  const selectedDispute = disputes.find((d) => d.id === selectedDisputeId) || disputes[0] || null;
 
   // Roster metrics
   const totalEnrolled = 60;
@@ -141,22 +97,23 @@ export default function AdminHubPage() {
   const quorumPercentage = ((verifiedCount / totalEnrolled) * 100).toFixed(1);
   const meetsQuorum = (verifiedCount / totalEnrolled) >= 0.70;
 
-  const handleResolveDispute = (id: string, decision: "RESOLVED" | "REJECTED") => {
-    setDisputes(prev =>
-      prev.map(d => (d.id === id ? { ...d, status: decision } : d))
-    );
+  const handleResolveDispute = (id: string, decision: "approved" | "rejected") => {
+    const note = resolutionNote.trim() || (decision === "approved" 
+      ? "Telemetry verified against provider timestamp certificate under Rule §9.7."
+      : "Does not meet boundary exemption criteria under Rule §9.7.");
+    
+    resolveDispute(id, decision, note);
 
     const dispute = disputes.find(d => d.id === id);
     const newLog: AuditLogEntry = {
       id: `log-${Date.now()}`,
       timestamp: "Just now",
-      action: decision === "RESOLVED" ? "DISPUTE_ACCEPTED" : "DISPUTE_REJECTED",
-      actor: "admin_current_user",
-      details: `${decision === "RESOLVED" ? "Accepted" : "Rejected"} dispute for ${dispute?.studentName}. Note: ${resolutionNote || "Admin reviewed telemetry payload"}`,
-      severity: decision === "RESOLVED" ? "WARNING" : "INFO"
+      action: decision === "approved" ? "DISPUTE_ACCEPTED" : "DISPUTE_REJECTED",
+      actor: `${currentUser.name} (${currentUser.role === "co-admin" ? "Co-Admin" : "Class Rep"})`,
+      details: `${decision === "approved" ? "Accepted" : "Rejected"} dispute #${id} for ${dispute?.studentName}. Justification: ${note}`,
+      severity: decision === "approved" ? "WARNING" : "INFO"
     };
     setLogs(prev => [newLog, ...prev]);
-    setSelectedDispute(null);
     setResolutionNote("");
   };
 
@@ -168,12 +125,36 @@ export default function AdminHubPage() {
         id: `log-${Date.now()}`,
         timestamp: "Just now",
         action: "PROVIDER_AUDIT_RESYNC",
-        actor: "admin_current_user",
-        details: "Manual health audit resync executed for all 3 telemetry connectors.",
+        actor: `${currentUser.name} (Admin)`,
+        details: "Manual health audit resync executed for all 3 telemetry connectors. All endpoints healthy.",
         severity: "INFO"
       };
       setLogs(prev => [newLog, ...prev]);
+      addToast({
+        title: "Telemetry Connectors Audited",
+        description: "All GitHub REST, LeetCode GraphQL, and HackerRank adapters verified.",
+        type: "success"
+      });
     }, 1200);
+  };
+
+  const handleExportAuditLogs = () => {
+    const csvContent = "data:text/csv;charset=utf-8," +
+      ["ID,Timestamp,Action,Actor,Severity,Details"].concat(
+        logs.map(l => `"${l.id}","${l.timestamp}","${l.action}","${l.actor}","${l.severity}","${l.details.replace(/"/g, '""')}"`)
+      ).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `twm3_audit_trail_${new Date().toISOString().split("T")[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    addToast({
+      title: "Audit Trail Exported",
+      description: "Downloaded immutable ledger as CSV.",
+      type: "info"
+    });
   };
 
   return (
@@ -226,9 +207,9 @@ export default function AdminHubPage() {
             }`}
           >
             <span>Telemetry Disputes</span>
-            {disputes.filter(d => d.status === "PENDING_REVIEW").length > 0 && (
+            {disputes.filter(d => d.status === "pending").length > 0 && (
               <span className="w-4 h-4 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center justify-center text-[10px]">
-                {disputes.filter(d => d.status === "PENDING_REVIEW").length}
+                {disputes.filter(d => d.status === "pending").length}
               </span>
             )}
           </button>
@@ -241,6 +222,29 @@ export default function AdminHubPage() {
             }`}
           >
             Immutable Audit Trail
+          </button>
+        </div>
+
+        {/* Co-Admin Mode Banner */}
+        <div className="p-3.5 rounded-xl bg-amber-500/5 border border-amber-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div className="flex items-center space-x-2.5">
+            <ShieldAlert className="w-4 h-4 text-accent shrink-0" />
+            <div>
+              <span className="font-semibold text-white">
+                Active Session: {currentUser.name} ({currentUser.role === "co-admin" ? "Faculty Co-Admin" : "Elected Class Rep"})
+              </span>
+              <p className="text-muted text-[11px]">
+                {currentUser.role === "co-admin"
+                  ? "Full administrative quorum authorization active. All actions cryptographically signed."
+                  : "Operating with delegated student-representative review rights under Rule §9.7."}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => switchRole(currentUser.role === "co-admin" ? "student" : "co-admin")}
+            className="px-3 py-1.5 rounded-lg bg-surface hover:bg-surface-raised border border-white/10 text-xs font-mono text-accent transition-colors shrink-0"
+          >
+            Switch to {currentUser.role === "co-admin" ? "Student View" : "Co-Admin View"}
           </button>
         </div>
 
@@ -271,9 +275,12 @@ export default function AdminHubPage() {
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>{meetsQuorum ? "Quorum Satisfied (≥70%)" : "Quorum Incomplete"}</span>
                   </div>
-                  <button className="px-3 py-1.5 rounded-lg bg-surface-raised hover:bg-white/10 text-xs font-mono text-ink-secondary border border-white/10 flex items-center space-x-1.5">
-                    <FileSpreadsheet className="w-3.5 h-3.5" />
-                    <span>Update Roster (CSV)</span>
+                  <button 
+                    onClick={exportLeaderboardCSV}
+                    className="px-3 py-1.5 rounded-lg bg-surface-raised hover:bg-white/10 text-xs font-mono text-ink-secondary border border-white/10 flex items-center space-x-1.5"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Export Roster Standings</span>
                   </button>
                 </div>
               </div>
@@ -436,7 +443,7 @@ export default function AdminHubPage() {
                 {disputes.map((dispute) => (
                   <div
                     key={dispute.id}
-                    onClick={() => setSelectedDispute(dispute)}
+                    onClick={() => setSelectedDisputeId(dispute.id)}
                     className={`p-4 rounded-xl border transition-all cursor-pointer ${
                       selectedDispute?.id === dispute.id
                         ? "bg-surface-raised border-accent"
@@ -450,18 +457,18 @@ export default function AdminHubPage() {
                             {dispute.studentName}
                           </span>
                           <span className="text-xs text-muted font-mono">
-                            @{dispute.githubHandle}
+                            @{dispute.handle} • {dispute.rollNo}
                           </span>
                         </div>
-                        <p className="text-xs text-ink-secondary mt-1">
-                          {dispute.reportedIssue}
+                        <p className="text-xs text-ink-secondary mt-1.5 line-clamp-2">
+                          {dispute.claim}
                         </p>
                       </div>
 
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-mono border ${
-                        dispute.status === "PENDING_REVIEW"
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-mono border uppercase ${
+                        dispute.status === "pending"
                           ? "bg-amber-500/10 text-amber-300 border-amber-500/20"
-                          : dispute.status === "RESOLVED"
+                          : dispute.status === "approved"
                           ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/20"
                           : "bg-rose-500/10 text-rose-300 border-rose-500/20"
                       }`}>
@@ -470,8 +477,8 @@ export default function AdminHubPage() {
                     </div>
 
                     <div className="mt-3 pt-2 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono text-muted">
-                      <span>Platform: {dispute.platform}</span>
-                      <span className="text-accent">Click to Inspect Payload →</span>
+                      <span>{dispute.platform} • {dispute.submittedAt}</span>
+                      <span className="text-accent text-[11px]">Inspect Audit Claim →</span>
                     </div>
                   </div>
                 ))}
@@ -487,25 +494,65 @@ export default function AdminHubPage() {
                           Dispute Audit: #{selectedDispute.id}
                         </h3>
                         <p className="text-xs text-muted font-mono">
-                          {selectedDispute.studentName} ({selectedDispute.platform})
+                          {selectedDispute.studentName} (@{selectedDispute.handle}) • {selectedDispute.platform}
                         </p>
                       </div>
-                      <span className="text-xs text-accent font-mono">
-                        {selectedDispute.calculatedPeriod}
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-mono border uppercase ${
+                        selectedDispute.status === "pending"
+                          ? "bg-amber-500/10 text-amber-300 border-amber-500/20"
+                          : selectedDispute.status === "approved"
+                          ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/20"
+                          : "bg-rose-500/10 text-rose-300 border-rose-500/20"
+                      }`}>
+                        {selectedDispute.status}
                       </span>
                     </div>
 
-                    <div className="space-y-1">
-                      <span className="text-xs font-mono text-muted block">
-                        Raw Provider Payload (Audited):
-                      </span>
-                      <pre className="p-3 bg-canvas rounded-xl border border-white/[0.08] font-mono text-[11px] text-accent overflow-x-auto max-h-48">
-                        {selectedDispute.rawPayload}
-                      </pre>
+                    <div className="space-y-3 text-xs">
+                      <div className="p-3 bg-surface-raised rounded-xl border border-white/[0.06] space-y-1">
+                        <span className="text-[11px] font-mono text-muted block uppercase">Student Claim</span>
+                        <p className="text-ink-secondary leading-relaxed">{selectedDispute.claim}</p>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 font-mono text-[11px]">
+                        <div className="p-2.5 rounded-lg bg-canvas border border-white/[0.06]">
+                          <span className="text-muted block text-[10px]">RULE REFERENCE</span>
+                          <span className="text-white">{selectedDispute.ruleReference}</span>
+                        </div>
+                        <div className="p-2.5 rounded-lg bg-canvas border border-white/[0.06]">
+                          <span className="text-muted block text-[10px]">METRIC TARGET</span>
+                          <span className="text-accent">{selectedDispute.metric}</span>
+                        </div>
+                      </div>
+
+                      {selectedDispute.evidenceUrl && (
+                        <div className="p-2.5 rounded-lg bg-canvas border border-white/[0.06] flex items-center justify-between font-mono text-[11px]">
+                          <span className="text-muted truncate max-w-[280px]">Proof: {selectedDispute.evidenceUrl}</span>
+                          <a
+                            href={selectedDispute.evidenceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-accent hover:underline flex items-center space-x-1 shrink-0"
+                          >
+                            <span>Open URL</span>
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        </div>
+                      )}
+
+                      {selectedDispute.resolutionNote && (
+                        <div className="p-3 rounded-xl bg-canvas border border-emerald-500/20 text-emerald-300 space-y-1">
+                          <span className="text-[10px] font-mono uppercase block text-muted">Audited Resolution</span>
+                          <p className="text-xs">{selectedDispute.resolutionNote}</p>
+                          <span className="text-[10px] font-mono text-muted block">
+                            By {selectedDispute.reviewedBy || "Faculty Co-Admin"} at {selectedDispute.reviewedAt || "Recent"}
+                          </span>
+                        </div>
+                      )}
                     </div>
 
-                    {selectedDispute.status === "PENDING_REVIEW" && (
-                      <div className="space-y-3 pt-2">
+                    {selectedDispute.status === "pending" && (
+                      <div className="space-y-3 pt-3 border-t border-white/[0.06]">
                         <label className="text-xs font-mono text-ink-secondary block">
                           Mandatory Resolution Justification:
                         </label>
@@ -518,26 +565,20 @@ export default function AdminHubPage() {
                         />
                         <div className="flex items-center space-x-2 pt-1">
                           <button
-                            onClick={() => handleResolveDispute(selectedDispute.id, "RESOLVED")}
+                            onClick={() => handleResolveDispute(selectedDispute.id, "approved")}
                             className="flex-1 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-canvas font-bold text-xs flex items-center justify-center space-x-1.5 transition-colors"
                           >
                             <Check className="w-3.5 h-3.5" />
                             <span>Accept &amp; Backfill Telemetry</span>
                           </button>
                           <button
-                            onClick={() => handleResolveDispute(selectedDispute.id, "REJECTED")}
+                            onClick={() => handleResolveDispute(selectedDispute.id, "rejected")}
                             className="flex-1 py-2 rounded-lg bg-surface-raised hover:bg-white/10 text-ink-secondary font-medium text-xs flex items-center justify-center space-x-1.5 transition-colors border border-white/10"
                           >
                             <X className="w-3.5 h-3.5" />
                             <span>Reject Appeal</span>
                           </button>
                         </div>
-                      </div>
-                    )}
-
-                    {selectedDispute.status !== "PENDING_REVIEW" && (
-                      <div className="p-3 rounded-xl bg-canvas border border-white/[0.08] text-xs font-mono text-muted">
-                        This dispute has been marked as <strong className="text-white">{selectedDispute.status}</strong>. An immutable audit record has been appended to the system log.
                       </div>
                     )}
                   </div>
@@ -555,7 +596,7 @@ export default function AdminHubPage() {
         {/* TAB 3: AUDIT TRAIL */}
         {activeTab === "logs" && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h2 className="text-lg font-bold text-ink">
                   Immutable Governance Log
@@ -564,9 +605,18 @@ export default function AdminHubPage() {
                   Append-only administrative trail capturing all cohort adjustments and scheduler milestones.
                 </p>
               </div>
-              <span className="text-xs font-mono text-muted">
-                Rule §11.4: Immutable Ledger
-              </span>
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={handleExportAuditLogs}
+                  className="px-3 py-1.5 rounded-lg bg-surface hover:bg-surface-raised border border-white/10 text-xs font-mono text-accent flex items-center space-x-1.5 transition-colors"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Export Audit Trail (CSV)</span>
+                </button>
+                <span className="text-xs font-mono text-muted">
+                  Rule §11.4: Immutable Ledger
+                </span>
+              </div>
             </div>
 
             <div className="bg-surface border border-white/[0.08] rounded-2xl overflow-hidden divide-y divide-white/[0.06]">

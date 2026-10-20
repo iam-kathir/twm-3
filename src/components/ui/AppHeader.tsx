@@ -62,6 +62,15 @@ export function AppHeader() {
         <div className="flex items-center gap-6">
           <BrandLogo showLivePulse={true} href="/" />
 
+          {/* Every screen under this header renders illustrative data until a provider is
+              connected. Saying so is part of the product's honesty rule. */}
+          <span
+            title="Illustrative figures — no provider is connected yet."
+            className="hidden lg:inline-flex items-center gap-1.5 rounded-md border border-accent/25 bg-accent/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-accent"
+          >
+            Demo data
+          </span>
+
           <nav className="hidden md:flex items-center gap-1.5 text-xs font-mono">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
@@ -203,6 +212,11 @@ export function AppHeader() {
       {/* Mobile Nav Drawer */}
       {isMobileMenuOpen && (
         <div className="md:hidden px-4 pt-2 pb-4 border-t border-white/[0.08] bg-canvas space-y-1">
+          <div className="px-3 pb-2">
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-accent/25 bg-accent/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-accent">
+              Demo data — no provider connected
+            </span>
+          </div>
           {navLinks.map((link) => (
             <NextLink
               key={link.href}

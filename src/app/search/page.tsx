@@ -15,9 +15,16 @@ import {
   ExternalLink,
   ShieldCheck,
   Sparkles,
-  UserCheck
+  UserCheck,
+  X,
+  Calendar,
+  GitCommit,
+  ChevronRight,
+  ShieldAlert,
+  Award
 } from "lucide-react";
 import { AppHeader } from "@/components/ui/AppHeader";
+import { useApp } from "@/context/AppContext";
 
 
 type EvidenceLevel = "EXPLICIT_SOURCE" | "SUPPORTED_INFERENCE" | "SELF_DECLARED";
@@ -161,9 +168,11 @@ const POPULAR_TAGS = [
 ];
 
 export default function SearchPage() {
+  const { openDisputeModal, currentUser, addToast } = useApp();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [evidenceFilter, setEvidenceFilter] = useState<EvidenceLevel | "ALL">("ALL");
+  const [selectedDev, setSelectedDev] = useState<SearchableDeveloper | null>(null);
 
   const filteredDevelopers = useMemo(() => {
     return MOCK_DEVELOPERS.filter((dev) => {
@@ -410,13 +419,13 @@ export default function SearchPage() {
                     </span>
                   </div>
 
-                  <Link
-                    href={`/dashboard?user=${dev.githubHandle}`}
+                  <button
+                    onClick={() => setSelectedDev(dev)}
                     className="inline-flex items-center space-x-1 text-accent hover:underline text-xs font-sans font-medium"
                   >
-                    <span>View Telemetry</span>
+                    <span>Inspect Profile</span>
                     <ExternalLink className="w-3 h-3" />
-                  </Link>
+                  </button>
                 </div>
               </motion.div>
             ))}
@@ -444,6 +453,147 @@ export default function SearchPage() {
           </div>
         )}
       </main>
+
+      {/* Interactive Telemetry Inspection Modal */}
+      <AnimatePresence>
+        {selectedDev && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ duration: 0.2 }}
+              className="bg-surface border border-white/10 rounded-2xl max-w-2xl w-full p-6 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedDev(null)}
+                className="absolute top-4 right-4 p-2 rounded-lg bg-surface-raised hover:bg-white/10 text-muted hover:text-white transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              {/* Modal Header */}
+              <div className="flex items-start space-x-4">
+                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center font-bold text-xl text-accent">
+                  {selectedDev.avatarInitials}
+                </div>
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <h2 className="text-xl font-bold text-white">{selectedDev.name}</h2>
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono">
+                      COHORT VERIFIED
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted font-mono mt-0.5">
+                    @{selectedDev.githubHandle} • {selectedDev.classBatch}
+                  </p>
+                  <p className="text-xs text-ink-secondary mt-1.5 font-medium">
+                    {selectedDev.roleInterest}
+                  </p>
+                </div>
+              </div>
+
+              {/* Telemetry Metric Cards */}
+              <div className="grid grid-cols-3 gap-3">
+                <div className="p-3 bg-canvas rounded-xl border border-white/[0.06] text-xs space-y-1">
+                  <span className="text-[10px] font-mono text-muted block uppercase">ACTIVE RHYTHM</span>
+                  <span className="text-sm font-bold text-accent font-mono">{selectedDev.activeRhythm}</span>
+                  <span className="text-[10px] text-muted-soft block">Weekly regularity</span>
+                </div>
+                <div className="p-3 bg-canvas rounded-xl border border-white/[0.06] text-xs space-y-1">
+                  <span className="text-[10px] font-mono text-muted block uppercase">GITHUB REPOSITORIES</span>
+                  <span className="text-sm font-bold text-white font-mono">{selectedDev.platforms.github.repos} Repos</span>
+                  <span className="text-[10px] text-emerald-400 block">{selectedDev.platforms.github.activeDaysThisMonth} active days/mo</span>
+                </div>
+                <div className="p-3 bg-canvas rounded-xl border border-white/[0.06] text-xs space-y-1">
+                  <span className="text-[10px] font-mono text-muted block uppercase">LEETCODE PROBLEMS</span>
+                  <span className="text-sm font-bold text-[#FFA116] font-mono">{selectedDev.platforms.leetcode.solved} Solved</span>
+                  <span className="text-[10px] text-muted block">{selectedDev.platforms.hackerrank.stars}★ HackerRank</span>
+                </div>
+              </div>
+
+              {/* Verified Capabilities & Explicit File Evidence */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-mono text-muted uppercase tracking-wider">
+                    Audited Skill Artifacts (Rule §10.3)
+                  </h4>
+                  <span className="text-[11px] font-mono text-emerald-400">
+                    {selectedDev.tags.filter(t => t.evidence === "EXPLICIT_SOURCE").length} Explicit Manifests Verified
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  {selectedDev.tags.map((tag) => (
+                    <div 
+                      key={tag.id}
+                      className="p-3 rounded-xl bg-surface-raised border border-white/[0.06] flex items-start justify-between gap-3 text-xs"
+                    >
+                      <div className="space-y-1">
+                        <div className="flex items-center space-x-2">
+                          <span className="font-semibold text-white font-mono">#{tag.name}</span>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-mono border ${
+                            tag.evidence === "EXPLICIT_SOURCE"
+                              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                              : tag.evidence === "SUPPORTED_INFERENCE"
+                              ? "bg-amber-500/10 text-accent border-amber-500/20"
+                              : "bg-white/5 text-muted border-white/10"
+                          }`}>
+                            {tag.evidence}
+                          </span>
+                        </div>
+                        <p className="text-xs text-ink-secondary">
+                          {tag.sourceDetail}
+                        </p>
+                      </div>
+                      <div className="text-[10px] font-mono text-muted shrink-0 flex items-center space-x-1">
+                        <GitCommit className="w-3 h-3 text-accent" />
+                        <span>Sha Audited</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Audit Compliance Card */}
+              <div className="p-3.5 rounded-xl bg-emerald-500/5 border border-emerald-500/20 flex items-center justify-between text-xs font-mono">
+                <div className="flex items-center space-x-2 text-emerald-400">
+                  <CheckCircle2 className="w-4 h-4 shrink-0" />
+                  <span>Telemetry Observation Boundary (IST 23:59:59) Validated</span>
+                </div>
+                <span className="text-muted text-[11px]">Rule §9.7</span>
+              </div>
+
+              {/* Modal Action Buttons */}
+              <div className="flex items-center space-x-3 pt-2">
+                <Link
+                  href={`/dashboard?user=${selectedDev.githubHandle}`}
+                  onClick={() => setSelectedDev(null)}
+                  className="flex-1 py-2.5 rounded-xl bg-accent hover:bg-amber-400 text-canvas font-bold text-xs flex items-center justify-center space-x-1.5 transition-colors"
+                >
+                  <span>Open Telemetry Cockpit</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </Link>
+                <button
+                  onClick={() => {
+                    const devToDispute = selectedDev;
+                    setSelectedDev(null);
+                    openDisputeModal({
+                      studentName: devToDispute.name,
+                      handle: devToDispute.githubHandle,
+                      metric: "github_active_days"
+                    });
+                  }}
+                  className="px-4 py-2.5 rounded-xl bg-surface-raised hover:bg-white/10 text-xs font-mono text-ink-secondary border border-white/10 flex items-center space-x-1.5 transition-colors"
+                >
+                  <ShieldAlert className="w-3.5 h-3.5 text-accent" />
+                  <span>Peer Inquiry (§9.7)</span>
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Footer */}
       <footer className="border-t border-white/[0.08] bg-canvas px-6 py-4 text-xs text-muted-soft">

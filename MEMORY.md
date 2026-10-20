@@ -32,6 +32,35 @@ adapters. The plan's Phase 0 (provider evidence) has not started.
 
 ## Session log
 
+### 2026-10-20 (later) — landing composition + demo labelling
+
+**Problem:** three consecutive landing sections (HowItWorks, FairnessGuarantees, PlatformMatrix)
+shared the identical shape: centred chip-header + `grid-cols-3` of equal cards. That is the
+classic template rhythm the review flagged.
+
+Changed:
+
+1. **`HowItWorks`** — centred 3-card grid → left-aligned header + a horizontal numbered rail with
+   a hairline connector at `top-[22px]` (hidden on mobile, where the steps stack). Cards are gone;
+   spacing and hairlines do the grouping. Staggered `whileInView` reveal.
+2. **`FairnessGuarantees`** — centred 3-card grid → **asymmetric split**: sticky statement column
+   on the left, rule rows on the right separated by hairlines, with `§7.3`-style tags as a mono
+   left column. Different layout family from every other section.
+3. **`AppHeader`** — added a `Demo data` chip (inline on `lg+`, plus a variant row in the mobile
+   drawer). Covers dashboard, leaderboard, search, admin, settings in one place. This is the
+   honesty rule from the plan, not decoration: those screens render invented figures.
+
+Landing now uses four distinct layout families instead of one. Eyebrow count is unchanged
+(`HowItWorks` kept one, `FairnessGuarantees` dropped one).
+
+Gates: `tsc --noEmit` clean, `next build` green, 10 static routes.
+⚠️ `admin/page.tsx` was mid-migration to the shared `TelemetryDispute` type during this pass;
+`tsc` was red for ~10 minutes from that other process, not from these edits. Don't "fix" a file
+that is being written to.
+⚠️ The `feat(landing)` commit also carries that migration (admin 274 lines, search 11 lines) —
+`git add -A` swept it in because it had landed before I committed. History is green but the
+commit message only describes the landing work.
+
 ### 2026-10-20 — UI review + hardening pass
 
 **Review verdict:** 6.4/10 as a UI prototype (≈4/10 as shippable frontend). Full scorecard was
@@ -84,10 +113,11 @@ Bugs found while doing the above:
 ## Known debt (ranked)
 
 1. **No backend at all.** Next real work is one GitHub API route + one adapter, not more UI.
-2. **App screens present invented numbers without a demo badge** (roster 42/60, audit logs,
-   disputes). Violates the core principle above. Cheapest fix: one `Demo data` chip per screen.
-3. **Layout repetition:** 7 landing sections, all centred on `max-w-4xl`. No asymmetry or bento.
-   Would need a real composition pass, not a tweak.
+2. ~~**App screens presented invented numbers without a demo badge.**~~ Done — `Demo data` chip in
+   `AppHeader` (5 screens). `login` and `onboarding` show no data tables, so they stay unlabelled.
+3. **Layout repetition** — partly fixed (see latest session entry). Still centred-card shaped:
+   `MotionShowcase`, `PlatformMatrix`, `CockpitPreview`, `AppScreensGallery`. Watch the 3-in-a-row
+   rule: don't convert them all to the same new family.
 4. **Dead assets in `public/`:** `logo.svg` (2.4 MB), `logo.png` (1.8 MB),
    `logo-horizontal.png` (257 KB), `twm_perfect_landing.png` (761 KB),
    `twm_streamlined_motion.png` (503 KB) — none referenced. ~5.8 MB in git history forever.
