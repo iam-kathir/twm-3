@@ -47,57 +47,57 @@ export function PlatformMatrix() {
   ];
 
   return (
-    <section id="platforms" className="py-16 md:py-24 border-t border-white/[0.08] bg-canvas relative">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-accent/10 text-accent border border-accent/20 text-xs font-mono mb-3">
-            <Layers className="h-3.5 w-3.5" />
+    <section id="platforms" className="py-20 md:py-28 border-t border-white/[0.08] bg-canvas relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent/10 text-accent border border-accent/20 text-xs font-mono font-medium mb-3">
+            <Layers className="h-4 w-4" />
             <span>Phase 0 Capability Matrix</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-ink tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-ink tracking-tight">
             Independent Provider Adapters
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-muted">
-            TWM does not assume APIs exist or fudge missing timestamps. Each provider operates under isolated adapters, capability states, and rate limits.
+          <p className="mt-4 text-base sm:text-lg text-muted leading-relaxed">
+            TWM never guesses APIs or fudges missing timestamps. Each provider operates under isolated adapters, capability states, and rate limits.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {platforms.map((platform, idx) => {
             const Icon = platform.icon;
             return (
               <div
                 key={idx}
-                className="rounded-2xl border border-white/[0.08] bg-surface p-6 flex flex-col justify-between hover:border-white/20 transition-colors"
+                className="rounded-2xl border border-white/[0.08] bg-surface p-8 sm:p-9 flex flex-col justify-between hover:border-white/20 transition-all shadow-xl hover:shadow-2xl"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2.5">
-                      <div className="p-2 rounded-lg bg-surface-raised border border-white/10 text-white">
-                        <Icon className="h-5 w-5" />
+                  <div className="flex items-center justify-between mb-5">
+                    <div className="flex items-center gap-3">
+                      <div className="p-3 rounded-xl bg-surface-raised border border-white/10 text-ink shadow-sm">
+                        <Icon className="h-6 w-6" />
                       </div>
-                      <h3 className="font-bold text-ink text-base">{platform.name}</h3>
+                      <h3 className="font-extrabold text-ink text-xl">{platform.name}</h3>
                     </div>
-                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded border font-medium ${platform.statusClass}`}>
+                    <span className={`text-xs font-mono px-3 py-1 rounded-full border font-semibold tracking-wide ${platform.statusClass}`}>
                       {platform.status}
                     </span>
                   </div>
 
-                  <p className="text-xs text-muted mb-6 leading-relaxed">
+                  <p className="text-sm sm:text-base text-muted mb-8 leading-relaxed">
                     {platform.description}
                   </p>
 
-                  <div className="space-y-2.5 mb-6">
-                    <span className="text-[11px] font-mono text-muted-soft uppercase tracking-wider block">
+                  <div className="space-y-3 mb-8">
+                    <span className="text-xs font-mono text-muted uppercase tracking-wider block font-semibold">
                       Tracked Fields &amp; Semantics:
                     </span>
                     {platform.fields.map((field, fIdx) => (
                       <div
                         key={fIdx}
-                        className="flex items-center justify-between p-2 rounded-lg bg-surface-raised border border-white/[0.05] text-xs font-mono"
+                        className="flex items-center justify-between p-3.5 rounded-xl bg-surface-raised border border-white/[0.05] text-sm font-mono"
                       >
-                        <span className="text-ink-secondary">{field.name}</span>
-                        <span className="text-[10px] text-muted bg-surface px-2 py-0.5 rounded border border-white/[0.04]">
+                        <span className="text-ink font-medium">{field.name}</span>
+                        <span className="text-xs text-muted-soft bg-surface px-2.5 py-1 rounded-md border border-white/[0.06] font-mono">
                           {field.state}
                         </span>
                       </div>
@@ -105,9 +105,9 @@ export function PlatformMatrix() {
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-white/[0.06] text-[11px] font-mono text-muted">
-                  <span className="text-muted-soft block mb-0.5">Cadence:</span>
-                  <span className="text-ink-secondary">{platform.cadence}</span>
+                <div className="pt-5 border-t border-white/[0.08] text-xs sm:text-sm font-mono text-muted">
+                  <span className="text-muted block mb-1">Cadence:</span>
+                  <span className="text-ink font-semibold">{platform.cadence}</span>
                 </div>
               </div>
             );
