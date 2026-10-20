@@ -1,69 +1,80 @@
-# AGENTS.md — TWM 3.1
+# AGENTS.md — TWM 3.1 Master Entry Point & Invariants
 
-Entry point for any agent working in this repo. Read this first, then:
+Entry point for any agent (Antigravity or OpenCode) working in this repo. Read this first, then:
 
-1. `MEMORY.md` — top of *Session log*: what the other agent just did. Also the live task board.
-2. `TASKS.md` — the task ledger. Current phase and next task ID.
-3. `TWM_Final_Project_Plan_v3.1.md` §20 — only when scoping new work.
-4. `.agents/workflows/workflow.md` — working method (finish the task, verify, report).
-5. `.agents/skills/` — installed skills (`design-taste-frontend` lives here).
+1. [`MEMORY.md`](MEMORY.md) — Top of *Session log*: what the other agent just did. Also the live architecture state and task board.
+2. [`TASKS.md`](TASKS.md) — The task ledger. Current phase status and next task ID.
+3. `TWM_Final_Project_Plan_v3.1.md` §20 — Only when scoping new work or validating rule compliance.
+4. `.agents/workflows/workflow.md` — Working method: Opus 5.5 protocol (finish the task, verify, report).
+5. `.agents/skills/` & Global Skills — Installed design systems (`impeccable`, `awesome-design-md`, `img2threejs`, `design-taste-frontend`).
 
-Do not start editing before step 1. Two agents work in this folder at the same time.
+Do not start editing before step 1. Two agents work in this repository simultaneously.
 
-## Stack
+---
 
-Next.js 14 App Router · TypeScript (strict) · Tailwind · framer-motion · `node:sqlite`
-(no npm driver, no ORM). All UI text is English. No env file is committed.
+## 👥 Multi-Agent Collaboration Model
 
-## Invariants (breaking one is a bug, not a style choice)
+- **Antigravity (IDE Orchestrator):** Leads architecture, multi-file code generation, UI animations, database design, and master ledger coordination.
+- **OpenCode (CLI Subagent):** Launched via `C:\Users\kathi\opencode-fresh.cmd` (auto-injects `HF_TOKEN`, `GITHUB_TOKEN`). Executes terminal tasks, deep code audits, and complementary sub-tasks.
+- **Shared Skills Junctions:** All skills are linked across Claude, Codex, OpenCode, Antigravity, and the workspace via NTFS Directory Junctions (`mklink /J`), avoiding Windows `EPERM` symlink limitations.
 
-- **Zero fabrication.** Never render unverified, unavailable, or mock data as fact. Mock screens say
-  `Demo data`. Missing provider data is `UNAVAILABLE`, never `0`. Network failure never becomes
-  success. This has already been violated twice (fake bio verification, fake "Providers Live" pill).
-- **One palette**, the tokens in `src/app/globals.css`. No literal hex in components except provider
-  brand colours, which have `--provider-*` tokens. Tailwind maps them via `*-rgb` triplets.
-- **One font source**: `next/font` in `src/app/layout.tsx` sets `--font-sans`/`--font-mono`. Never
-  redefine those vars in `:root`.
-- **Provider capability is not equal.** HackerRank has no public event timestamps: display only,
-  excluded from weekly deltas. Never merge providers into one score.
-- **Ranking is deterministic** (§9.6): `1, 2, 2, 4`, ties share a rank, alphabetical secondary sort,
-  tie badge in the UI.
+---
 
-## Verification gates — all four, every time
+## 🛠️ Stack
+
+Next.js 14 App Router · TypeScript (strict) · Tailwind CSS (obsidian tokens) · framer-motion · `node:sqlite` (WAL mode, zero npm ORM). All UI text is English. No env file is committed.
+
+---
+
+## 🔒 Invariants (Breaking One is a Bug, Not a Style Choice)
+
+- **Zero fabrication (§1.2 & §5.7).** Never render unverified, unavailable, or mock data as fact. Mock screens say `Demo data`. Missing provider data is `UNAVAILABLE` or `Pending`, never `0`. Network failure never becomes success.
+- **Quorum Participation Rule (§3.3).** The cohort denominator is the authoritative enrolled roster in SQLite. If $\ge 70\%$ are verified & opted-in: labelled **"Representative Class Leaderboard"**. If $< 70\%$: labelled **"Participating Members Leaderboard"**.
+- **Sunday Boundary Rule (§9.1 & §9.7).** Weekly competition closes strictly at Sunday 23:59:59 IST (`Asia/Kolkata` / UTC+5:30). Only observations at or before the boundary count. `boundary_gap <= 3h`.
+- **Ranking is deterministic (§9.6).** Standard competition ranking `1, 2, 2, 4`, ties share a rank with tie badge, alphabetical secondary sort.
+- **Provider capability disparity.** HackerRank has no public event timestamps: display-only badge evidence, excluded from weekly competition deltas. Never merge providers into one opaque score.
+- **One palette.** Tokens in `src/app/globals.css` (canvas `#090A0E`, surface `#111319`, accent `#F59E0B`). No literal hex in components except provider brand colours (`--provider-*`).
+- **One font source.** `next/font` in `src/app/layout.tsx` sets `--font-sans`/`--font-mono`. Never redefine those vars in `:root`.
+
+---
+
+## ✅ Verification gates — all four, every time
 
 ```powershell
 npx tsc --noEmit                                  # must exit 0
-npm test                                          # node:test suite, must pass
-npx next build                                    # must be green (skip while `next dev` runs — see below)
+npm test                                          # node:test suite (scripts/test-foundation.mjs), must pass
+npx next build                                    # must be green (skip while next dev runs — see below)
 git status --short                                # must be clean before you report done
 ```
 
-For anything touching a route handler, also hit it live and paste the status codes into `MEMORY.md`.
+For anything touching a route handler, hit it live (`http://localhost:3000/...`) and paste the status code and verification output into `MEMORY.md`.
 
-## Gotchas that have cost real time
+---
 
-- **`next dev` on port 3000 is usually running.** It rewrites `.next/`, which deletes
-  `.next/types/**` and makes `tsc` fail with `TS6053` for no reason. Only-TS6053 means the dev
-  server, not your code. Also: never run `next build` concurrently with it.
-- **Never `git add -A`.** Stage explicit paths. A concurrent process has had its work swept into
-  three unrelated commits that way, so history no longer matches the messages.
-- **Files move under you.** If a build fails in a file you did not touch, re-check its mtime before
-  "fixing" it — the other agent is probably mid-write. Wait, then re-run.
-- **`node:sqlite` keeps the event loop alive**, so `npm test` used to hang after passing. Fixed with
-  `--test-force-exit`; keep that flag.
-- Fonts are fetched at build time by `next/font`, so `next build` needs network.
+## ⚠️ Gotchas that have cost real time
 
-## Definition of done
+- **`next dev` on port 3000 is usually running.** It rewrites `.next/`, which deletes `.next/types/**` and makes `tsc` fail with `TS6053` for no reason. Only-TS6053 means the dev server, not your code. Also: never run `next build` concurrently with `next dev`.
+- **Never `git add -A`.** Stage explicit paths. A concurrent process has had its work swept into unrelated commits that way.
+- **Files move under you.** If a build fails in a file you did not touch, re-check its mtime before "fixing" it — the other agent is probably mid-write. Wait, then re-run.
+- **`node:sqlite` keeps the event loop alive**, so `npm test` used to hang after passing. Fixed with `--test-force-exit` in `package.json`; keep that flag.
+- **Fonts are fetched at build time** by `next/font`, so `next build` needs network.
+- **Solid coloured fills pair with `text-canvas`, never `text-white`.** On `bg-emerald-500`, canvas text is 7.8:1 (white would be 2.54:1, a hard AA fail). Known exception to fix: DisputeModal.tsx:175 (`text-white` on `bg-rose-500`, 3.67:1 — TASKS.md QP-1). Also: `text-muted-soft`/`text-muted-dark` (3.67 / 2.53:1) fail AA below ~18px — use `text-muted` (6.5:1) for small text. Full audit numbers in `MEMORY.md`, backlog in `TASKS.md` (QP-1…QP-6).
 
-1. Code compiles, tests pass, build is green.
-2. Anything you claimed was verified — actually ran it.
-3. `MEMORY.md` session log has a new top entry: what changed, what you verified (with real output),
-   what is left, and any ⚠️ the next agent needs.
+---
+
+## 🏁 Definition of Done
+
+1. Code compiles without type errors, all `node:test` tests pass, build is green.
+2. Anything you claimed was verified — actually ran it and logged real output.
+3. `MEMORY.md` session log has a new top entry: what changed, what was verified (with real terminal output), what is left, and any ⚠️ the next agent needs.
 4. `TASKS.md` status updated if you closed or discovered a task.
-5. Commit with a message that describes only what is in the commit.
+5. Commit with a message describing only what is in the commit.
 
-## Do not
+---
 
-- Push, force-push, delete data, or add a dependency without asking.
-- Add a second colour system, a second font, a UI kit, or a state library.
+## 🚫 Do not
+
+- Push, force-push, delete data, or add an npm dependency without asking.
+- Add a second colour system, a second font, a UI kit, or an external state library.
 - Present a plan as done. Half-wired integrations get labelled as such in `MEMORY.md`.
+

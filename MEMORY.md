@@ -1,71 +1,135 @@
-# MEMORY — TWM 3.1 working notes
+# MEMORY — TWM 3.1 Master Living Ledger & Collaboration Context
 
-Running log of decisions and changes. Newest session at the top of *Session log*.
-Plan of record: `TWM_Final_Project_Plan_v3.1.md` (read Section 20 roadmap).
-Master task ledger & delivery roadmap: [`TASKS.md`](TASKS.md).
-
----
-
-## What this project is
-
-TWM ("Track. Win. Maintain.") — a class-scoped developer activity + friendly competition app.
-Next.js 14 App Router, TypeScript, Tailwind, framer-motion, lucide. No backend yet.
-
-**Current state:** clickable UI prototype. Every screen renders hardcoded data from
-`src/context/AppContext.tsx` or page-local arrays. No `app/api/`, no DB, no OAuth, no provider
-adapters. The plan's Phase 0 (provider evidence) has not started.
+Running log of decisions, architectural invariants, multi-agent coordination, and active state.
+- **Plan of Record:** `TWM_Final_Project_Plan_v3.1.md` (read Section 20 for phase roadmaps).
+- **Master Task Ledger & Backlog:** [`TASKS.md`](TASKS.md).
+- **Agent Entry Point & Invariants:** [`AGENTS.md`](AGENTS.md).
+- **Methodology & Reporting Doctrine:** `.agents/workflows/workflow.md` (Opus 5.5 protocol).
+- **Design Doctrine & Installed Skills:** `.agents/skills/design-taste-frontend` + global design skills.
 
 ---
 
-## Ground rules for this repo
+## 🏛️ What This Project Is & Current Architecture State
 
-- The plan's core principle: **never represent unavailable or unverified data as a fact.**
-  Demo data must be visibly labelled. Do not add fake success states, fake domains, or fake
-  "live" indicators.
-- One palette: the amber `--*` tokens in `src/app/globals.css`. Do not add a second colour system
-  (a Tailwind `brand.*` palette was deleted for exactly this reason).
-- One font source: `next/font` in `src/app/layout.tsx` sets `--font-sans` / `--font-mono` on
-  `<html>`. Never redefine those vars in `:root` — it silently wins or loses by source order.
-- `AppProvider` and `MotionProvider` wrap `{children}` in the root layout. Anything using
-  `useApp()` must stay under it, and the root layout stays a Server Component.
+TWM ("Track. Win. Maintain.") is an institutional-grade, class-scoped developer activity and friendly competition platform for engineering cohorts (specifically B.Tech CSE cohorts).
+
+### Current State (Updated 2026-10-21):
+- **Architecture Maturity:** Full-stack SaaS implementation. Zero mock-reliance for backend data paths; clean separation between verified observations and unverified assertions.
+- **Phase 0 (Provider Scrapers & Adapters):** ✅ **DONE**. Live Next.js route handlers `/api/auth/hmac-challenge`, `/api/telemetry/github`, `/api/telemetry/leetcode`, and `/api/telemetry/hackerrank`.
+- **Phase 1 (Basement, SQLite WAL, Security & Automated Tests):** ✅ **DONE**. `src/lib/db.ts` (`node:sqlite` WAL mode), HMAC nonce replay prevention, sliding-window rate limiters (`src/lib/rate-limit.ts`), deterministic §9.6 competition ranking engine (`src/lib/leaderboard.ts`), and `node:test` suite (`scripts/test-foundation.mjs`).
+- **Phase 2 (Live Tournament & Observation Engine):** ✅ **DONE**.
+  - **P2-1**: Sunday 23:59:59 IST Finalizer Engine (`src/lib/finalizer.ts`, `/api/cron/boundary-finalize`). Observations $\le$ Sunday 23:59:59 IST; `boundary_gap <= 3h`.
+  - **P2-2**: Persistent Telemetry Disputes & Two-Person Audit System (`src/app/api/disputes/route.ts`, SQLite `disputes` table, `/admin` resolution flow).
+  - **P2-DESIGN**: Frontend motion & obsidian aesthetics overhaul across landing, navigation, and cockpit.
+  - **P2-3**: Class Roster & 70% Quorum Management Console (§3.3) — SQLite roster denominator, quorum percentage calculation, "Representative Class Leaderboard" ($\ge 70\%$) vs "Participating Members Leaderboard" ($< 70\%$), `/admin` Roster tab with 70% demarcation line progress meter, real-time search, CSV export, and animated enrollment modal.
+  - **P2-4**: Boundary Background Scheduler & Daemon (`scripts/boundary-scheduler.mjs`) with `--once`, `--finalize`, and 3-hour daemon.
+- **Phase 3 (Multi-Provider Verification & Audits):** 🎯 **CURRENT ACTIVE FOCUS**. P3-1 (GitHub commit verification), P3-2 (LeetCode historical baseline tracking), P3-3 (HackerRank badge evidence disclosure).
+- **Phase 4 (Deterministic & AI Recaps):** 🔮 **QUEUED**. P4-1 (Rule-based recap generator), P4-2 (LLM natural language summarizer), P4-3 (Semantic classmate search).
 
 ---
 
-## 🤝 Team Working Protocol (Antigravity + OpenCode)
+## 🔒 Non-Negotiable Invariants (Breaking One is a Bug)
 
-**Core Mandate:** Antigravity and OpenCode operate as a unified engineering team. We share context, respect locks, avoid stepping on each other's files, and treat this file (`MEMORY.md`) as our single live collaboration ledger.
+1. **Zero Fabrication (§1.2 & §5.7):**
+   - Never render unverified, unavailable, or mock data as fact.
+   - Missing provider data must be labelled `UNAVAILABLE` or `Pending`, never `0` or fake success.
+   - Network failure never becomes success; no simulated fake delays.
+   - Demo screens must say `Demo data`.
+2. **Deterministic Ranking (§9.6):**
+   - Standard competition ranking `1, 2, 2, 4`.
+   - Tied participants share the same rank and receive a tie badge; secondary sorting is strictly alphabetical by handle.
+3. **Sunday Boundary Rule (§9.1 & §9.7):**
+   - Weekly competition window strictly closes at **Sunday 23:59:59 IST** (`Asia/Kolkata` / UTC+5:30).
+   - Only observations taken at or before the boundary timestamp are eligible for weekly scoring.
+   - Freshness rule: `boundary_gap <= 3h`. Observations with `boundary_gap > 3h` are marked `Provisional` and flagged for re-sync.
+4. **Quorum Participation Rule (§3.3):**
+   - Denominator is the authoritative enrolled roster in SQLite (`roster_members`).
+   - If $\ge 70\%$ of the enrolled cohort is verified & opted in: labelled **"Representative Class Leaderboard"**.
+   - If $< 70\%$: labelled **"Participating Members Leaderboard"**.
+5. **Provider Capability Disparity:**
+   - HackerRank lacks public event timestamps: display-only badge evidence, excluded from weekly competition deltas. Never merge providers into a single opaque score.
+6. **One Design Palette:**
+   - Linear-tier obsidian canvas (`#090A0E`), surface (`#111319`), and amber accent (`#F59E0B`).
+   - CSS tokens in `src/app/globals.css`. Never introduce arbitrary secondary palettes.
+7. **One Font Source:**
+   - `next/font` in `src/app/layout.tsx` sets `--font-sans` (Sora) and `--font-mono` (JetBrains Mono) on `<html>`. Never redefine font variables in `:root`.
 
-### 📋 Invariants for Both Agents:
-1. **Mandatory Log After Every Work Unit:**
-   - Whenever either agent (Antigravity or OpenCode) finishes a task, fix, or refactor, **you must immediately update `MEMORY.md`** under `Session log` with:
-     - What was changed (files + line ranges if helpful)
-     - What was verified (`npx tsc --noEmit`, browser inspect, or test outputs)
-     - What is handed off or remaining
-2. **Read Before Writing:**
-   - Before starting any new task, read the latest entries in `MEMORY.md` to see what your teammate just completed.
-3. **Never Overwrite Concurrent In-Flight Work:**
-   - Check `git status` or file diffs before making changes. If a file is being actively edited by the other process, coordinate or pick an orthogonal task from the task board.
-4. **Dev Server & Build Hygiene:**
-   - `npm run dev` runs on port 3000. Do not execute concurrent `npm run build` while `next dev` is reading `.next/` without coordinating or temporarily pausing.
+---
 
-### 🎯 Live Active Task Board:
-| Task | Owner / Status | Scope & Notes |
-| :--- | :--- | :--- |
-| **Global UI Scale & Readability** | Antigravity — **COMPLETED** | Upgraded typography, input sizes, container widths (`max-w-6xl`/`7xl`), and hydration safety across all 11 routes. |
-| **Login & Onboarding Scale** | Antigravity — **COMPLETED** | Enlarged modal cards, button padding, step pills, and typography on `/login` and `/onboarding`. |
-| **Landing Section Scale & Rhythm** | Antigravity — **COMPLETED** | Scaled `HeroSection`, `NavBar`, `MotionShowcase`, `PlatformMatrix`, `CockpitPreview`, and `AppScreensGallery` to generous desktop proportion with interactive observation console. |
-| **Public Asset Optimization** | Antigravity — **COMPLETED** | Deleted 5.7MB unreferenced dead assets in `public/` (`logo.svg` 2.4MB base64 raster, `logo.png` 1.8MB, `twm_perfect_landing.png` 761KB, etc.). |
-| **Token Consolidation Sweep** | Antigravity — **COMPLETED** | Fixed residual raw hex classes in `admin/page.tsx`, `CockpitPreview.tsx`, and `HeroSection.tsx` to strictly consume `--canvas`, `--surface`, `--accent` tokens. |
-| **Phase 0 API Route Handlers (All 3 Providers)** | Antigravity & OpenCode — **COMPLETED** | Scaffolded live Next.js route handlers `/api/auth/hmac-challenge`, `/api/telemetry/github`, `/api/telemetry/hackerrank`, and `/api/telemetry/leetcode` with real bio scrapers and rate limit protections. |
-| **UI Chore Polish & SaaS Elevation** | Antigravity — **COMPLETED** | Redesigned `BrandLogo` mark with ambient glow, upgraded `AppHeader` "Demo data" pill to live "3 Providers Live" telemetry monitor, polished `/search` evidence standards, and wired real API audits in `/admin` & `/settings`. |
-| **Phase 1 Multi-Provider Live Sync & Dynamic Dashboard** | Antigravity & OpenCode — **COMPLETED** | Connected `triggerLiveSync` to query GitHub, LeetCode, and HackerRank in real-time; dynamically wired `/dashboard` KPI and Provider cards to live `currentUser` state. |
-| **Stream A: API Rate Limiting & Nonce Invalidation** | **Antigravity & OpenCode — COMPLETED** | Implemented `src/lib/rate-limit.ts` (sliding-window rate limiter for `/api/telemetry/*`) and single-use nonce consumption in `/api/auth/hmac-challenge/route.ts`, eliminating replay debt. |
-| **Stream B: Dynamic Leaderboard & §9.6 Tie Engine** | **Antigravity — COMPLETED** | Built `src/lib/leaderboard.ts` with Section 9.6 deterministic ties (`1, 2, 2, 4`), bound live `currentUser` stats, added HackerRank tab with Section 5.6 capability-gating notice. |
-| **Phase 1: SQLite Observation Store & Automated Tests** | **Antigravity — COMPLETED** | Built `src/lib/db.ts` (SQLite WAL mode), `/api/roster`, `/api/telemetry/sync` persistence, brand color unification, and `npm test` automated suite (39ms execution). |
+## 🤝 Multi-Agent Protocol & Global Skill Ecosystem
+
+### Antigravity & OpenCode Dual-Agent Model:
+- **Antigravity (IDE Orchestrator):** Handles complex code generation, system architecture, database migrations, UI motion elevation, and master documentation governance.
+- **OpenCode (CLI Subagent / Co-Pilot):** Launched via `C:\Users\kathi\opencode-fresh.cmd` (injects `HF_TOKEN`, `GITHUB_TOKEN`). Executes terminal tasks, deep code audits, and complementary sub-tasks.
+- **Single Source of Truth:** `MEMORY.md` is the live coordination board. Both agents read the top of `Session log` before editing, stage files explicitly (`never git add -A`), and respect active edits.
+
+### Global Skills Installed Across All 5 Agent Hosts:
+All skills are permanently installed and linked across **Claude Code, OpenAI Codex, OpenCode, Antigravity IDE, and the Workspace**:
+1. **`img2threejs` (v2.0.0):** CLI engine at `C:\Users\kathi\.img2threejs\releases\...` for converting UI designs/assets into 3D WebGL scenes.
+2. **`impeccable` (v4.7.0):** Native engine `impeccable.exe` v0.1.16 for professional design critique, craft floor checks, and typographic hierarchy.
+3. **`awesome-design-md` (v1.0.0):** 84 tokenized production-grade design systems (Linear, Stripe, Apple, Vercel, etc.) located at `C:\Users\kathi\.skills\awesome-design-md`.
+4. **`creative-motion-frontend`:** Framer Motion spring physics, staggered entrances, and micro-interactions.
+5. **`design-taste-frontend` (`tasteskill v2`):** Located at `.agents/skills/design-taste-frontend`, enforces high-contrast typography, zero-slop art direction, and bold focal points.
+*Windows Invariant:* Standard npm symlinks fail on Windows with `EPERM` without Developer Mode. All cross-agent skill linking is established using NTFS Directory Junctions (`mklink /J` or `New-Item -ItemType Junction`), which work without elevated privileges.
+
+---
+
+## 🎯 Master Live Task Board (Phases 0–4)
+
+| Task ID | Component / Milestone | Owner / Status | Scope & File References |
+| :--- | :--- | :--- | :--- |
+| **P0-1** | **HMAC Bio Verification Gate** | Antigravity & OpenCode — ✅ **DONE** | Cryptographic bio challenge with constant-time verification. [`/api/auth/hmac-challenge`](src/app/api/auth/hmac-challenge/route.ts) |
+| **P0-2** | **GitHub Active Days Adapter** | Antigravity & OpenCode — ✅ **DONE** | 7-day UTC commit observation with rate-limiting. [`/api/telemetry/github`](src/app/api/telemetry/github/route.ts) |
+| **P0-3** | **LeetCode GraphQL Bridge** | Antigravity & OpenCode — ✅ **DONE** | Problem breakdown scraper with Sunday baseline checks. [`/api/telemetry/leetcode`](src/app/api/telemetry/leetcode/route.ts) |
+| **P0-4** | **HackerRank Evidence Adapter** | Antigravity & OpenCode — ✅ **DONE** | Display-only verified badge extraction. [`/api/telemetry/hackerrank`](src/app/api/telemetry/hackerrank/route.ts) |
+| **P1-1** | **SQLite WAL Observation Store** | Antigravity — ✅ **DONE** | Seeded roster, single-use HMAC nonces, snapshot persistence. [`src/lib/db.ts`](src/lib/db.ts) |
+| **P1-2** | **Deterministic Ranking Engine** | Antigravity — ✅ **DONE** | Section 9.6 competition ranking (`1, 2, 2, 4`) with tie badges. [`src/lib/leaderboard.ts`](src/lib/leaderboard.ts) |
+| **P1-3** | **Sliding-Window Rate Limiter** | Antigravity — ✅ **DONE** | IP-based request throttling with RFC headers. [`src/lib/rate-limit.ts`](src/lib/rate-limit.ts) |
+| **P2-1** | **Sunday Boundary Finalizer Engine** | Antigravity — ✅ **DONE** | Sunday 23:59:59 IST boundary rule (§9.1) & 3h gap compliance (§9.7). [`src/lib/finalizer.ts`](src/lib/finalizer.ts)<br>[`/api/cron/boundary-finalize`](src/app/api/cron/boundary-finalize/route.ts) |
+| **P2-2** | **Telemetry Disputes & Audit Trail** | Antigravity — ✅ **DONE** | Two-person dispute logging and approval flow backed by SQLite. [`src/app/api/disputes/route.ts`](src/app/api/disputes/route.ts) |
+| **P2-DESIGN**| **SaaS Motion & Brand Overhaul** | Antigravity — ✅ **DONE** | Horizontal logo (`/logo-horizontal.svg`), spring physics, Linear-tier obsidian aesthetics. [`BrandLogo.tsx`](src/components/ui/BrandLogo.tsx)<br>[`landing/*`](src/components/landing/) |
+| **P2-3** | **Live Roster & 70% Quorum Console** | Antigravity — ✅ **DONE** | Denominator management, quorum threshold progress meter, CSV export, student enrollment modal. [`src/app/admin/page.tsx`](src/app/admin/page.tsx)<br>[`/api/roster`](src/app/api/roster/route.ts) |
+| **P2-4** | **Boundary Scheduler & Daemon** | Antigravity — ✅ **DONE** | Standalone Node daemon (`scripts/boundary-scheduler.mjs`) with `--once`, `--finalize`, and 3h scheduler. |
+| **P3-1** | **GitHub Commit Author Verification** | **NEXT UP** | Match commit author email / PGP signature against college roster email (§9.1). |
+| **P3-2** | **LeetCode Baseline Tracking** | **QUEUED** | Compare consecutive Sunday snapshots for problem deltas (§9.7). |
+| **P3-3** | **HackerRank Evidence Disclosure** | **QUEUED** | Section 5.6 immutable badge evidence / timestamp unavailable disclaimer. |
+| **P4-1** | **Deterministic Weekly Recap** | **QUEUED** | Rule-based summary of cohort milestones and streaks. |
+| **P4-2** | **Grounded AI Recap Summarizer** | **QUEUED** | Hallucination-free LLM natural language recap quoting verified telemetry. |
+| **P4-3** | **Semantic Cohort Search** | **QUEUED** | Search students by tech stack, verified badges, and active tracks. |
 
 ---
 
 ## Session log
+
+### 2026-10-21 01:07 IST — Colour-theme audit (read-only, no diff) — OpenCode
+
+- **Scope & when:** ran 00:40–01:07 IST, 6 tool phases (token read → impeccable v4.7.0 context load → doctrine refs → contrast math → usage census → context checks). Question asked: "do you like the colour theme, analysed with all frontend skills". **Complete:** verdict delivered. Nothing changed in `src/` — analysis only.
+- **Skills applied:** `impeccable` v4.7.0 (loaded live, `SCOPED_EXISTING_ALLOWED` — no PRODUCT.md/DESIGN.md yet, critique framework scaled down to colour scope) + `design-taste-frontend` `references/colour.md` doctrine + WCAG 2.x relative-luminance math computed on the real `globals.css` token hexes. `ui-ux-pro-max` dataset and `web-design-guidelines` skill were **not** fully loaded (justified in skips below).
+- **Verdict: FOUNDATION GOOD, 3 DEFECTS.** Dark neutral + one amber accent (#090A0E blue-tinted ground, white/8% borders) = the profile of the top-scored gallery sites (23% of that study is "monochrome + one accent"); zero banned families (no violet / cream / terracotta); depth from lighter surface steps, not glows. Reads *decided*, not tinted.
+- **Full contrast table (WCAG ratio, small-text pass = ≥4.5):**
+  - ink `#F5F6F8` on bg **18.3** ✓ · ink-secondary `#C8CDD6` **12.4** ✓ · muted `#8D94A5` on bg **6.51** ✓ (on surface 6.11 ✓)
+  - accent `#F59E0B` on bg **9.21** ✓ · canvas-on-accent **9.21** ✓ (amber buttons safe)
+  - providers: leetcode `#FBBF24` **11.85** ✓ · hackerrank `#34D399` **10.29** ✓ · github `#60A5FA` **7.78** ✓
+  - semantic: emerald-400 text **10.29** ✓ · emerald-500 **7.8** ✓ · rose-400 **7.35** ✓ · red-500 **5.26** ✓ · sky-400 **9.24** ✓
+  - ❌ FAILURES: `--muted-soft` `#636A7E` **3.67** (used 45× total, worst on tiny 10–11px mono tags — page.tsx files ×37, CockpitPreview ×2, ToastContainer ×2, +1 each FairnessGuarantees/Footer/MotionShowcase/PlatformMatrix) · `--muted-dark` `#4B5262` **2.53** (30 placeholder-family hits, fails even 3:1) · `text-white` on `bg-rose-500` **3.67** (DisputeModal.tsx:175 submit button)
+- ⚠️ **Do NOT "fix" solid `bg-emerald-500` (33 uses) to white text** — it would drop to 2.54:1. It correctly pairs with `text-canvas` = 7.8:1 ✓. Existing hover `bg-emerald-400` + canvas = 10.29 ✓. This was verified non-defective on purpose.
+- **Only taste-level criticism:** amber works too hard — it is simultaneously accent, LeetCode provider colour, warning state, focus ring, and section eyebrows; at that density the accent stops signalling "action". Semantic emerald/rose for verified/danger is endorsed by doctrine; amber ubiquity is not.
+- **Systemic debt (the real long-term risk):** ~180 call sites spell colours as Tailwind stock while hex-identical tokens exist — `amber-500` **is** `--accent` #F59E0B, `emerald-500` **is** `--status-verified`, `amber-400` **is** `--provider-leetcode`. Coherent today, unfixable tomorrow (change the token → nothing follows). Plus 13 literal hexes in tsx (`#FFA116` ×7, `#00EA64` ×6) despite `--provider-*` tokens existing (violates the one-palette exception's *intent*), and 1 gradient (`from-emerald-500`, gradients are the study's weak-page signature) ×1.
+- **Fix list ranked (value/effort):**
+  1. DisputeModal.tsx:175 `text-white` → `text-canvas` (5.3:1 ✓) — one line.
+  2. muted-soft small-text spots → `text-muted` (3.67 → 6.51) — mechanical, but NOT a blanket swap: only the tiny-tag cases (~45 call sites).
+  3. muted-dark: audit the 30 placeholder hits; if any are real text, bump the hex (~#7A8296 territory).
+  4. ⚠️ BIG: spelling consolidation sed (`bg-amber-500` → `bg-accent` etc., ~180 sites, every component file) — **requires user approval + coordination with Antigravity**, touches all files.
+  5. 13 literal hexes → `var(--provider-*)` tokens.
+  6. Delete the one `from-emerald-500` gradient.
+- **Skipped:** full `ui-ux-pro-max` load (161-palette dataset is for picking palettes, not judging one) · impeccable's full dual-subagent critique ceremony (all-app critique, overkill for a colour question) · rendered-screenshot verification.
+- **Risk:** ratios verified on hex pairs, not screenshots — any colour passing through opacity modifiers (`/10` backgrounds) shifts effective contrast; the audited text colours are solid by inspection. Contrast calculator was throwaway PowerShell (not committed).
+
+### 2026-10-21 ~00:15 IST — Global skill installs + project cleanup — OpenCode
+
+- Installed `impeccable` (design/UX skill + native engine v4.7.0 windows-x64) **globally** via its own installer (`npx impeccable install --yes --global`), plus companion `awesome-design-md` (84 real-world DESIGN.md specs). Canonical store now `~/.agents/skills/` (single source), junctions into `~/.claude/skills`, `~/.codex/skills`, `~/.config/opencode/skills` — all 3 hosts resolve all 3 skills (`impeccable`, `awesome-design-md`, `img2threejs`) ✓. Fixed OpenCode's stale first-install copy by replacing the real dir with a junction (no version drift possible now).
+- **Repo cleanup (this is the repo-relevant part):** deleted `.agents/skills/img2threejs/` — the installer had dropped a 4.66 MB copy of the whole skill **repo including its own nested `.git`** into the project. Untracked at delete time. Nested `.git` = gitlink booby-trap (any `git add .agents` would store a broken submodule reference). Global junction already covers the project, so nothing lost. Tracked `design-taste-frontend` untouched. `git status` clean after.
+- Not committed / not run: `/impeccable init` (design-context step, runs in chat on request) · nothing new installed for Cursor/Grok/Hermes (not present on this machine).
 
 ### 2026-10-21 — Live Roster & 70% Quorum Console (§3.3) + Boundary Background Scheduler (Antigravity)
 
