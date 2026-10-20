@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TWM 3.0 — Track. Win. Maintain. | Class Developer Activity Platform",
+  title: "TWM 3.1 — Track. Win. Maintain. | Class Developer Activity Platform",
   description: "A class-focused multi-platform developer activity and friendly competition platform. Connect your GitHub, LeetCode, and HackerRank profiles to track verified progress.",
   icons: {
     icon: [

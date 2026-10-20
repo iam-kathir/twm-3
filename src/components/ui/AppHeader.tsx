@@ -59,8 +59,8 @@ export function AppHeader() {
     <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-canvas/95 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Brand & Navigation */}
-        <div className="flex items-center gap-8">
-          <BrandLogo size="lg" showLivePulse={true} href="/" />
+        <div className="flex items-center gap-6 lg:gap-8">
+          <BrandLogo variant="horizontal" size="md" showLivePulse={true} href="/" />
 
           {/* Three adapters exist, but the accounts and figures on these screens are still
               illustrative. Claiming "live" here would break the ground rule. */}
