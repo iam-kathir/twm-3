@@ -62,16 +62,16 @@ export function AppHeader() {
         <div className="flex items-center gap-8">
           <BrandLogo size="lg" showLivePulse={true} href="/" />
 
-          {/* Live Telemetry Engine status indicator */}
+          {/* Three adapters exist, but the accounts and figures on these screens are still
+              illustrative. Claiming "live" here would break the ground rule. */}
           <div
-            title="Telemetry Engine: GitHub (Live UTC), LeetCode (Sunday Snapshot), HackerRank (Capability Gated)"
-            className="hidden xl:inline-flex items-center gap-2 rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-3 py-1.5 font-mono text-xs text-emerald-400 shadow-sm cursor-help transition-all hover:bg-emerald-500/15"
+            title="Three provider adapters are wired (GitHub, LeetCode, HackerRank). The accounts and figures shown on these screens are illustrative until a student links one."
+            className="hidden xl:inline-flex items-center gap-2 rounded-xl border border-accent/25 bg-accent/10 px-3 py-1.5 font-mono text-xs text-accent shadow-sm cursor-help transition-all hover:bg-accent/15"
           >
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
             </span>
-            <span className="font-semibold tracking-wide">3 Providers Live</span>
+            <span className="font-semibold tracking-wide">Demo data · 3 adapters wired</span>
           </div>
 
           <nav className="hidden md:flex items-center gap-2">
@@ -217,7 +217,7 @@ export function AppHeader() {
         <div className="md:hidden px-4 pt-2 pb-4 border-t border-white/[0.08] bg-canvas space-y-1">
           <div className="px-3 pb-2">
             <span className="inline-flex items-center gap-1.5 rounded-md border border-accent/25 bg-accent/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-accent">
-              Demo data — no provider connected
+              Demo data — 3 adapters wired, no account linked
             </span>
           </div>
           {navLinks.map((link) => (

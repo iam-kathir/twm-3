@@ -64,6 +64,52 @@ adapters. The plan's Phase 0 (provider evidence) has not started.
 
 ## Session log
 
+### 2026-10-20 — Ownership proof was fake; now it verifies (OpenCode)
+
+**The bug that mattered:** `/api/auth/hmac-challenge` reported `verified: true` for anyone.
+Four separate reasons:
+
+1. `verifyChallengeInProfile()` never checked the HMAC signature — it only asked whether the
+   token string appeared in a text blob. The `sig` generated at create time was compared to nothing.
+2. That text blob (`profileText`) came from the **request body**, so the caller supplied its own
+   evidence. `onboarding/page.tsx` built it client-side:
+   `` `Full stack student developer. ${challengeCode}` `` → could not fail.
+3. Expiry was stored but never enforced at verify time.
+4. `catch { setLeetCodeVerified(true) }` — a network error counted as proof of ownership.
+
+**Fixed:**
+
+- Token now carries its own payload: `twm-verify-<expiresAt base36>-<nonce hex>-<sig hex>`
+  where `sig = HMAC-SHA256(userId:provider:handleLower:nonce:expiresAt)`. Stateless — no DB needed.
+- Verify order: parse → check expiry → `timingSafeEqual` signature → **only then** fetch the bio.
+  A forged or stale token never triggers a provider request.
+- The bio is fetched **server-side** (`leetcode.com/graphql` `profile.aboutMe` /
+  `hackerrank .../profile` `model.about`). `profileText` is gone from the request type and ignored
+  if a client still sends it.
+- Onboarding: no fabricated bio, no `catch → verified`; failures render a `role="alert"` message
+  with the real reason. Settings adapter test now sends the real field names
+  (`userId`/`handle`, reads `challengeCode`) instead of `studentRoll`/`challengeString` (always 400).
+- Production fails closed: unset `TWM_HMAC_SECRET` throws instead of falling back to the committed
+  dev secret. 500 responses no longer echo `error.message`.
+
+**Verified** (live `next dev`, 6 cases): create `200`; tampered sig `400 SIGNATURE_MISMATCH`;
+same token + different handle `400 SIGNATURE_MISMATCH`; expired token with a *valid* signature
+`400 TOKEN_EXPIRED`; valid token → `422 NO_PUBLIC_BIO`, which proves the server actually fetched
+the provider instead of trusting the caller; `profileText` containing the token still rejected.
+
+Also reverted the header's `3 Providers Live` pill to `Demo data · 3 adapters wired`. Three
+adapters existing is not the same as three accounts being linked, and the mobile drawer on the
+same component already said "no provider connected" — the two contradicted each other.
+
+**Still open:** no rate limiting or auth on any `/api/*` route (anyone can burn the server-side
+`GITHUB_TOKEN`); tokens are replayable inside their 15-min TTL (no nonce store); the rest of the
+app is still mock data with real fetches layered on top; `MEMORY.md` line 58's claim of "real bio
+scrapers" was written before they were real.
+
+⚠️ Commit `119167c` ("wire live 3-provider sync") contains this HMAC fix because the other process
+ran `git add -A` mid-session. The code is correct; the message does not describe it. Third time a
+broad `git add` has mislabelled shared history — stage files explicitly from now on.
+
 ### 2026-10-20 — Phase 1 Multi-Provider Live Sync & Dynamic Dashboard Integration
 **Completed by:** Antigravity & OpenCode (Joint Stream)
 - **Multi-Provider Live Sync (`src/context/AppContext.tsx`):**
