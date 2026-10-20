@@ -67,6 +67,28 @@ adapters. The plan's Phase 0 (provider evidence) has not started.
 
 ## Session log
 
+### 2026-10-21 — Frontend Motion, Typography & SaaS Aesthetics Overhaul (Antigravity)
+
+- **Skills Enabled & Integrated**:
+  - `creative-motion-frontend`: Framer Motion spring physics (`stiffness: 120-400, damping: 18-30`), staggered entrance variants, AnimatePresence mode transitions.
+  - `design-taste-frontend` (`tasteskill v2`): Enforced no-slop art direction, high-contrast typography, honest focal points, and asymmetric layout balance.
+  - `awesome-design-md`: Linear-tier obsidian aesthetic (`#090A0E` canvas, `#111319` surface), hairline borders (`border-white/10`), ambient radial spotlights (`from-accent/0.08 to-transparent`).
+  - `impeccable`: Craft floor pass, eliminated residual visual artifacts, perfected responsive padding and contrast hierarchy.
+- **Brand Identity & Horizontal Logo Integration**:
+  - Upgraded `BrandLogo.tsx`: Direct integration with `/logo-horizontal.svg` for `variant="horizontal"`, hover micro-scale, glowing halo, and live pulse status badge.
+  - Upgraded `variant="mark"` using `/icon.svg` with bevelled obsidian backplate, amber glow, and unified "TWM 3.1" + "Track. Win. Maintain." typography.
+  - Integrated `variant="horizontal"` directly in `NavBar.tsx`, `AppHeader.tsx`, and `Footer.tsx`.
+- **Motion & Component Polish**:
+  - `NavBar.tsx`: Floating glass obsidian bar (`backdrop-blur-2xl bg-surface/80`), spring entrance, micro-animations on nav links and CTA.
+  - `HeroSection.tsx`: Authoritative headline with dual-tone gradient ink, staggered entrance, ambient lighting, and interactive class code gate.
+  - `CockpitPreview.tsx`: Framer Motion cards with spring hover lift, animated AI vs Deterministic recap switcher (`AnimatePresence`), and live active days visual squares.
+  - `PlatformMatrix.tsx`: Provider adapters wrapped in interactive motion cards with brand icons (GitHub, LeetCode, HackerRank).
+  - `Footer.tsx`: Polished brand alignment, trademark, IST boundary notice, and structured navigation.
+- **Verification & Gates**:
+  - `npm test`: Exits 0 (all 7 foundation suites pass in ~25ms).
+  - `npx tsc --noEmit`: Exits 0 (0 errors, clean).
+  - Git commit: Tracked changes committed cleanly (`0419597`).
+
 ### 2026-10-21 — Agent entry point + `npm test` unblocked (OpenCode)
 
 **`.agents/` had a skill folder and a workflow file but nothing told a new agent where to look.**
