@@ -39,9 +39,9 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 ```
 [ Phase 0: Scaffolding & Adapters ] ─────────────────────────► COMPLETED (100%)
 [ Phase 1: Foundation & "Basement" Architecture ] ──────────► COMPLETED (100%)
-[ Phase 2: Live Tournament & Observation Engine ] ──────────► IN PROGRESS (Next Up)
-[ Phase 3: Multi-Provider Verification & Audits ] ──────────► QUEUED
-[ Phase 4: Deterministic & AI Recaps ] ─────────────────────► QUEUED
+[ Phase 2: Live Tournament & Observation Engine ] ──────────► COMPLETED (100%)
+[ Phase 3: Multi-Provider Verification & Audits ] ──────────► COMPLETED (100%)
+[ Phase 4: Deterministic & AI Recaps ] ─────────────────────► IN PROGRESS (Next Up)
 ```
 
 ---
@@ -75,7 +75,7 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 
 ---
 
-## 🎯 Phase 2: Live Tournament & Observation Engine (IN PROGRESS)
+## ✅ Phase 2: Live Tournament & Observation Engine (COMPLETED)
 
 | Task ID | Task Description | Scope & Requirements | Target Files | Owner / Status |
 | :--- | :--- | :--- | :--- | :--- |
@@ -84,20 +84,19 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 | **P2-3** | **Live Roster & 70% Quorum Management Console (§3.3)** | Upgrade `/admin` roster tab to load live from `/api/roster`. Add classmate registration form and dynamic quorum calculation. | [`src/app/admin/page.tsx`](src/app/admin/page.tsx)<br>[`src/app/api/roster/route.ts`](src/app/api/roster/route.ts)<br>[`src/lib/db.ts`](src/lib/db.ts) | ✅ **DONE** |
 | **P2-4** | **Scheduled Cron Background Worker Script** | Background script / scheduled runner to automatically poll providers every 3 hours and execute pre-boundary snapshot at Sunday 23:45 IST. | [`scripts/boundary-scheduler.mjs`](scripts/boundary-scheduler.mjs) | ✅ **DONE** |
 
+---
+
+## ✅ Phase 3: Multi-Provider Verification & Audits (COMPLETED)
+
+| Task ID | Task Description | Scope & Requirements | Target Files | Owner / Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **P3-1** | **GitHub Commit Verification & Author Matching** | Verify commits in tracked repositories match student's verified college roster email or GitHub login; anti-gaming audit metrics. | [`src/app/api/telemetry/github/route.ts`](src/app/api/telemetry/github/route.ts) | ✅ **DONE** |
+| **P3-2** | **LeetCode GraphQL Historical Baseline Tracking** | Compare consecutive Sunday baseline snapshots to detect problem category deltas (easy, medium, hard). Honest `NO_PRIOR_SUNDAY_BASELINE` fallback. | [`src/lib/baseline.ts`](src/lib/baseline.ts)<br>[`src/app/api/telemetry/leetcode/route.ts`](src/app/api/telemetry/leetcode/route.ts) | ✅ **DONE** |
+| **P3-3** | **HackerRank Audit & Badge Verification Evidence** | Display immutable SHA-256 cryptographic proof digest (`hr-proof-...`) and explicit Section 5.6 display-only disclosure in table view. | [`src/app/api/telemetry/hackerrank/route.ts`](src/app/api/telemetry/hackerrank/route.ts)<br>[`src/app/leaderboard/page.tsx`](src/app/leaderboard/page.tsx) | ✅ **DONE** |
 
 ---
 
-## 🔮 Phase 3: Multi-Provider Verification & Audits (QUEUED)
-
-| Task ID | Task Description | Scope & Requirements |
-| :--- | :--- | :--- |
-| **P3-1** | **GitHub Commit Verification & Author Matching** | Verify commits in tracked repositories match student's verified email / PGP signature to prevent false-attribution. |
-| **P3-2** | **LeetCode GraphQL Historical Baseline Tracking** | Compare consecutive Sunday baseline snapshots to detect problem category deltas (easy, medium, hard). |
-| **P3-3** | **HackerRank Audit & Badge Verification Evidence** | Display immutable badge timestamp metadata or explicit "Timestamp unavailable - display only" disclosure. |
-
----
-
-## 🤖 Phase 4: Deterministic & AI Recaps (QUEUED)
+## 🤖 Phase 4: Deterministic & AI Recaps (IN PROGRESS)
 
 | Task ID | Task Description | Scope & Requirements |
 | :--- | :--- | :--- |
@@ -115,12 +114,12 @@ WCAG math on the real `globals.css` token pairs. Foundation verdict: **GOOD** (d
 
 | Task ID | Fix | Scope | Status |
 | :--- | :--- | :--- | :--- |
-| **QP-1** | DisputeModal.tsx:175 `text-white` → `text-canvas` on `bg-rose-500` (3.67 → 5.3:1) | 1 line | ⏳ QUEUED |
+| **QP-1** | DisputeModal.tsx:175 `text-white` → `text-canvas` on `bg-rose-500` (3.67 → 5.3:1) | 1 line | ✅ **DONE** |
 | **QP-2** | `text-muted-soft` small-text spots → `text-muted` (3.67 → 6.51:1) — stage-tag cases only, NOT a blanket swap | ~45 call sites | ⏳ QUEUED |
 | **QP-3** | Audit 30 `--muted-dark` placeholder hits (2.53:1); bump the hex where any are real (non-placeholder) text | 30 hits, file list in MEMORY.md | ⏳ QUEUED |
 | **QP-4** | ⚠️ Consolidate Tailwind stock spellings to tokens (`bg-amber-500` → `bg-accent`, `text-emerald-400` → status tokens, …) — hex-identical today, so it is a maintainability fix, not a visual one. Requires approval + Antigravity coordination | ~180 sites, every component file | ⏳ QUEUED (blocked on approval) |
-| **QP-5** | 13 literal hexes in tsx (`#FFA116` ×7, `#00EA64` ×6) → `var(--provider-*)` tokens | 2 files | ⏳ QUEUED |
-| **QP-6** | Delete the single `from-emerald-500` gradient (gradient fills are the weak-page signature in the colour study) | 1 site | ⏳ QUEUED |
+| **QP-5** | 13 literal hexes in tsx (`#FFA116` ×7, `#00EA64` ×6) → `var(--provider-*)` tokens | 7 component files | ✅ **DONE** |
+| **QP-6** | Delete the single `from-emerald-500` gradient (gradient fills are the weak-page signature in the colour study) | 1 site in admin page | ✅ **DONE** |
 
 ---
 

@@ -296,7 +296,7 @@ export default function OnboardingPage() {
                 <div className="p-5 sm:p-6 rounded-2xl border border-white/10 bg-surface-raised space-y-4 shadow-sm">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
-                      <Code2 className="h-6 w-6 text-[#FFA116]" />
+                      <Code2 className="h-6 w-6 text-provider-leetcode-brand" />
                       <span className="text-base font-bold text-white">LeetCode Profile</span>
                     </div>
                     {leetCodeVerified ? (
@@ -363,7 +363,7 @@ export default function OnboardingPage() {
                 {/* 3. HackerRank Profile Handle */}
                 <div className="p-5 rounded-2xl border border-white/10 bg-surface-raised flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3.5">
-                    <Award className="h-6 w-6 text-[#00EA64]" />
+                    <Award className="h-6 w-6 text-provider-hackerrank" />
                     <div>
                       <div className="text-base font-bold text-white">HackerRank Handle</div>
                       <div className="text-xs font-mono text-muted mt-0.5">Cumulative Badge Display Only</div>

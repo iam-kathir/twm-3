@@ -732,7 +732,7 @@ export default function AdminHubPage() {
                 <div className="w-full h-3 rounded-full bg-surface-raised border border-white/10 overflow-hidden">
                   <div
                     className={`h-full transition-all duration-500 rounded-full ${
-                      meetsQuorum ? "bg-gradient-to-r from-emerald-500 to-accent" : "bg-gradient-to-r from-amber-600 to-amber-400"
+                      meetsQuorum ? "bg-status-verified" : "bg-accent"
                     }`}
                     style={{ width: `${Math.min(quorumPercentage, 100)}%` }}
                   />

@@ -416,7 +416,7 @@ export default function SearchPage() {
                       <span>{dev.platforms.github.repos} repos</span>
                     </span>
                     <span className="flex items-center space-x-1.5 text-white" title="LeetCode Solved Problems">
-                      <Code2 className="w-4 h-4 text-[#FFA116]" />
+                      <Code2 className="w-4 h-4 text-provider-leetcode-brand" />
                       <span>{dev.platforms.leetcode.solved}</span>
                     </span>
                   </div>
@@ -510,7 +510,7 @@ export default function SearchPage() {
                 </div>
                 <div className="p-3 bg-canvas rounded-xl border border-white/[0.06] text-xs space-y-1">
                   <span className="text-[10px] font-mono text-muted block uppercase">LEETCODE PROBLEMS</span>
-                  <span className="text-sm font-bold text-[#FFA116] font-mono">{selectedDev.platforms.leetcode.solved} Solved</span>
+                  <span className="text-sm font-bold text-provider-leetcode-brand font-mono">{selectedDev.platforms.leetcode.solved} Solved</span>
                   <span className="text-[10px] text-muted block">{selectedDev.platforms.hackerrank.stars}★ HackerRank</span>
                 </div>
               </div>

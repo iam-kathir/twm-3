@@ -172,7 +172,7 @@ export function DisputeModal() {
 
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-mono font-bold transition-all shadow-md active:scale-95"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-canvas text-xs font-mono font-bold transition-all shadow-md active:scale-95"
             >
               <Send className="h-3.5 w-3.5" />
               <span>Submit for Audit Review</span>

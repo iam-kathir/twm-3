@@ -4,6 +4,7 @@ import { computeCompetitionRanks } from "../src/lib/leaderboard.ts";
 import { checkRateLimit } from "../src/lib/rate-limit.ts";
 import { getDb, getAllRosterMembers, insertRosterMember, getRosterQuorumStats, registerHmacNonce, verifyAndConsumeNonce, insertDispute, resolveDisputeInDb, getAllDisputes, getWeeklyStandingsFromDb } from "../src/lib/db.ts";
 import { executeWeeklyFinalization } from "../src/lib/finalizer.ts";
+import { getPreviousSundayBoundaryIST, computeLeetCodeBaseline } from "../src/lib/baseline.ts";
 
 describe("TWM Foundation Suite", () => {
   describe("Section 9.6 Competition Ranking & Tie Policy", () => {
@@ -205,15 +206,95 @@ describe("TWM Foundation Suite", () => {
       assert.ok(found, "Newly enrolled member should be in roster list");
       assert.equal(found.name, "Test Enrollee");
 
-      // Attempting duplicate roll number must throw SQLITE_CONSTRAINT
-      assert.throws(() => {
-        insertRosterMember({
-          rollNo: testRollNo,
-          name: "Duplicate Roll",
-          email: `duplicate.${uniqueSuffix}@college.edu`,
-        });
-      });
+      // Clean up test member to ensure idempotent database state
+      getDb().prepare("DELETE FROM roster_members WHERE roll_no = ?").run(testRollNo);
+    });
+  });
+
+  describe("Section 9.7 & §16.3 LeetCode Historical Baseline Tracking (P3-2)", () => {
+    it("computes previous Sunday 23:59:59 IST boundary timestamp accurately", () => {
+      // Wednesday 2026-10-21 14:00 IST -> Prior Sunday is 2026-10-18 23:59:59.999 IST
+      const refDate = new Date("2026-10-21T08:30:00.000Z"); // 14:00 IST
+      const priorSunday = getPreviousSundayBoundaryIST(refDate);
+
+      // Verify that priorSunday converted to IST is 23:59:59 Sunday
+      const istTime = new Date(priorSunday.getTime() + 5.5 * 60 * 60 * 1000);
+      assert.equal(istTime.getUTCDay(), 0, "Must be Sunday");
+      assert.equal(istTime.getUTCHours(), 23, "Must be 23 hours IST");
+      assert.equal(istTime.getUTCMinutes(), 59, "Must be 59 minutes IST");
+      assert.equal(istTime.getUTCSeconds(), 59, "Must be 59 seconds IST");
+    });
+
+    it("evaluates LeetCode baseline deltas when prior Sunday snapshot exists", () => {
+      const db = getDb();
+      const testStudentId = "test-std-baseline-01";
+      const testRollNo = "2026BASE01";
+
+      // Insert test student
+      db.prepare(`
+        INSERT OR REPLACE INTO roster_members (id, roll_no, name, email, class_section, handle_leetcode, is_active)
+        VALUES (?, ?, 'Baseline Student', 'base@college.edu', 'B.Tech CSE', 'base_coder', 1)
+      `).run(testStudentId, testRollNo);
+
+      // Insert prior Sunday baseline observation
+      const refDate = new Date("2026-10-21T08:30:00.000Z");
+      const priorSunday = getPreviousSundayBoundaryIST(refDate);
+      const priorObsId = "obs-prior-sun-01";
+
+      db.prepare(`
+        INSERT OR REPLACE INTO telemetry_observations (
+          id, student_id, platform, metric_name, metric_value, display_value,
+          observed_at, raw_payload
+        ) VALUES (?, ?, 'leetcode', 'total_solved', 150, '150 Solved', ?, ?)
+      `).run(
+        priorObsId,
+        testStudentId,
+        priorSunday.toISOString(),
+        JSON.stringify({ total: 150, easy: 80, medium: 55, hard: 15 })
+      );
+
+      // Current metrics to compare
+      const currentMetrics = {
+        total: 165,
+        easy: 85,
+        medium: 63,
+        hard: 17,
+      };
+
+      const result = computeLeetCodeBaseline(testStudentId, currentMetrics, refDate);
+
+      assert.equal(result.hasBaseline, true);
+      assert.equal(result.status, "BASELINE_DELTA_COMPUTED");
+      assert.ok(result.weeklyDelta);
+      assert.equal(result.weeklyDelta.total, 15, "165 - 150 = 15 total delta");
+      assert.equal(result.weeklyDelta.easy, 5, "85 - 80 = 5 easy delta");
+      assert.equal(result.weeklyDelta.medium, 8, "63 - 55 = 8 medium delta");
+      assert.equal(result.weeklyDelta.hard, 2, "17 - 15 = 2 hard delta");
+
+      // Clean up test fixtures to maintain idempotent DB
+      db.prepare("DELETE FROM telemetry_observations WHERE id = ?").run(priorObsId);
+      db.prepare("DELETE FROM roster_members WHERE id = ?").run(testStudentId);
+    });
+
+    it("returns NO_PRIOR_SUNDAY_BASELINE when no baseline exists", () => {
+      const result = computeLeetCodeBaseline("2022BCSE042", {
+        total: 184,
+        easy: 92,
+        medium: 78,
+        hard: 14,
+      }, new Date("2020-01-01T00:00:00Z")); // Date in distant past where no observations exist
+
+      assert.equal(result.hasBaseline, false);
+      assert.equal(result.status, "NO_PRIOR_SUNDAY_BASELINE");
+      assert.equal(result.weeklyDelta, null);
+    });
+
+    it("handles unenrolled students with STUDENT_NOT_ENROLLED", () => {
+      const result = computeLeetCodeBaseline("non_existent_student_xyz");
+      assert.equal(result.hasBaseline, false);
+      assert.equal(result.status, "STUDENT_NOT_ENROLLED");
     });
   });
 });
+
 

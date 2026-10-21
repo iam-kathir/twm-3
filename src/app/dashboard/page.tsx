@@ -177,7 +177,7 @@ export default function DashboardPage() {
             <div>
               <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-2.5 text-white font-bold text-base sm:text-lg">
-                  <Code2 className="h-5 w-5 text-[#FFA116]" />
+                  <Code2 className="h-5 w-5 text-provider-leetcode-brand" />
                   <span>LeetCode Telemetry</span>
                 </div>
                 <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-amber-500/10 text-accent border border-amber-500/20 font-semibold">
@@ -226,7 +226,7 @@ export default function DashboardPage() {
             <div>
               <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-2.5 text-white font-bold text-base sm:text-lg">
-                  <Award className="h-5 w-5 text-[#00EA64]" />
+                  <Award className="h-5 w-5 text-provider-hackerrank" />
                   <span>HackerRank Badges</span>
                 </div>
                 <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">

@@ -144,7 +144,7 @@ export function CockpitPreview() {
               <div>
                 <div className="flex items-center justify-between mb-5">
                   <div className="flex items-center gap-2.5 text-ink font-bold text-base sm:text-lg">
-                    <Code2 className="h-5 w-5 text-[#FFA116]" />
+                    <Code2 className="h-5 w-5 text-provider-leetcode-brand" />
                     <span>LeetCode</span>
                   </div>
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-amber-500/10 text-accent border border-amber-500/20">
@@ -196,7 +196,7 @@ export function CockpitPreview() {
               <div>
                 <div className="flex items-center justify-between mb-5">
                   <div className="flex items-center gap-2.5 text-ink font-bold text-base sm:text-lg">
-                    <Award className="h-5 w-5 text-[#00EA64]" />
+                    <Award className="h-5 w-5 text-provider-hackerrank" />
                     <span>HackerRank</span>
                   </div>
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">

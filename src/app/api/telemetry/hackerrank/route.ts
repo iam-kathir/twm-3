@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
+import crypto from "node:crypto";
 
 export const dynamic = "force-dynamic";
 
@@ -124,6 +125,19 @@ export async function GET(req: NextRequest) {
       (b) => b.badge_name.toLowerCase().includes("problem solving") || b.badge_name.toLowerCase().includes("algorithms")
     );
 
+    // Section 5.6 & P3-3: Immutable cryptographic evidence digest for display-only audit
+    const observationTimestamp = new Date().toISOString();
+    const evidencePayload = JSON.stringify({
+      provider: "hackerrank",
+      username: cleanUsername,
+      totalStars,
+      badgesCount: badges.length,
+      problemSolvingStars: problemSolvingBadge ? problemSolvingBadge.stars : 0,
+      badges: badges.map((b) => ({ name: b.badge_name, stars: b.stars })),
+      observedAt: observationTimestamp,
+    });
+    const evidenceHash = `hr-proof-${crypto.createHash("sha256").update(evidencePayload).digest("hex").slice(0, 24)}`;
+
     // Section 5.6 Compliance: HackerRank data is strictly display-only & excluded from weekly delta rankings
     return NextResponse.json(
       {
@@ -141,13 +155,21 @@ export async function GET(req: NextRequest) {
           reason:
             "HackerRank provides cumulative domain badges and stars without deterministic event timestamps. Per Plan Section 5.6, this data is displayed for personal portfolio showcase but strictly excluded from weekly competition deltas.",
         },
+        auditEvidence: {
+          evidenceHash,
+          immutableDisclosure:
+            "Section 5.6 & 10.3: HackerRank public telemetry lacks event timestamps. Badges & stars are verified display-only evidence, permanently excluded from weekly delta rankings.",
+          eligibilityVerdict: "EXCLUDED_FROM_WEEKLY_COMPETITION",
+          verificationStandard: "ZERO_FABRICATION_DISPLAY_ONLY",
+          observedAt: observationTimestamp,
+        },
         metrics: {
           totalStars,
           badgesCount: badges.length,
           problemSolvingStars: problemSolvingBadge ? problemSolvingBadge.stars : 0,
           badges,
         },
-        observationTimestamp: new Date().toISOString(),
+        observationTimestamp,
         freshnessSeconds: 300,
       },
       {

@@ -192,7 +192,7 @@ export function MotionShowcase() {
                   transition={{ duration: 0.25 }}
                   className="w-full max-w-2xl space-y-6 text-center py-4"
                 >
-                  <div className="inline-flex p-4 rounded-2xl bg-[#00EA64]/10 border border-[#00EA64]/20 text-[#00EA64] shadow-md shadow-[#00EA64]/10">
+                  <div className="inline-flex p-4 rounded-2xl bg-provider-hackerrank/10 border border-provider-hackerrank/20 text-provider-hackerrank shadow-md shadow-provider-hackerrank/10">
                     <Award className="h-10 w-10 sm:h-12 sm:w-12" />
                   </div>
                   <div>

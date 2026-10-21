@@ -23,7 +23,7 @@ export function PlatformMatrix() {
     {
       name: "LeetCode",
       icon: Code2,
-      iconColor: "text-[#FFA116]",
+      iconColor: "text-provider-leetcode-brand",
       status: "SUPPORTED_SNAPSHOT",
       statusClass: "bg-amber-500/10 text-accent border-amber-500/20",
       description: "HMAC profile bio challenge verification with cumulative problem-solving snapshots.",
@@ -37,7 +37,7 @@ export function PlatformMatrix() {
     {
       name: "HackerRank",
       icon: Award,
-      iconColor: "text-[#00EA64]",
+      iconColor: "text-provider-hackerrank",
       status: "LIMITED_CAPABILITY",
       statusClass: "bg-amber-500/10 text-amber-400 border-amber-500/20",
       description: "Community profile badges and domain star ratings with honest capability gating.",

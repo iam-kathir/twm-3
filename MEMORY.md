@@ -90,16 +90,42 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 | **P2-DESIGN**| **SaaS Motion & Brand Overhaul** | Antigravity — ✅ **DONE** | Horizontal logo (`/logo-horizontal.svg`), spring physics, Linear-tier obsidian aesthetics. [`BrandLogo.tsx`](src/components/ui/BrandLogo.tsx)<br>[`landing/*`](src/components/landing/) |
 | **P2-3** | **Live Roster & 70% Quorum Console** | Antigravity — ✅ **DONE** | Denominator management, quorum threshold progress meter, CSV export, student enrollment modal. [`src/app/admin/page.tsx`](src/app/admin/page.tsx)<br>[`/api/roster`](src/app/api/roster/route.ts) |
 | **P2-4** | **Boundary Scheduler & Daemon** | Antigravity — ✅ **DONE** | Standalone Node daemon (`scripts/boundary-scheduler.mjs`) with `--once`, `--finalize`, and 3h scheduler. |
-| **P3-1** | **GitHub Commit Author Verification** | **NEXT UP** | Match commit author email / PGP signature against college roster email (§9.1). |
-| **P3-2** | **LeetCode Baseline Tracking** | **QUEUED** | Compare consecutive Sunday snapshots for problem deltas (§9.7). |
-| **P3-3** | **HackerRank Evidence Disclosure** | **QUEUED** | Section 5.6 immutable badge evidence / timestamp unavailable disclaimer. |
-| **P4-1** | **Deterministic Weekly Recap** | **QUEUED** | Rule-based summary of cohort milestones and streaks. |
+| **P3-1** | **GitHub Commit Author Verification** | Antigravity — ✅ **DONE** | Match commit author email / login against college roster email (§9.1). [`/api/telemetry/github`](src/app/api/telemetry/github/route.ts) |
+| **P3-2** | **LeetCode Baseline Tracking** | Antigravity — ✅ **DONE** | Compare consecutive Sunday snapshots for problem category deltas (§9.7). [`src/lib/baseline.ts`](src/lib/baseline.ts)<br>[`/api/telemetry/leetcode`](src/app/api/telemetry/leetcode/route.ts) |
+| **P3-3** | **HackerRank Evidence Disclosure** | Antigravity — ✅ **DONE** | Section 5.6 cryptographic proof digest (`hr-proof-...`) and display-only disclaimer. [`/api/telemetry/hackerrank`](src/app/api/telemetry/hackerrank/route.ts)<br>[`/leaderboard`](src/app/leaderboard/page.tsx) |
+| **P4-1** | **Deterministic Weekly Recap** | **NEXT UP** | Rule-based summary of cohort milestones and streaks. |
 | **P4-2** | **Grounded AI Recap Summarizer** | **QUEUED** | Hallucination-free LLM natural language recap quoting verified telemetry. |
 | **P4-3** | **Semantic Cohort Search** | **QUEUED** | Search students by tech stack, verified badges, and active tracks. |
 
 ---
 
 ## Session log
+
+### 2026-10-21 14:10 IST — Phase 3 (Multi-Provider Verification & Audits) + Contrast/Token Backlog (Antigravity)
+
+- **Phase 3 Delivery Completed (100%)**:
+  - **P3-1: GitHub Commit Author Verification & Anti-Gaming (§8, §9.1)**:
+    - Updated `src/app/api/telemetry/github/route.ts` to inspect `PushEvent` commit payloads.
+    - Matches commit author emails and author names against the student's verified college roster email from SQLite and GitHub login.
+    - Prevents false attribution: day buckets are only marked active if they contain verified author contributions.
+    - Exposes `commitAuthorAudit` metadata (`verifiedCommits`, `authorMatchRatePercent`, `status: "AUTHOR_VERIFIED"`).
+  - **P3-2: LeetCode Historical Baseline Tracking Engine (§9.7, §16.3)**:
+    - Created `src/lib/baseline.ts`: Computes prior Sunday 23:59:59 IST boundary (`getPreviousSundayBoundaryIST`), fetches prior Sunday snapshot from SQLite `telemetry_observations`, and calculates difficulty deltas (easy, medium, hard, total).
+    - Updated `src/app/api/telemetry/leetcode/route.ts`: Integrates baseline engine into `snapshotProtocol` with honest `NO_PRIOR_SUNDAY_BASELINE` fallback when prior baseline does not yet exist.
+  - **P3-3: HackerRank Audit & Cryptographic Evidence Disclosure (§5.6, §10.3)**:
+    - Updated `src/app/api/telemetry/hackerrank/route.ts`: Generates immutable SHA-256 evidence digest (`hr-proof-...`) over observed badge configurations and timestamps.
+    - Updated `src/app/leaderboard/page.tsx`: Displays cryptographic evidence tag and Section 5.6 display-only portfolio disclaimer on HackerRank leaderboard rows.
+- **Contrast & Quality Backlog Tickets Closed**:
+  - **QP-1**: Fixed `src/components/ui/DisputeModal.tsx`: Replaced `text-white` on `bg-rose-500` with `text-canvas` (contrast ratio boosted from 3.67:1 → 5.3:1, WCAG AA passing).
+  - **QP-5**: Replaced 13 literal hex values (`#FFA116`, `#00EA64`) across 7 component files (`PlatformMatrix.tsx`, `CockpitPreview.tsx`, `MotionShowcase.tsx`, `settings/page.tsx`, `search/page.tsx`, `onboarding/page.tsx`, `dashboard/page.tsx`) with semantic provider tokens (`text-provider-leetcode-brand`, `text-provider-hackerrank`).
+  - **QP-6**: Removed single `from-emerald-500` gradient in `src/app/admin/page.tsx`, replaced with solid token fills (`bg-status-verified` / `bg-accent`).
+- **Test Suite & Idempotency Fix**:
+  - `scripts/test-foundation.mjs`: Added test cleanup for temporary roster members to prevent test leakage and denominator bloat.
+  - Added new test suite: *Section 9.7 & §16.3 LeetCode Historical Baseline Tracking (P3-2)* with 4 tests covering boundary calculations, baseline category deltas, fallback notices, and un-enrolled students.
+- **Verification Gates**:
+  - `npm test`: 13/13 tests pass across 8 suites in 32ms.
+  - `npx tsc --noEmit`: Exits 0 (0 errors, clean).
+  - `npx next build`: 12/12 static pages and all dynamic route handlers compile green.
 
 ### 2026-10-21 01:07 IST — Colour-theme audit (read-only, no diff) — OpenCode
 

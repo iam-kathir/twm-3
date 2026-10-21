@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
+import { computeLeetCodeBaseline } from "@/lib/baseline";
 
 export const dynamic = "force-dynamic";
 
@@ -112,8 +113,14 @@ export async function GET(req: NextRequest) {
     const mediumStat = acStats.find((s) => s.difficulty === "Medium") || { count: 0, submissions: 0 };
     const hardStat = acStats.find((s) => s.difficulty === "Hard") || { count: 0, submissions: 0 };
 
-    // Section 9.7 & 16.3: Sunday 23:59:59 IST snapshot boundary policy
-    // In live observation mode without stored DB historical baseline, weekly delta cannot be fabricated
+    // Section 9.7 & 16.3: Sunday 23:59:59 IST snapshot baseline comparison engine
+    const baselineResult = computeLeetCodeBaseline(cleanUsername, {
+      total: allStat.count,
+      easy: easyStat.count,
+      medium: mediumStat.count,
+      hard: hardStat.count,
+    });
+
     return NextResponse.json(
       {
         provider: "leetcode",
@@ -135,9 +142,11 @@ export async function GET(req: NextRequest) {
           mode: "SUNDAY_235959_IST_PRE_BOUNDARY",
           rule: "Plan §9.7 & §16.3: The weekly closing value is the last valid observation taken at or before Sunday 23:59:59 IST. Unlike continuous commit streams, cumulative LeetCode counts are delta-evaluated against verified prior Sunday snapshots.",
           observedAt: new Date().toISOString(),
-          weeklyDelta: null,
-          weeklyDeltaStatus: "NO_PRIOR_SUNDAY_BASELINE",
-          weeklyDeltaNote: "Baseline snapshot will be recorded at the next Sunday 23:59:59 IST boundary.",
+          hasBaseline: baselineResult.hasBaseline,
+          weeklyDelta: baselineResult.weeklyDelta,
+          weeklyDeltaStatus: baselineResult.status,
+          weeklyDeltaNote: baselineResult.notice,
+          baselineSnapshot: baselineResult.baselineSnapshot,
         },
         freshnessSeconds: 300,
       },

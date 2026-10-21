@@ -405,7 +405,7 @@ export default function SettingsPage() {
             <div className="p-8 sm:p-10 rounded-2xl bg-surface border border-white/10 space-y-6 shadow-xl">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <div className="p-3.5 rounded-2xl bg-[#FFA116]/10 border border-[#FFA116]/20 text-[#FFA116]">
+                  <div className="p-3.5 rounded-2xl bg-provider-leetcode-brand/10 border border-provider-leetcode-brand/20 text-provider-leetcode-brand">
                     <Code2 className="h-7 w-7" />
                   </div>
                   <div>
@@ -461,7 +461,7 @@ export default function SettingsPage() {
             <div className="p-8 sm:p-10 rounded-2xl bg-surface border border-white/10 space-y-6 shadow-xl">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <div className="p-3.5 rounded-2xl bg-[#00EA64]/10 border border-[#00EA64]/20 text-[#00EA64]">
+                  <div className="p-3.5 rounded-2xl bg-provider-hackerrank/10 border border-provider-hackerrank/20 text-provider-hackerrank">
                     <Award className="h-7 w-7" />
                   </div>
                   <div>
