@@ -45,7 +45,7 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 [ Phase 1: Foundation & "Basement" Architecture ] ──────────► COMPLETED (100%)
 [ Phase 2: Live Tournament & Observation Engine ] ──────────► COMPLETED (100%)
 [ Phase 3: Multi-Provider Verification & Audits ] ──────────► COMPLETED (100%)
-[ Phase 4: Deterministic & AI Recaps ] ─────────────────────► IN PROGRESS (Next Up)
+[ Phase 4: Deterministic & AI Recaps ] ─────────────────────► COMPLETED (100%)
 ```
 
 ---
@@ -100,14 +100,14 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 
 ---
 
-## 🤖 Phase 4: Deterministic & AI Recaps (IN PROGRESS)
+## 🤖 Phase 4: Deterministic & AI Recaps (COMPLETED)
 
 | Task ID | Task Description | Scope & Requirements | Target Files | Owner / Status |
 | :--- | :--- | :--- | :--- | :--- |
 | **P4-1** | **Deterministic Weekly Recap Generator** | Rule-based engine computing consistency streaks, active days delta, top movers, and quorum status. Zero LLM hallucinations. | [`src/lib/recap.ts`](src/lib/recap.ts)<br>[`src/app/api/recap/route.ts`](src/app/api/recap/route.ts)<br>[`WeeklyRecapCard.tsx`](src/components/dashboard/WeeklyRecapCard.tsx) | **Antigravity (IDE)** — ✅ **DONE** |
 | **P4-1-TEST**| **Recap Test Suite & Daemon Verification** | Unit tests for recap calculations + live verification via CLI test harness. | [`scripts/test-foundation.mjs`](scripts/test-foundation.mjs) | **`agy` (CLI)** & **Antigravity** — ✅ **DONE** |
 | **P4-2** | **AI-Powered Natural Language Performance Summarizer** | Grounded LLM recap quoting verified telemetry without hallucinations or unverified praise. | [`src/lib/ai-recap.ts`](src/lib/ai-recap.ts)<br>[`src/app/api/ai/recap/route.ts`](src/app/api/ai/recap/route.ts) | **Antigravity (IDE)** — ✅ **DONE** |
-| **P4-3** | **Semantic Classmate Search** | Search classmates by technology stack, verified badges, and active tracks. | [`src/app/search/page.tsx`](src/app/search/page.tsx)<br>[`src/lib/search.ts`](src/lib/search.ts) | **Antigravity (IDE)** & **`agy` (CLI)** — ⏳ **QUEUED** |
+| **P4-3** | **Semantic Classmate Search** | Search classmates by technology stack, verified badges, and active tracks. Live SQLite directory with zero mocks. | [`src/app/search/page.tsx`](src/app/search/page.tsx)<br>[`src/lib/search.ts`](src/lib/search.ts)<br>[`/api/search`](src/app/api/search/route.ts) | **Antigravity (IDE)** — ✅ **DONE** |
 | **QP-2** | **Small-Text Contrast Refinement** | `text-muted-soft` small-text spots → `text-muted` (3.67 → 6.51:1) across tags. | Component files | **OpenCode (CLI)** — ⏳ **QUEUED** |
 | **QP-3** | **Placeholder Text Contrast Audit** | Audit 30 `--muted-dark` placeholder hits (2.53:1). | Form components | **OpenCode (CLI)** — ⏳ **QUEUED** |
 

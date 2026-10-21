@@ -7,6 +7,7 @@ import { executeWeeklyFinalization } from "../src/lib/finalizer.ts";
 import { getPreviousSundayBoundaryIST, computeLeetCodeBaseline } from "../src/lib/baseline.ts";
 import { generateDeterministicWeeklyRecap } from "../src/lib/recap.ts";
 import { synthesizeDeterministicGroundedRecap, generateGroundedAIRecap } from "../src/lib/ai-recap.ts";
+import { getCohortDevelopers } from "../src/lib/search.ts";
 
 describe("TWM Foundation Suite", () => {
   describe("Section 9.6 Competition Ranking & Tie Policy", () => {
@@ -372,6 +373,41 @@ describe("TWM Foundation Suite", () => {
       // Check disclosures: HackerRank must be cited as display-only per §5.6
       const hrGrowthArea = aiRecap.honestGrowthAreas.find((g) => g.includes("HackerRank"));
       assert.ok(hrGrowthArea, "HackerRank must be disclosed as display-only per §5.6");
+    });
+  });
+
+  describe("Section 10.3 Semantic Classmate Search & Cohort Directory (P4-3)", () => {
+    it("returns real enrolled cohort members from SQLite database without mocks", () => {
+      const allDevs = getCohortDevelopers();
+      assert.ok(allDevs.length >= 7, "Must contain all enrolled cohort members from SQLite");
+
+      const aarav = allDevs.find((d) => d.rollNo === "2022BCSE042");
+      assert.ok(aarav, "Aarav Sharma must be present in directory");
+      assert.equal(aarav.name, "Aarav Sharma");
+      assert.ok(aarav.tags.length >= 2, "Must contain grounded skill tags");
+      assert.equal(aarav.platforms.hackerrank.isDisplayOnly, true, "HackerRank must be flagged display-only per §5.6");
+    });
+
+    it("filters cohort directory by technology tag and evidence level correctly", () => {
+      // Filter by tag: TypeScript
+      const tsDevs = getCohortDevelopers({ tag: "TypeScript" });
+      assert.ok(tsDevs.length >= 1, "Must find students with TypeScript tag");
+      for (const dev of tsDevs) {
+        assert.ok(dev.tags.some((t) => t.name.toLowerCase() === "typescript"));
+      }
+
+      // Filter by evidence level: EXPLICIT_SOURCE
+      const explicitDevs = getCohortDevelopers({ evidenceLevel: "EXPLICIT_SOURCE" });
+      assert.ok(explicitDevs.length >= 1, "Must find students with explicit source evidence");
+      for (const dev of explicitDevs) {
+        assert.ok(dev.tags.some((t) => t.evidence === "EXPLICIT_SOURCE"));
+      }
+
+      // Filter by text search: 'Python'
+      const pythonSearch = getCohortDevelopers({ query: "Python" });
+      assert.ok(pythonSearch.length >= 1);
+      const priya = pythonSearch.find((d) => d.name.includes("Priya"));
+      assert.ok(priya, "Priya Nair must be returned for Python query");
     });
   });
 });
