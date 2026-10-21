@@ -147,7 +147,7 @@ export function CockpitPreview() {
                     <Code2 className="h-5 w-5 text-provider-leetcode-brand" />
                     <span>LeetCode</span>
                   </div>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-amber-500/10 text-accent border border-amber-500/20">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-accent/10 text-accent border border-accent/20">
                     <ShieldCheck className="h-3 w-3" />
                     HMAC_VERIFIED
                   </span>

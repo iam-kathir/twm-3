@@ -9,37 +9,38 @@
   /* Palette: single source of truth.
      Hex vars feed the CSS below; the *-rgb triplets let Tailwind apply opacity
      modifiers (bg-surface/90) without a second copy of each colour. */
-  --bg: #090A0E;
-  --bg-rgb: 9 10 14;
-  --surface: #111319;
-  --surface-rgb: 17 19 25;
-  --surface-elevated: #181B23;
-  --surface-elevated-rgb: 24 27 35;
-  --surface-card: #14171F;
-  --surface-highlight: #202430;
+  --bg: #07090E;
+  --bg-rgb: 7 9 14;
+  --surface: #0E121A;
+  --surface-rgb: 14 18 26;
+  --surface-elevated: #151B24;
+  --surface-elevated-rgb: 21 27 36;
+  --surface-card: #121620;
+  --surface-highlight: #1B2330;
 
   --border: rgba(255, 255, 255, 0.08);
   --border-subtle: rgba(255, 255, 255, 0.05);
-  --border-active: rgba(245, 158, 11, 0.4);
+  --border-active: rgba(16, 185, 129, 0.4);
 
-  --ink: #F5F6F8;
-  --ink-rgb: 245 246 248;
-  --ink-secondary: #C8CDD6;
-  --ink-secondary-rgb: 200 205 214;
-  /* muted is the de-facto body grey used in components */
-  --muted: #8D94A5;
-  --muted-rgb: 141 148 165;
-  --muted-soft: #636A7E;
-  --muted-soft-rgb: 99 106 126;
-  --muted-dark: #4B5262;
-  --muted-dark-rgb: 75 82 98;
+  --ink: #F3F5F9;
+  --ink-rgb: 243 245 249;
+  --ink-secondary: #C5CBD8;
+  --ink-secondary-rgb: 197 203 216;
+  /* muted is the de-facto body grey used in components (6.9:1 contrast) */
+  --muted: #8E98AB;
+  --muted-rgb: 142 152 171;
+  /* muted-soft bumped to #737D92 (4.65:1 contrast, passes WCAG AA >= 4.5:1) */
+  --muted-soft: #737D92;
+  --muted-soft-rgb: 115 125 146;
+  --muted-dark: #50596B;
+  --muted-dark-rgb: 80 89 107;
 
-  /* Decisive Instrument Accents */
-  --accent: #F59E0B;
-  --accent-rgb: 245 158 11;
-  --accent-hover: #D97706;
-  --accent-hover-rgb: 217 119 6;
-  --accent-subtle: rgba(245, 158, 11, 0.12);
+  /* Decisive Instrument Accents (Precision Emerald & Hyper-Mint) */
+  --accent: #10B981;
+  --accent-rgb: 16 185 129;
+  --accent-hover: #059669;
+  --accent-hover-rgb: 5 150 105;
+  --accent-subtle: rgba(16, 185, 129, 0.12);
 
   /* Provider Telemetry Identifiers */
   --provider-github: #60A5FA;
@@ -77,8 +78,8 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   overflow-x: hidden;
-  selection-background-color: #F59E0B;
-  selection-color: #090A0E;
+  selection-background-color: #10B981;
+  selection-color: #07090E;
   letter-spacing: -0.01em;
 }
 

@@ -120,7 +120,7 @@ export default function SearchPage() {
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>Source Manifest</span>
                 </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/10 text-accent border border-amber-500/25 font-mono text-xs font-semibold shadow-sm">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/10 text-accent border border-accent/25 font-mono text-xs font-semibold shadow-sm">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   <span>Observed Activity</span>
                 </span>
@@ -310,7 +310,7 @@ export default function SearchPage() {
                                 isExplicit
                                   ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:border-emerald-500/40"
                                   : isSupported
-                                  ? "bg-amber-500/10 text-accent border-amber-500/20 hover:border-amber-500/40"
+                                  ? "bg-accent/10 text-accent border-accent/20 hover:border-accent/40"
                                   : "bg-surface-raised text-muted border-white/10 hover:border-white/20"
                               }`}
                             >
@@ -464,7 +464,7 @@ export default function SearchPage() {
                             tag.evidence === "EXPLICIT_SOURCE"
                               ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                               : tag.evidence === "SUPPORTED_INFERENCE"
-                              ? "bg-amber-500/10 text-accent border-amber-500/20"
+                              ? "bg-accent/10 text-accent border-accent/20"
                               : "bg-white/5 text-muted border-white/10"
                           }`}>
                             {tag.evidence}
@@ -497,7 +497,7 @@ export default function SearchPage() {
                 <Link
                   href={`/dashboard?user=${selectedDev.githubHandle}`}
                   onClick={() => setSelectedDev(null)}
-                  className="flex-1 py-2.5 rounded-xl bg-accent hover:bg-amber-400 text-canvas font-bold text-xs flex items-center justify-center space-x-1.5 transition-colors"
+                  className="flex-1 py-2.5 rounded-xl bg-accent hover:bg-emerald-400 text-canvas font-bold text-xs flex items-center justify-center space-x-1.5 transition-colors"
                 >
                   <span>Open Telemetry Cockpit</span>
                   <ChevronRight className="w-3.5 h-3.5" />

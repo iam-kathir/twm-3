@@ -40,7 +40,7 @@ Next.js 14 App Router · TypeScript (strict) · Tailwind CSS (obsidian tokens) �
 - **Sunday Boundary Rule (§9.1 & §9.7).** Weekly competition closes strictly at Sunday 23:59:59 IST (`Asia/Kolkata` / UTC+5:30). Only observations at or before the boundary count. `boundary_gap <= 3h`.
 - **Ranking is deterministic (§9.6).** Standard competition ranking `1, 2, 2, 4`, ties share a rank with tie badge, alphabetical secondary sort.
 - **Provider capability disparity.** HackerRank has no public event timestamps: display-only badge evidence, excluded from weekly competition deltas. Never merge providers into one opaque score.
-- **One palette.** Tokens in `src/app/globals.css` (canvas `#090A0E`, surface `#111319`, accent `#F59E0B`). No literal hex in components except provider brand colours (`--provider-*`).
+- **One palette.** Tokens in `src/app/globals.css` (canvas `#07090E`, surface `#0E121A`, accent `#10B981` with Hyper-Mint `#34D399`). No literal hex in components except provider brand colours (`--provider-*`).
 - **One font source.** `next/font` in `src/app/layout.tsx` sets `--font-sans`/`--font-mono`. Never redefine those vars in `:root`.
 
 ---

@@ -44,7 +44,7 @@ export function HeroSection() {
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden text-center">
       {/* Precision Ambient Atmosphere (Linear / Stripe style radial gradients) */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-tr from-accent/[0.08] via-amber-500/[0.03] to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-tr from-accent/[0.12] via-accent/[0.04] to-transparent rounded-full blur-3xl pointer-events-none" />
       <div className="absolute top-12 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full bg-tech-dots opacity-25 pointer-events-none" />
 
       <motion.div
@@ -90,7 +90,7 @@ export function HeroSection() {
         <motion.div variants={itemVariants} id="invite" className="mt-12 max-w-md mx-auto">
           <form
             onSubmit={handleSubmit}
-            className="flex items-center gap-2.5 p-2 rounded-2xl border border-white/10 bg-surface/90 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.6)] focus-within:border-accent/80 focus-within:shadow-[0_0_25px_rgba(245,158,11,0.2)] transition-all duration-300"
+            className="flex items-center gap-2.5 p-2 rounded-2xl border border-white/10 bg-surface/90 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.6)] focus-within:border-accent/80 focus-within:shadow-[0_0_25px_rgba(16,185,129,0.25)] transition-all duration-300"
           >
             <div className="pl-4 text-muted">
               <KeyRound className="h-5 w-5 text-accent" />

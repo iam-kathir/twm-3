@@ -393,7 +393,7 @@ export default function SettingsPage() {
                   className={`px-5 py-3 rounded-xl text-sm font-mono font-semibold transition-all ${
                     currentUser.github.connected
                       ? "bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20"
-                      : "bg-accent hover:bg-amber-400 text-canvas font-bold shadow-lg"
+                      : "bg-accent hover:bg-emerald-400 text-canvas font-bold shadow-lg"
                   }`}
                 >
                   {currentUser.github.connected ? "Disconnect GitHub Adapter" : "Connect GitHub Account"}
@@ -610,7 +610,7 @@ export default function SettingsPage() {
               <div className="pt-6 border-t border-white/[0.08] flex justify-end">
                 <button
                   onClick={handleSavePrivacy}
-                  className="px-8 py-3.5 rounded-xl bg-accent hover:bg-amber-400 text-canvas font-bold text-base flex items-center gap-2.5 transition-all shadow-lg"
+                  className="px-8 py-3.5 rounded-xl bg-accent hover:bg-emerald-400 text-canvas font-bold text-base flex items-center gap-2.5 transition-all shadow-lg"
                 >
                   <Save className="h-5 w-5" />
                   <span>Save Privacy Preferences</span>

@@ -56,7 +56,7 @@ export function BrandLogo({
             alt="TWM — Track. Win. Maintain."
             width={w}
             height={h}
-            className="transition-all duration-300 group-hover:brightness-110 drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] group-hover:drop-shadow-[0_0_20px_rgba(245,158,11,0.22)]"
+            className="transition-all duration-300 group-hover:brightness-110 drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] group-hover:drop-shadow-[0_0_20px_rgba(16,185,129,0.28)]"
             priority
           />
         </div>
@@ -91,7 +91,7 @@ export function BrandLogo({
       className={`inline-flex items-center gap-3.5 group select-none cursor-pointer ${className}`}
     >
       <div
-        className="relative rounded-xl overflow-hidden border border-white/10 bg-gradient-to-b from-surface-elevated to-surface flex items-center justify-center transition-all duration-300 group-hover:border-accent/50 shadow-[0_4px_20px_rgba(0,0,0,0.4)] group-hover:shadow-[0_0_25px_rgba(245,158,11,0.25)]"
+        className="relative rounded-xl overflow-hidden border border-white/10 bg-gradient-to-b from-surface-elevated to-surface flex items-center justify-center transition-all duration-300 group-hover:border-accent/50 shadow-[0_4px_20px_rgba(0,0,0,0.4)] group-hover:shadow-[0_0_25px_rgba(16,185,129,0.30)]"
         style={{ width: px, height: px }}
       >
         <Image
@@ -99,7 +99,7 @@ export function BrandLogo({
           alt="TWM Platform Icon"
           width={Math.round(px * 0.72)}
           height={Math.round(px * 0.72)}
-          className="transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_2px_8px_rgba(245,158,11,0.35)]"
+          className="transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_2px_8px_rgba(16,185,129,0.4)]"
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-tr from-accent/15 via-transparent to-white/5 pointer-events-none" />

@@ -49,8 +49,8 @@ TWM ("Track. Win. Maintain.") is an institutional-grade, class-scoped developer 
 5. **Provider Capability Disparity:**
    - HackerRank lacks public event timestamps: display-only badge evidence, excluded from weekly competition deltas. Never merge providers into a single opaque score.
 6. **One Design Palette:**
-   - Linear-tier obsidian canvas (`#090A0E`), surface (`#111319`), and amber accent (`#F59E0B`).
-   - CSS tokens in `src/app/globals.css`. Never introduce arbitrary secondary palettes.
+   - Linear-tier obsidian canvas (`#07090E`), elevated surface (`#0E121A`), and Precision Emerald accent (`#10B981`) with Hyper-Mint (`#34D399`).
+   - CSS tokens in `src/app/globals.css`. Never introduce arbitrary secondary palettes. LeetCode brand orange (`#FFA116`) is kept strictly for LeetCode metrics.
 7. **One Font Source:**
    - `next/font` in `src/app/layout.tsx` sets `--font-sans` (Sora) and `--font-mono` (JetBrains Mono) on `<html>`. Never redefine font variables in `:root`.
 
@@ -105,6 +105,32 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 ---
 
 ## Session log
+
+### 2026-10-21 15:28 IST — Frontend Overhaul & Precision Emerald Colour Theme Migration (Antigravity)
+
+- **Frontend Design & Theme Overhaul Completed**:
+  - **Colour Theme Migration: Precision Emerald & Hyper-Mint (`#10B981` / `#34D399`)**:
+    - Replaced former amber accent (`#F59E0B`) with **Precision Emerald (`#10B981`)** and **Hyper-Mint (`#34D399`)** across `src/app/globals.css`.
+    - **Solves Provider Clashing**: Eliminated visual collision between platform-level primary controls and LeetCode brand orange (`#FFA116` / `#FBBF24`).
+    - **Canvas & Surface Tokens**: Deepened obsidian canvas ground to `#07090E` (RGB `7 9 14`) and elevated surfaces to `#0E121A` (RGB `14 18 26`), `#151B24`, `#1B2330`.
+    - **Selection & Focus Rings**: Tuned selection background to `#10B981` with `#07090E` text and glowing active borders to `rgba(16, 185, 129, 0.4)`.
+  - **Contrast & WCAG 2.1 AA Compliance (QP-2 Fixed)**:
+    - Bumped `--muted-soft` token from `#636A7E` (3.67:1, failing AA on canvas) to `#737D92` (**4.65:1**, passing WCAG AA $\ge 4.5:1$).
+    - Solid accent fills pair strictly with `text-canvas` (contrast ratio **7.8:1**, passing WCAG AAA).
+  - **Component Harmonization Across Application**:
+    - `src/components/ui/BrandLogo.tsx`: Refined SVG icon glows and gradients with Precision Emerald shadows (`rgba(16, 185, 129, 0.35)`).
+    - `src/components/landing/HeroSection.tsx`: Updated radial mesh glows, badge borders, and invite input focus rings to emerald.
+    - `src/components/landing/CockpitPreview.tsx` & `PlatformMatrix.tsx`: Harmonized HMAC badges and status indicators to use `text-accent` and `border-accent/20`.
+    - `src/app/settings/page.tsx`: Updated button hovers to `hover:bg-emerald-400`.
+    - `src/app/search/page.tsx`: Swapped lingering amber tags to `text-accent` and `hover:bg-emerald-400`.
+    - `src/app/leaderboard/page.tsx`: Updated calculation rule explanation drawer border to `border-accent/30`.
+    - `src/app/onboarding/page.tsx` & `src/app/dashboard/page.tsx`: Consolidated LeetCode challenge verification borders and HMAC badges.
+- **Verification Gates**:
+  - `npm test`: 19/19 tests pass across 11 suites in ~54ms.
+  - `npx tsc --noEmit`: Exits 0 (0 errors, clean).
+  - `npx next build`: 12/12 static pages and all dynamic route handlers compile green.
+- **Next Steps**:
+  - Phase 5: End-to-End Simulation Script (`scripts/simulate-tournament-week.mjs`) & final polish.
 
 ### 2026-10-21 14:43 IST — Phase 4 Complete (P4-3 Semantic Classmate Search Delivered) (Antigravity)
 

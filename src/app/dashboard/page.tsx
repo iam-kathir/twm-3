@@ -184,7 +184,7 @@ export default function DashboardPage() {
                   <Code2 className="h-5 w-5 text-provider-leetcode-brand" />
                   <span>LeetCode Telemetry</span>
                 </div>
-                <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-amber-500/10 text-accent border border-amber-500/20 font-semibold">
+                <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-accent/10 text-accent border border-accent/20 font-semibold">
                   HMAC_VERIFIED
                 </span>
               </div>

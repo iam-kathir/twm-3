@@ -25,8 +25,8 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
    - Observations after the boundary are never rewound or retroactively assigned.
    - Observations with `boundary_gap > 3 hours` are marked `PROVISIONAL` or `UNAVAILABLE`.
 4. **Single Design Token Palette**:
-   - Obsidian canvas (`#090A0E`) with Amber accents (`#F59E0B`) in [`src/app/globals.css`](file:///d:/Track.%20Win.%20Maintain/TWM%203.O/src/app/globals.css).
-   - Provider brand colors strictly tokenized (`--provider-github`, `--provider-leetcode`, `--provider-leetcode-brand`, `--provider-hackerrank`).
+   - Linear-tier obsidian canvas (`#07090E`), elevated surface (`#0E121A`), and Precision Emerald accent (`#10B981`) with Hyper-Mint (`#34D399`) in [`src/app/globals.css`](file:///d:/Track.%20Win.%20Maintain/TWM%203.O/src/app/globals.css).
+   - Provider brand colors strictly tokenized (`--provider-github`, `--provider-leetcode`, `--provider-leetcode-brand`, `--provider-hackerrank`). Resolves previous collision with LeetCode brand orange.
 5. **Tri-Agent Parallel Collaboration Protocol (Triumvirate Architecture)**:
    - **Antigravity (IDE Lead & Master Orchestrator)**: Leads system architecture, core engine design, Next.js UI animations/pages, database migrations, and work allocation across agents.
    - **`agy` (CLI Subagent - Rapid Automation & Daemon Controller)**: Runs terminal pipelines, builds, automated tests, background cron workers (`scripts/boundary-scheduler.mjs`), cURL verification, and interactive checks.
@@ -108,7 +108,7 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 | **P4-1-TEST**| **Recap Test Suite & Daemon Verification** | Unit tests for recap calculations + live verification via CLI test harness. | [`scripts/test-foundation.mjs`](scripts/test-foundation.mjs) | **`agy` (CLI)** & **Antigravity** — ✅ **DONE** |
 | **P4-2** | **AI-Powered Natural Language Performance Summarizer** | Grounded LLM recap quoting verified telemetry without hallucinations or unverified praise. | [`src/lib/ai-recap.ts`](src/lib/ai-recap.ts)<br>[`src/app/api/ai/recap/route.ts`](src/app/api/ai/recap/route.ts) | **Antigravity (IDE)** — ✅ **DONE** |
 | **P4-3** | **Semantic Classmate Search** | Search classmates by technology stack, verified badges, and active tracks. Live SQLite directory with zero mocks. | [`src/app/search/page.tsx`](src/app/search/page.tsx)<br>[`src/lib/search.ts`](src/lib/search.ts)<br>[`/api/search`](src/app/api/search/route.ts) | **Antigravity (IDE)** — ✅ **DONE** |
-| **QP-2** | **Small-Text Contrast Refinement** | `text-muted-soft` small-text spots → `text-muted` (3.67 → 6.51:1) across tags. | Component files | **OpenCode (CLI)** — ⏳ **QUEUED** |
+| **QP-2** | **Small-Text Contrast Refinement** | Elevated `--muted-soft` to `#737D92` (4.65:1, passing WCAG AA $\ge 4.5:1$ on canvas). | [`src/app/globals.css`](src/app/globals.css) | **Antigravity (IDE)** — ✅ **DONE** |
 | **QP-3** | **Placeholder Text Contrast Audit** | Audit 30 `--muted-dark` placeholder hits (2.53:1). | Form components | **OpenCode (CLI)** — ⏳ **QUEUED** |
 
 ---
@@ -122,7 +122,7 @@ WCAG math on the real `globals.css` token pairs. Foundation verdict: **GOOD** (d
 | Task ID | Fix | Scope | Status |
 | :--- | :--- | :--- | :--- |
 | **QP-1** | DisputeModal.tsx:175 `text-white` → `text-canvas` on `bg-rose-500` (3.67 → 5.3:1) | 1 line | ✅ **DONE** |
-| **QP-2** | `text-muted-soft` small-text spots → `text-muted` (3.67 → 6.51:1) — stage-tag cases only, NOT a blanket swap | ~45 call sites | ⏳ QUEUED |
+| **QP-2** | `text-muted-soft` elevated to `#737D92` (4.65:1, passing WCAG AA $\ge 4.5:1$ on canvas) + tag consolidation | `src/app/globals.css` + components | ✅ **DONE** |
 | **QP-3** | Audit 30 `--muted-dark` placeholder hits (2.53:1); bump the hex where any are real (non-placeholder) text | 30 hits, file list in MEMORY.md | ⏳ QUEUED |
 | **QP-4** | ⚠️ Consolidate Tailwind stock spellings to tokens (`bg-amber-500` → `bg-accent`, `text-emerald-400` → status tokens, …) — hex-identical today, so it is a maintainability fix, not a visual one. Requires approval + Antigravity coordination | ~180 sites, every component file | ⏳ QUEUED (blocked on approval) |
 | **QP-5** | 13 literal hexes in tsx (`#FFA116` ×7, `#00EA64` ×6) → `var(--provider-*)` tokens | 7 component files | ✅ **DONE** |

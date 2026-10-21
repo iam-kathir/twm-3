@@ -25,7 +25,7 @@ export function PlatformMatrix() {
       icon: Code2,
       iconColor: "text-provider-leetcode-brand",
       status: "SUPPORTED_SNAPSHOT",
-      statusClass: "bg-amber-500/10 text-accent border-amber-500/20",
+      statusClass: "bg-accent/10 text-accent border-accent/20",
       description: "HMAC profile bio challenge verification with cumulative problem-solving snapshots.",
       fields: [
         { name: "Cumulative Solved Count", state: "Verified Snapshot", period: "Continuous" },

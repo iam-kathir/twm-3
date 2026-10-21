@@ -332,7 +332,7 @@ export default function OnboardingPage() {
                       <button
                         onClick={verifyLeetCode}
                         disabled={verifyingLeetCode}
-                        className="w-full py-3 px-4 rounded-xl bg-canvas hover:bg-white/5 border border-amber-500/30 text-accent text-sm font-mono font-bold flex items-center justify-center gap-2 transition-colors"
+                        className="w-full py-3 px-4 rounded-xl bg-canvas hover:bg-white/5 border border-accent/30 text-accent text-sm font-mono font-bold flex items-center justify-center gap-2 transition-colors"
                       >
                         {verifyingLeetCode ? (
                           <>

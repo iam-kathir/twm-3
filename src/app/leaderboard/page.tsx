@@ -371,7 +371,7 @@ export default function LeaderboardPage() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="p-6 rounded-2xl border border-amber-500/20 bg-surface-raised text-sm font-mono space-y-3 text-ink-secondary shadow-md overflow-hidden"
+              className="p-6 rounded-2xl border border-accent/30 bg-surface-raised text-sm font-mono space-y-3 text-ink-secondary shadow-md overflow-hidden"
             >
               <div className="flex items-center justify-between text-white font-bold">
                 <span className="flex items-center gap-2 text-accent text-base">
