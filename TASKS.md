@@ -124,6 +124,14 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 
 ---
 
+## 🛡️ Phase 6: Data Sovereignty & Governance Policy (COMPLETED)
+
+| Task ID | Task Description | Scope & Requirements | Target Files | Owner / Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **P6-1** | **Privacy & Student Data Governance Policy** | Comprehensive 8-section institutional governance policy: non-surveillance commitment, telemetry boundaries, zero-fabrication invariant (§1.2/§5.7), identity tiers (§18.1), HMAC bio challenges (§6.2), two-person disputes (§10.1), data portability & 1-click disconnect (§18.4), and zero commercial sharing. Wired across all platform footers, profile dropdowns, and settings. | [`src/app/privacy/page.tsx`](src/app/privacy/page.tsx)<br>[`src/components/landing/Footer.tsx`](src/components/landing/Footer.tsx)<br>[`src/components/ui/AppHeader.tsx`](src/components/ui/AppHeader.tsx)<br>[`src/app/settings/page.tsx`](src/app/settings/page.tsx) | **Antigravity (IDE)** — ✅ **DONE** |
+
+---
+
 ## 🐛 Discovered — Colour/Contrast Quality Backlog (2026-10-21 01:07 IST audit, OpenCode)
 
 WCAG math on the real `globals.css` token pairs. Foundation verdict: **GOOD** (dark neutral + one accent, all functional roles pass AA). Three small-text failures + one spelling debt to fix. Full numbers, method, and call-site lists in `MEMORY.md` session log.

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   User,
@@ -508,6 +509,26 @@ export default function SettingsPage() {
                 <p className="text-sm sm:text-base text-muted mt-1">
                   Choose how your rankings and activity are presented to classmates across class leaderboards and discovery searches.
                 </p>
+              </div>
+
+              {/* Full Policy Link Banner */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-surface-raised border border-emerald-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3.5">
+                  <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-accent">
+                    <Shield className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="text-sm sm:text-base font-semibold text-white">Official Cohort Privacy &amp; Data Governance Policy</div>
+                    <div className="text-xs sm:text-sm text-muted">Read our non-surveillance pledge, telemetry boundaries, and rights under Rule §11.</div>
+                  </div>
+                </div>
+                <Link
+                  href="/privacy"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-mono text-xs font-semibold border border-white/10 transition-colors shrink-0"
+                >
+                  <span>Read Policy</span>
+                  <ArrowRight className="h-4 w-4 text-accent" />
+                </Link>
               </div>
 
               {/* Leaderboard visibility mode */}

@@ -39,6 +39,9 @@ export function Footer() {
             <Link href="/settings" className="hover:text-white transition-colors">
               Settings
             </Link>
+            <Link href="/privacy" className="hover:text-white transition-colors">
+              Privacy &amp; Governance
+            </Link>
           </div>
         </div>
 

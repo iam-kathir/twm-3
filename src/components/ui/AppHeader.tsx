@@ -182,6 +182,15 @@ export function AppHeader() {
                     <span>Account Settings</span>
                   </NextLink>
 
+                  <NextLink
+                    href="/privacy"
+                    onClick={() => setIsProfileOpen(false)}
+                    className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
+                  >
+                    <Shield className="h-4 w-4 text-slate-400" />
+                    <span>Privacy &amp; Governance</span>
+                  </NextLink>
+
                   <button
                     onClick={() => {
                       setIsProfileOpen(false);
