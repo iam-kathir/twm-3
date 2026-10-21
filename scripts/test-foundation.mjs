@@ -8,6 +8,7 @@ import { getPreviousSundayBoundaryIST, computeLeetCodeBaseline } from "../src/li
 import { generateDeterministicWeeklyRecap } from "../src/lib/recap.ts";
 import { synthesizeDeterministicGroundedRecap, generateGroundedAIRecap } from "../src/lib/ai-recap.ts";
 import { getCohortDevelopers } from "../src/lib/search.ts";
+import { runTournamentSimulation } from "./simulate-tournament-week.mjs";
 
 describe("TWM Foundation Suite", () => {
   describe("Section 9.6 Competition Ranking & Tie Policy", () => {
@@ -408,6 +409,17 @@ describe("TWM Foundation Suite", () => {
       assert.ok(pythonSearch.length >= 1);
       const priya = pythonSearch.find((d) => d.name.includes("Priya"));
       assert.ok(priya, "Priya Nair must be returned for Python query");
+    });
+  });
+
+  describe("Section 16.3 Full Tournament Week Simulation (Phase 5)", () => {
+    it("executes full 7-day tournament lifecycle and passes all invariant gates", async () => {
+      const results = await runTournamentSimulation({ weekNumber: 44, year: 2026 });
+      assert.ok(results.invariantsPassed, "All tournament invariants must pass");
+      assert.equal(results.assertions.length, 5, "Must test all 5 core invariants");
+      for (const a of results.assertions) {
+        assert.equal(a.passed, true, `Invariant '${a.name}' failed`);
+      }
     });
   });
 });

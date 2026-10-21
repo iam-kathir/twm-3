@@ -95,13 +95,13 @@ export function generateDeterministicWeeklyRecap(options: {
     meetsQuorum: quorumStats.meetsQuorum,
     quorumLabel: quorumStats.label,
     topGithubStudent: topGithub ? {
-      name: topGithub.student_name || "Unknown",
+      name: (topGithub as any).name || topGithub.student_name || "Unknown",
       score: topGithub.score_value,
       rank: topGithub.rank,
       isTied: topGithub.is_tied === 1,
     } : null,
     topLeetcodeStudent: topLeetcode ? {
-      name: topLeetcode.student_name || "Unknown",
+      name: (topLeetcode as any).name || topLeetcode.student_name || "Unknown",
       score: topLeetcode.score_value,
       rank: topLeetcode.rank,
       isTied: topLeetcode.is_tied === 1,
