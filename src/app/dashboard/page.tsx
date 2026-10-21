@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useApp } from "@/context/AppContext";
+import { WeeklyRecapCard } from "@/components/dashboard/WeeklyRecapCard";
 
 export default function DashboardPage() {
   const {
@@ -114,6 +115,9 @@ export default function DashboardPage() {
             <span className="text-xs font-mono text-muted-soft block">Boundary rule compliant</span>
           </div>
         </div>
+
+        {/* Deterministic Weekly Recap (§10.1) */}
+        <WeeklyRecapCard />
 
         {/* 3 Active Provider Adapters */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

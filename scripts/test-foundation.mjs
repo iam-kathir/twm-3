@@ -5,6 +5,7 @@ import { checkRateLimit } from "../src/lib/rate-limit.ts";
 import { getDb, getAllRosterMembers, insertRosterMember, getRosterQuorumStats, registerHmacNonce, verifyAndConsumeNonce, insertDispute, resolveDisputeInDb, getAllDisputes, getWeeklyStandingsFromDb } from "../src/lib/db.ts";
 import { executeWeeklyFinalization } from "../src/lib/finalizer.ts";
 import { getPreviousSundayBoundaryIST, computeLeetCodeBaseline } from "../src/lib/baseline.ts";
+import { generateDeterministicWeeklyRecap } from "../src/lib/recap.ts";
 
 describe("TWM Foundation Suite", () => {
   describe("Section 9.6 Competition Ranking & Tie Policy", () => {
@@ -295,6 +296,43 @@ describe("TWM Foundation Suite", () => {
       assert.equal(result.status, "STUDENT_NOT_ENROLLED");
     });
   });
+
+  describe("Section 10.1 Deterministic Weekly Recap Generator (P4-1)", () => {
+    it("generates structured weekly recap with cohort quorum and disclosures", () => {
+      const recap = generateDeterministicWeeklyRecap({ weekNumber: 42, year: 2026 });
+
+      assert.equal(recap.weekNumber, 42);
+      assert.equal(recap.year, 2026);
+      assert.ok(recap.boundaryTimestampIST.includes("Sunday 23:59:59 IST"));
+      assert.ok(recap.cohort.totalEnrolled >= 7);
+      assert.ok(recap.cohort.quorumPercentage >= 70);
+      assert.equal(recap.cohort.meetsQuorum, true);
+      assert.ok(recap.highlights.length >= 1);
+
+      // Verify zero fabrication disclosures are present per §1.2 & §5.7
+      assert.ok(recap.disclosures.zeroFabricationNotice.includes("Plan §1.2"));
+      assert.ok(recap.disclosures.boundaryRule.includes("Sunday 23:59:59 IST"));
+      assert.ok(recap.disclosures.hackerRankNotice.includes("Plan §5.6"));
+    });
+
+    it("evaluates student specific recap milestones for current user", () => {
+      const recap = generateDeterministicWeeklyRecap({
+        rollNo: "2022BCSE042", // Aarav Sharma
+        weekNumber: 42,
+        year: 2026,
+      });
+
+      assert.ok(recap.student, "Student recap detail must be populated");
+      assert.equal(recap.student.rollNo, "2022BCSE042");
+      assert.equal(recap.student.name, "Aarav Sharma");
+      assert.ok(recap.student.consistencyStreakWeeks >= 1);
+
+      // Verify highlights include student's verified accomplishments
+      const studentHighlights = recap.highlights.filter((h) => h.includes("Aarav Sharma"));
+      assert.ok(studentHighlights.length >= 1, "Must generate at least one factual student milestone highlight");
+    });
+  });
 });
+
 
 

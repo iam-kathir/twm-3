@@ -1,22 +1,29 @@
 # AGENTS.md — TWM 3.1 Master Entry Point & Invariants
 
-Entry point for any agent (Antigravity or OpenCode) working in this repo. Read this first, then:
+Entry point for any agent (Antigravity IDE, agy CLI subagent, or opencode CLI subagent) working in this repo. Read this first, then:
 
-1. [`MEMORY.md`](MEMORY.md) — Top of *Session log*: what the other agent just did. Also the live architecture state and task board.
+1. [`MEMORY.md`](MEMORY.md) — Top of *Session log*: what the other agents just did. Also the live architecture state and task board.
 2. [`TASKS.md`](TASKS.md) — The task ledger. Current phase status and next task ID.
 3. `TWM_Final_Project_Plan_v3.1.md` §20 — Only when scoping new work or validating rule compliance.
 4. `.agents/workflows/workflow.md` — Working method: Opus 5.5 protocol (finish the task, verify, report).
 5. `.agents/skills/` & Global Skills — Installed design systems (`impeccable`, `awesome-design-md`, `img2threejs`, `design-taste-frontend`).
 
-Do not start editing before step 1. Two agents work in this repository simultaneously.
+Do not start editing before step 1. Three agents work in this repository simultaneously in parallel under Antigravity orchestration.
 
 ---
 
-## 👥 Multi-Agent Collaboration Model
+## 👥 Tri-Agent Parallel Collaboration Model
 
-- **Antigravity (IDE Orchestrator):** Leads architecture, multi-file code generation, UI animations, database design, and master ledger coordination.
-- **OpenCode (CLI Subagent):** Launched via `C:\Users\kathi\opencode-fresh.cmd` (auto-injects `HF_TOKEN`, `GITHUB_TOKEN`). Executes terminal tasks, deep code audits, and complementary sub-tasks.
-- **Shared Skills Junctions:** All skills are linked across Claude, Codex, OpenCode, Antigravity, and the workspace via NTFS Directory Junctions (`mklink /J`), avoiding Windows `EPERM` symlink limitations.
+The repository operates under a 3-agent autonomous engineering model managed by Antigravity:
+
+- **Antigravity (IDE Lead & Orchestrator):** Leads architecture, multi-file code generation, UI animations, database migrations, and master ledger coordination. Directly allocates and supervises tasks for the other two agents in `TASKS.md` and `MEMORY.md`.
+- **`agy` (Antigravity CLI Subagent):** High-velocity interactive terminal agent inside the shell. Handles live endpoint testing, CLI slash commands, background daemon supervision, and immediate validation cycles.
+- **OpenCode (CLI Deep Auditor & Quality Subagent):** Launched via `C:\Users\kathi\opencode-fresh.cmd` (auto-injects `HF_TOKEN`, `GITHUB_TOKEN`). Specializes in deep code audits, contrast/WCAG compliance sweeps (e.g., QP backlog), and static analysis.
+- **Parallel Coordination Rules:**
+  1. **Strict Task Segregation:** Always check `TASKS.md` and `MEMORY.md` before picking up a task. Never work on the same task ID or edit the same file concurrently.
+  2. **Explicit Staging Only:** **Never run `git add -A`**. Stage only the explicit file paths you modified.
+  3. **Shared Skills Junctions:** All skills are linked across Claude, Codex, OpenCode, Antigravity, and the workspace via NTFS Directory Junctions (`mklink /J`), avoiding Windows `EPERM` symlink limitations.
+  4. **Single Source of Truth:** Update `MEMORY.md` session log after completing every work unit.
 
 ---
 

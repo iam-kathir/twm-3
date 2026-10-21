@@ -27,10 +27,14 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 4. **Single Design Token Palette**:
    - Obsidian canvas (`#090A0E`) with Amber accents (`#F59E0B`) in [`src/app/globals.css`](file:///d:/Track.%20Win.%20Maintain/TWM%203.O/src/app/globals.css).
    - Provider brand colors strictly tokenized (`--provider-github`, `--provider-leetcode`, `--provider-leetcode-brand`, `--provider-hackerrank`).
-5. **Team Collaboration Protocol (Antigravity + OpenCode)**:
-   - Both agents operate concurrently as an autonomous engineering pair.
-   - Maintain [`MEMORY.md`](file:///d:/Track.%20Win.%20Maintain/TWM%203.O/MEMORY.md) after every completed task.
-   - Never execute blanket `git add -A` while concurrent editing is active.
+5. **Tri-Agent Parallel Collaboration Protocol (Triumvirate Architecture)**:
+   - **Antigravity (IDE Lead & Master Orchestrator)**: Leads system architecture, core engine design, Next.js UI animations/pages, database migrations, and work allocation across agents.
+   - **`agy` (CLI Subagent - Rapid Automation & Daemon Controller)**: Runs terminal pipelines, builds, automated tests, background cron workers (`scripts/boundary-scheduler.mjs`), cURL verification, and interactive checks.
+   - **`opencode` (CLI Subagent - Deep Code Auditor & Quality Engineer)**: Executes deep static code audits, WCAG 2.1 AA contrast sweeps (QP backlog), typography checks, and accessibility verifications.
+   - **Parallel Work Principles**:
+     - Strict task partitioning: Agents never work on the same task ID or edit the same file concurrently.
+     - Never execute blanket `git add -A`; stage explicit paths only.
+     - Update [`MEMORY.md`](file:///d:/Track.%20Win.%20Maintain/TWM%203.O/MEMORY.md) session log after every completed milestone.
 
 ---
 
@@ -98,11 +102,14 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 
 ## 🤖 Phase 4: Deterministic & AI Recaps (IN PROGRESS)
 
-| Task ID | Task Description | Scope & Requirements |
-| :--- | :--- | :--- |
-| **P4-1** | **Deterministic Weekly Recap Generator** | Rule-based summary of individual and class milestones (consistency streaks, active days delta). |
-| **P4-2** | **AI-Powered Natural Language Performance Summarizer** | Grounded LLM recap quoting verified telemetry without hallucinations or unverified praise. |
-| **P4-3** | **Semantic Classmate Search** | Search classmates by technology stack, verified badges, and active tracks. |
+| Task ID | Task Description | Scope & Requirements | Target Files | Owner / Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **P4-1** | **Deterministic Weekly Recap Generator** | Rule-based engine computing consistency streaks, active days delta, top movers, and quorum status. Zero LLM hallucinations. | [`src/lib/recap.ts`](src/lib/recap.ts)<br>[`src/app/api/recap/route.ts`](src/app/api/recap/route.ts)<br>[`WeeklyRecapCard.tsx`](src/components/dashboard/WeeklyRecapCard.tsx) | **Antigravity (IDE)** — ✅ **DONE** |
+| **P4-1-TEST**| **Recap Test Suite & Daemon Verification** | Unit tests for recap calculations + live verification via CLI test harness. | [`scripts/test-foundation.mjs`](scripts/test-foundation.mjs) | **`agy` (CLI)** & **Antigravity** — ✅ **DONE** |
+| **P4-2** | **AI-Powered Natural Language Performance Summarizer** | Grounded LLM recap quoting verified telemetry without hallucinations or unverified praise. | [`src/lib/ai-recap.ts`](src/lib/ai-recap.ts)<br>[`src/app/api/ai/recap/route.ts`](src/app/api/ai/recap/route.ts) | **Antigravity (IDE)** — ⏳ **QUEUED** |
+| **P4-3** | **Semantic Classmate Search** | Search classmates by technology stack, verified badges, and active tracks. | [`src/app/search/page.tsx`](src/app/search/page.tsx)<br>[`src/lib/search.ts`](src/lib/search.ts) | **Antigravity (IDE)** & **`agy` (CLI)** — ⏳ **QUEUED** |
+| **QP-2** | **Small-Text Contrast Refinement** | `text-muted-soft` small-text spots → `text-muted` (3.67 → 6.51:1) across tags. | Component files | **OpenCode (CLI)** — ⏳ **QUEUED** |
+| **QP-3** | **Placeholder Text Contrast Audit** | Audit 30 `--muted-dark` placeholder hits (2.53:1). | Form components | **OpenCode (CLI)** — ⏳ **QUEUED** |
 
 ---
 

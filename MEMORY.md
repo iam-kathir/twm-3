@@ -58,10 +58,15 @@ TWM ("Track. Win. Maintain.") is an institutional-grade, class-scoped developer 
 
 ## 🤝 Multi-Agent Protocol & Global Skill Ecosystem
 
-### Antigravity & OpenCode Dual-Agent Model:
-- **Antigravity (IDE Orchestrator):** Handles complex code generation, system architecture, database migrations, UI motion elevation, and master documentation governance.
-- **OpenCode (CLI Subagent / Co-Pilot):** Launched via `C:\Users\kathi\opencode-fresh.cmd` (injects `HF_TOKEN`, `GITHUB_TOKEN`). Executes terminal tasks, deep code audits, and complementary sub-tasks.
-- **Single Source of Truth:** `MEMORY.md` is the live coordination board. Both agents read the top of `Session log` before editing, stage files explicitly (`never git add -A`), and respect active edits.
+### Tri-Agent Parallel Engineering Model (Managed by Antigravity):
+- **Antigravity (IDE Lead & Orchestrator):** Manages task scheduling, multi-file full-stack code generation, Next.js architecture, UI animations, database design, and master ledger coordination. Directly coordinates work between `agy` and `OpenCode`.
+- **`agy` (Antigravity CLI Subagent):** High-velocity terminal agent running in the shell. Owns rapid terminal diagnostics, live endpoint cURL checks, background cron daemon maintenance, and instant slash command workflows.
+- **OpenCode (CLI Deep Auditor & Quality Subagent):** Launched via `C:\Users\kathi\opencode-fresh.cmd` (injects `HF_TOKEN`, `GITHUB_TOKEN`). Specializes in deep codebase audits, contrast/WCAG compliance sweeps (e.g. QP-2 through QP-4), and mechanical static analysis.
+- **Parallel Work Coordination Rules:**
+  - Tasks in `TASKS.md` and `MEMORY.md` are tagged with explicit owners (`Antigravity`, `agy`, or `OpenCode`).
+  - Strict file-boundary isolation: agents never write to the same file concurrently.
+  - Never run blanket `git add -A`; stage explicit paths only.
+  - `MEMORY.md` session log is updated at the conclusion of every work unit.
 
 ### Global Skills Installed Across All 5 Agent Hosts:
 All skills are permanently installed and linked across **Claude Code, OpenAI Codex, OpenCode, Antigravity IDE, and the Workspace**:
@@ -100,6 +105,30 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 ---
 
 ## Session log
+
+### 2026-10-21 14:30 IST — Phase 4 (P4-1 Deterministic Weekly Recap) + Tri-Agent Triumvirate Protocol (Antigravity)
+
+- **Tri-Agent Parallel Execution Architecture Activated**:
+  - **Antigravity (IDE Lead & Master Orchestrator)**: Leads system architecture, core engine design, Next.js UI animations/pages, database migrations, and work allocation across agents.
+  - **`agy` (CLI Subagent - Rapid Automation & Daemon Controller)**: Runs terminal pipelines, builds, automated tests, background cron workers (`scripts/boundary-scheduler.mjs`), cURL verification, and interactive checks.
+  - **`opencode` (CLI Subagent - Deep Code Auditor & Quality Engineer)**: Executes deep static code audits, WCAG 2.1 AA contrast sweeps (QP backlog), typography checks, and accessibility verifications.
+  - **Parallel Work Coordination**: Agents work in parallel on isolated files/task IDs; blanket `git add -A` is prohibited; all updates flow through explicit staging.
+- **Phase 4 Delivery — P4-1 Completed (100%)**:
+  - **P4-1: Deterministic Weekly Recap Generator (§10.1)**:
+    - Created `src/lib/recap.ts`: Implemented rule-based weekly performance recap engine. Computes consistency streaks, active days delta across GitHub and LeetCode, cohort top movers, and Section 3.3 cohort quorum status. Zero LLM hallucinations or fabrication.
+    - Created `src/app/api/recap/route.ts`: Cached REST endpoint for fetching cohort and student recaps with rate limiting and deterministic fallback notices.
+    - Created `src/components/dashboard/WeeklyRecapCard.tsx`: Linear-tier obsidian card featuring weekly highlight banners, consistency metrics, quorum status indicators, and student-specific milestones.
+    - Integrated recap card into `src/app/dashboard/page.tsx`.
+  - **P4-1-TEST: Foundation Test Suite Expansion**:
+    - Added *Section 10.1 Deterministic Weekly Recap Generator (P4-1)* test suite to `scripts/test-foundation.mjs` (2 tests covering quorum metrics and student milestones).
+    - Fixed test database isolation: clean cleanup queries ensure temporary test roster members do not leak into `data/twm.sqlite`.
+- **Verification Gates**:
+  - `npm test`: 15/15 tests pass across 9 suites in 40ms.
+  - `npx tsc --noEmit`: Exits 0 (0 errors, clean).
+- **Next Parallel Work Allocations**:
+  - **Antigravity**: P4-2 Grounded AI natural language performance summarizer (`src/lib/ai-recap.ts`, `/api/ai/recap`).
+  - **`agy` (CLI)**: Terminal validation, live cURL hitting `/api/recap`, background scheduler health check.
+  - **`opencode` (CLI)**: QP-2 small-text contrast adjustments and QP-3 placeholder text audits.
 
 ### 2026-10-21 14:10 IST — Phase 3 (Multi-Provider Verification & Audits) + Contrast/Token Backlog (Antigravity)
 
