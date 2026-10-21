@@ -116,8 +116,10 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 
 | Task ID | Task Description | Scope & Requirements | Target Files | Owner / Status |
 | :--- | :--- | :--- | :--- | :--- |
-| **P5-1** | **7-Day Tournament Lifecycle Simulation** | End-to-end script simulating Mon 00:00 kickoff, Wed author verification, Fri dispute resolution, Sun 23:45 sweep, Sun 23:59:59 boundary cutoff, and Mon dual recaps. | [`scripts/simulate-tournament-week.mjs`](scripts/simulate-tournament-week.mjs) | **Antigravity (IDE)** — ✅ **DONE** |
+| **P5-1** | **7-Day Tournament Lifecycle Simulation** | End-to-end script simulating Mon 00:00 kickoff, Wed author verification, Fri dispute resolution, Sun 23:45 sweep, Sun 23:59:59 boundary cutoff, and Mon dual recaps. | [`scripts/simulate-tournament-week.mjs`](scripts/simulate-tournament-week.mjs)<br>[`src/lib/simulation.ts`](src/lib/simulation.ts) | **Antigravity (IDE)** — ✅ **DONE** |
 | **P5-2** | **Automated Invariant Audit Gate** | Programmatic verification in test suite asserting quorum (§3.3), dispute audit (§10.1), ties (§9.6), rank skips (§9.6), and zero-fabrication (§1.2, §5.7). | [`scripts/test-foundation.mjs`](scripts/test-foundation.mjs) | **Antigravity (IDE)** — ✅ **DONE** |
+| **P5-3** | **Simulation REST API Endpoint** | Rate-limited `POST /api/simulation` returning full 6-step lifecycle breakdown, audit assertions, and dual recaps. | [`src/app/api/simulation/route.ts`](src/app/api/simulation/route.ts) | **Antigravity (IDE)** — ✅ **DONE** |
+| **P5-4** | **Interactive Tournament Simulator Tab** | Rich admin UI panel in `/admin` with 1-click execution, 6-step chronological stepper, invariant audit table, and standings/recap preview. | [`src/app/admin/page.tsx`](src/app/admin/page.tsx) | **Antigravity (IDE)** — ✅ **DONE** |
 | **QP-3** | **Placeholder Text Contrast Audit** | Audit 30 `--muted-dark` placeholder hits (2.53:1). | Form components | **OpenCode (CLI)** — ⏳ **IN PROGRESS** |
 
 ---
