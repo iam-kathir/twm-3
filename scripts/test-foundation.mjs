@@ -6,6 +6,7 @@ import { getDb, getAllRosterMembers, insertRosterMember, getRosterQuorumStats, r
 import { executeWeeklyFinalization } from "../src/lib/finalizer.ts";
 import { getPreviousSundayBoundaryIST, computeLeetCodeBaseline } from "../src/lib/baseline.ts";
 import { generateDeterministicWeeklyRecap } from "../src/lib/recap.ts";
+import { synthesizeDeterministicGroundedRecap, generateGroundedAIRecap } from "../src/lib/ai-recap.ts";
 
 describe("TWM Foundation Suite", () => {
   describe("Section 9.6 Competition Ranking & Tie Policy", () => {
@@ -330,6 +331,47 @@ describe("TWM Foundation Suite", () => {
       // Verify highlights include student's verified accomplishments
       const studentHighlights = recap.highlights.filter((h) => h.includes("Aarav Sharma"));
       assert.ok(studentHighlights.length >= 1, "Must generate at least one factual student milestone highlight");
+    });
+  });
+
+  describe("Section 10.2 Grounded AI Natural Language Performance Summarizer (P4-2)", () => {
+    it("synthesizes grounded executive summary strictly quoting verified telemetry", () => {
+      const deterministic = generateDeterministicWeeklyRecap({
+        rollNo: "2022BCSE042",
+        weekNumber: 42,
+        year: 2026,
+      });
+      const aiRecap = synthesizeDeterministicGroundedRecap(deterministic);
+
+      assert.ok(aiRecap.executiveSummary.length > 20);
+      assert.ok(aiRecap.executiveSummary.includes("Aarav Sharma"));
+      assert.equal(aiRecap.groundingAudit.isGrounded, true);
+      assert.equal(aiRecap.groundingAudit.zeroFabricationVerified, true);
+      assert.equal(aiRecap.groundingAudit.engine, "DETERMINISTIC_GROUNDED_SYNTHESIS");
+      assert.ok(aiRecap.groundingAudit.verifiedFactsQuoted.length >= 2);
+    });
+
+    it("enforces honest growth areas and action plan without fabricated praise", async () => {
+      const aiRecap = await generateGroundedAIRecap({
+        rollNo: "2022BCSE042",
+        weekNumber: 42,
+        year: 2026,
+      });
+
+      assert.ok(aiRecap.verifiedStrengths.length >= 1);
+      assert.ok(aiRecap.honestGrowthAreas.length >= 1);
+      assert.ok(aiRecap.actionPlan.length >= 1);
+
+      // Every action plan item must have targetMetric defined
+      for (const item of aiRecap.actionPlan) {
+        assert.ok(item.title);
+        assert.ok(item.description);
+        assert.ok(item.targetMetric);
+      }
+
+      // Check disclosures: HackerRank must be cited as display-only per §5.6
+      const hrGrowthArea = aiRecap.honestGrowthAreas.find((g) => g.includes("HackerRank"));
+      assert.ok(hrGrowthArea, "HackerRank must be disclosed as display-only per §5.6");
     });
   });
 });
