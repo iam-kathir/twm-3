@@ -373,7 +373,7 @@ export default function OnboardingPage() {
                     type="text"
                     value={hackerRankUsername}
                     onChange={(e) => setHackerRankUsername(e.target.value)}
-                    className="w-40 bg-canvas border border-white/10 rounded-xl px-3.5 py-2 text-sm font-mono text-white focus:outline-none focus:border-accent"
+                    className="w-40 bg-canvas border border-white/10 rounded-xl px-3.5 py-2 text-sm font-mono text-white placeholder:text-muted-soft focus:outline-none focus:border-accent"
                     placeholder="username"
                   />
                 </div>

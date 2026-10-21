@@ -63,9 +63,9 @@ export function MotionShowcase() {
             <div className="flex items-center gap-3">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-ink font-semibold text-base">Aarav Sharma</span>
-              <span className="text-muted-dark">•</span>
+              <span className="text-muted-soft">•</span>
               <span className="text-muted">CSE 2026</span>
-              <span className="text-muted-dark">•</span>
+              <span className="text-muted-soft">•</span>
               <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.06] text-xs text-muted-soft">Section A</span>
             </div>
             <div className="flex items-center gap-2 text-muted text-xs sm:text-sm">
@@ -111,7 +111,7 @@ export function MotionShowcase() {
                             className={`h-14 sm:h-16 w-full rounded-xl flex flex-col items-center justify-center font-mono text-xs font-bold transition-all ${
                               active
                                 ? "bg-emerald-400 text-canvas shadow-md shadow-emerald-400/20"
-                                : "bg-white/[0.03] text-muted-dark border border-white/[0.06]"
+                                : "bg-white/[0.03] text-muted-soft border border-white/[0.06]"
                             }`}
                           >
                             <span className="text-base">{active ? "✓" : "—"}</span>

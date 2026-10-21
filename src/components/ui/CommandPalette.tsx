@@ -149,9 +149,9 @@ export function CommandPalette() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Type a command, page, or classmate name..."
-            className="flex-1 bg-transparent text-sm text-ink placeholder:text-slate-500 focus:outline-none font-sans"
+            className="flex-1 bg-transparent text-sm text-ink placeholder:text-muted-soft focus:outline-none font-sans"
           />
-          <div className="flex items-center gap-1 font-mono text-[10px] text-slate-400 px-2 py-0.5 rounded bg-white/5 border border-white/10">
+          <div className="flex items-center gap-1 font-mono text-[10px] text-muted px-2 py-0.5 rounded bg-white/5 border border-white/10">
             <span>ESC</span>
           </div>
         </div>

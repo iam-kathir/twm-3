@@ -115,7 +115,7 @@ export function DisputeModal() {
               value={claim}
               onChange={(e) => setClaim(e.target.value)}
               placeholder="e.g. Commit 8f1e pushed at 23:51 IST was recorded in git reflog but omitted from public contribution graph due to default branch merge delay."
-              className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs text-ink focus:border-accent focus:outline-none placeholder:text-slate-600"
+              className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs text-ink focus:border-accent focus:outline-none placeholder:text-muted-soft"
             />
           </div>
 
@@ -130,9 +130,9 @@ export function DisputeModal() {
                 value={evidenceUrl}
                 onChange={(e) => setEvidenceUrl(e.target.value)}
                 placeholder="https://github.com/.../commit/... or https://leetcode.com/submissions/..."
-                className="w-full pl-8 pr-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs font-mono text-ink focus:border-accent focus:outline-none placeholder:text-slate-600"
+                className="w-full pl-8 pr-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs font-mono text-ink focus:border-accent focus:outline-none placeholder:text-muted-soft"
               />
-              <LinkIcon className="h-3.5 w-3.5 text-slate-500 absolute left-2.5 top-2.5" />
+              <LinkIcon className="h-3.5 w-3.5 text-muted absolute left-2.5 top-2.5" />
             </div>
           </div>
 

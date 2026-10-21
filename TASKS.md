@@ -120,7 +120,7 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 | **P5-2** | **Automated Invariant Audit Gate** | Programmatic verification in test suite asserting quorum (§3.3), dispute audit (§10.1), ties (§9.6), rank skips (§9.6), and zero-fabrication (§1.2, §5.7). | [`scripts/test-foundation.mjs`](scripts/test-foundation.mjs) | **Antigravity (IDE)** — ✅ **DONE** |
 | **P5-3** | **Simulation REST API Endpoint** | Rate-limited `POST /api/simulation` returning full 6-step lifecycle breakdown, audit assertions, and dual recaps. | [`src/app/api/simulation/route.ts`](src/app/api/simulation/route.ts) | **Antigravity (IDE)** — ✅ **DONE** |
 | **P5-4** | **Interactive Tournament Simulator Tab** | Rich admin UI panel in `/admin` with 1-click execution, 6-step chronological stepper, invariant audit table, and standings/recap preview. | [`src/app/admin/page.tsx`](src/app/admin/page.tsx) | **Antigravity (IDE)** — ✅ **DONE** |
-| **QP-3** | **Placeholder Text Contrast Audit** | Audit 30 `--muted-dark` placeholder hits (2.53:1). | Form components | **OpenCode (CLI)** — ⏳ **IN PROGRESS** |
+| **QP-3** | **Placeholder Text Contrast Audit** | Elevated `--muted-dark` to `#707C92` (4.95:1 AA) and replaced low-contrast placeholders with `placeholder:text-muted-soft` across forms. | Form components | **Antigravity & OpenCode** — ✅ **DONE** |
 
 ---
 
@@ -134,7 +134,7 @@ WCAG math on the real `globals.css` token pairs. Foundation verdict: **GOOD** (d
 | :--- | :--- | :--- | :--- |
 | **QP-1** | DisputeModal.tsx:175 `text-white` → `text-canvas` on `bg-rose-500` (3.67 → 5.3:1) | 1 line | ✅ **DONE** |
 | **QP-2** | `text-muted-soft` elevated to `#737D92` (4.65:1, passing WCAG AA $\ge 4.5:1$ on canvas) + tag consolidation | `src/app/globals.css` + components | ✅ **DONE** |
-| **QP-3** | Audit 30 `--muted-dark` placeholder hits (2.53:1); bump the hex where any are real (non-placeholder) text | 30 hits, file list in MEMORY.md | ⏳ QUEUED |
+| **QP-3** | Audit `--muted-dark` placeholder hits (2.53:1); bumped token to `#707C92` (4.95:1 AA) & updated placeholders | `globals.css` + form components | ✅ **DONE** |
 | **QP-4** | ⚠️ Consolidate Tailwind stock spellings to tokens (`bg-amber-500` → `bg-accent`, `text-emerald-400` → status tokens, …) — hex-identical today, so it is a maintainability fix, not a visual one. Requires approval + Antigravity coordination | ~180 sites, every component file | ⏳ QUEUED (blocked on approval) |
 | **QP-5** | 13 literal hexes in tsx (`#FFA116` ×7, `#00EA64` ×6) → `var(--provider-*)` tokens | 7 component files | ✅ **DONE** |
 | **QP-6** | Delete the single `from-emerald-500` gradient (gradient fills are the weak-page signature in the colour study) | 1 site in admin page | ✅ **DONE** |

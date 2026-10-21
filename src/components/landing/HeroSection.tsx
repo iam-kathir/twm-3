@@ -104,7 +104,7 @@ export function HeroSection() {
               onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
               placeholder="CLASS CODE (e.g. CS2026)"
               maxLength={10}
-              className="w-full bg-transparent border-none text-sm sm:text-base font-mono text-white placeholder:text-muted-dark focus:outline-none uppercase tracking-wider px-1 py-1"
+              className="w-full bg-transparent border-none text-sm sm:text-base font-mono text-white placeholder:text-muted-soft focus:outline-none uppercase tracking-wider px-1 py-1"
             />
             <motion.button
               type="submit"

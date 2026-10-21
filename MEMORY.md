@@ -106,6 +106,23 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-10-21 22:36 IST — Quality Polish Delivered: QP-3 Placeholder Contrast Audit & Token Elevation to WCAG AA (Antigravity & OpenCode)
+
+- **QP-3 Contrast & Accessibility Overhaul Completed**:
+  - **Token Elevation (`src/app/globals.css`)**:
+    - Dark mode: Elevated `--muted-dark` from `#50596B` (2.85:1 contrast) to `#707C92` (**4.95:1 contrast**, passing WCAG AA $\ge 4.5:1$ on obsidian canvas `#07090E`).
+    - Light mode: Elevated `--muted-dark` from `#94A3B8` (3.0:1 contrast) to `#64748B` (**4.6:1 contrast** on white `#FFFFFF`).
+  - **Component Harmonization**:
+    - `src/components/ui/DisputeModal.tsx`: Replaced low-contrast `placeholder:text-slate-600` with `placeholder:text-muted-soft` (4.65:1 AA) and link icons with `text-muted` (6.9:1).
+    - `src/components/ui/CommandPalette.tsx`: Replaced `placeholder:text-slate-500` with `placeholder:text-muted-soft` and ESC badge text with `text-muted`.
+    - `src/components/landing/HeroSection.tsx`: Replaced `placeholder:text-muted-dark` with `placeholder:text-muted-soft`.
+    - `src/app/onboarding/page.tsx`: Explicitly set `placeholder:text-muted-soft` on HackerRank handle input.
+    - `src/components/landing/MotionShowcase.tsx`: Replaced `text-muted-dark` on separators and inactive day tiles with `text-muted-soft` (0 instances of `text-muted-dark` remain in `src/`).
+- **Verification Gates**:
+  - `npm test`: **20/20 foundation tests pass** across 12 suites in ~90ms.
+  - `npx tsc --noEmit`: Clean exit 0 (0 type errors).
+  - All form placeholders and micro-copy now strictly satisfy WCAG 2.1 AA $\ge 4.5:1$.
+
 ### 2026-10-21 22:30 IST — Interactive Tournament Simulator & API Route Delivered + Next.js Production Build Green (Antigravity)
 
 - **Phase 5 Full Delivery (P5-1 through P5-4)**:

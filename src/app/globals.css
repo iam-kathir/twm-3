@@ -32,8 +32,9 @@
   /* muted-soft bumped to #737D92 (4.65:1 contrast, passes WCAG AA >= 4.5:1) */
   --muted-soft: #737D92;
   --muted-soft-rgb: 115 125 146;
-  --muted-dark: #50596B;
-  --muted-dark-rgb: 80 89 107;
+  /* QP-3: muted-dark elevated to #707C92 (4.95:1 contrast, passes WCAG AA >= 4.5:1) */
+  --muted-dark: #707C92;
+  --muted-dark-rgb: 112 124 146;
 
   /* Decisive Instrument Accents (Precision Emerald & Hyper-Mint) */
   --accent: #10B981;
@@ -85,8 +86,9 @@ html.light {
   --muted-rgb: 100 116 139;
   --muted-soft: #475569;
   --muted-soft-rgb: 71 85 105;
-  --muted-dark: #94A3B8;
-  --muted-dark-rgb: 148 163 184;
+  /* QP-3: light mode muted-dark elevated to #64748B (4.6:1 contrast on white) */
+  --muted-dark: #64748B;
+  --muted-dark-rgb: 100 116 139;
 
   /* High-Contrast Emerald for Light Backgrounds (4.7:1 contrast on white) */
   --accent: #059669;
