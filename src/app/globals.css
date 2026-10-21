@@ -59,6 +59,102 @@
   --status-error-rgb: 239 68 68;
 }
 
+[data-theme="light"],
+html.light {
+  color-scheme: light;
+
+  /* GitHub Light Inspired Crisp Canvas & Surfaces */
+  --bg: #F8FAFC;
+  --bg-rgb: 248 250 252;
+  --surface: #FFFFFF;
+  --surface-rgb: 255 255 255;
+  --surface-elevated: #F1F5F9;
+  --surface-elevated-rgb: 241 245 249;
+  --surface-card: #FFFFFF;
+  --surface-highlight: #E2E8F0;
+
+  --border: rgba(31, 35, 40, 0.12);
+  --border-subtle: rgba(31, 35, 40, 0.08);
+  --border-active: rgba(5, 150, 105, 0.6);
+
+  --ink: #0F172A;
+  --ink-rgb: 15 23 42;
+  --ink-secondary: #334155;
+  --ink-secondary-rgb: 51 65 85;
+  --muted: #64748B;
+  --muted-rgb: 100 116 139;
+  --muted-soft: #475569;
+  --muted-soft-rgb: 71 85 105;
+  --muted-dark: #94A3B8;
+  --muted-dark-rgb: 148 163 184;
+
+  /* High-Contrast Emerald for Light Backgrounds (4.7:1 contrast on white) */
+  --accent: #059669;
+  --accent-rgb: 5 150 105;
+  --accent-hover: #047857;
+  --accent-hover-rgb: 4 120 87;
+  --accent-subtle: rgba(5, 150, 105, 0.12);
+
+  /* Provider Telemetry Identifiers */
+  --provider-github: #0969DA;
+  --provider-github-rgb: 9 105 218;
+  --provider-leetcode: #D97706;
+  --provider-leetcode-rgb: 217 119 6;
+  --provider-leetcode-brand: #D97706;
+  --provider-leetcode-brand-rgb: 217 119 6;
+  --provider-hackerrank: #059669;
+  --provider-hackerrank-rgb: 5 150 105;
+
+  --status-verified: #059669;
+  --status-verified-rgb: 5 150 105;
+  --status-warning: #D97706;
+  --status-error: #DC2626;
+  --status-error-rgb: 220 38 38;
+}
+
+[data-theme="light"] .text-white,
+html.light .text-white {
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .border-white\/10,
+[data-theme="light"] .border-white\/\[0\.08\],
+[data-theme="light"] .border-white\/\[0\.06\],
+[data-theme="light"] .border-white\/\[0\.05\],
+[data-theme="light"] .border-white\/5,
+html.light .border-white\/10,
+html.light .border-white\/\[0\.08\],
+html.light .border-white\/\[0\.06\],
+html.light .border-white\/\[0\.05\],
+html.light .border-white\/5 {
+  border-color: rgba(31, 35, 40, 0.12) !important;
+}
+
+[data-theme="light"] .bg-white\/5,
+[data-theme="light"] .bg-white\/\[0\.02\],
+[data-theme="light"] .bg-white\/\[0\.04\],
+html.light .bg-white\/5,
+html.light .bg-white\/\[0\.02\],
+html.light .bg-white\/\[0\.04\] {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+
+[data-theme="light"] .bg-white\/10,
+html.light .bg-white\/10 {
+  background-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="light"] .hover\:bg-white\/5:hover,
+html.light .hover\:bg-white\/5:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme="light"] .hover\:bg-white\/10:hover,
+html.light .hover\:bg-white\/10:hover {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+
 html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;

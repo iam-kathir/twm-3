@@ -16,7 +16,9 @@ import {
   LogOut,
   ExternalLink,
   Menu,
-  X
+  X,
+  Sun,
+  Moon
 } from "lucide-react";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 import { useApp } from "@/context/AppContext";
@@ -30,7 +32,9 @@ export function AppHeader() {
     triggerLiveSync,
     lastSyncTime,
     openCommandPalette,
-    openDisputeModal
+    openDisputeModal,
+    theme,
+    toggleTheme
   } = useApp();
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -119,6 +123,21 @@ export function AppHeader() {
             <span className="hidden sm:inline text-muted font-medium">
               {isSyncing ? "Syncing..." : lastSyncTime}
             </span>
+          </button>
+
+          {/* Theme Toggle Button */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="flex items-center justify-center p-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-ink transition-all shadow-sm group"
+            title={theme === "dark" ? "Switch to GitHub Light Theme" : "Switch to Obsidian Dark Theme"}
+            aria-label="Toggle theme mode"
+          >
+            {theme === "dark" ? (
+              <Sun className="h-4 w-4 text-amber-400 group-hover:rotate-45 transition-transform duration-300" />
+            ) : (
+              <Moon className="h-4 w-4 text-accent group-hover:-rotate-12 transition-transform duration-300" />
+            )}
           </button>
 
           {/* User Profile Menu */}

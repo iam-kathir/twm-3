@@ -53,6 +53,10 @@ interface AppContextType {
   leaderboard: LeaderboardStudent[];
   exportLeaderboardCSV: () => void;
   exportTelemetryJSON: () => void;
+
+  // Theme
+  theme: "dark" | "light";
+  toggleTheme: () => void;
 }
 
 const DEFAULT_USER: UserProfile = {
@@ -271,6 +275,45 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isDisputeModalOpen, setIsDisputeModalOpen] = useState(false);
   const [disputeModalMetric, setDisputeModalMetric] = useState<string | undefined>(undefined);
+
+  // Theme state
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  useEffect(() => {
+    try {
+      const savedTheme = localStorage.getItem("twm-theme") as "dark" | "light" | null;
+      const initialTheme = savedTheme === "light" ? "light" : "dark";
+      setTheme(initialTheme);
+      document.documentElement.setAttribute("data-theme", initialTheme);
+      if (initialTheme === "light") {
+        document.documentElement.classList.remove("dark");
+        document.documentElement.classList.add("light");
+      } else {
+        document.documentElement.classList.remove("light");
+        document.documentElement.classList.add("dark");
+      }
+    } catch {
+      // Ignore in restricted environments
+    }
+  }, []);
+
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => {
+      const next = prev === "dark" ? "light" : "dark";
+      try {
+        localStorage.setItem("twm-theme", next);
+      } catch {}
+      document.documentElement.setAttribute("data-theme", next);
+      if (next === "light") {
+        document.documentElement.classList.remove("dark");
+        document.documentElement.classList.add("light");
+      } else {
+        document.documentElement.classList.remove("light");
+        document.documentElement.classList.add("dark");
+      }
+      return next;
+    });
+  }, []);
 
   // Load saved state from localStorage on mount
   useEffect(() => {
@@ -679,7 +722,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         closeDisputeModal,
         leaderboard,
         exportLeaderboardCSV,
-        exportTelemetryJSON
+        exportTelemetryJSON,
+        theme,
+        toggleTheme
       }}
     >
       {children}

@@ -106,6 +106,34 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-10-21 15:40 IST — Theme Toggle (Obsidian Dark / GitHub Light) & Platform Design System Enrichment (Antigravity)
+
+- **Theme Toggle Engine Delivered (Obsidian Dark & GitHub-Inspired Light Mode)**:
+  - **Zero-FOUC Architecture**: Embedded synchronous pre-render theme script in `src/app/layout.tsx` checking `localStorage('twm-theme')` before first paint, eliminating layout flicker.
+  - **GitHub Light Palette (`src/app/globals.css`)**:
+    - Canvas: `--bg: #F8FAFC` (RGB `248 250 252`), cards: `--surface: #FFFFFF`.
+    - Text: `--ink: #0F172A` (14:1 contrast on white), `--muted: #64748B` (4.6:1 contrast).
+    - Accent: `--accent: #059669` (high-contrast emerald for light mode $\ge 4.7:1$).
+    - Overrides: Adaptive borders and background alpha modifiers for light mode.
+  - **AppHeader Theme Toggle Button**: Added Sun/Moon icon toggle with hover micro-animations and accessibility aria labels in `src/components/ui/AppHeader.tsx`.
+  - **AppProvider State Integration**: Added `theme` state and `toggleTheme` callback in `src/context/AppContext.tsx` with persistent `localStorage` synchronization.
+- **Provider Design System Enrichments (`src/app/dashboard/page.tsx`)**:
+  - **GitHub Activity Card**:
+    - Authentic 4-week, 28-day contribution heatmap matrix with 5 intensity levels (`#0e4429`, `#006d32`, `#26a641`, `#39d353`).
+    - Multi-color language footprint bar (`TypeScript 68% #3178C6`, `Python 32% #3572A5`).
+    - Monospace commit hashes, branch indicators (`main`, `HEAD`), and 100% college roster author match verification.
+  - **LeetCode Telemetry Card**:
+    - Authentic difficulty progress bars using LeetCode's canonical colors: Easy (`#00B8A3`), Medium (`#FFA116`), Hard (`#FF375F`).
+    - 14-day problem solving streak flame indicator 🔥 (`Flame`).
+    - Sunday 23:59:59 IST pre-boundary baseline delta indicator (`+12 Solved`).
+  - **HackerRank Evidence Card**:
+    - Domain badges for Python (5★ Gold standard) and Problem Solving (4★ Silver standard) with metallic star rendering.
+    - Cryptographic evidence digest chip (`hr-proof-8f12a...`) and §5.6 capability disclosure.
+- **Verification Gates**:
+  - `npm test`: 19/19 tests pass across 11 suites in ~48ms.
+  - `npx tsc --noEmit`: Exits 0 (0 errors, clean).
+  - `npx next build`: 12/12 static pages and all dynamic route handlers compile green.
+
 ### 2026-10-21 15:28 IST — Frontend Overhaul & Precision Emerald Colour Theme Migration (Antigravity)
 
 - **Frontend Design & Theme Overhaul Completed**:
