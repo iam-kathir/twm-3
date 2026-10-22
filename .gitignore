@@ -23,8 +23,7 @@ Thumbs.db
 /data/backups/
 /data/*.meta.json
 
-# agent skills junctions & local harness hooks
-.agents/skills/awesome-design-md/
-.agents/skills/img2threejs/
-.agents/skills/impeccable/
+# agent skills junctions & local harness hooks (third-party skill assets are
+# installed locally, not vendored into the repo)
+.agents/skills/
 .codex/
