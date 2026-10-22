@@ -11,7 +11,11 @@ next-env.d.ts
 *.tsbuildinfo
 
 # env
+.env
+.env.local
 .env*.local
+.env.production
+.env.test
 
 # os
 .DS_Store
@@ -22,8 +26,16 @@ Thumbs.db
 /data/*.db*
 /data/backups/
 /data/*.meta.json
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
 
 # agent skills junctions & local harness hooks (third-party skill assets are
 # installed locally, not vendored into the repo)
 .agents/skills/
 .codex/
+
+# test & browser inspection artifacts
+.playwright-mcp/
+/landing.png
+

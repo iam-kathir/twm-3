@@ -1,0 +1,48 @@
+name: TWM Quality & CI Verification Gates
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Typecheck, Lint, Test & Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      NODE_ENV: test
+      EMAIL_PROVIDER: mock
+      TWM_SESSION_SECRET: ci_test_secret_for_automated_verification_minimum_32_chars_123456
+      COLLEGE_EMAIL_DOMAINS: karunya.edu,vitstudent.ac.in,student.annauniv.edu
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies (clean reproducible install)
+        run: npm ci
+
+      - name: TypeScript Compilation Check
+        run: npx tsc --noEmit
+
+      - name: ESLint Quality Gate
+        run: npm run lint
+
+      - name: Automated Unit & Foundation Tests
+        run: npm test
+
+      - name: Production Build Verification
+        run: npm run build

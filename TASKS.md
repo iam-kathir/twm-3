@@ -150,6 +150,14 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 
 ---
 
+## 🛡️ Phase 8: ESLint, CI and Automated Quality Gates (COMPLETED)
+
+| Task ID | Task Description | Scope & Requirements | Target Files | Owner / Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **P8-1** | **ESLint 8 & Next.js Core Web Vitals CI Gates** | Installed compatible `eslint@^8.57.1` and `eslint-config-next@^14.2.35` with standard `.eslintrc.json`. Created GitHub Actions workflow (`.github/workflows/ci.yml`) testing PRs and pushes to `main` with reproducible `npm ci`, isolated mock email configuration, `npx tsc --noEmit`, `npm run lint`, `npm test`, and `npm run build`. Hardened `.gitignore` against accidental secret and database leaks. | [`.eslintrc.json`](.eslintrc.json)<br>[`.github/workflows/ci.yml`](.github/workflows/ci.yml)<br>[`package.json`](package.json)<br>[`.gitignore`](.gitignore) | **Antigravity (IDE)** — ✅ **DONE** |
+
+---
+
 ## 🐛 Discovered — Colour/Contrast Quality Backlog (2026-10-21 01:07 IST audit, OpenCode)
 
 WCAG math on the real `globals.css` token pairs. Foundation verdict: **GOOD** (dark neutral + one accent, all functional roles pass AA). Three small-text failures + one spelling debt to fix. Full numbers, method, and call-site lists in `MEMORY.md` session log.

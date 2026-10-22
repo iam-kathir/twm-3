@@ -108,6 +108,31 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-10-22 15:45 IST — Phase 8: ESLint, CI and Automated Quality Gates (P8-1) (Antigravity)
+
+- **Deliverables Completed**:
+  - **ESLint 8 & Next.js Core Web Vitals Configuration**:
+    - Installed `eslint@^8.57.1` and `eslint-config-next@^14.2.35` (compatible peer with Next.js 14.2.x).
+    - Configured standard `.eslintrc.json` extending `next/core-web-vitals`.
+    - Executed `npm run lint` (`next lint`): **Passed with zero errors and zero warnings**.
+  - **All Quality Gates Executed and Verified**:
+    - `npm test`: 19/19 test suites passed (10/10 launch checklist gates + 18/18 OTP verification security tests).
+    - `npx tsc --noEmit`: Clean exit code 0.
+    - `npm run lint`: Clean exit code 0 (`✔ No ESLint warnings or errors`).
+    - `npm run build`: Clean exit code 0. Generated all 13 static pages and 16 dynamic API routes.
+  - **GitHub Actions CI Workflow (`.github/workflows/ci.yml`)**:
+    - Automated CI triggers on pushes and PRs targeting `main`.
+    - Node 20.x environment with npm caching and reproducible clean dependency installation (`npm ci`).
+    - Isolated test environment: `NODE_ENV: test`, `EMAIL_PROVIDER: mock`, dummy test session secret, and institutional domain allowlist. No production secrets or live email delivery required.
+  - **Security & Secret Leak Prevention**:
+    - Hardened `.gitignore` to explicitly reject `.env`, `.env.local`, `.env.production`, `.env.test`, `*.sqlite`, `*.sqlite-wal`, and `*.sqlite-shm`.
+
+- **Verification Output**:
+  - `npm test` → 19/19 tests passed (0 failures).
+  - `npx tsc --noEmit` → exit code 0.
+  - `npm run lint` → `✔ No ESLint warnings or errors`.
+  - `npm run build` → 13 static pages, 16 dynamic routes, exit code 0.
+
 ### 2026-10-22 14:19 IST — GitHub Remote Created, README Added & Auto-Push Hook (OpenCode)
 
 - **Deliverables Completed**:
