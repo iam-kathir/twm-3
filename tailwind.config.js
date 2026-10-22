@@ -24,6 +24,7 @@ module.exports = {
         "provider-leetcode-brand": "rgb(var(--provider-leetcode-brand-rgb) / <alpha-value>)",
         "provider-hackerrank": "rgb(var(--provider-hackerrank-rgb) / <alpha-value>)",
         "status-verified": "rgb(var(--status-verified-rgb) / <alpha-value>)",
+        "status-warning": "rgb(var(--status-warning-rgb) / <alpha-value>)",
         "status-error": "rgb(var(--status-error-rgb) / <alpha-value>)",
       },
       fontFamily: {

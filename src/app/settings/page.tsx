@@ -171,7 +171,7 @@ export default function SettingsPage() {
     }
   };
 
-  const handleSavePrivacy = () => {
+  const handleSavePrivacy = async () => {
     updateUserSettings({
       leaderboardVisibility: visibility,
       recapPreference: recapPref,
@@ -179,6 +179,22 @@ export default function SettingsPage() {
       notifyOnDispute: notifyDispute,
       notifyOnWeeklyRecap: notifyRecap
     });
+
+    const tierMap: Record<string, string> = {
+      public: "LEGAL_NAME",
+      handle_only: "HANDLE_ONLY",
+      anonymous: "ANONYMOUS",
+    };
+
+    try {
+      await fetch("/api/auth/session", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identityTier: tierMap[visibility] || "LEGAL_NAME" }),
+      });
+    } catch {
+      // Handled gracefully in offline or local mode
+    }
   };
 
   const handlePurgeCache = () => {

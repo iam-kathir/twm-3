@@ -56,6 +56,7 @@
   --status-verified: #10B981;
   --status-verified-rgb: 16 185 129;
   --status-warning: #F59E0B;
+  --status-warning-rgb: 245 158 11;
   --status-error: #EF4444;
   --status-error-rgb: 239 68 68;
 }
@@ -110,6 +111,7 @@ html.light {
   --status-verified: #059669;
   --status-verified-rgb: 5 150 105;
   --status-warning: #D97706;
+  --status-warning-rgb: 217 119 6;
   --status-error: #DC2626;
   --status-error-rgb: 220 38 38;
 }

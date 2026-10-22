@@ -37,6 +37,7 @@ import {
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useApp } from "@/context/AppContext";
 import { TelemetryDispute } from "@/types/saas";
+import { BulkRosterImportModal } from "@/components/admin/BulkRosterImportModal";
 
 interface AuditLogEntry {
   id: string;
@@ -118,6 +119,7 @@ export default function AdminHubPage() {
   const [isLoadingRoster, setIsLoadingRoster] = useState(true);
   const [rosterSearch, setRosterSearch] = useState("");
   const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+  const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
   const [isSubmittingEnrollment, setIsSubmittingEnrollment] = useState(false);
   const [enrollForm, setEnrollForm] = useState({
     rollNo: "",
@@ -760,6 +762,14 @@ export default function AdminHubPage() {
                 >
                   <Download className="w-4 h-4 text-accent" />
                   <span>Export CSV</span>
+                </button>
+
+                <button
+                  onClick={() => setIsBulkImportOpen(true)}
+                  className="px-4 py-2.5 rounded-xl bg-surface-raised hover:bg-white/10 border border-accent/30 text-accent hover:text-white text-sm font-semibold font-mono flex items-center space-x-2 transition-colors shadow-sm"
+                >
+                  <FileSpreadsheet className="w-4 h-4" />
+                  <span>Bulk CSV Import</span>
                 </button>
 
                 <button
@@ -1686,6 +1696,20 @@ export default function AdminHubPage() {
             </div>
           )}
         </AnimatePresence>
+
+        {/* Bulk CSV Roster Importer Modal (§3.2, §3.3) */}
+        <BulkRosterImportModal
+          isOpen={isBulkImportOpen}
+          onClose={() => setIsBulkImportOpen(false)}
+          onSuccess={() => {
+            fetchRosterData();
+            addToast({
+              title: "Class Roster Updated",
+              description: "Batch enrolled students into SQLite class roster.",
+              type: "success",
+            });
+          }}
+        />
       </main>
 
       {/* Footer */}

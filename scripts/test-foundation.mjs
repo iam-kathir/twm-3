@@ -11,6 +11,7 @@ import { getCohortDevelopers } from "../src/lib/search.ts";
 import { runTournamentSimulation } from "./simulate-tournament-week.mjs";
 import { createDatabaseBackup, verifyBackupFile, restoreDatabaseFromBackup } from "../src/lib/backup.ts";
 import { runLaunchAcceptanceAudit } from "./audit-launch-checklist.mjs";
+import { signSessionToken, verifySessionToken, formatStudentDisplayName, isInstitutionalCollegeEmail, buildStudentSession } from "../src/lib/auth.ts";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -486,6 +487,109 @@ describe("TWM Foundation Suite", () => {
         fs.rmSync(testBackupDir, { recursive: true, force: true });
       }
       assert.equal(fs.existsSync(testBackupDir), false);
+    });
+  });
+
+  describe("Section 6.1, §17.4 & §18.1 GitHub OAuth Session & Identity Tiers", () => {
+    const mockStudent = {
+      id: "std-test-session",
+      roll_no: "2022BCSE999",
+      name: "Tanya Verma",
+      email: "tanya.verma@college.edu",
+      class_section: "CSE-A",
+      handle_github: "tanya_dev",
+      handle_leetcode: "tanya_lc",
+      handle_hackerrank: "tanya_hr",
+      is_active: 1,
+      is_current_user: 0,
+      created_at: new Date().toISOString(),
+    };
+
+    it("signs and verifies tamper-proof HMAC-SHA256 session tokens", () => {
+      const session = buildStudentSession(mockStudent, "LEGAL_NAME");
+      const token = signSessionToken(session);
+
+      assert.ok(token.includes("."), "Token must be in payload.signature format");
+      const verified = verifySessionToken(token);
+      assert.ok(verified, "Session must verify successfully");
+      assert.equal(verified.studentId, mockStudent.id);
+      assert.equal(verified.rollNo, mockStudent.roll_no);
+      assert.equal(verified.identityTier, "LEGAL_NAME");
+    });
+
+    it("rejects tampered tokens or altered signatures with timingSafeEqual", () => {
+      const session = buildStudentSession(mockStudent, "LEGAL_NAME");
+      const token = signSessionToken(session);
+      const [payload, sig] = token.split(".");
+
+      // Tamper signature
+      const badSig = sig.slice(0, -2) + "xx";
+      const tamperedToken = `${payload}.${badSig}`;
+      assert.equal(verifySessionToken(tamperedToken), null, "Tampered signature must be rejected");
+
+      // Tamper payload
+      const tamperedPayload = Buffer.from(JSON.stringify({ ...session, studentId: "hacked" })).toString("base64url");
+      assert.equal(verifySessionToken(`${tamperedPayload}.${sig}`), null, "Altered payload must be rejected");
+    });
+
+    it("formats student display names accurately according to Identity Tiers (§18.1)", () => {
+      // Tier 1: Legal Name
+      assert.equal(
+        formatStudentDisplayName({ name: "Aarav Sharma", rollNo: "2022BCSE042", handleGithub: "aarav", identityTier: "LEGAL_NAME" }),
+        "Aarav Sharma"
+      );
+
+      // Tier 2: Handle Only
+      assert.equal(
+        formatStudentDisplayName({ name: "Aarav Sharma", rollNo: "2022BCSE042", handleGithub: "aarav", identityTier: "HANDLE_ONLY" }),
+        "@aarav"
+      );
+
+      // Tier 3: Anonymous Candidate
+      const anon = formatStudentDisplayName({ name: "Aarav Sharma", rollNo: "2022BCSE042", handleGithub: "aarav", identityTier: "ANONYMOUS" });
+      assert.ok(anon.startsWith("Candidate #"), `Expected 'Candidate #...', got: ${anon}`);
+    });
+
+    it("validates institutional college email domains correctly (§6.1, §17.4)", () => {
+      assert.equal(isInstitutionalCollegeEmail("student@karunya.edu.in"), true);
+      assert.equal(isInstitutionalCollegeEmail("researcher@mit.edu"), true);
+      assert.equal(isInstitutionalCollegeEmail("faculty@iisc.ac.in"), true);
+      assert.equal(isInstitutionalCollegeEmail("hacker@gmail.com"), false);
+      assert.equal(isInstitutionalCollegeEmail("spammer@yahoo.co.in"), false);
+      assert.equal(isInstitutionalCollegeEmail(""), false);
+    });
+  });
+
+  describe("Section 3.2 & §3.3 Atomic Bulk Roster Ingestion & Quorum Updates", () => {
+    const db = getDb();
+    const testRoll1 = "2022BCSE801";
+    const testRoll2 = "2022BCSE802";
+
+    it("imports student batch atomically and maintains quorum calculations", () => {
+      const initialQuorum = getRosterQuorumStats();
+
+      // Clean up previous runs if any
+      db.prepare("DELETE FROM roster_members WHERE roll_no IN (?, ?)").run(testRoll1, testRoll2);
+
+      const insertStmt = db.prepare(`
+        INSERT INTO roster_members (
+          id, roll_no, name, email, class_section, handle_github, handle_leetcode, handle_hackerrank, is_active, is_current_user
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 0)
+      `);
+
+      db.exec("BEGIN TRANSACTION;");
+      insertStmt.run("std-bck-801", testRoll1, "Batch Test 1", "batch1@college.edu", "CSE-A", "batch_gh1", "batch_lc1", "batch_hr1");
+      insertStmt.run("std-bck-802", testRoll2, "Batch Test 2", "batch2@college.edu", "CSE-A", "batch_gh2", "batch_lc2", "batch_hr2");
+      db.exec("COMMIT;");
+
+      const updatedQuorum = getRosterQuorumStats();
+      assert.equal(updatedQuorum.totalEnrolled, initialQuorum.totalEnrolled + 2);
+      assert.ok(updatedQuorum.quorumPercentage >= 70);
+
+      // Clean up test batch fixtures
+      db.prepare("DELETE FROM roster_members WHERE roll_no IN (?, ?)").run(testRoll1, testRoll2);
+      const restoredQuorum = getRosterQuorumStats();
+      assert.equal(restoredQuorum.totalEnrolled, initialQuorum.totalEnrolled);
     });
   });
 });

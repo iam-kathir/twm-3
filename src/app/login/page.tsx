@@ -13,10 +13,8 @@ export default function LoginPage() {
 
   const handleGitHubLogin = () => {
     setIsLoading(true);
-    // Simulate GitHub OAuth roundtrip
-    setTimeout(() => {
-      router.push("/onboarding");
-    }, 800);
+    // Real GitHub OAuth initiation with CSRF state protection
+    window.location.href = "/api/auth/github";
   };
 
   return (

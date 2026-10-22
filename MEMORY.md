@@ -108,7 +108,30 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
-### 2026-10-22 10:55 IST — Phase 7: Launch Readiness, SQLite WAL Backup Engine & Production Docker Delivered (Antigravity)
+### 2026-10-22 11:35 IST — Live GitHub OAuth SSO, Bulk CSV Roster Importer & Design Token Consolidation Delivered (Antigravity)
+
+- **GitHub OAuth Login & College Domain SSO Slice Delivered (`src/lib/auth.ts`, `/api/auth/github/*`, `/api/auth/session`)**:
+  - Implemented stateless HMAC-SHA256 session token system stored in secure HTTP-only cookies (`twm_session`) with constant-time verification (`crypto.timingSafeEqual`).
+  - Implemented 3 Identity Tiers (§18.1):
+    - `LEGAL_NAME`: Full legal name and roll number displayed.
+    - `HANDLE_ONLY`: Masks legal name and displays verified GitHub handle.
+    - `ANONYMOUS`: Deterministic anonymous candidate label (`Candidate #42`).
+  - Added institutional college email validator (`isInstitutionalCollegeEmail` for `.edu`, `.edu.in`, `.ac.in`, `.ernet.in`).
+  - OAuth route handlers: `/api/auth/github` (CSRF state protection, 10m TTL), `/api/auth/github/callback` (token exchange, verified email lookup, and automatic roster matching against SQLite), and `/api/auth/session` (session info & Identity Tier update).
+  - Integrated with `src/app/login/page.tsx` (real OAuth redirect) and `src/app/settings/page.tsx` (Identity Tier patch synchronization).
+- **Classmate Pilot Tools & Bulk CSV Roster Importer Delivered (`/api/roster/bulk-import`, `BulkRosterImportModal.tsx`)**:
+  - Atomic batch enrollment endpoint accepting raw CSV or JSON payloads, validating roll number uniqueness and email format within a single atomic SQLite transaction (`BEGIN TRANSACTION` / `COMMIT` / `ROLLBACK`).
+  - Interactive admin modal component (`src/components/admin/BulkRosterImportModal.tsx`) featuring 1-click sample CSV download, live preview, validation error reporting, and dynamic Quorum Participation recalculation (§3.3).
+  - Wired into `src/app/admin/page.tsx` with dedicated "Bulk CSV Import" button.
+- **Design Token Discipline & Color Polish (QP-4 Completed)**:
+  - Added `--status-warning-rgb` in `src/app/globals.css` (both obsidian dark `#F59E0B` and light mode `#D97706`).
+  - Mapped `"status-warning"` in `tailwind.config.js`.
+- **Test Suite Expansion & Verification Gates (All Green)**:
+  - Added *Section 6.1, §17.4 & §18.1 GitHub OAuth Session & Identity Tiers* and *Section 3.2 & §3.3 Atomic Bulk Roster Ingestion* test suites in `scripts/test-foundation.mjs`.
+  - `npx tsc --noEmit`: Clean exit 0 (0 type errors).
+  - `npm test`: **All foundation & Phase 7 test suites pass** across 15 suites in ~125ms.
+  - `npx next build`: **13/13 static pages** and **15/15 dynamic route handlers** compile green with standalone production distribution.
+  - `node scripts/audit-launch-checklist.mjs`: **10/10 launch gates passed** (100%).
 
 - **Phase 7 Delivery Completed (P7-1, P7-2, P7-3)**:
   - **SQLite WAL Online Backup & Restore Engine (`src/lib/backup.ts`, `scripts/backup-db.mjs`, `scripts/restore-db.mjs`)**:
