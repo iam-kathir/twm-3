@@ -1,0 +1,3 @@
+# Shell hooks must stay LF: a CRLF shebang breaks `sh` ("bad interpreter").
+# core.autocrlf=true on Windows would otherwise rewrite this file on checkout.
+scripts/git-hooks/post-commit text eol=lf
