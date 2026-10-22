@@ -108,6 +108,27 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-10-22 11:45 IST — Live Endpoint HTTP Verification, .env.example Template & Compose Spec Refinement (Antigravity)
+
+- **Live End-to-End HTTP Route Verification**:
+  - Dev server started on `http://localhost:3000` (`next dev -p 3000`).
+  - `GET /api/auth/session` (Unauthenticated): Returns `200` with `authenticated: false`, `fallbackDefaultUser: Aarav Sharma`.
+  - `GET /api/auth/github`: Returns `307` redirect with 32-byte cryptographic CSRF state nonce stored in cookie (`twm_oauth_csrf`).
+  - `GET /api/auth/github/callback?demo_student_id=roster_aarav_sharma`: Returns `307` redirect to `/dashboard` with HMAC-SHA256 session token stored in `twm_session` cookie.
+  - `GET /api/auth/session` (Authenticated with cookie): Returns `200` with `authenticated: true`, `session: { name: 'Aarav Sharma', identityTier: 'LEGAL_NAME', displayName: 'Aarav Sharma' }`.
+  - `PATCH /api/auth/session` (Switch to `HANDLE_ONLY`): Returns `200` with `identityTier: 'HANDLE_ONLY'`, `displayName: '@aarav-dev'`, updated cookie issued.
+  - `POST /api/roster/bulk-import`: Accepted CSV batch, executed inside atomic SQLite transaction, imported pilot students `PILOT001` and `PILOT002`, and recalculated quorum (`totalEnrolled: 10`, `verifiedOptedIn: 10`, `quorumPercentage: 100%`, label: "Representative Class Leaderboard").
+- **Environment Configuration Template (`.env.example`)**:
+  - Documented exact settings for GitHub OAuth App (`GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, callback `http://localhost:3000/api/auth/github/callback`).
+  - Documented `TWM_SESSION_SECRET` generation command, `COLLEGE_EMAIL_DOMAINS`, and `CRON_SECRET` / `ADMIN_TOKEN`.
+- **Docker Compose Spec Refinement**:
+  - Removed deprecated `version: "3.8"` attribute from `docker-compose.yml`; validated with `docker compose config` (0 warnings, exit 0).
+- **Verification Gates**:
+  - `npm test`: **15/15 foundation and Phase 7 test suites pass** (~128ms).
+  - `npx tsc --noEmit`: Clean exit 0 (0 type errors).
+  - `scripts/audit-launch-checklist.mjs`: **10/10 master launch acceptance gates passed** (100%).
+  - Git working tree: Clean commit `55d7ccc`.
+
 ### 2026-10-22 11:35 IST — Live GitHub OAuth SSO, Bulk CSV Roster Importer & Design Token Consolidation Delivered (Antigravity)
 
 - **GitHub OAuth Login & College Domain SSO Slice Delivered (`src/lib/auth.ts`, `/api/auth/github/*`, `/api/auth/session`)**:
