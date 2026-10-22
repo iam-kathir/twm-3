@@ -183,6 +183,14 @@ body {
   letter-spacing: -0.01em;
 }
 
+/* Prevent coding ligatures from morphing standard text into math symbols */
+.font-mono,
+code,
+kbd,
+samp {
+  font-variant-ligatures: none;
+}
+
 /* Custom precision scrollbar */
 ::-webkit-scrollbar {
   width: 7px;
@@ -284,4 +292,21 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Typography & Clean Font Rendering: Prevent coding ligatures from morphing plain text into symbols */
+.font-mono,
+code,
+kbd,
+samp {
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
+  letter-spacing: -0.01em;
+}
+
+body {
+  font-family: var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

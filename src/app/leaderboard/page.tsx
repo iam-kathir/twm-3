@@ -19,7 +19,8 @@ import {
   Users,
   FileDown,
   Star,
-  ShieldAlert
+  ShieldAlert,
+  X
 } from "lucide-react";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useApp } from "@/context/AppContext";
@@ -281,20 +282,20 @@ export default function LeaderboardPage() {
                   {isRepresentative ? "CSE 2026 Class Leaderboard" : "Participating Members Leaderboard"}
                 </h1>
               </div>
-              <p className="text-sm text-muted font-mono">
-                Class: B.Tech CSE 2026 • Period: Week 42 (Mon 00:00 to Sun 23:59:59 IST)
+              <p className="text-sm text-muted font-sans">
+                Class: B.Tech CSE 2026 <span className="mx-1.5 opacity-40">|</span> Period: Week 42 (Mon 00:00 to Sun 23:59:59 IST)
               </p>
             </div>
 
             {/* 70% Participation Ratio Badge */}
-            <div className="flex items-center gap-3.5 p-3.5 px-4 rounded-xl bg-surface-raised border border-white/[0.08] self-start sm:self-auto font-mono text-sm shadow-sm">
+            <div className="flex items-center gap-3.5 p-3.5 px-4 rounded-xl bg-surface-raised border border-white/[0.08] self-start sm:self-auto font-sans text-sm shadow-sm">
               <Users className="h-5 w-5 text-accent" />
               <div>
-                <span className="text-muted-soft block text-xs uppercase tracking-wider">PARTICIPATION RATIO</span>
+                <span className="text-muted block text-xs uppercase tracking-wider font-semibold">PARTICIPATION RATIO</span>
                 <span className="text-white font-bold">{participatingCount} / {totalRoster} students ({participationPercentage}%)</span>
               </div>
-              <span className="text-xs px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
-                Representative (&ge;70%)
+              <span className="text-xs px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold font-sans">
+                Representative (&gt;= 70%)
               </span>
             </div>
           </div>
@@ -304,7 +305,7 @@ export default function LeaderboardPage() {
             <div
               role="group"
               aria-label="Leaderboard platform"
-              className="inline-flex p-1.5 rounded-xl bg-canvas border border-white/10 text-sm font-mono flex-wrap"
+              className="inline-flex p-1.5 rounded-xl bg-canvas border border-white/10 text-sm font-sans flex-wrap"
             >
               <button
                 type="button"
@@ -341,7 +342,7 @@ export default function LeaderboardPage() {
               </button>
             </div>
 
-            <div className="flex items-center gap-3 text-sm font-mono">
+            <div className="flex items-center gap-3 text-sm font-sans">
               <button
                 onClick={exportLeaderboardCSV}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 transition-colors font-semibold"
@@ -355,10 +356,10 @@ export default function LeaderboardPage() {
                 type="button"
                 aria-expanded={showCalculationInfo}
                 onClick={() => setShowCalculationInfo(!showCalculationInfo)}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 bg-surface-raised text-sm font-mono text-ink-secondary hover:bg-surface transition-colors font-semibold"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 bg-surface-raised text-sm font-sans text-ink-secondary hover:bg-surface transition-colors font-semibold"
               >
                 <Info className="h-4 w-4 text-accent" />
-                <span>Rules (§9.6)</span>
+                <span>Competition Rules</span>
               </button>
             </div>
           </div>
@@ -371,37 +372,44 @@ export default function LeaderboardPage() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="p-6 rounded-2xl border border-accent/30 bg-surface-raised text-sm font-mono space-y-3 text-ink-secondary shadow-md overflow-hidden"
+              className="p-6 rounded-2xl border border-accent/30 bg-surface-raised text-sm font-sans space-y-4 text-ink-secondary shadow-md overflow-hidden"
             >
               <div className="flex items-center justify-between text-white font-bold">
-                <span className="flex items-center gap-2 text-accent text-base">
+                <span className="flex items-center gap-2 text-accent text-base font-sans">
                   <Info className="h-5 w-5" />
-                  Deterministic Competition Rules &amp; Tie Policy (§9.6)
+                  Deterministic Competition Rules &amp; Tie Policy (Rule 9.6)
                 </span>
                 <button
                   type="button"
                   onClick={() => setShowCalculationInfo(false)}
-                  className="text-muted hover:text-white text-sm"
+                  className="inline-flex items-center gap-1.5 text-xs text-muted hover:text-white transition-colors px-2 py-1 rounded-lg hover:bg-white/5 font-sans"
                 >
-                  Close &times;
+                  <X className="h-3.5 w-3.5" />
+                  <span>Close</span>
                 </button>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-                <div className="p-3.5 rounded-xl bg-surface border border-white/5 space-y-1">
-                  <span className="text-white font-semibold block text-xs text-accent">§9.6 TIE POLICY</span>
-                  <p className="text-xs text-muted">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+                <div className="p-4 rounded-xl bg-surface border border-white/5 space-y-1.5">
+                  <span className="text-white font-bold block text-xs text-accent uppercase tracking-wider font-sans">
+                    RULE 9.6: TIE POLICY
+                  </span>
+                  <p className="text-xs text-muted leading-relaxed font-sans">
                     Equal metric values share the same rank (e.g. 1, 2, 2, 4). Secondary display sort is strictly alphabetical by name without altering rank.
                   </p>
                 </div>
-                <div className="p-3.5 rounded-xl bg-surface border border-white/5 space-y-1">
-                  <span className="text-white font-semibold block text-xs text-accent">§9.7 BOUNDARY RULE</span>
-                  <p className="text-xs text-muted">
+                <div className="p-4 rounded-xl bg-surface border border-white/5 space-y-1.5">
+                  <span className="text-white font-bold block text-xs text-accent uppercase tracking-wider font-sans">
+                    RULE 9.7: SUNDAY BOUNDARY
+                  </span>
+                  <p className="text-xs text-muted leading-relaxed font-sans">
                     Cumulative deltas use only observations taken at or before Sunday 23:59:59 IST. Late observations are never rewound.
                   </p>
                 </div>
-                <div className="p-3.5 rounded-xl bg-surface border border-white/5 space-y-1">
-                  <span className="text-white font-semibold block text-xs text-accent">§5.6 CAPABILITY GATING</span>
-                  <p className="text-xs text-muted">
+                <div className="p-4 rounded-xl bg-surface border border-white/5 space-y-1.5">
+                  <span className="text-white font-bold block text-xs text-accent uppercase tracking-wider font-sans">
+                    RULE 5.6: CAPABILITY GATING
+                  </span>
+                  <p className="text-xs text-muted leading-relaxed font-sans">
                     HackerRank lacks public event timestamps; badges &amp; stars are displayed for verification only and excluded from weekly ranking deltas.
                   </p>
                 </div>
@@ -429,7 +437,7 @@ export default function LeaderboardPage() {
             {/* HackerRank Verified Badges Table */}
             <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden shadow-xl">
               <div className="overflow-x-auto">
-                <table className="w-full text-left font-mono text-sm">
+                <table className="w-full text-left font-sans text-sm">
                   <thead className="bg-surface-raised border-b border-white/[0.08] text-muted uppercase tracking-wider text-xs">
                     <tr>
                       <th scope="col" className="py-4 px-6">Participant</th>
@@ -516,10 +524,10 @@ export default function LeaderboardPage() {
                         {/* Policy & Proof */}
                         <td className="py-4 px-6 text-right">
                           <div className="flex flex-col items-end gap-1">
-                            <span className="inline-block px-2.5 py-1 rounded text-xs font-mono bg-white/5 text-muted border border-white/10">
-                              Excluded from Weekly Delta (§5.6)
+                            <span className="inline-block px-2.5 py-1 rounded text-xs font-sans bg-white/5 text-muted border border-white/10">
+                              Excluded from Weekly Delta (Rule 5.6)
                             </span>
-                            <span className="text-[10px] font-mono text-emerald-400/80 bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10">
+                            <span className="text-[10px] font-sans text-emerald-400/80 bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10">
                               SHA-256 Evidence Verified
                             </span>
                           </div>
@@ -532,13 +540,13 @@ export default function LeaderboardPage() {
             </div>
           </div>
         ) : (
-          /* Deterministic Competition Leaderboard Table (§9.6) */
+          /* Deterministic Competition Leaderboard Table */
           <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden shadow-xl">
             <div className="overflow-x-auto">
-              <table className="w-full text-left font-mono text-sm">
+              <table className="w-full text-left font-sans text-sm">
                 <thead className="bg-surface-raised border-b border-white/[0.08] text-muted uppercase tracking-wider text-xs">
                   <tr>
-                    <th scope="col" className="py-4 px-6">Rank (§9.6)</th>
+                    <th scope="col" className="py-4 px-6">Rank</th>
                     <th scope="col" className="py-4 px-6">Participant</th>
                     <th scope="col" className="py-4 px-6">
                       {platform === "github" ? "Observed Active Days" : "Weekly Solved Delta"}
@@ -577,8 +585,8 @@ export default function LeaderboardPage() {
 
                           {item.isTied && (
                             <span
-                              className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-muted-soft font-mono font-normal"
-                              title="Tied score (§9.6: standard competition ranking 1, 2, 2, 4)"
+                              className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-muted-soft font-sans font-medium"
+                              title="Tied score (Rule 9.6: standard competition ranking 1, 2, 2, 4)"
                             >
                               Tied
                             </span>
@@ -640,7 +648,7 @@ export default function LeaderboardPage() {
                             <button
                               onClick={() => openDisputeModal(platform === "github" ? "github_active_days" : "leetcode_delta")}
                               className="text-xs text-rose-400 hover:text-rose-300 px-2.5 py-1 rounded bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 font-semibold transition-colors"
-                              title="Dispute calculation under Rule §9.7"
+                              title="Dispute calculation under Rule 9.7"
                             >
                               Dispute
                             </button>
@@ -657,11 +665,11 @@ export default function LeaderboardPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.08] bg-canvas py-6 text-xs text-muted-soft font-mono">
+      <footer className="border-t border-white/[0.08] bg-canvas py-6 text-xs text-muted font-sans">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>TWM 3.0 Platform • Deterministic Ranks &amp; Roster Denominator</div>
+          <div>TWM 3.1 Platform | Deterministic Ranks &amp; Roster Denominator</div>
           <div className="text-muted">
-            Rule §9.6: Competition Ranking (1, 2, 2, 4 ties) • Section 5.6 Capability Gating
+            Rule 9.6: Competition Ranking (1, 2, 2, 4 ties) | Section 5.6: Capability Gating
           </div>
         </div>
       </footer>

@@ -78,7 +78,7 @@ export function AppHeader() {
               illustrative. Claiming "live" here would break the ground rule. */}
           <div
             title="Three provider adapters are wired (GitHub, LeetCode, HackerRank). The accounts and figures shown on these screens are illustrative until a student links one."
-            className="hidden xl:inline-flex items-center gap-2 rounded-xl border border-accent/25 bg-accent/10 px-3 py-1.5 font-mono text-xs text-accent shadow-sm cursor-help transition-all hover:bg-accent/15"
+            className="hidden xl:inline-flex items-center gap-2 rounded-xl border border-accent/25 bg-accent/10 px-3 py-1.5 font-sans text-xs text-accent shadow-sm cursor-help transition-all hover:bg-accent/15"
           >
             <span className="relative flex h-2 w-2">
               <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
@@ -118,7 +118,7 @@ export function AppHeader() {
           {/* Quick Search / Cmd+K Pill */}
           <button
             onClick={openCommandPalette}
-            className="hidden sm:flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm text-muted hover:text-ink transition-all font-mono shadow-sm group"
+            className="hidden sm:flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm text-muted hover:text-ink transition-all font-sans shadow-sm group"
           >
             <Search className="h-4 w-4 text-slate-400 group-hover:text-accent transition-colors" />
             <span className="text-slate-400 group-hover:text-slate-200">Search or command...</span>
@@ -131,7 +131,7 @@ export function AppHeader() {
           <button
             onClick={triggerLiveSync}
             disabled={isSyncing}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm font-mono text-ink transition-all disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm font-sans text-ink transition-all disabled:opacity-50"
             title="Execute Live Telemetry Crawl"
           >
             <RotateCw className={`h-4 w-4 text-accent ${isSyncing ? "animate-spin" : ""}`} />

@@ -108,6 +108,27 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-10-22 12:40 IST — Typography & Font Rendering Audit: Eliminating Ligature Glyphs & Section Symbols (Antigravity)
+
+- **Root Cause Solved**:
+  - Overuse of `font-mono` across leaderboard table headers, cells, platform tabs, rule drawers, and participation badges caused text to render with monospaced typewriter metrics.
+  - Coding font ligatures (in JetBrains Mono) turned characters like `>=`, `<=`, and numbers into math symbols and slashed zeros.
+  - Windows Chrome fallback font mapped generic `monospace` to `Courier New` or jagged system fonts, and section symbols (`§9.6`, `§9.7`, `§5.6`) looked like mojibake/corrupted encoding to students.
+- **Changes Applied**:
+  - `tailwind.config.js`: Expanded `fontFamily.sans` and `fontFamily.mono` with robust, modern OS fallback stacks (`ui-monospace`, `SFMono-Regular`, `Consolas`, `Segoe UI`, etc.).
+  - `src/app/globals.css`: Added `font-variant-ligatures: none;` and `font-feature-settings: "liga" 0, "calt" 0;` to `.font-mono, code, kbd, samp` to disable symbol ligatures. Added antialiased font smoothing and explicit body typography rules.
+  - `src/app/leaderboard/page.tsx`:
+    - Replaced all monospaced table containers and prose with clean `font-sans font-medium`.
+    - Modernized platform tabs and rule drawers: replaced `§9.6` / `§9.7` with human-readable `Rule 9.6` and `Rule 9.7`.
+    - Swapped raw `&times;` with Lucide `<X />` icon.
+    - Updated `Representative (&ge;70%)` to `Representative (>= 70%)` in clean sans-serif.
+    - Simplified table header from `Rank (§9.6)` to `Rank`.
+  - `src/components/ui/AppHeader.tsx`: Swapped adapter badge, search pill, and sync trigger to crisp `font-sans`.
+- **Verification Gates**:
+  - `npx tsc --noEmit`: Exit 0 (clean).
+  - `npm test`: 10/10 master launch acceptance gates passed (100%).
+  - Live Browser Snapshot: Navigated to `http://localhost:3000/leaderboard` via Playwright MCP and visually verified clean, crisp, modern typography with zero glyph/symbol distortion.
+
 ### 2026-10-22 12:20 IST — Linear/Raycast-Grade UI Craft & Micro-Interactions Delivered (Antigravity)
 
 - **Global Navigation & Header Polish (`src/components/ui/AppHeader.tsx`, `NavBar.tsx`)**:
