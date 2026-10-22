@@ -72,6 +72,7 @@ export interface ToastNotification {
   description?: string;
   type: ToastType;
   timestamp: string;
+  duration?: number;
   actionLabel?: string;
   onAction?: () => void;
 }

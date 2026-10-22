@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import Link from "next/navigation";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   RotateCw,
   Search,
@@ -41,6 +41,14 @@ export function AppHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
 
+  const userInitials = (currentUser?.name || "Student")
+    .split(" ")
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase() || "ST";
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
@@ -60,7 +68,7 @@ export function AppHeader() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-canvas/95 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-canvas/90 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Brand & Navigation */}
         <div className="flex items-center gap-6 lg:gap-8">
@@ -78,20 +86,27 @@ export function AppHeader() {
             <span className="font-semibold tracking-wide">Demo data · 3 adapters wired</span>
           </div>
 
-          <nav className="hidden md:flex items-center gap-2">
+          <nav className="hidden md:flex items-center gap-1.5 p-1 rounded-2xl bg-surface/50 border border-white/[0.05]">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
                 <NextLink
                   key={link.href}
                   href={link.href}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                  className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
                     isActive
-                      ? "bg-surface-raised text-white font-semibold border border-white/10 shadow-sm"
-                      : "text-muted hover:text-white hover:bg-white/5"
+                      ? "text-white font-semibold"
+                      : "text-muted hover:text-white hover:bg-white/[0.04]"
                   }`}
                 >
-                  {link.label}
+                  {isActive && (
+                    <motion.span
+                      layoutId="header-active-nav"
+                      className="absolute inset-0 rounded-xl bg-surface-raised border border-white/10 shadow-sm"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{link.label}</span>
                 </NextLink>
               );
             })}
@@ -144,10 +159,10 @@ export function AppHeader() {
           <div className="relative" ref={profileRef}>
             <button
               onClick={() => setIsProfileOpen((prev) => !prev)}
-              className="flex items-center gap-3 p-1.5 sm:px-3 sm:py-2 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 transition-colors"
+              className="flex items-center gap-3 p-1.5 sm:px-3 sm:py-2 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 transition-colors shadow-sm"
             >
               <div className="w-9 h-9 rounded-xl bg-surface-raised border border-accent/40 flex items-center justify-center font-mono text-sm font-bold text-accent shadow-sm">
-                AS
+                {userInitials}
               </div>
               <div className="hidden lg:block text-left">
                 <div className="text-sm font-semibold text-ink leading-tight">
@@ -157,77 +172,85 @@ export function AppHeader() {
                   {currentUser.role === "co-admin" ? "Faculty Co-Admin" : currentUser.rollNo}
                 </div>
               </div>
-              <ChevronDown className="h-4 w-4 text-slate-400 ml-0.5" />
+              <ChevronDown className={`h-4 w-4 text-slate-400 ml-0.5 transition-transform duration-200 ${isProfileOpen ? "rotate-180" : ""}`} />
             </button>
 
             {/* Profile Dropdown */}
-            {isProfileOpen && (
-              <div className="absolute right-0 mt-2 w-72 rounded-2xl bg-surface border border-white/10 shadow-2xl p-2.5 z-50 text-sm font-sans">
-                <div className="px-3.5 py-3 border-b border-white/[0.08]">
-                  <div className="font-bold text-base text-ink">{currentUser.name}</div>
-                  <div className="text-xs font-mono text-muted truncate mt-0.5">{currentUser.email}</div>
-                  <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono bg-white/5 border border-white/10 text-accent">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                    <span>Role: {currentUser.role === "co-admin" ? "Co-Admin Reviewer" : "Verified Student"}</span>
-                  </div>
-                </div>
-
-                <div className="py-1.5 space-y-0.5">
-                  <NextLink
-                    href="/settings"
-                    onClick={() => setIsProfileOpen(false)}
-                    className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
-                  >
-                    <Settings className="h-4 w-4 text-slate-400" />
-                    <span>Account Settings</span>
-                  </NextLink>
-
-                  <NextLink
-                    href="/privacy"
-                    onClick={() => setIsProfileOpen(false)}
-                    className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
-                  >
-                    <Shield className="h-4 w-4 text-slate-400" />
-                    <span>Privacy &amp; Governance</span>
-                  </NextLink>
-
-                  <button
-                    onClick={() => {
-                      setIsProfileOpen(false);
-                      openDisputeModal();
-                    }}
-                    className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-rose-400 hover:bg-white/5 transition-colors text-left font-medium"
-                  >
-                    <ShieldAlert className="h-4 w-4 text-rose-400" />
-                    <span>Lodge Score Dispute</span>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setIsProfileOpen(false);
-                      switchRole(currentUser.role === "student" ? "co-admin" : "student");
-                    }}
-                    className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-accent hover:bg-white/5 transition-colors text-left font-medium"
-                  >
-                    <div className="flex items-center gap-3">
-                      <Shield className="h-4 w-4 text-accent" />
-                      <span>Switch to {currentUser.role === "student" ? "Co-Admin View" : "Student View"}</span>
+            <AnimatePresence>
+              {isProfileOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                  transition={{ type: "spring", stiffness: 420, damping: 28 }}
+                  className="absolute right-0 mt-2.5 w-72 rounded-2xl bg-surface/95 backdrop-blur-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-2.5 z-50 text-sm font-sans"
+                >
+                  <div className="px-3.5 py-3 border-b border-white/[0.08]">
+                    <div className="font-bold text-base text-ink">{currentUser.name}</div>
+                    <div className="text-xs font-mono text-muted truncate mt-0.5">{currentUser.email}</div>
+                    <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono bg-white/5 border border-white/10 text-accent">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                      <span>Role: {currentUser.role === "co-admin" ? "Co-Admin Reviewer" : "Verified Student"}</span>
                     </div>
-                  </button>
-                </div>
+                  </div>
 
-                <div className="pt-1.5 border-t border-white/[0.08]">
-                  <NextLink
-                    href="/login"
-                    onClick={() => setIsProfileOpen(false)}
-                    className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-white/5 transition-colors font-medium"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    <span>Sign Out</span>
-                  </NextLink>
-                </div>
-              </div>
-            )}
+                  <div className="py-1.5 space-y-0.5">
+                    <NextLink
+                      href="/settings"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
+                    >
+                      <Settings className="h-4 w-4 text-slate-400" />
+                      <span>Account Settings</span>
+                    </NextLink>
+
+                    <NextLink
+                      href="/privacy"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
+                    >
+                      <Shield className="h-4 w-4 text-slate-400" />
+                      <span>Privacy &amp; Governance</span>
+                    </NextLink>
+
+                    <button
+                      onClick={() => {
+                        setIsProfileOpen(false);
+                        openDisputeModal();
+                      }}
+                      className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-rose-400 hover:bg-white/5 transition-colors text-left font-medium"
+                    >
+                      <ShieldAlert className="h-4 w-4 text-rose-400" />
+                      <span>Lodge Score Dispute</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setIsProfileOpen(false);
+                        switchRole(currentUser.role === "student" ? "co-admin" : "student");
+                      }}
+                      className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-accent hover:bg-white/5 transition-colors text-left font-medium"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Shield className="h-4 w-4 text-accent" />
+                        <span>Switch to {currentUser.role === "student" ? "Co-Admin View" : "Student View"}</span>
+                      </div>
+                    </button>
+                  </div>
+
+                  <div className="pt-1.5 border-t border-white/[0.08]">
+                    <NextLink
+                      href="/login"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-white/5 transition-colors font-medium"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>Sign Out</span>
+                    </NextLink>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Mobile Menu Trigger */}

@@ -458,67 +458,48 @@ export default function AdminHubPage() {
         </div>
 
         {/* Tab Controls */}
-        <div className="flex items-center space-x-3 border-b border-white/[0.08] pb-3 overflow-x-auto">
-          <button
-            onClick={() => setActiveTab("overview")}
-            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shrink-0 ${
-              activeTab === "overview"
-                ? "bg-accent text-canvas font-bold shadow-md shadow-accent/20"
-                : "text-muted hover:text-white bg-surface/50 hover:bg-surface border border-transparent hover:border-white/10"
-            }`}
-          >
-            System Overview &amp; Quorum
-          </button>
-          <button
-            onClick={() => setActiveTab("roster")}
-            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center space-x-2 shrink-0 ${
-              activeTab === "roster"
-                ? "bg-accent text-canvas font-bold shadow-md shadow-accent/20"
-                : "text-muted hover:text-white bg-surface/50 hover:bg-surface border border-transparent hover:border-white/10"
-            }`}
-          >
-            <Users className="w-4 h-4" />
-            <span>Class Roster ({totalEnrolled})</span>
-          </button>
-          <button
-            onClick={() => setActiveTab("disputes")}
-            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center space-x-2 shrink-0 ${
-              activeTab === "disputes"
-                ? "bg-accent text-canvas font-bold shadow-md shadow-accent/20"
-                : "text-muted hover:text-white bg-surface/50 hover:bg-surface border border-transparent hover:border-white/10"
-            }`}
-          >
-            <span>Telemetry Disputes</span>
-            {disputes.filter(d => d.status === "pending").length > 0 && (
-              <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center justify-center text-xs font-mono font-bold">
-                {disputes.filter(d => d.status === "pending").length}
-              </span>
-            )}
-          </button>
-          <button
-            onClick={() => setActiveTab("logs")}
-            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shrink-0 ${
-              activeTab === "logs"
-                ? "bg-accent text-canvas font-bold shadow-md shadow-accent/20"
-                : "text-muted hover:text-white bg-surface/50 hover:bg-surface border border-transparent hover:border-white/10"
-            }`}
-          >
-            Immutable Audit Trail
-          </button>
-          <button
-            onClick={() => setActiveTab("simulator")}
-            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center space-x-2 shrink-0 ${
-              activeTab === "simulator"
-                ? "bg-accent text-canvas font-bold shadow-md shadow-accent/20"
-                : "text-muted hover:text-white bg-surface/50 hover:bg-surface border border-transparent hover:border-white/10"
-            }`}
-          >
-            <Activity className="w-4 h-4" />
-            <span>Tournament Simulator</span>
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-accent/20 text-accent uppercase">
-              Phase 5
-            </span>
-          </button>
+        <div className="flex items-center space-x-2 border-b border-white/[0.08] pb-3 overflow-x-auto p-1">
+          {[
+            { id: "overview", label: "System Overview & Quorum" },
+            { id: "roster", label: `Class Roster (${totalEnrolled})`, icon: Users },
+            { id: "disputes", label: "Telemetry Disputes", badge: disputes.filter(d => d.status === "pending").length },
+            { id: "logs", label: "Immutable Audit Trail" },
+            { id: "simulator", label: "Tournament Simulator", icon: Activity, tag: "Phase 5" },
+          ].map((tab) => {
+            const isSelected = activeTab === tab.id;
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center space-x-2 shrink-0 ${
+                  isSelected
+                    ? "text-canvas font-bold"
+                    : "text-muted hover:text-white bg-surface/50 hover:bg-surface border border-transparent hover:border-white/10"
+                }`}
+              >
+                {isSelected && (
+                  <motion.span
+                    layoutId="admin-active-tab-pill"
+                    className="absolute inset-0 rounded-xl bg-accent shadow-md shadow-accent/25"
+                    transition={{ type: "spring", stiffness: 420, damping: 32 }}
+                  />
+                )}
+                {Icon && <Icon className={`relative z-10 w-4 h-4 ${isSelected ? "text-canvas" : "text-muted"}`} />}
+                <span className="relative z-10">{tab.label}</span>
+                {typeof tab.badge === "number" && tab.badge > 0 && (
+                  <span className={`relative z-10 w-5 h-5 rounded-full flex items-center justify-center text-xs font-mono font-bold ${isSelected ? "bg-canvas text-accent" : "bg-amber-500/20 text-amber-300 border border-amber-500/30"}`}>
+                    {tab.badge}
+                  </span>
+                )}
+                {tab.tag && (
+                  <span className={`relative z-10 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${isSelected ? "bg-canvas/20 text-canvas" : "bg-accent/20 text-accent"}`}>
+                    {tab.tag}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
         {/* Co-Admin Mode Banner */}

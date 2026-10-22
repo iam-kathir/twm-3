@@ -230,7 +230,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Tab Controls Bar */}
-        <div className="flex items-center gap-2 sm:gap-3 border-b border-white/[0.08] pb-4 overflow-x-auto">
+        <div className="flex items-center gap-2 sm:gap-3 border-b border-white/[0.08] pb-4 overflow-x-auto p-1">
           {[
             { id: "profile", label: "Profile & Roster", icon: User },
             { id: "adapters", label: "Connected Adapters", icon: Github },
@@ -243,14 +243,21 @@ export default function SettingsPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm sm:text-base font-semibold transition-all whitespace-nowrap ${
+                className={`relative flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
                   isSelected
-                    ? "bg-surface-raised text-white border border-accent/40 shadow-md"
-                    : "text-muted hover:text-white hover:bg-white/5 border border-transparent"
+                    ? "text-white font-bold"
+                    : "text-muted hover:text-white hover:bg-white/5"
                 }`}
               >
-                <Icon className={`h-4 w-4 sm:h-5 sm:w-5 ${isSelected ? "text-accent" : "text-slate-400"}`} />
-                <span>{tab.label}</span>
+                {isSelected && (
+                  <motion.span
+                    layoutId="settings-active-tab"
+                    className="absolute inset-0 rounded-xl bg-surface-raised border border-accent/40 shadow-[0_4px_20px_rgba(16,185,129,0.15)]"
+                    transition={{ type: "spring", stiffness: 420, damping: 32 }}
+                  />
+                )}
+                <Icon className={`relative z-10 h-4 w-4 sm:h-5 sm:w-5 ${isSelected ? "text-accent" : "text-slate-400"}`} />
+                <span className="relative z-10">{tab.label}</span>
               </button>
             );
           })}

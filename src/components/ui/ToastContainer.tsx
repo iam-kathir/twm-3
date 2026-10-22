@@ -40,19 +40,40 @@ export function ToastContainer() {
             ? "text-rose-400"
             : "text-sky-400";
 
+          const bgAura = isSuccess
+            ? "from-emerald-500/10 via-transparent to-transparent"
+            : isWarning
+            ? "from-amber-500/10 via-transparent to-transparent"
+            : isError
+            ? "from-rose-500/10 via-transparent to-transparent"
+            : "from-sky-500/10 via-transparent to-transparent";
+
+          const progressBg = isSuccess
+            ? "bg-emerald-400"
+            : isWarning
+            ? "bg-amber-400"
+            : isError
+            ? "bg-rose-400"
+            : "bg-sky-400";
+
           return (
             <motion.div
               key={toast.id}
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              initial={{ opacity: 0, y: 24, scale: 0.92 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              className={`pointer-events-auto p-3.5 rounded-xl bg-surface/95 backdrop-blur-md border ${borderColor} shadow-2xl flex items-start gap-3 relative overflow-hidden`}
+              exit={{ opacity: 0, y: 16, scale: 0.92 }}
+              transition={{ type: "spring", stiffness: 380, damping: 26 }}
+              className={`pointer-events-auto p-4 rounded-2xl bg-surface/90 backdrop-blur-2xl border ${borderColor} shadow-[0_20px_50px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.06)] flex items-start gap-3.5 relative overflow-hidden`}
             >
-              <Icon className={`h-5 w-5 ${iconColor} shrink-0 mt-0.5`} />
+              {/* Subtle Ambient Radial Glow */}
+              <div className={`absolute -top-12 -left-12 w-32 h-32 bg-gradient-to-br ${bgAura} rounded-full blur-xl pointer-events-none`} />
 
-              <div className="flex-1 pr-4">
-                <div className="text-xs font-semibold text-ink font-sans">
+              <div className={`p-1.5 rounded-xl bg-white/[0.04] border border-white/[0.06] shrink-0 mt-0.5`}>
+                <Icon className={`h-4 w-4 ${iconColor}`} />
+              </div>
+
+              <div className="flex-1 pr-4 relative z-10">
+                <div className="text-xs font-semibold text-ink font-sans tracking-wide">
                   {toast.title}
                 </div>
                 {toast.description && (
@@ -60,30 +81,25 @@ export function ToastContainer() {
                     {toast.description}
                   </div>
                 )}
-                <div className="text-[9px] font-mono text-muted-soft mt-1">
+                <div className="text-[9px] font-mono text-muted mt-1.5 opacity-80">
                   {toast.timestamp}
                 </div>
               </div>
 
               <button
                 onClick={() => dismissToast(toast.id)}
-                className="text-muted-soft hover:text-ink p-1 rounded-md hover:bg-white/5 transition-colors absolute top-2.5 right-2.5"
+                className="text-muted hover:text-white p-1 rounded-lg hover:bg-white/[0.06] transition-colors absolute top-3 right-3 z-20"
                 aria-label="Dismiss notification"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
 
-              {/* Subtle top indicator bar */}
-              <div
-                className={`absolute top-0 left-0 right-0 h-0.5 ${
-                  isSuccess
-                    ? "bg-emerald-400"
-                    : isWarning
-                    ? "bg-amber-400"
-                    : isError
-                    ? "bg-rose-400"
-                    : "bg-sky-400"
-                }`}
+              {/* Animated Progress Countdown Bar */}
+              <motion.div
+                initial={{ width: "100%" }}
+                animate={{ width: "0%" }}
+                transition={{ duration: (toast.duration || 5000) / 1000, ease: "linear" }}
+                className={`absolute bottom-0 left-0 right-0 h-0.5 ${progressBg} opacity-80`}
               />
             </motion.div>
           );
