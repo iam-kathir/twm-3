@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import { Github, Shield, ArrowRight, CheckCircle2, Lock, Sparkles, GraduationCap } from "lucide-react";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -146,3 +146,18 @@ export default function LoginPage() {
     </div>
   );
 }
+
+export default function LoginPage() {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="min-h-screen bg-canvas text-ink flex items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+        </div>
+      }
+    >
+      <LoginContent />
+    </React.Suspense>
+  );
+}
+
