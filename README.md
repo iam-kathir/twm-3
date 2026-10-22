@@ -25,9 +25,9 @@ Developed and verified on Node 24.
 | `npm run dev` | Next.js dev server on port 3000 |
 | `npm run build` | Production build (`output: "standalone"`) |
 | `npm start` | Serve the production build |
-| `npm test` | `node:test` foundation suite (`scripts/test-foundation.mjs`) |
+| `npm test` | Automated `node:test` suite (`scripts/test-foundation.mjs` + `scripts/test-otp-verification.mjs`) |
 | `npm run simulate` | Simulate a 7-day tournament week against a throwaway DB |
-| `npm run lint` | Next.js ESLint |
+| `npm run lint` | Next.js Core Web Vitals ESLint audit (`next lint`) |
 
 ---
 
@@ -40,6 +40,8 @@ Copy `.env.example` → `.env.local`. Nothing in `.env.local` is committed.
 | `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | GitHub OAuth App for cohort sign-in |
 | `TWM_SESSION_SECRET` | 64-char hex secret used to sign tamper-proof sessions |
 | `COLLEGE_EMAIL_DOMAINS` | Comma-separated institutional domains allowed to enroll |
+| `RESEND_API_KEY` / `RESEND_FROM_EMAIL` | Transactional email provider for college OTP verification |
+| `SENDGRID_API_KEY` / `SENDGRID_FROM_EMAIL` | Alternative transactional email provider |
 | `CRON_SECRET` / `ADMIN_TOKEN` | Bearer auth for the Sunday boundary finalizer and admin routes |
 | `NEXT_PUBLIC_APP_URL` | Public base URL (defaults to the request origin) |
 
@@ -52,7 +54,7 @@ The GitHub OAuth callback must point at `http://localhost:3000/api/auth/github/c
 
 ```
 src/app/                 Next.js App Router routes (pages + route handlers)
-  api/auth/              GitHub OAuth + session + HMAC challenge
+  api/auth/              GitHub OAuth + session + HMAC challenge + email OTP
   api/telemetry/         GitHub / LeetCode / HackerRank ingestion + sync
   api/cron/              Sunday boundary finalizer
   api/roster/            Roster enrolment, bulk import, quorum
@@ -61,11 +63,12 @@ src/app/                 Next.js App Router routes (pages + route handlers)
   api/recap, api/ai/     Rule-based + AI weekly recaps
   api/simulation/        Tournament-week simulator
 src/lib/                 db.ts (node:sqlite, WAL), leaderboard.ts, finalizer.ts,
-                         rate-limit.ts, auth.ts, search.ts, simulation.ts, recap.ts
+                         rate-limit.ts, auth.ts, otp.ts, email/ (Resend, SendGrid, template)
 src/components/          UI (landing, dashboard, admin, shared ui primitives)
 src/context/             AppContext — client state for the cockpit
-scripts/                 test-foundation.mjs, boundary-scheduler.mjs,
+scripts/                 test-foundation.mjs, test-otp-verification.mjs, boundary-scheduler.mjs,
                          backup-db.mjs, restore-db.mjs, simulate-tournament-week.mjs
+.github/workflows/       ci.yml — Automated CI running typecheck, lint, test, and build
 data/                    SQLite database + WAL + backups (git-ignored, mount as a volume)
 ```
 
@@ -76,8 +79,12 @@ database service. Backups via `npm run` scripts `backup-db.mjs` / `restore-db.mj
 
 | Endpoint | Method | Purpose |
 |---|---|---|
+| `/api/auth/github` | GET | Initiates GitHub OAuth with CSRF state nonce |
+| `/api/auth/github/callback` | GET | Validates CSRF, exchanges token, matches roster |
+| `/api/auth/email/request-otp`| POST | Dispatches 6-digit verification code to college email |
+| `/api/auth/email/verify-otp` | POST | Timing-safe OTP verification & session cookie upgrade |
 | `/api/auth/hmac-challenge` | POST | One-time HMAC nonce for telemetry ingestion |
-| `/api/auth/session` | GET/POST | Session issue / read |
+| `/api/auth/session` | GET/PATCH | Session issue / read / identity tier update |
 | `/api/telemetry/github` | POST | Commit + activity ingestion |
 | `/api/telemetry/leetcode` | POST | Solved-problem ingestion |
 | `/api/telemetry/hackerrank` | POST | Badge evidence ingestion |

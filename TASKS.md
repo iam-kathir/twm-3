@@ -49,6 +49,7 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 [ Phase 5: Tournament Week Simulation & Audits ] ───────────► COMPLETED (100%)
 [ Phase 6: Data Sovereignty & Governance Policy ] ──────────► COMPLETED (100%)
 [ Phase 7: Launch Readiness, Backups & Containerization ] ──► COMPLETED (100%)
+[ Phase 8: ESLint, CI and Automated Quality Gates ] ────────► COMPLETED (100%)
 ```
 
 ---
@@ -178,18 +179,21 @@ WCAG math on the real `globals.css` token pairs. Foundation verdict: **GOOD** (d
 ## 🛠️ Commands & Verification Reference
 
 ```powershell
-# 1. Run Automated Foundation Test Suite (Runs in ~32ms)
+# 1. Run Automated Test Suite (Foundation & OTP Verification)
 npm test
 
 # 2. Type Safety Gate
 npx tsc --noEmit
 
-# 3. Start Local Development Server (Port 3000)
+# 3. Next.js ESLint Quality Gate
+npm run lint
+
+# 4. Start Local Development Server (Port 3000)
 npm run dev
 
-# 4. Production Build Verification
+# 5. Production Build Verification
 npx next build
 
-# 5. Query Local SQLite Roster API
+# 6. Query Local SQLite Roster API
 node -e "fetch('http://localhost:3000/api/roster').then(r => r.json()).then(console.log)"
 ```

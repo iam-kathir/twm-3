@@ -45,11 +45,12 @@ Next.js 14 App Router · TypeScript (strict) · Tailwind CSS (obsidian tokens) �
 
 ---
 
-## ✅ Verification gates — all four, every time
+## ✅ Verification gates — all five, every time
 
 ```powershell
 npx tsc --noEmit                                  # must exit 0
-npm test                                          # node:test suite (scripts/test-foundation.mjs), must pass
+npm run lint                                      # ESLint 8 + Next Core Web Vitals, must exit 0
+npm test                                          # dual node:test suite (foundation + OTP tests), must pass
 npx next build                                    # must be green (skip while next dev runs — see below)
 git status --short                                # must be clean before you report done
 ```
@@ -71,7 +72,7 @@ For anything touching a route handler, hit it live (`http://localhost:3000/...`)
 
 ## 🏁 Definition of Done
 
-1. Code compiles without type errors, all `node:test` tests pass, build is green.
+1. Code compiles without type errors, linter passes with 0 errors/warnings (`npm run lint`), all `node:test` suites pass (`npm test`), build is green.
 2. Anything you claimed was verified — actually ran it and logged real output.
 3. `MEMORY.md` session log has a new top entry: what changed, what was verified (with real terminal output), what is left, and any ⚠️ the next agent needs.
 4. `TASKS.md` status updated if you closed or discovered a task.

@@ -13,7 +13,7 @@ Running log of decisions, architectural invariants, multi-agent coordination, an
 
 TWM ("Track. Win. Maintain.") is an institutional-grade, class-scoped developer activity and friendly competition platform for engineering cohorts (specifically B.Tech CSE cohorts).
 
-### Current State (Updated 2026-10-21):
+### Current State (Updated 2026-10-22):
 - **Architecture Maturity:** Full-stack SaaS implementation. Zero mock-reliance for backend data paths; clean separation between verified observations and unverified assertions.
 - **Phase 0 (Provider Scrapers & Adapters):** ✅ **DONE**. Live Next.js route handlers `/api/auth/hmac-challenge`, `/api/telemetry/github`, `/api/telemetry/leetcode`, and `/api/telemetry/hackerrank`.
 - **Phase 1 (Basement, SQLite WAL, Security & Automated Tests):** ✅ **DONE**. `src/lib/db.ts` (`node:sqlite` WAL mode), HMAC nonce replay prevention, sliding-window rate limiters (`src/lib/rate-limit.ts`), deterministic §9.6 competition ranking engine (`src/lib/leaderboard.ts`), and `node:test` suite (`scripts/test-foundation.mjs`).
@@ -27,6 +27,9 @@ TWM ("Track. Win. Maintain.") is an institutional-grade, class-scoped developer 
 - **Phase 4 (Deterministic & AI Recaps):** ✅ **DONE**. P4-1 (Rule-based recap generator), P4-2 (LLM natural language summarizer), P4-3 (Semantic classmate search).
 - **Phase 5 (Tournament Week Simulation & Invariant Audits):** ✅ **DONE**. P5-1 (Simulation engine), P5-2 (Test invariant gates), P5-3 (REST API), P5-4 (Admin interactive simulator).
 - **Phase 6 (Data Sovereignty & Privacy Policy):** ✅ **DONE**. P6-1 (8-section data governance policy page, footer nav, header dropdown, and settings banner).
+- **Phase 7 (Launch Readiness, Backups & Containerization):** ✅ **DONE**. Multi-stage production `Dockerfile`, hot-backup & atomic restore scripts (`scripts/backup-db.mjs`, `scripts/restore-db.mjs`), database corruption recovery protocol, and automated launch readiness checklist.
+- **Phase 8 (ESLint, CI and Automated Quality Gates):** ✅ **DONE**. P8-1 (`eslint@^8.57.1`, `eslint-config-next@^14.2.35`, `.eslintrc.json`, GitHub Actions CI workflow in `.github/workflows/ci.yml`).
+- **Phase 7 Extension (College Email OTP Verification):** ✅ **DONE**. Dual-tier authentication model (GitHub OAuth + college email OTP verification via `/api/auth/email/request-otp` and `/api/auth/email/verify-otp`), Resend & SendGrid providers with isolated mock fallback, and 18 security invariant unit tests.
 
 ---
 
@@ -81,7 +84,7 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ---
 
-## 🎯 Master Live Task Board (Phases 0–4)
+## 🎯 Master Live Task Board (Phases 0–8)
 
 | Task ID | Component / Milestone | Owner / Status | Scope & File References |
 | :--- | :--- | :--- | :--- |
@@ -103,6 +106,12 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 | **P4-1** | **Deterministic Weekly Recap** | Antigravity — ✅ **DONE** | Rule-based summary of cohort milestones and streaks. [`src/lib/recap.ts`](src/lib/recap.ts)<br>[`/api/recap`](src/app/api/recap/route.ts) |
 | **P4-2** | **Grounded AI Recap Summarizer** | Antigravity — ✅ **DONE** | Zero-hallucination natural language recap quoting verified telemetry. [`src/lib/ai-recap.ts`](src/lib/ai-recap.ts)<br>[`/api/ai/recap`](src/app/api/ai/recap/route.ts) |
 | **P4-3** | **Semantic Cohort Search** | Antigravity — ✅ **DONE** | Live SQLite directory with zero mocks. [`src/app/search/page.tsx`](src/app/search/page.tsx)<br>[`src/lib/search.ts`](src/lib/search.ts)<br>[`/api/search`](src/app/api/search/route.ts) |
+| **P5-1** | **Tournament Week Simulator Engine** | Antigravity — ✅ **DONE** | Multi-student 7-day telemetry time-travel simulator. [`src/lib/simulation.ts`](src/lib/simulation.ts)<br>[`scripts/simulate-tournament-week.mjs`](scripts/simulate-tournament-week.mjs) |
+| **P6-1** | **Data Sovereignty & Governance Policy** | Antigravity — ✅ **DONE** | 8-section institutional privacy policy and settings surface. [`src/app/data-policy/page.tsx`](src/app/data-policy/page.tsx) |
+| **P7-1** | **Containerization & Standalone Output** | Antigravity — ✅ **DONE** | Production multi-stage `Dockerfile` with standalone Next.js 14 bundling. [`Dockerfile`](Dockerfile) |
+| **P7-2** | **Hot Backup & Atomic Restore Scripts** | Antigravity — ✅ **DONE** | SQLite WAL-safe backup with SHA256 integrity verification. [`scripts/backup-db.mjs`](scripts/backup-db.mjs)<br>[`scripts/restore-db.mjs`](scripts/restore-db.mjs) |
+| **P7-3** | **College Email OTP Verification** | Antigravity — ✅ **DONE** | Secure 6-digit OTP delivery, Resend & SendGrid adapters, rate limiting, and 18 unit tests. [`src/lib/otp.ts`](src/lib/otp.ts)<br>[`src/lib/email/`](src/lib/email/) |
+| **P8-1** | **ESLint 8 & CI Quality Gate Workflow** | Antigravity — ✅ **DONE** | ESLint 8 + Next Core Web Vitals configuration and automated GitHub Actions CI pipeline. [`.eslintrc.json`](.eslintrc.json)<br>[`.github/workflows/ci.yml`](.github/workflows/ci.yml) |
 
 ---
 
