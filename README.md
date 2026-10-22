@@ -123,6 +123,20 @@ boundary scheduler daemon against the same volume.
 
 ---
 
+## Git workflow
+
+This repo is worked on by several agents in parallel against one working tree, so every commit is
+pushed to `origin` immediately by a `post-commit` hook (`scripts/git-hooks/post-commit`).
+
+```bash
+cp scripts/git-hooks/post-commit .git/hooks/post-commit   # Git Bash / WSL
+# PowerShell: Copy-Item scripts/git-hooks/post-commit .git/hooks/post-commit
+```
+
+The hook never blocks a commit — if the push is rejected (another agent pushed first) it integrates
+`origin/<branch>` only when the tree is clean, otherwise it reports the failure on stderr and the
+push is retried on the next commit.
+
 ## Project documents
 
 | File | What it is |

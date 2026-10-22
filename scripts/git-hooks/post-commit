@@ -1,0 +1,42 @@
+#!/bin/sh
+# ---------------------------------------------------------------------------
+# TWM auto-push hook (post-commit)
+#
+# Every commit made in this repo (shared by 3 parallel agents) is pushed to
+# origin immediately, so the GitHub copy never lags behind the working tree.
+#
+# Install (Git Bash / WSL):
+#   cp scripts/git-hooks/post-commit .git/hooks/post-commit
+# Install (PowerShell):
+#   Copy-Item scripts/git-hooks/post-commit .git/hooks/post-commit
+#
+# The hook never fails a commit: push problems are reported on stderr only.
+# ---------------------------------------------------------------------------
+
+branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)" || exit 0
+[ "$branch" = "HEAD" ] && exit 0          # detached HEAD: nothing to track
+
+log="$(git rev-parse --git-dir)/twm-autopush.log"
+
+push() {
+  git push origin "$branch:refs/heads/$branch" >"$log" 2>&1
+}
+
+if push; then
+  exit 0
+fi
+
+# Rejected: another agent pushed first. Integrate only if the tree is clean,
+# otherwise leave the push to the next commit (never touch another agent's
+# in-flight edits).
+if git diff --quiet HEAD 2>/dev/null && git diff --cached --quiet 2>/dev/null; then
+  if git fetch origin "$branch" >/dev/null 2>&1 &&
+     git merge --no-edit "origin/$branch" >/dev/null 2>&1 &&
+     push; then
+    exit 0
+  fi
+fi
+
+echo "twm-autopush: could not push '$branch' to origin; run 'git push origin $branch' manually." >&2
+tail -n 5 "$log" 2>/dev/null >&2
+exit 0
