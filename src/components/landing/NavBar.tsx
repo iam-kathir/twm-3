@@ -21,7 +21,7 @@ export function NavBar() {
         </div>
 
         {/* Center Nav Links with Micro-Interactions */}
-        <nav className="hidden md:flex items-center gap-1 p-1 rounded-xl bg-white/[0.02] border border-white/[0.04] text-sm font-mono text-muted">
+        <nav className="hidden md:flex items-center gap-1.5 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06] text-sm font-sans">
           {[
             { label: "Telemetry", href: "#showcase" },
             { label: "Leaderboard", href: "/leaderboard" },
@@ -32,7 +32,7 @@ export function NavBar() {
             <Link
               key={item.label}
               href={item.href}
-              className="relative px-3.5 py-1.5 rounded-lg text-xs lg:text-sm font-medium transition-all duration-150 hover:text-white hover:bg-white/[0.06] active:scale-95"
+              className="relative px-3.5 py-1.5 rounded-lg text-xs lg:text-sm font-medium text-slate-300 transition-all duration-150 hover:text-white hover:bg-white/[0.08] active:scale-95"
             >
               {item.label}
             </Link>
@@ -43,9 +43,9 @@ export function NavBar() {
         <div className="flex items-center gap-3 sm:gap-4">
           <Link
             href="/login"
-            className="hidden sm:inline-flex items-center gap-2 text-xs lg:text-sm text-muted hover:text-white px-3.5 py-2 font-mono transition-colors font-medium rounded-xl hover:bg-white/[0.05]"
+            className="hidden sm:inline-flex items-center gap-2 text-xs lg:text-sm text-slate-300 hover:text-white px-3.5 py-2 font-sans transition-colors font-medium rounded-xl hover:bg-white/[0.06]"
           >
-            <Github className="h-4 w-4 text-white/70" />
+            <Github className="h-4 w-4 text-white/80" />
             Sign in
           </Link>
           <motion.a
@@ -53,7 +53,7 @@ export function NavBar() {
             whileHover={{ scale: 1.03, boxShadow: "0 0 24px -2px rgba(16,185,129,0.4)" }}
             whileTap={{ scale: 0.97 }}
             transition={{ type: "spring", stiffness: 400, damping: 20 }}
-            className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-canvas text-xs sm:text-sm font-bold font-mono transition-colors shadow-lg shadow-accent/20 cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-canvas text-xs sm:text-sm font-bold font-sans transition-all shadow-lg shadow-accent/25 cursor-pointer"
           >
             <span>Join Class</span>
             <ArrowRight className="h-3.5 w-3.5 stroke-[2.5]" />

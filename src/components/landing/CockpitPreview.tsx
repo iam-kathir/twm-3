@@ -211,13 +211,13 @@ export function CockpitPreview() {
                     <span className="text-ink font-black text-sm sm:text-base">5★ Python, 4★ PS</span>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-surface-raised border border-white/[0.06] text-xs sm:text-sm text-muted leading-relaxed">
-                    Profile linked. Cumulative stats shown for display; excluded from period ranking per Phase 0 boundary rule (§5.6).
+                  <div className="p-3.5 rounded-xl bg-surface-raised border border-white/[0.06] text-xs sm:text-sm text-slate-300 font-sans leading-relaxed">
+                    Profile linked. Cumulative stats shown for display; excluded from period ranking per capability rule (Rule 5.6).
                   </div>
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs sm:text-sm font-mono text-muted">
+              <div className="mt-6 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs sm:text-sm font-sans text-slate-400">
                 <span>Eligibility Status:</span>
                 <span className="text-accent font-bold">Display Only</span>
               </div>
@@ -229,12 +229,12 @@ export function CockpitPreview() {
             <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
               <div className="flex items-center gap-2.5">
                 <Sparkles className="h-5 w-5 text-accent" />
-                <h4 className="font-bold text-base sm:text-lg text-ink">Weekly Developer Synthesis</h4>
-                <span className="text-xs font-mono px-2.5 py-0.5 rounded-md bg-surface-raised border border-white/[0.06] text-muted">
+                <h4 className="font-bold text-base sm:text-lg text-white">Weekly Developer Synthesis</h4>
+                <span className="text-xs font-sans px-2.5 py-0.5 rounded-md bg-surface-raised border border-white/[0.06] text-slate-300">
                   Non-Judgmental Peer Recap
                 </span>
               </div>
-              <div className="flex items-center gap-1 bg-canvas p-1 rounded-xl border border-white/10 text-xs sm:text-sm font-mono">
+              <div className="flex items-center gap-1 bg-canvas p-1 rounded-xl border border-white/10 text-xs sm:text-sm font-sans">
                 <button
                   type="button"
                   onClick={() => setRecapMode("ai")}
@@ -264,7 +264,7 @@ export function CockpitPreview() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.2 }}
-                  className="text-sm sm:text-base text-ink-secondary leading-relaxed font-sans bg-canvas/80 p-5 rounded-xl border border-white/[0.06]"
+                  className="text-sm sm:text-base text-slate-300 leading-relaxed font-sans bg-canvas/80 p-5 rounded-xl border border-white/[0.06]"
                 >
                   &ldquo;You demonstrated steady momentum this week with <strong>6 active days observed on GitHub</strong> and an <strong>85.7% consistency rate</strong>. Your commit activity was distributed across semester repositories with 94.2% data coverage. On LeetCode, 12 verified problems were closed before Sunday 23:59 IST. <em>Next week focus:</em> try solving two Medium Tree problems on LeetCode to sustain your pattern.&rdquo;
                 </motion.p>
@@ -275,11 +275,11 @@ export function CockpitPreview() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.2 }}
-                  className="text-xs sm:text-sm font-mono text-ink-secondary bg-canvas/80 p-5 rounded-xl border border-white/[0.06] space-y-1.5"
+                  className="text-xs sm:text-sm font-sans text-slate-300 bg-canvas/80 p-5 rounded-xl border border-white/[0.06] space-y-1.5"
                 >
                   <div>• GitHub Active Days: 6/7 (UTC) | Coverage: 94.2% | Period: Mon–Sun IST</div>
                   <div>• LeetCode Boundary Change: +12 Solved | Base: 172 -&gt; Current: 184</div>
-                  <div>• HackerRank: Excluded from delta calculation (cumulative display only §5.6)</div>
+                  <div>• HackerRank: Excluded from delta calculation (cumulative display only: Rule 5.6)</div>
                 </motion.div>
               )}
             </AnimatePresence>

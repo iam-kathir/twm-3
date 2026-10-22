@@ -8,23 +8,23 @@ export function FairnessGuarantees() {
   const pillars = [
     {
       icon: AlertCircle,
-      title: "Missing Data != Zero",
+      title: "Missing Data is Never Zero",
       desc: "API rate limits, provider outages, or private days are never converted into zero. Standing is never unfairly penalized.",
-      tag: "§7.3",
+      tag: "Rule 7.3",
       accent: "text-accent",
     },
     {
       icon: Scale,
       title: "Platform-Specific Truth",
       desc: "GitHub commits and LeetCode problems are unlike metrics. We never combine them into an arbitrary fiction score.",
-      tag: "§9.8",
+      tag: "Rule 9.8",
       accent: "text-provider-github",
     },
     {
       icon: ShieldCheck,
       title: "Deterministic Ties",
       desc: "Equal performance shares the same rank (1, 2, 2, 4). No secret tie-breakers or bias by join date.",
-      tag: "§9.6",
+      tag: "Rule 9.6",
       accent: "text-emerald-400",
     },
   ];
@@ -55,7 +55,7 @@ export function FairnessGuarantees() {
                 transition={{ duration: 0.45, delay: idx * 0.07, ease: "easeOut" }}
                 className="grid grid-cols-[3.25rem_1fr] gap-4 border-b border-white/[0.08] py-7"
               >
-                <span className="pt-0.5 font-mono text-[11px] text-muted-soft">{item.tag}</span>
+                <span className="pt-0.5 font-sans font-semibold text-xs text-emerald-400">{item.tag}</span>
                 <div>
                   <h3 className="flex items-center gap-2 text-base font-bold text-ink">
                     <Icon className={`h-4 w-4 ${item.accent}`} />
