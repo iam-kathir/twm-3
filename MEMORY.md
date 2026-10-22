@@ -108,6 +108,25 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-10-22 14:19 IST — GitHub Remote Created, README Added & Auto-Push Hook (OpenCode)
+
+- **Deliverables Completed**:
+  - **GitHub Remote**: Created the private repo `iam-kathir/twm-3` (`https://github.com/iam-kathir/twm-3.git`) and pushed `main`. Remote and local are byte-identical (`831a101` → now `c4df786`).
+  - **`README.md` (new)**: The repo had none. Added quick start, script table, environment-variable reference, full live-endpoint table, directory architecture map, the six product invariants, Docker deployment instructions and a project-document index.
+  - **Vendored skill assets untracked**: `git rm -r --cached .agents/skills` (38 files, ~1.6 MB of third-party `Leonxlnx/taste-skill` JSON/CSS) and `.gitignore` generalised from three per-folder entries to a single `.agents/skills/` rule. Files remain on disk locally — no agent tooling was removed.
+  - **Auto-Push Hook (`scripts/git-hooks/post-commit`)**: New tracked source of truth, installed to `.git/hooks/post-commit`. Every commit in the shared tree is pushed to `origin` immediately, so the GitHub copy cannot lag behind the 3-agent working tree. The hook never blocks a commit: on a rejected push it fetches and merges `origin/<branch>` only when the tree is clean, otherwise it reports on stderr and retries on the next commit. Verified end-to-end — commit `c4df786` reached GitHub with no manual push.
+  - **Push subagent**: A dedicated `general` subagent was fanned out with the standing duty of keeping `origin/main` in sync with local `main` and keeping the hook installed.
+
+- **Verification Output**:
+  - `git ls-remote --heads origin` → `c4df786...` ; `git rev-parse HEAD` → `c4df786...` (identical).
+  - `.git/twm-autopush.log` → `f6c3f3b..c4df786  main -> main` (hook fired and pushed).
+  - `gh api repos/iam-kathir/twm-3/git/trees/main?recursive=1` → 148 files; no `node_modules/`, `.next/`, `data/` or `.env` on the remote.
+  - Local dev server verified on all 8 routes (HTTP 200) before the push.
+
+- **⚠️ For the next agent**:
+  - `origin` is now `https://github.com/iam-kathir/twm-3.git` (private). Commits auto-push, but the hook is a **local** `.git/hooks/` file — it is tracked as `scripts/git-hooks/post-commit` for reproducibility, and a fresh clone must run `Copy-Item scripts/git-hooks/post-commit .git/hooks/post-commit` (or `cp` in Git Bash) to re-enable it.
+  - `npm test` / `next build` were **not** run in this unit: the detached dev server holds `.next/`, and the two must not run concurrently.
+
 ### 2026-10-22 13:20 IST — Secure College Email OTP Verification & Auth Hardening (P7-8) (Antigravity)
 
 - **Deliverables Completed**:
