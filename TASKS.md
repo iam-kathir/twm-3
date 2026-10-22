@@ -46,6 +46,9 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 [ Phase 2: Live Tournament & Observation Engine ] ──────────► COMPLETED (100%)
 [ Phase 3: Multi-Provider Verification & Audits ] ──────────► COMPLETED (100%)
 [ Phase 4: Deterministic & AI Recaps ] ─────────────────────► COMPLETED (100%)
+[ Phase 5: Tournament Week Simulation & Audits ] ───────────► COMPLETED (100%)
+[ Phase 6: Data Sovereignty & Governance Policy ] ──────────► COMPLETED (100%)
+[ Phase 7: Launch Readiness, Backups & Containerization ] ──► COMPLETED (100%)
 ```
 
 ---
@@ -129,6 +132,16 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 | Task ID | Task Description | Scope & Requirements | Target Files | Owner / Status |
 | :--- | :--- | :--- | :--- | :--- |
 | **P6-1** | **Privacy & Student Data Governance Policy** | Comprehensive 8-section institutional governance policy: non-surveillance commitment, telemetry boundaries, zero-fabrication invariant (§1.2/§5.7), identity tiers (§18.1), HMAC bio challenges (§6.2), two-person disputes (§10.1), data portability & 1-click disconnect (§18.4), and zero commercial sharing. Wired across all platform footers, profile dropdowns, and settings. | [`src/app/privacy/page.tsx`](src/app/privacy/page.tsx)<br>[`src/components/landing/Footer.tsx`](src/components/landing/Footer.tsx)<br>[`src/components/ui/AppHeader.tsx`](src/components/ui/AppHeader.tsx)<br>[`src/app/settings/page.tsx`](src/app/settings/page.tsx) | **Antigravity (IDE)** — ✅ **DONE** |
+
+---
+
+## 🚀 Phase 7: Launch Readiness, Backup Engine & Containerization (COMPLETED)
+
+| Task ID | Task Description | Scope & Requirements | Target Files | Owner / Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **P7-1** | **SQLite WAL Online Backup & Restore Engine (§19.5)** | Online atomic database snapshotting via `PRAGMA wal_checkpoint(TRUNCATE)` + `VACUUM INTO`. Generated `.meta.json` with SHA-256 integrity hash, table statistics, and automatic retention pruning (retains latest 7). Fully tested restore with safety snapshotting. | [`src/lib/backup.ts`](src/lib/backup.ts)<br>[`scripts/backup-db.mjs`](scripts/backup-db.mjs)<br>[`scripts/restore-db.mjs`](scripts/restore-db.mjs) | **Antigravity (IDE)** — ✅ **DONE** |
+| **P7-2** | **Master Launch Acceptance Checklist Audit Gate (§21)** | Programmatic verification across 10 launch criteria (product boundaries, quorum denominator, deterministic ties, Sunday boundary, LeetCode baseline, HackerRank gating, disputes audit, AI zero-fabrication, privacy policy, online backups). | [`scripts/audit-launch-checklist.mjs`](scripts/audit-launch-checklist.mjs) | **Antigravity (IDE)** — ✅ **DONE** |
+| **P7-3** | **Production Containerization & Orchestration** | Multi-stage production `Dockerfile` (Node 22 alpine + standalone Next.js 14) + `docker-compose.yml` orchestrating `twm-web` and `twm-scheduler` (3h boundary daemon) sharing a persistent SQLite WAL volume `/app/data`. | [`Dockerfile`](Dockerfile)<br>[`docker-compose.yml`](docker-compose.yml)<br>[`.dockerignore`](.dockerignore)<br>[`next.config.js`](next.config.js) | **Antigravity (IDE)** — ✅ **DONE** |
 
 ---
 

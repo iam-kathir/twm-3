@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  # -----------------------------------------------------------------------
+  # TWM Web Application (Next.js Standalone + SQLite WAL)
+  # -----------------------------------------------------------------------
+  twm-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: twm:3.1
+    container_name: twm-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - NEXT_TELEMETRY_DISABLED=1
+    volumes:
+      - twm-data:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3000/api/roster"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  # -----------------------------------------------------------------------
+  # TWM 3-Hour Boundary Observation & Scheduler Daemon
+  # -----------------------------------------------------------------------
+  twm-scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: twm:3.1
+    container_name: twm-scheduler
+    restart: unless-stopped
+    command: ["node", "scripts/boundary-scheduler.mjs"]
+    environment:
+      - NODE_ENV=production
+      - HOSTNAME=0.0.0.0
+    volumes:
+      - twm-data:/app/data
+    depends_on:
+      twm-web:
+        condition: service_healthy
+
+volumes:
+  twm-data:
+    driver: local

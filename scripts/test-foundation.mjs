@@ -9,6 +9,10 @@ import { generateDeterministicWeeklyRecap } from "../src/lib/recap.ts";
 import { synthesizeDeterministicGroundedRecap, generateGroundedAIRecap } from "../src/lib/ai-recap.ts";
 import { getCohortDevelopers } from "../src/lib/search.ts";
 import { runTournamentSimulation } from "./simulate-tournament-week.mjs";
+import { createDatabaseBackup, verifyBackupFile, restoreDatabaseFromBackup } from "../src/lib/backup.ts";
+import { runLaunchAcceptanceAudit } from "./audit-launch-checklist.mjs";
+import fs from "node:fs";
+import path from "node:path";
 
 describe("TWM Foundation Suite", () => {
   describe("Section 9.6 Competition Ranking & Tie Policy", () => {
@@ -420,6 +424,68 @@ describe("TWM Foundation Suite", () => {
       for (const a of results.assertions) {
         assert.equal(a.passed, true, `Invariant '${a.name}' failed`);
       }
+    });
+  });
+
+  describe("Section 19.5 & §21 Database Backup, Restore & Launch Gates (Phase 7)", () => {
+    const testBackupDir = path.join(process.cwd(), "data", "test_backups");
+
+    it("creates an online atomic SQLite WAL backup and verified manifest", () => {
+      const backup = createDatabaseBackup({
+        targetDir: testBackupDir,
+        maxBackups: 3,
+      });
+
+      assert.equal(backup.success, true);
+      assert.ok(fs.existsSync(backup.backupPath), "Backup SQLite file must exist");
+      assert.ok(fs.existsSync(backup.manifestPath), "Manifest JSON file must exist");
+      assert.equal(backup.metadata.integrityCheck, "ok");
+      assert.ok(backup.metadata.sizeBytes > 0);
+      assert.ok(backup.metadata.sha256.length === 64, "SHA-256 hash must be 64 characters");
+      assert.ok(backup.metadata.tables.roster_members >= 7, "Must contain all roster members");
+    });
+
+    it("validates SQLite backup integrity and detects valid files", () => {
+      const backup = createDatabaseBackup({ targetDir: testBackupDir });
+      const verification = verifyBackupFile(backup.backupPath);
+
+      assert.equal(verification.isValid, true);
+      assert.equal(verification.integrityCheck, "ok");
+      assert.equal(verification.manifestMatch, true);
+      assert.equal(verification.sha256, backup.metadata.sha256);
+    });
+
+    it("restores database from backup with pre-restore safety snapshot", () => {
+      const backup = createDatabaseBackup({ targetDir: testBackupDir });
+      const targetTestDb = path.join(testBackupDir, "restored_test.sqlite");
+
+      const restore = restoreDatabaseFromBackup(backup.backupPath, {
+        targetDbPath: targetTestDb,
+        createSafetyBackup: false,
+      });
+
+      assert.equal(restore.success, true);
+      assert.equal(restore.integrityCheck, "ok");
+      assert.equal(restore.tables.roster_members, backup.metadata.tables.roster_members);
+      assert.equal(restore.tables.telemetry_observations, backup.metadata.tables.telemetry_observations);
+
+      // Clean up test database
+      if (fs.existsSync(targetTestDb)) fs.unlinkSync(targetTestDb);
+    });
+
+    it("passes all Master Launch Acceptance Checklist gates programmatically", () => {
+      const audit = runLaunchAcceptanceAudit();
+      assert.equal(audit.allPassed, true, "All launch acceptance gates must pass");
+      assert.equal(audit.failedCount, 0);
+      assert.ok(audit.passedCount >= 10);
+    });
+
+    // Cleanup test backups directory
+    it("cleans up test backup artifacts", () => {
+      if (fs.existsSync(testBackupDir)) {
+        fs.rmSync(testBackupDir, { recursive: true, force: true });
+      }
+      assert.equal(fs.existsSync(testBackupDir), false);
     });
   });
 });

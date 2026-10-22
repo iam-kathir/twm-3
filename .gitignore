@@ -17,9 +17,11 @@ next-env.d.ts
 .DS_Store
 Thumbs.db
 
-# sqlite databases
+# sqlite databases & backups
 /data/*.sqlite*
 /data/*.db*
+/data/backups/
+/data/*.meta.json
 
 # agent skills junctions & local harness hooks
 .agents/skills/awesome-design-md/

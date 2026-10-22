@@ -1,0 +1,26 @@
+# Git & documentation
+.git
+.gitignore
+*.md
+
+# Node modules & build artifacts
+node_modules
+npm-debug.log
+.next
+out
+build
+next-env.d.ts
+*.tsbuildinfo
+
+# Environment & local variables
+.env*.local
+
+# Database local development state & backups
+data/*.sqlite*
+data/*.db*
+data/backups/
+data/*.meta.json
+
+# Agent harnesses & skills
+.agents
+.codex
