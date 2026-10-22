@@ -108,6 +108,42 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-10-22 13:20 IST — Secure College Email OTP Verification & Auth Hardening (P7-8) (Antigravity)
+
+- **Deliverables Completed**:
+  - **Database Migration & OTP Challenge Store (`src/lib/db.ts`)**:
+    - Added `email_verified` (INTEGER DEFAULT 0) and `email_verified_at` (TEXT) columns to `roster_members` with idempotent runtime migration (`PRAGMA table_info`).
+    - Created `email_otp_challenges` table with compound index on `(student_id, email, expires_at)`.
+    - Implemented atomic helper methods: `createEmailOtpChallenge`, `getLatestActiveOtpChallenge`, `incrementOtpChallengeAttempts`, `consumeOtpChallenge` (atomic consumption with `consumed_at IS NULL AND expires_at > ? AND attempts <= max_attempts`), `invalidateActiveOtpChallenges`, `markStudentEmailVerified`, `getRosterMemberById`, and `getRosterMemberByEmail`.
+  - **Zero-Dependency Transactional Email Provider (`src/lib/email/`)**:
+    - `types.ts`: Defined `EmailMessage`, `EmailSendResult`, and `EmailProvider` interfaces.
+    - `template.ts`: Responsive branded TWM institutional email template with 6-digit code, 10-minute expiry notice, and security advice.
+    - `provider.ts`: Implemented `ResendEmailProvider`, `SendgridEmailProvider`, and `MockTestEmailProvider` (with inspectable `mockEmailQueue`). In production, missing credentials fails closed (`success: false`).
+  - **OTP Security & Institutional Domain Engine (`src/lib/otp.ts`)**:
+    - Cryptographically secure 6-digit numeric OTP generation (`crypto.randomInt(100000, 1000000)`).
+    - Salted HMAC-SHA256 persistence (`hashOTP(otp, salt)`). Plaintext OTP is never stored in DB or logs.
+    - Constant-time verification (`crypto.timingSafeEqual`).
+    - Institutional domain enforcement: `isValidInstitutionalDomain` strictly enforces `COLLEGE_EMAIL_DOMAINS` env var, rejecting arbitrary `.edu` or commercial addresses.
+    - Rate limits and resend cooldown: 60s cooldown, 10m TTL, max 5 attempts.
+  - **OAuth & Session Security Hardening (`src/lib/auth.ts`, `src/app/api/auth/`)**:
+    - `sanitizeReturnTo()` blocks open redirects (enforces leading `/` and rejects `//`, `/\\`, `https://`, and javascript schemes).
+    - Hardened `github/route.ts` and `github/callback/route.ts`: Fail-closed CSRF validation (missing state or mismatched nonce returns 400), production demo bypass prohibition (`NODE_ENV === "production"` forbids demo logins), and unverified student routing to `/onboarding?verify_email=true`.
+    - Session hydration in `getCurrentSession()` reads authoritative `email_verified` status from SQLite.
+    - Created `POST /api/auth/email/request-otp` and `POST /api/auth/email/verify-otp`.
+  - **Onboarding UX Integration (`src/app/onboarding/page.tsx`)**:
+    - Integrated Step 1 College Email verification with live countdown timer (10:00), 60s resend cooldown timer, 6-digit input, error alert states, and session upgrade.
+    - Added friendly fallback screen for unmatched GitHub handles (`unmatched_roster=true`).
+    - Wrapped in `<Suspense>` for Next.js 14 App Router static compilation compliance.
+  - **Configuration & Automated Tests**:
+    - Updated `.env.example` with Resend/SendGrid and `COLLEGE_EMAIL_DOMAINS` guidance.
+    - Created `scripts/test-otp-verification.mjs` with 18 automated unit and integration tests.
+    - Updated `package.json` test script to execute both test foundation and OTP verification suites.
+
+- **Verification Output**:
+  - `npx tsc --noEmit`: Exit code 0 (clean).
+  - `npm test`: Exit code 0 (10/10 master launch acceptance gates + 18/18 OTP verification tests passed).
+  - Live HTTP endpoints: `curl -X POST http://localhost:3000/api/auth/email/request-otp` returns 401 UNAUTHORIZED for unauthenticated calls.
+
 ### 2026-10-22 13:00 IST — Hero & Landing Page Visual Overhaul (Option B) & GitHub Sync (Antigravity)
 
 - **Deliverables Completed**:

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "node --test --test-force-exit scripts/test-foundation.mjs",
+    "test": "node --test --test-force-exit scripts/test-foundation.mjs scripts/test-otp-verification.mjs",
     "simulate": "node scripts/simulate-tournament-week.mjs",
     "backup": "node scripts/backup-db.mjs",
     "restore": "node scripts/restore-db.mjs",

@@ -19,9 +19,11 @@ export async function GET() {
   const session = await getCurrentSession();
 
   if (!session) {
-    // Check if default current user is active in SQLite
+    const isProduction = process.env.NODE_ENV === "production";
     const db = getDb();
-    const defaultUser = db.prepare("SELECT * FROM roster_members WHERE is_current_user = 1").get() as RosterMemberRow | undefined;
+    const defaultUser = !isProduction
+      ? (db.prepare("SELECT * FROM roster_members WHERE is_current_user = 1").get() as RosterMemberRow | undefined)
+      : undefined;
 
     return NextResponse.json({
       authenticated: false,

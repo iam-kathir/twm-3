@@ -6,7 +6,7 @@ import {
   SESSION_TTL_SECONDS,
   buildStudentSession,
   signSessionToken,
-  isInstitutionalCollegeEmail,
+  sanitizeReturnTo,
 } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -21,35 +21,24 @@ export async function GET(request: NextRequest) {
   const stateEncoded = searchParams.get("state");
   const demoStudentId = searchParams.get("demo_student_id");
 
-  // 1. Verify CSRF State
+  // 1. Verify CSRF State & Nonce
   const storedCsrf = request.cookies.get(CSRF_COOKIE_NAME)?.value;
   let returnTo = "/dashboard";
 
-  if (stateEncoded) {
-    try {
-      const decoded = JSON.parse(Buffer.from(stateEncoded, "base64url").toString("utf-8"));
-      if (decoded.returnTo) returnTo = decoded.returnTo;
-      if (storedCsrf && decoded.nonce !== storedCsrf) {
-        return NextResponse.json(
-          { error: "CSRF_MISMATCH", message: "Invalid OAuth state nonce" },
-          { status: 400 }
-        );
-      }
-    } catch {
-      // Invalid state format
-    }
-  }
+  // In production, demo fast-track is strictly prohibited
+  const isProduction = process.env.NODE_ENV === "production";
 
-  const db = getDb();
-
-  // 2. Dev / Demo Fast-Track (when GITHUB_CLIENT_ID not configured or demo passed)
   if (demoStudentId || (!process.env.GITHUB_CLIENT_ID && !code)) {
+    if (isProduction) {
+      return NextResponse.redirect(new URL("/login?error=DEMO_DISABLED_IN_PRODUCTION", request.url));
+    }
+
+    const db = getDb();
     let student: RosterMemberRow | undefined;
     if (demoStudentId) {
       student = db.prepare("SELECT * FROM roster_members WHERE id = ?").get(demoStudentId) as RosterMemberRow | undefined;
     }
     if (!student) {
-      // Default to currentUser (Aarav Sharma) or first roster member
       student = (db.prepare("SELECT * FROM roster_members WHERE is_current_user = 1").get() ||
         db.prepare("SELECT * FROM roster_members LIMIT 1").get()) as RosterMemberRow | undefined;
     }
@@ -61,26 +50,43 @@ export async function GET(request: NextRequest) {
     const session = buildStudentSession(student, "LEGAL_NAME");
     const sessionToken = signSessionToken(session);
 
-    const redirectUrl = new URL(returnTo, request.url);
+    const redirectUrl = new URL(
+      student.email_verified ? returnTo : `/onboarding?verify_email=true&returnTo=${encodeURIComponent(returnTo)}`,
+      request.url
+    );
     const response = NextResponse.redirect(redirectUrl);
 
-    // Set secure HTTP-only session cookie
     response.cookies.set({
       name: SESSION_COOKIE_NAME,
       value: sessionToken,
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isProduction,
       sameSite: "lax",
       maxAge: SESSION_TTL_SECONDS,
       path: "/",
     });
 
-    // Clear one-time CSRF cookie
     response.cookies.delete(CSRF_COOKIE_NAME);
     return response;
   }
 
-  // 3. Live GitHub OAuth Token Exchange
+  // Live OAuth flow requires valid state and matching CSRF cookie (fail-closed)
+  if (!stateEncoded || !storedCsrf) {
+    return NextResponse.redirect(new URL("/login?error=CSRF_MISSING", request.url));
+  }
+
+  try {
+    const decoded = JSON.parse(Buffer.from(stateEncoded, "base64url").toString("utf-8"));
+    if (decoded.returnTo) {
+      returnTo = sanitizeReturnTo(decoded.returnTo);
+    }
+    if (!decoded.nonce || decoded.nonce !== storedCsrf) {
+      return NextResponse.redirect(new URL("/login?error=CSRF_MISMATCH", request.url));
+    }
+  } catch {
+    return NextResponse.redirect(new URL("/login?error=CSRF_INVALID", request.url));
+  }
+
   if (!code) {
     return NextResponse.redirect(new URL("/login?error=MISSING_CODE", request.url));
   }
@@ -125,8 +131,8 @@ export async function GET(request: NextRequest) {
     });
     const emails: Array<{ email: string; primary: boolean; verified: boolean }> = await emailRes.json();
 
+    const db = getDb();
     // 4. Match against SQLite Roster Members
-    // Look up by github handle first, then by verified emails
     let matchedStudent: RosterMemberRow | undefined;
 
     if (githubLogin) {
@@ -157,18 +163,22 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(onboardUrl);
     }
 
-    // 6. Issue Session Cookie and Redirect
+    // 6. Issue Session Cookie and Route (unverified -> email verification step)
     const session = buildStudentSession(matchedStudent, "LEGAL_NAME");
     const sessionToken = signSessionToken(session);
 
-    const redirectUrl = new URL(returnTo, request.url);
+    const targetPath = matchedStudent.email_verified
+      ? returnTo
+      : `/onboarding?verify_email=true&returnTo=${encodeURIComponent(returnTo)}`;
+
+    const redirectUrl = new URL(targetPath, request.url);
     const response = NextResponse.redirect(redirectUrl);
 
     response.cookies.set({
       name: SESSION_COOKIE_NAME,
       value: sessionToken,
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isProduction,
       sameSite: "lax",
       maxAge: SESSION_TTL_SECONDS,
       path: "/",

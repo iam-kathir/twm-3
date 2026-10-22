@@ -121,11 +121,34 @@ function initSchema(db: DatabaseSync): void {
 
     CREATE UNIQUE INDEX IF NOT EXISTS idx_standing_week_platform_student
       ON weekly_standings (week_number, year, platform, student_id);
+
+    -- 6. Email OTP Verification Challenges
+    CREATE TABLE IF NOT EXISTS email_otp_challenges (
+      id TEXT PRIMARY KEY,
+      student_id TEXT NOT NULL,
+      email TEXT NOT NULL,
+      otp_hash TEXT NOT NULL,
+      salt TEXT NOT NULL,
+      attempts INTEGER NOT NULL DEFAULT 0,
+      max_attempts INTEGER NOT NULL DEFAULT 5,
+      expires_at INTEGER NOT NULL, -- unix ms
+      consumed_at INTEGER, -- unix ms
+      resend_available_at INTEGER NOT NULL, -- unix ms
+      created_at INTEGER NOT NULL, -- unix ms
+      ip_address TEXT,
+      user_agent TEXT,
+      FOREIGN KEY (student_id) REFERENCES roster_members(id) ON DELETE CASCADE
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_otp_student_email 
+      ON email_otp_challenges (student_id, email, expires_at);
   `);
 
   // Idempotent column migrations for existing databases
   try { db.exec("ALTER TABLE disputes ADD COLUMN reviewed_by TEXT;"); } catch {}
   try { db.exec("ALTER TABLE disputes ADD COLUMN reviewed_at TEXT;"); } catch {}
+  try { db.exec("ALTER TABLE roster_members ADD COLUMN email_verified INTEGER NOT NULL DEFAULT 0;"); } catch {}
+  try { db.exec("ALTER TABLE roster_members ADD COLUMN email_verified_at TEXT;"); } catch {}
 }
 
 function seedInitialRosterIfEmpty(db: DatabaseSync): void {
@@ -285,6 +308,8 @@ export interface RosterMemberRow {
   handle_hackerrank: string | null;
   is_active: number;
   is_current_user: number;
+  email_verified: number;
+  email_verified_at: string | null;
   created_at: string;
 }
 
@@ -583,4 +608,123 @@ export function getWeeklyStandingsFromDb(weekNumber: number, year: number, platf
     ORDER BY s.rank ASC, m.name ASC
   `).all(weekNumber, year, platform) as unknown as (WeeklyStandingRow & { name: string; roll_no: string; handle_github: string; handle_leetcode: string })[];
 }
+
+// ---------------------------------------------------------------------------
+// Email OTP Verification Challenges
+// ---------------------------------------------------------------------------
+
+export interface EmailOtpChallengeRow {
+  id: string;
+  student_id: string;
+  email: string;
+  otp_hash: string;
+  salt: string;
+  attempts: number;
+  max_attempts: number;
+  expires_at: number; // unix ms
+  consumed_at: number | null; // unix ms
+  resend_available_at: number; // unix ms
+  created_at: number; // unix ms
+  ip_address: string | null;
+  user_agent: string | null;
+}
+
+export function createEmailOtpChallenge(challenge: {
+  id: string;
+  studentId: string;
+  email: string;
+  otpHash: string;
+  salt: string;
+  maxAttempts?: number;
+  expiresAt: number;
+  resendAvailableAt: number;
+  ipAddress?: string | null;
+  userAgent?: string | null;
+}): void {
+  const db = getDb();
+  const now = Date.now();
+  db.prepare(`
+    INSERT INTO email_otp_challenges (
+      id, student_id, email, otp_hash, salt, attempts, max_attempts,
+      expires_at, consumed_at, resend_available_at, created_at, ip_address, user_agent
+    ) VALUES (?, ?, ?, ?, ?, 0, ?, ?, NULL, ?, ?, ?, ?)
+  `).run(
+    challenge.id,
+    challenge.studentId,
+    challenge.email,
+    challenge.otpHash,
+    challenge.salt,
+    challenge.maxAttempts ?? 5,
+    challenge.expiresAt,
+    challenge.resendAvailableAt,
+    now,
+    challenge.ipAddress || null,
+    challenge.userAgent || null
+  );
+}
+
+export function getLatestActiveOtpChallenge(studentId: string, email: string): EmailOtpChallengeRow | undefined {
+  const db = getDb();
+  return db.prepare(`
+    SELECT * FROM email_otp_challenges
+    WHERE student_id = ? AND LOWER(email) = LOWER(?) AND consumed_at IS NULL
+    ORDER BY created_at DESC
+    LIMIT 1
+  `).get(studentId, email) as unknown as EmailOtpChallengeRow | undefined;
+}
+
+export function incrementOtpChallengeAttempts(challengeId: string): void {
+  const db = getDb();
+  db.prepare(`
+    UPDATE email_otp_challenges
+    SET attempts = attempts + 1
+    WHERE id = ?
+  `).run(challengeId);
+}
+
+export function consumeOtpChallenge(challengeId: string, consumedAtMs: number = Date.now()): boolean {
+  const db = getDb();
+  const res = db.prepare(`
+    UPDATE email_otp_challenges
+    SET consumed_at = ?
+    WHERE id = ? AND consumed_at IS NULL AND expires_at > ? AND attempts <= max_attempts
+  `).run(consumedAtMs, challengeId, consumedAtMs);
+  return Number(res.changes) > 0;
+}
+
+export function invalidateActiveOtpChallenges(studentId: string, email: string): void {
+  const db = getDb();
+  const now = Date.now();
+  db.prepare(`
+    UPDATE email_otp_challenges
+    SET expires_at = ?
+    WHERE student_id = ? AND LOWER(email) = LOWER(?) AND consumed_at IS NULL AND expires_at > ?
+  `).run(now, studentId, email, now);
+}
+
+export function markStudentEmailVerified(studentId: string, email: string): void {
+  const db = getDb();
+  const nowIso = new Date().toISOString();
+  db.prepare(`
+    UPDATE roster_members
+    SET email_verified = 1, email_verified_at = ?, email = ?
+    WHERE id = ?
+  `).run(nowIso, email, studentId);
+}
+
+export function getRosterMemberById(studentId: string): RosterMemberRow | undefined {
+  const db = getDb();
+  return db.prepare("SELECT * FROM roster_members WHERE id = ?").get(studentId) as unknown as RosterMemberRow | undefined;
+}
+
+export function getRosterMemberByEmail(email: string): RosterMemberRow | undefined {
+  const db = getDb();
+  return db.prepare("SELECT * FROM roster_members WHERE LOWER(email) = LOWER(?)").get(email) as unknown as RosterMemberRow | undefined;
+}
+
+export function getRosterMemberByGithub(handle: string): RosterMemberRow | undefined {
+  const db = getDb();
+  return db.prepare("SELECT * FROM roster_members WHERE LOWER(handle_github) = LOWER(?)").get(handle) as unknown as RosterMemberRow | undefined;
+}
+
 
