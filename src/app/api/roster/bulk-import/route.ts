@@ -78,6 +78,8 @@ export async function POST(request: NextRequest) {
         studentRows = body.students;
       } else if (typeof body.csv === "string") {
         studentRows = parseCsvRows(body.csv);
+      } else if (typeof body.csvContent === "string") {
+        studentRows = parseCsvRows(body.csvContent);
       }
     } else {
       const rawText = await request.text();
