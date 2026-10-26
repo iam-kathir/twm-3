@@ -433,7 +433,7 @@ export default function AdminHubPage() {
         {/* Header Title with Sync Button */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-mono font-bold tracking-wider uppercase mb-3">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-bold mb-3">
               <Shield className="w-3.5 h-3.5" />
               <span>Administrative Operations • Rule §3.3 & §9.7</span>
             </div>
@@ -481,7 +481,7 @@ export default function AdminHubPage() {
                 {isSelected && (
                   <motion.span
                     layoutId="admin-active-tab-pill"
-                    className="absolute inset-0 rounded-xl bg-accent shadow-md shadow-accent/25"
+                    className="absolute inset-0 rounded-xl bg-accent"
                     transition={{ type: "spring", stiffness: 420, damping: 32 }}
                   />
                 )}
@@ -493,7 +493,7 @@ export default function AdminHubPage() {
                   </span>
                 )}
                 {tab.tag && (
-                  <span className={`relative z-10 px-1.5 py-0.5 rounded text-xs font-mono font-bold uppercase ${isSelected ? "bg-canvas/20 text-canvas" : "bg-accent/20 text-accent"}`}>
+                  <span className={`relative z-10 px-1.5 py-0.5 rounded text-xs font-bold ${isSelected ? "bg-canvas/20 text-canvas" : "bg-accent/20 text-accent"}`}>
                     {tab.tag}
                   </span>
                 )}
@@ -563,7 +563,7 @@ export default function AdminHubPage() {
                   <button 
                     onClick={handleTriggerSundayFinalize}
                     disabled={isFinalizing}
-                    className="px-4 py-2 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-bold text-sm font-mono flex items-center space-x-2 transition-all shadow-md shadow-accent/20 disabled:opacity-50"
+                    className="px-4 py-2 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-semibold text-sm flex items-center space-x-2 transition-all disabled:opacity-50"
                     title="Close and finalize competition under Rule §9.1 and §9.7"
                   >
                     <Clock className={`w-4 h-4 ${isFinalizing ? "animate-spin" : ""}`} />
@@ -598,17 +598,17 @@ export default function AdminHubPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
                 <div className="p-5 rounded-2xl bg-surface-raised border border-white/[0.06] space-y-2">
-                  <span className="text-muted-soft font-mono text-xs font-bold tracking-wider block uppercase">TOTAL ENROLLED</span>
+                  <span className="text-muted-soft text-xs font-semibold block">Total enrolled</span>
                   <span className="text-2xl sm:text-3xl font-extrabold text-white font-mono">{totalEnrolled} Students</span>
                   <p className="text-xs sm:text-sm text-muted">Authoritative class denominator</p>
                 </div>
                 <div className="p-5 rounded-2xl bg-surface-raised border border-white/[0.06] space-y-2">
-                  <span className="text-muted-soft font-mono text-xs font-bold tracking-wider block uppercase">OPTED-IN &amp; PARTICIPATING</span>
+                  <span className="text-muted-soft text-xs font-semibold block">Opted-in and participating</span>
                   <span className="text-2xl sm:text-3xl font-extrabold text-accent font-mono">{verifiedCount} Students</span>
                   <p className="text-xs sm:text-sm text-muted">Connected GitHub/LeetCode profiles</p>
                 </div>
                 <div className="p-5 rounded-2xl bg-surface-raised border border-white/[0.06] space-y-2">
-                  <span className="text-muted-soft font-mono text-xs font-bold tracking-wider block uppercase">PARTICIPATION STATUS</span>
+                  <span className="text-muted-soft text-xs font-semibold block">Participation status</span>
                   <span className={`text-2xl sm:text-3xl font-extrabold font-mono ${meetsQuorum ? "text-emerald-400" : "text-amber-400"}`}>
                     {meetsQuorum ? "Quorum Met" : "Below 70%"}
                   </span>
@@ -755,7 +755,7 @@ export default function AdminHubPage() {
 
                 <button
                   onClick={() => setIsEnrollModalOpen(true)}
-                  className="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-light text-canvas font-bold text-sm flex items-center space-x-2 shadow-lg shadow-accent/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  className="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-light text-canvas font-semibold text-sm flex items-center space-x-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <UserPlus className="w-4 h-4" />
                   <span>Enroll Student</span>
@@ -767,16 +767,15 @@ export default function AdminHubPage() {
             <div className="p-6 rounded-2xl bg-surface border border-white/[0.08] space-y-4 shadow-xl">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm">
                 <div>
-                  <span className="text-muted text-xs font-mono font-bold tracking-wider uppercase block">
-                    CURRENT LEADERBOARD CLASSIFICATION
+                  <span className="text-muted text-xs font-semibold block">Current leaderboard classification
                   </span>
                   <span className="text-lg font-bold text-white font-mono mt-0.5 block">
                     {quorumLabel}
                   </span>
                 </div>
                 <div className="sm:text-right">
-                  <span className="text-muted text-xs font-mono font-bold tracking-wider uppercase block">
-                    PARTICIPATION RATIO
+                  <span className="text-muted text-xs font-semibold block">
+                    Participation ratio
                   </span>
                   <span className="text-lg font-bold font-mono text-accent">
                     {verifiedCount} / {totalEnrolled} ({quorumPercentage}%)
@@ -836,7 +835,7 @@ export default function AdminHubPage() {
             <div className="bg-surface border border-white/[0.08] rounded-2xl overflow-hidden shadow-xl">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
-                  <thead className="bg-surface-raised border-b border-white/[0.08] text-xs font-mono uppercase tracking-wider text-muted">
+                  <thead className="bg-surface-raised border-b border-white/[0.08] text-xs text-muted">
                     <tr>
                       <th className="py-3.5 px-5 font-semibold">Student / Roll No</th>
                       <th className="py-3.5 px-4 font-semibold">Class Section</th>
@@ -976,7 +975,7 @@ export default function AdminHubPage() {
                     onClick={() => setSelectedDisputeId(dispute.id)}
                     className={`p-6 rounded-2xl border transition-all cursor-pointer ${
                       selectedDispute?.id === dispute.id
-                        ? "bg-surface-raised border-accent shadow-lg shadow-accent/10"
+                        ? "bg-surface-raised border-accent"
                         : "bg-surface border-white/[0.08] hover:border-white/20"
                     }`}
                   >
@@ -995,7 +994,7 @@ export default function AdminHubPage() {
                         </p>
                       </div>
 
-                      <span className={`px-3 py-1 rounded-xl text-xs font-mono font-bold border uppercase shrink-0 ${
+                      <span className={`px-3 py-1 rounded-xl text-xs font-bold border shrink-0 ${
                         dispute.status === "pending"
                           ? "bg-amber-500/10 text-amber-300 border-amber-500/20"
                           : dispute.status === "approved"
@@ -1027,7 +1026,7 @@ export default function AdminHubPage() {
                           {selectedDispute.studentName} (@{selectedDispute.handle}) • {selectedDispute.platform}
                         </p>
                       </div>
-                      <span className={`px-3 py-1 rounded-xl text-xs font-mono font-bold border uppercase ${
+                      <span className={`px-3 py-1 rounded-xl text-xs font-bold border ${
                         selectedDispute.status === "pending"
                           ? "bg-amber-500/10 text-amber-300 border-amber-500/20"
                           : selectedDispute.status === "approved"
@@ -1040,17 +1039,17 @@ export default function AdminHubPage() {
 
                     <div className="space-y-4 text-sm">
                       <div className="p-4 bg-surface-raised rounded-2xl border border-white/[0.06] space-y-1.5">
-                        <span className="text-xs font-mono font-bold text-muted block uppercase tracking-wider">Student Claim</span>
+                        <span className="text-xs font-bold text-muted block">Student Claim</span>
                         <p className="text-white text-base leading-relaxed">{selectedDispute.claim}</p>
                       </div>
 
                       <div className="grid grid-cols-2 gap-3 font-mono text-xs sm:text-sm">
                         <div className="p-3.5 rounded-xl bg-canvas border border-white/[0.06]">
-                          <span className="text-muted block text-xs font-bold uppercase mb-1">RULE REFERENCE</span>
+                          <span className="text-muted block text-xs font-semibold mb-1">Rule reference</span>
                           <span className="text-white font-semibold">{selectedDispute.ruleReference}</span>
                         </div>
                         <div className="p-3.5 rounded-xl bg-canvas border border-white/[0.06]">
-                          <span className="text-muted block text-xs font-bold uppercase mb-1">METRIC TARGET</span>
+                          <span className="text-muted block text-xs font-semibold mb-1">Metric target</span>
                           <span className="text-accent font-semibold">{selectedDispute.metric}</span>
                         </div>
                       </div>
@@ -1072,7 +1071,7 @@ export default function AdminHubPage() {
 
                       {selectedDispute.resolutionNote && (
                         <div className="p-4 rounded-2xl bg-canvas border border-emerald-500/20 text-emerald-300 space-y-1.5">
-                          <span className="text-xs font-mono uppercase font-bold block text-muted">Audited Resolution</span>
+                          <span className="text-xs font-bold block text-muted">Audited Resolution</span>
                           <p className="text-sm text-emerald-200">{selectedDispute.resolutionNote}</p>
                           <span className="text-xs font-mono text-muted block mt-1">
                             By {selectedDispute.reviewedBy || "Faculty Co-Admin"} at {selectedDispute.reviewedAt || "Recent"}
@@ -1096,7 +1095,7 @@ export default function AdminHubPage() {
                         <div className="flex items-center space-x-3 pt-1">
                           <button
                             onClick={() => handleResolveDispute(selectedDispute.id, "approved")}
-                            className="flex-1 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-canvas font-bold text-sm sm:text-base flex items-center justify-center space-x-2 transition-colors shadow-md shadow-emerald-500/20"
+                            className="flex-1 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-canvas font-bold text-sm sm:text-base flex items-center justify-center space-x-2 transition-colors"
                           >
                             <Check className="w-4 h-4" />
                             <span>Accept &amp; Backfill Telemetry</span>
@@ -1191,7 +1190,7 @@ export default function AdminHubPage() {
 
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                  <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-mono font-bold tracking-wider uppercase mb-2">
+                  <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-bold mb-2">
                     <Activity className="w-3.5 h-3.5" />
                     <span>Phase 5 • End-to-End Operational Lifecycle</span>
                   </div>
@@ -1220,7 +1219,7 @@ export default function AdminHubPage() {
                   <button
                     onClick={handleRunSimulation}
                     disabled={isSimulating}
-                    className="px-6 py-3 rounded-xl bg-accent hover:bg-accent-light text-canvas text-sm font-bold font-mono flex items-center space-x-2.5 shadow-lg shadow-accent/20 transition-all disabled:opacity-50"
+                    className="px-6 py-3 rounded-xl bg-accent hover:bg-accent-light text-canvas text-sm font-semibold flex items-center space-x-2.5 transition-all disabled:opacity-50"
                   >
                     {isSimulating ? (
                       <>
@@ -1274,7 +1273,7 @@ export default function AdminHubPage() {
                 </p>
                 <button
                   onClick={handleRunSimulation}
-                  className="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-light text-canvas text-xs font-mono font-bold inline-flex items-center space-x-2"
+                  className="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-light text-canvas text-xs font-semibold inline-flex items-center space-x-2"
                 >
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Execute Week {simWeek} Simulation</span>
@@ -1334,7 +1333,7 @@ export default function AdminHubPage() {
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm font-sans border-collapse">
                       <thead>
-                        <tr className="border-b border-white/[0.08] text-xs font-mono text-muted uppercase tracking-wider">
+                        <tr className="border-b border-white/[0.08] text-xs text-muted">
                           <th className="py-3 px-4">Rule Invariant</th>
                           <th className="py-3 px-4">Expected Threshold</th>
                           <th className="py-3 px-4">Observed Telemetry Result</th>
@@ -1459,7 +1458,7 @@ export default function AdminHubPage() {
                       </div>
 
                       <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] space-y-2">
-                        <span className="text-xs font-mono font-bold text-accent uppercase tracking-wider block">
+                        <span className="text-xs font-bold text-accent block">
                           Executive Analyst Summary
                         </span>
                         <p className="text-sm text-ink-secondary leading-relaxed font-sans">
@@ -1468,7 +1467,7 @@ export default function AdminHubPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <span className="text-xs font-mono text-muted uppercase font-bold tracking-wider">
+                        <span className="text-xs text-muted font-bold">
                           Verified Cohort Milestones
                         </span>
                         <ul className="space-y-1.5 text-xs text-muted">
@@ -1590,7 +1589,7 @@ export default function AdminHubPage() {
                   </div>
 
                   <div className="pt-2 border-t border-white/[0.08] space-y-3">
-                    <span className="text-xs font-mono text-muted-soft block uppercase font-bold tracking-wider">
+                    <span className="text-xs text-muted-soft block font-bold">
                       Initial Telemetry Handles (Optional)
                     </span>
 
@@ -1657,7 +1656,7 @@ export default function AdminHubPage() {
                     <button
                       type="submit"
                       disabled={isSubmittingEnrollment}
-                      className="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-light text-canvas text-xs font-mono font-bold flex items-center space-x-2 transition-all disabled:opacity-50"
+                      className="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-light text-canvas text-xs font-semibold flex items-center space-x-2 transition-all disabled:opacity-50"
                     >
                       {isSubmittingEnrollment ? (
                         <>

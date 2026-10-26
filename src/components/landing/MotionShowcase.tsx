@@ -9,21 +9,21 @@ export function MotionShowcase() {
 
   const tabGlowStyles = {
     github: {
-      glow: "from-sky-500/20 via-blue-500/10 to-transparent",
+      glow: "bg-sky-500/[0.08]",
       border: "border-sky-500/30",
       accentBg: "bg-sky-500/10 text-sky-400 border-sky-500/25",
       badge: "border-sky-500/30 text-sky-400 bg-sky-500/10",
       iconColor: "text-sky-400",
     },
     leetcode: {
-      glow: "from-amber-500/20 via-orange-500/10 to-transparent",
+      glow: "bg-amber-500/[0.08]",
       border: "border-amber-500/30",
       accentBg: "bg-amber-500/10 text-amber-400 border-amber-500/25",
       badge: "border-amber-500/30 text-amber-400 bg-amber-500/10",
       iconColor: "text-amber-400",
     },
     hackerrank: {
-      glow: "from-emerald-500/20 via-teal-500/10 to-transparent",
+      glow: "bg-accent/[0.08]",
       border: "border-emerald-500/30",
       accentBg: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25",
       badge: "border-emerald-500/30 text-emerald-400 bg-emerald-500/10",
@@ -37,13 +37,13 @@ export function MotionShowcase() {
     <section id="showcase" className="py-20 md:py-28 relative overflow-hidden">
       {/* Background Dynamic Ambient Radial Mesh */}
       <div
-        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-gradient-to-tr ${currentTheme.glow} rounded-full blur-[140px] pointer-events-none transition-all duration-700`}
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] ${currentTheme.glow} rounded-full blur-[140px] pointer-events-none transition-colors duration-500`}
       />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/25 bg-accent/10 text-accent text-xs font-sans font-semibold tracking-wide uppercase mb-4 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/25 bg-accent/10 text-accent text-xs font-sans font-semibold  mb-4">
             <Sparkles className="h-3.5 w-3.5" />
             Interactive Observation Console
           </div>
@@ -55,11 +55,11 @@ export function MotionShowcase() {
           </p>
 
           {/* Animated Tab Switcher with Glowing Active Pill */}
-          <div className="mt-8 inline-flex p-1.5 rounded-2xl border border-white/10 bg-surface shadow-panel">
+          <div className="mt-8 inline-flex max-w-full p-1.5 rounded-2xl border border-white/10 bg-surface shadow-panel">
             {[
-              { id: "github", label: "GitHub Commits", icon: Github, color: "text-sky-400" },
-              { id: "leetcode", label: "LeetCode Activity", icon: Code2, color: "text-amber-400" },
-              { id: "hackerrank", label: "HackerRank Badges", icon: Award, color: "text-emerald-400" },
+              { id: "github", label: "GitHub Commits", short: "GitHub", icon: Github, color: "text-sky-400" },
+              { id: "leetcode", label: "LeetCode Activity", short: "LeetCode", icon: Code2, color: "text-amber-400" },
+              { id: "hackerrank", label: "HackerRank Badges", short: "HackerRank", icon: Award, color: "text-emerald-400" },
             ].map((tab) => {
               const Icon = tab.icon;
               const isSelected = activeTab === tab.id;
@@ -68,7 +68,7 @@ export function MotionShowcase() {
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`relative flex items-center gap-2.5 px-5 py-3 rounded-xl text-xs sm:text-sm font-sans font-semibold transition-all ${
+                  className={`relative flex items-center gap-2 sm:gap-2.5 px-3 sm:px-5 py-3 rounded-xl text-xs sm:text-sm font-sans font-semibold transition-all ${
                     isSelected ? "text-white" : "text-slate-400 hover:text-white"
                   }`}
                 >
@@ -80,7 +80,10 @@ export function MotionShowcase() {
                     />
                   )}
                   <Icon className={`h-4 w-4 relative z-10 ${tab.color}`} />
-                  <span className="relative z-10">{tab.label}</span>
+                  <span className="relative z-10 whitespace-nowrap">
+                    <span className="hidden sm:inline">{tab.label}</span>
+                    <span className="sm:hidden">{tab.short}</span>
+                  </span>
                 </button>
               );
             })}
@@ -94,7 +97,7 @@ export function MotionShowcase() {
           {/* Header Bar */}
           <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-white/[0.08] text-sm font-sans text-slate-300">
             <div className="flex items-center gap-3">
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-white font-bold text-base">Aarav Sharma</span>
               <span className="text-white/20">|</span>
               <span className="text-slate-300 font-medium">CSE 2026</span>
@@ -232,7 +235,7 @@ export function MotionShowcase() {
                   transition={{ duration: 0.25 }}
                   className="w-full max-w-2xl space-y-6 text-center py-4"
                 >
-                  <div className="inline-flex p-4 rounded-3xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.25)]">
+                  <div className="inline-flex p-4 rounded-3xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
                     <Award className="h-10 w-10 sm:h-12 sm:w-12" />
                   </div>
                   <div>

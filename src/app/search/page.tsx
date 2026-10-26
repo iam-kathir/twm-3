@@ -114,7 +114,7 @@ export default function SearchPage() {
 
             {/* Evidence Legend Pill */}
             <div className="flex items-center gap-2 bg-surface border border-white/[0.08] px-4 py-2.5 rounded-xl shadow-panel">
-              <span className="text-xs text-muted font-mono uppercase tracking-wider font-semibold mr-1">Verification Standard:</span>
+              <span className="text-xs text-muted font-semibold mr-1">Verification Standard:</span>
               <div className="flex items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 font-mono text-xs font-semibold shadow-sm">
                   <CheckCircle2 className="w-3.5 h-3.5" />
@@ -180,7 +180,7 @@ export default function SearchPage() {
 
           {/* Popular Tag Pills */}
           <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-white/[0.06]">
-            <span className="text-xs text-muted font-mono flex items-center space-x-1.5 mr-1 font-semibold uppercase tracking-wider">
+            <span className="text-xs text-muted flex items-center space-x-1.5 mr-1 font-semibold">
               <Tag className="w-3.5 h-3.5" />
               <span>Filter by Tag:</span>
             </span>
@@ -189,7 +189,7 @@ export default function SearchPage() {
                 onClick={() => setSelectedTag(null)}
                 className="px-3 py-1.5 rounded-lg bg-accent text-canvas font-bold text-xs font-mono flex items-center space-x-1 shadow-sm"
               >
-                <span>✕ {selectedTag}</span>
+                <span>× {selectedTag}</span>
               </button>
             )}
             {POPULAR_TAGS.map((tag) => (
@@ -295,7 +295,7 @@ export default function SearchPage() {
 
                     {/* Tags & Evidence Badges */}
                     <div className="space-y-2 pt-2">
-                      <span className="text-xs font-mono text-muted uppercase tracking-wider block font-semibold">
+                      <span className="text-xs text-muted block font-semibold">
                         Verified Capabilities:
                       </span>
                       <div className="flex flex-wrap gap-2">
@@ -342,7 +342,7 @@ export default function SearchPage() {
                       </span>
                       <span className="flex items-center space-x-1 text-muted text-xs" title="HackerRank Verified Stars (Display Only)">
                         <Award className="w-3.5 h-3.5 text-provider-hackerrank" />
-                        <span>{dev.platforms.hackerrank.stars}★</span>
+                        <span>{dev.platforms.hackerrank.stars} stars</span>
                       </span>
                     </div>
 
@@ -437,14 +437,14 @@ export default function SearchPage() {
                 <div className="p-3 bg-canvas rounded-xl border border-white/[0.06] text-xs space-y-1">
                   <span className="text-xs font-medium text-muted block">LeetCode problems</span>
                   <span className="text-sm font-bold text-provider-leetcode-brand font-mono">{selectedDev.platforms.leetcode.solved} Solved</span>
-                  <span className="text-xs text-muted block">{selectedDev.platforms.hackerrank.stars}★ HackerRank (Display Only)</span>
+                  <span className="text-xs text-muted block">{selectedDev.platforms.hackerrank.stars} stars — HackerRank (display only)</span>
                 </div>
               </div>
 
               {/* Verified Capabilities & Explicit File Evidence */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-mono text-muted uppercase tracking-wider">
+                  <h4 className="text-xs text-muted">
                     Audited Skill Artifacts (Rule §10.3)
                   </h4>
                   <span className="text-xs font-mono text-emerald-400">

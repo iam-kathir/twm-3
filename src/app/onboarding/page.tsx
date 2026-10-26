@@ -367,7 +367,7 @@ function OnboardingContent() {
                   className="space-y-6"
                 >
                   <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-mono font-bold uppercase mb-3">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold mb-3">
                       <UserCheck className="h-4 w-4" />
                       <span>Roster Match Confirmed</span>
                     </div>
@@ -460,7 +460,7 @@ function OnboardingContent() {
                             type="button"
                             onClick={handleRequestOtp}
                             disabled={sendingOtp || cooldownRemaining > 0 || !emailInput.trim()}
-                            className="w-full py-3 rounded-xl bg-accent hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 text-canvas font-bold text-sm font-mono flex items-center justify-center gap-2 transition-all shadow-md shadow-accent/10"
+                            className="w-full py-3 rounded-xl bg-accent hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 text-canvas font-semibold text-sm flex items-center justify-center gap-2 transition-all"
                           >
                             {sendingOtp ? (
                               <>
@@ -541,7 +541,7 @@ function OnboardingContent() {
                               type="button"
                               onClick={handleVerifyOtp}
                               disabled={verifyingOtp || otpInput.trim().length !== 6}
-                              className="flex-1 py-3 rounded-xl bg-accent hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 text-canvas font-bold text-sm font-mono flex items-center justify-center gap-2 transition-all shadow-md shadow-accent/10"
+                              className="flex-1 py-3 rounded-xl bg-accent hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 text-canvas font-semibold text-sm flex items-center justify-center gap-2 transition-all"
                             >
                               {verifyingOtp ? (
                                 <>
@@ -570,7 +570,7 @@ function OnboardingContent() {
                   <button
                     onClick={() => setStep(2)}
                     disabled={!student?.emailVerified}
-                    className="w-full py-4 rounded-xl bg-accent hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 disabled:cursor-not-allowed text-canvas font-bold text-base flex items-center justify-center gap-2.5 hover:scale-[1.01] active:scale-[0.99] transition-all shadow-lg shadow-accent/20"
+                    className="w-full py-4 rounded-xl bg-accent hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 disabled:cursor-not-allowed text-canvas font-semibold text-base flex items-center justify-center gap-2.5 hover:scale-[1.01] active:scale-[0.99] transition-all"
                   >
                     <span>Continue to Privacy Settings</span>
                     <ArrowRight className="h-5 w-5" />
@@ -589,7 +589,7 @@ function OnboardingContent() {
                   className="space-y-8"
                 >
                   <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent border border-accent/20 text-xs font-mono font-bold uppercase mb-3">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent border border-accent/20 text-xs font-bold mb-3">
                       <Sliders className="h-4 w-4" />
                       <span>Control Your Experience</span>
                     </div>
@@ -682,7 +682,7 @@ function OnboardingContent() {
                     </button>
                     <button
                       onClick={() => setStep(3)}
-                      className="flex-1 py-4 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-bold text-base flex items-center justify-center gap-2.5 hover:scale-[1.01] active:scale-[0.99] transition-all shadow-lg shadow-accent/20"
+                      className="flex-1 py-4 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-semibold text-base flex items-center justify-center gap-2.5 hover:scale-[1.01] active:scale-[0.99] transition-all"
                     >
                       <span>Connect Developer Profiles</span>
                       <ArrowRight className="h-5 w-5" />
@@ -702,7 +702,7 @@ function OnboardingContent() {
                   className="space-y-8"
                 >
                   <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent border border-accent/20 text-xs font-mono font-bold uppercase mb-3">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent border border-accent/20 text-xs font-bold mb-3">
                       <ShieldCheck className="h-4 w-4" />
                       <span>Proof of Control</span>
                     </div>
@@ -823,7 +823,7 @@ function OnboardingContent() {
                     </button>
                     <button
                       onClick={handleFinish}
-                      className="flex-1 py-4 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-bold text-base flex items-center justify-center gap-2.5 hover:scale-[1.01] active:scale-[0.99] transition-all shadow-lg shadow-accent/20"
+                      className="flex-1 py-4 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-semibold text-base flex items-center justify-center gap-2.5 hover:scale-[1.01] active:scale-[0.99] transition-all"
                     >
                       <Sparkles className="h-5 w-5" />
                       <span>Complete Setup &amp; Launch Dashboard</span>

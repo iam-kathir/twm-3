@@ -75,7 +75,7 @@ export function CockpitPreview() {
           </div>
 
           {/* Provider Grid */}
-          <div className="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 bg-canvas/40">
+          <div className="p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 bg-canvas/40">
             {/* 1. GitHub Provider Card */}
             <motion.div
               whileHover={{ y: -4 }}
@@ -83,7 +83,7 @@ export function CockpitPreview() {
               className="rounded-2xl border border-white/[0.08] bg-surface/90 p-6 sm:p-7 flex flex-col justify-between hover:border-white/20 transition-all shadow-md group"
             >
               <div>
-                <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
                   <div className="flex items-center gap-2.5 text-ink font-bold text-base sm:text-lg">
                     <Github className="h-5 w-5 text-white" />
                     <span>GitHub</span>
@@ -108,7 +108,7 @@ export function CockpitPreview() {
                           title={`Day ${i + 1}: ${active ? "Active commit observed" : "No commits"}`}
                           className={`h-7 flex-1 rounded-lg transition-all ${
                             active
-                              ? "bg-emerald-400 shadow-sm shadow-emerald-400/30 scale-100"
+                              ? "bg-emerald-400 scale-100"
                               : "bg-surface-raised border border-white/[0.04]"
                           }`}
                         />
@@ -142,7 +142,7 @@ export function CockpitPreview() {
               className="rounded-2xl border border-white/[0.08] bg-surface/90 p-6 sm:p-7 flex flex-col justify-between hover:border-white/20 transition-all shadow-md group"
             >
               <div>
-                <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
                   <div className="flex items-center gap-2.5 text-ink font-bold text-base sm:text-lg">
                     <Code2 className="h-5 w-5 text-provider-leetcode-brand" />
                     <span>LeetCode</span>
@@ -194,7 +194,7 @@ export function CockpitPreview() {
               className="rounded-2xl border border-white/[0.08] bg-surface/90 p-6 sm:p-7 flex flex-col justify-between hover:border-white/20 transition-all shadow-md group"
             >
               <div>
-                <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
                   <div className="flex items-center gap-2.5 text-ink font-bold text-base sm:text-lg">
                     <Award className="h-5 w-5 text-provider-hackerrank" />
                     <span>HackerRank</span>
@@ -208,7 +208,7 @@ export function CockpitPreview() {
                 <div className="space-y-4 font-mono">
                   <div className="flex justify-between items-baseline">
                     <span className="text-xs sm:text-sm text-muted">Badges Observed:</span>
-                    <span className="text-ink font-black text-sm sm:text-base">5★ Python, 4★ PS</span>
+                    <span className="text-ink font-black text-sm sm:text-base">5-star Python, 4-star PS</span>
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-surface-raised border border-white/[0.06] text-xs sm:text-sm text-slate-300 font-sans leading-relaxed">
@@ -239,7 +239,7 @@ export function CockpitPreview() {
                   type="button"
                   onClick={() => setRecapMode("ai")}
                   className={`px-3.5 py-1.5 rounded-lg transition-all ${
-                    recapMode === "ai" ? "bg-accent text-canvas font-bold shadow-md shadow-accent/20" : "text-muted hover:text-white"
+                    recapMode === "ai" ? "bg-accent text-canvas font-bold" : "text-muted hover:text-white"
                   }`}
                 >
                   AI Explanation
@@ -248,7 +248,7 @@ export function CockpitPreview() {
                   type="button"
                   onClick={() => setRecapMode("deterministic")}
                   className={`px-3.5 py-1.5 rounded-lg transition-all ${
-                    recapMode === "deterministic" ? "bg-accent text-canvas font-bold shadow-md shadow-accent/20" : "text-muted hover:text-white"
+                    recapMode === "deterministic" ? "bg-accent text-canvas font-bold" : "text-muted hover:text-white"
                   }`}
                 >
                   Pure Metrics View

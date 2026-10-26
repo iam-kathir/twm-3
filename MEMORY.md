@@ -117,6 +117,16 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-10-26 — Buffy (Freebuff): premium pass 2 — de-tokenised labels, zero design-lint FAILs
+- **Goal:** "feel more premium" on top of the flat/quiet pass.
+- **Label sweep finished:** removed every `uppercase` / `tracking-wider` / `tracking-wide` class from `src/**/*.tsx` (0 left); remaining literal caps labels converted to sentence case on `admin` (Total enrolled / Opted-in and participating / Participation status / Participation ratio / Rule reference / Metric target), `settings` (Platform settings / Rule §10.3 compliant) and dashboard. Buttons on accent fills lost `font-mono` and `font-bold` → sans semibold.
+- **De-glowed:** all tinted `shadow-{sm,md,lg}-shadow-accent/emerald` glows and `shadow-[0_0_*]` blooms removed repo-wide (admin, onboarding, CockpitPreview, MotionShowcase, BrandLogo — logo mark is now flat `bg-surface-elevated`, no hover bloom or gradient sheen).
+- **Stars:** `★`/`☆` glyph repeats replaced with lucide `Star` (filled/30% opacity) in the dashboard HackerRank badge; `5★`-style strings reworded (`5-star Python, 4-star PS`, `N stars`) in CockpitPreview, search and the AppContext toast. Emoji `✕` → `×`, `⚠️` → `AlertCircle` in search / BulkRosterImportModal.
+- **Responsive fixes (real measured overflows):** added `.taste-skill/find-overflow.mjs` (CDP helper) — found and fixed `LIMITED_CAPABILITY` badge blowing the PlatformMatrix card grid at 768px (status now renders a short label with the enum in `title`, cards go 1/2/3 cols) and the MotionShowcase provider switcher overflowing at 390px (short labels under `sm`, `px-3` on phones). `document.documentElement.scrollWidth` now equals viewport at 768 and 390.
+- **Numerals:** `globals.css` sets `font-variant-numeric: tabular-nums` on `table`, `.tabular-nums`, `.font-mono` and heavy-weight text so KPIs/tables never jitter.
+- **Verified with real output:** `npx tsc --noEmit` 0 · `npm run lint` clean · `npm test` 19/19 · `npx next build` exit 0 · taste `lint.mjs` **0 FAIL, 484 WARN** (baseline earlier today: 85 FAIL / 653 WARN) · taste `inspect.mjs /` **0 FAIL, 9 WARN**, screenshots in `.taste-skill/after4/` · all 9 routes 200.
+- **Left:** WARN pool (484) is dominated by `font-mono` used as a UI voice (293×) and rest-state `shadow-sm/xl` (94×) — mostly `admin`/`onboarding`; hero H1 at 74px is landing-scale by design; `.taste-skill/` stays untracked; `scripts/audit-launch-checklist.mjs` is another agent's uncommitted work.
+
 ### 2026-10-26 — Buffy (Freebuff): premium-elegance frontend pass ("simple premium")
 - **Direction applied:** flat, quiet, SaaS-grade restraint — opaque panels on a tone step + one hairline border, no glow, no glass blur, no gradient headline, no heavy drop shadows. Same palette (`#07090E` / `#0E121A` / `#10B981`) and same font source (`next/font` Sora + JetBrains Mono) — invariants kept.
 - **Foundation:** `globals.css` added `--border-strong`, `--radius-panel` (14px) / `--radius-control` (10px), `--shadow-panel` / `--shadow-overlay`; `.glass-surface` made opaque, `.glow-subtle` / `.glow-hover` de-glowed, `.instrument-panel` rounded, new `.meta-label` helper. `tailwind.config.js` maps `shadow-panel|overlay`, `rounded-panel|control`.

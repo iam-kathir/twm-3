@@ -44,7 +44,7 @@ TWM 3.1 — Institutional Developer Activity & Cohort Platform
         <table role="presentation" width="100%" max-width="540" style="max-width: 540px; background-color: #0E121A; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6);">
           <!-- Header Banner -->
           <tr>
-            <td style="padding: 32px 32px 24px 32px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(14, 18, 26, 0) 100%);">
+            <td style="padding: 32px 32px 24px 32px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(14, 18, 26, 0) 100%); /* taste-skill-ignore: transactional email header tint, outside the web UI */">
               <table role="presentation" width="100%">
                 <tr>
                   <td>

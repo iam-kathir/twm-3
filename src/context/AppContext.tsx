@@ -578,7 +578,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
       addToast({
         title: "All 3 Telemetry Feeds Synced",
-        description: `GitHub: ${updatedUser.github.activeDaysWeek} active days • LeetCode: ${updatedUser.leetcode.totalSolved} solved • HackerRank: ${updatedUser.hackerrank.problemSolvingStars}★ verified.`,
+        description: `GitHub: ${updatedUser.github.activeDaysWeek} active days • LeetCode: ${updatedUser.leetcode.totalSolved} solved • HackerRank: ${updatedUser.hackerrank.problemSolvingStars} stars verified.`,
         type: "success"
       });
     } catch {

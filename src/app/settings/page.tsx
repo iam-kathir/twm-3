@@ -216,10 +216,10 @@ export default function SettingsPage() {
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
         {/* Title & Description Header */}
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-accent/10 border border-accent/20 text-xs sm:text-sm font-mono font-semibold text-accent">
-            <span>PLATFORM SETTINGS</span>
-            <span>•</span>
-            <span>RULE §10.3 COMPLIANT</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-accent/10 border border-accent/20 text-xs sm:text-sm font-medium text-accent">
+            <span>Platform settings</span>
+            <span className="text-accent/40">/</span>
+            <span>Rule §10.3 compliant</span>
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
             Account &amp; Telemetry Preferences

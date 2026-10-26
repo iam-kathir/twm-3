@@ -100,7 +100,7 @@ export default function PrivacyPolicyPage() {
 
         {/* Hero Header */}
         <div className="space-y-4 max-w-4xl">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-mono font-bold tracking-wider uppercase">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-bold">
             <Shield className="w-3.5 h-3.5" />
             <span>Institutional Governance • Fairness Rules §1.2, §18 &amp; §19</span>
           </div>
@@ -161,7 +161,7 @@ export default function PrivacyPolicyPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Left Table of Contents */}
           <aside className="lg:col-span-4 lg:sticky lg:top-24 space-y-3">
-            <span className="text-xs font-mono text-muted uppercase tracking-wider font-bold block px-2">
+            <span className="text-xs text-muted font-bold block px-2">
               Policy Sections
             </span>
             <nav className="space-y-1">
@@ -183,7 +183,7 @@ export default function PrivacyPolicyPage() {
             </nav>
 
             <div className="p-5 rounded-2xl bg-surface border border-white/[0.06] space-y-3 text-xs text-muted mt-6">
-              <span className="font-mono text-white font-bold block uppercase text-xs">
+              <span className="text-white font-bold block text-xs">
                 Your Privacy Controls
               </span>
               <p>
@@ -203,7 +203,7 @@ export default function PrivacyPolicyPage() {
           <div className="lg:col-span-8 space-y-12">
             {/* Section 1 */}
             <section id="principles" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent font-mono text-xs uppercase tracking-wider font-bold">
+              <div className="flex items-center space-x-3 text-accent text-xs font-bold">
                 <Shield className="w-4 h-4" />
                 <span>Section 1</span>
               </div>
@@ -228,7 +228,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 2 */}
             <section id="data-collection" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent font-mono text-xs uppercase tracking-wider font-bold">
+              <div className="flex items-center space-x-3 text-accent text-xs font-bold">
                 <Code2 className="w-4 h-4" />
                 <span>Section 2</span>
               </div>
@@ -276,7 +276,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 3 */}
             <section id="zero-fabrication" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent font-mono text-xs uppercase tracking-wider font-bold">
+              <div className="flex items-center space-x-3 text-accent text-xs font-bold">
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Section 3</span>
               </div>
@@ -303,7 +303,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 4 */}
             <section id="identity-visibility" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent font-mono text-xs uppercase tracking-wider font-bold">
+              <div className="flex items-center space-x-3 text-accent text-xs font-bold">
                 <Eye className="w-4 h-4" />
                 <span>Section 4</span>
               </div>
@@ -340,7 +340,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 5 */}
             <section id="authentication" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent font-mono text-xs uppercase tracking-wider font-bold">
+              <div className="flex items-center space-x-3 text-accent text-xs font-bold">
                 <Lock className="w-4 h-4" />
                 <span>Section 5</span>
               </div>
@@ -364,7 +364,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 6 */}
             <section id="disputes" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent font-mono text-xs uppercase tracking-wider font-bold">
+              <div className="flex items-center space-x-3 text-accent text-xs font-bold">
                 <Scale className="w-4 h-4" />
                 <span>Section 6</span>
               </div>
@@ -388,7 +388,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 7 */}
             <section id="retention-export" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent font-mono text-xs uppercase tracking-wider font-bold">
+              <div className="flex items-center space-x-3 text-accent text-xs font-bold">
                 <Database className="w-4 h-4" />
                 <span>Section 7</span>
               </div>
@@ -425,7 +425,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 8 */}
             <section id="governance" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent font-mono text-xs uppercase tracking-wider font-bold">
+              <div className="flex items-center space-x-3 text-accent text-xs font-bold">
                 <Users className="w-4 h-4" />
                 <span>Section 8</span>
               </div>

@@ -23,7 +23,8 @@ import {
   GitCommit,
   GitBranch,
   Flame,
-  Lock
+  Lock,
+  Star
 } from "lucide-react";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useApp } from "@/context/AppContext";
@@ -169,7 +170,7 @@ export default function DashboardPage() {
                             ? "bg-emerald-800 border border-emerald-700/60"
                             : level === 3
                             ? "bg-emerald-600 border border-emerald-500/60"
-                            : "bg-emerald-400 border border-emerald-300 shadow-[0_0_8px_rgba(52,211,153,0.3)]"
+                            : "bg-emerald-400 border border-emerald-300"
                         }`}
                       />
                     );
@@ -351,7 +352,9 @@ export default function DashboardPage() {
                   </div>
                   <div className="text-right">
                     <span className="text-sm font-bold text-amber-400 flex items-center gap-0.5">
-                      {"★".repeat(currentUser.hackerrank.pythonStars || 5)}
+                      {Array.from({ length: currentUser.hackerrank.pythonStars || 5 }).map((_, i) => (
+                        <Star key={i} className="h-3.5 w-3.5 fill-current" />
+                      ))}
                     </span>                      <span className="text-xs text-muted-soft block">{currentUser.hackerrank.pythonStars || 5} Stars</span>
                   </div>
                 </div>
@@ -369,8 +372,14 @@ export default function DashboardPage() {
                   </div>
                   <div className="text-right">
                     <span className="text-sm font-bold text-emerald-400 flex items-center gap-0.5">
-                      {"★".repeat(currentUser.hackerrank.problemSolvingStars || 4)}
-                      <span className="text-white/20">{"☆".repeat(Math.max(0, 5 - (currentUser.hackerrank.problemSolvingStars || 4)))}</span>
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`h-3.5 w-3.5 ${
+                            i < (currentUser.hackerrank.problemSolvingStars || 4) ? "fill-current" : "opacity-30"
+                          }`}
+                        />
+                      ))}
                     </span>                      <span className="text-xs text-muted-soft block">{currentUser.hackerrank.problemSolvingStars || 4} Stars</span>
                   </div>
                 </div>

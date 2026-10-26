@@ -11,6 +11,7 @@ export function PlatformMatrix() {
       icon: Github,
       iconColor: "text-white",
       status: "SUPPORTED_LIVE",
+      statusLabel: "Live",
       statusClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
       description: "Direct OAuth identity verification and public contribution calendar metrics.",
       fields: [
@@ -25,6 +26,7 @@ export function PlatformMatrix() {
       icon: Code2,
       iconColor: "text-provider-leetcode-brand",
       status: "SUPPORTED_SNAPSHOT",
+      statusLabel: "Snapshot",
       statusClass: "bg-accent/10 text-accent border-accent/20",
       description: "HMAC profile bio challenge verification with cumulative problem-solving snapshots.",
       fields: [
@@ -39,6 +41,7 @@ export function PlatformMatrix() {
       icon: Award,
       iconColor: "text-provider-hackerrank",
       status: "LIMITED_CAPABILITY",
+      statusLabel: "Limited",
       statusClass: "bg-amber-500/10 text-amber-400 border-amber-500/20",
       description: "Community profile badges and domain star ratings with honest capability gating.",
       fields: [
@@ -66,7 +69,7 @@ export function PlatformMatrix() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {platforms.map((platform, idx) => {
             const Icon = platform.icon;
             return (
@@ -74,18 +77,21 @@ export function PlatformMatrix() {
                 key={idx}
                 whileHover={{ y: -6 }}
                 transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                className="rounded-2xl border border-white/10 bg-surface/90 p-7 sm:p-8 flex flex-col justify-between hover:border-white/20 transition-all shadow-[0_10px_30px_rgba(0,0,0,0.5)] group"
+                className="rounded-2xl border border-white/[0.08] bg-surface p-7 sm:p-8 flex flex-col justify-between hover:border-white/20 transition-colors group"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-5">
+                  <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
                     <div className="flex items-center gap-3">
                       <div className="p-3 rounded-xl bg-surface-raised border border-white/10 shadow-inner">
                         <Icon className={`h-6 w-6 ${platform.iconColor}`} />
                       </div>
                       <h3 className="font-extrabold text-ink text-xl">{platform.name}</h3>
                     </div>
-                    <span className={`text-xs font-mono px-3 py-1 rounded-full border font-semibold tracking-wide ${platform.statusClass}`}>
-                      {platform.status}
+                    <span
+                      title={platform.status}
+                      className={`text-xs font-sans px-3 py-1 rounded-full border font-semibold ${platform.statusClass}`}
+                    >
+                      {platform.statusLabel}
                     </span>
                   </div>
 
@@ -94,7 +100,7 @@ export function PlatformMatrix() {
                   </p>
 
                   <div className="space-y-2.5 mb-7">
-                    <span className="text-xs font-mono text-muted uppercase tracking-wider block font-semibold">
+                    <span className="text-xs text-muted block font-semibold">
                       Tracked Fields &amp; Semantics:
                     </span>
                     {platform.fields.map((field, fIdx) => (

@@ -117,7 +117,7 @@ export function SundayCountdownClock() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
             </span>
-            <span className="font-sans text-xs sm:text-sm font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+            <span className="font-sans text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
               <Trophy className="h-3.5 w-3.5 text-amber-400" />
               Week 42 Live Competition
             </span>

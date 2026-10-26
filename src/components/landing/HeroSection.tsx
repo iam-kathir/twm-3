@@ -57,7 +57,7 @@ export function HeroSection() {
         {/* Headline: one face, one weight, solid ink with a single accent line */}
         <motion.h1
           variants={itemVariants}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-ink tracking-tight leading-[1.06]"
+          className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-ink tracking-tight leading-[1.06]"
         >
           Track your code.
           <br />

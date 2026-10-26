@@ -182,7 +182,12 @@ export function BulkRosterImportModal({ isOpen, onClose, onSuccess }: BulkRoster
               {importResult.skipped.length > 0 && (
                 <div className="text-xs font-mono text-muted max-h-24 overflow-y-auto space-y-1 pt-1">
                   {importResult.skipped.map((s, idx) => (
-                    <div key={idx}>⚠️ {s.rollNo} ({s.name}): {s.reason}</div>
+                    <div key={idx} className="flex items-start gap-1.5">
+                      <AlertCircle className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+                      <span>
+                        {s.rollNo} ({s.name}): {s.reason}
+                      </span>
+                    </div>
                   ))}
                 </div>
               )}

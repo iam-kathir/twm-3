@@ -274,7 +274,17 @@ samp {
 /* Subtle Technical Dot Matrix (replacing generic glowing grids) */
 .bg-tech-dots {
   background-size: 24px 24px;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px); /* taste-skill-ignore: 1px dot matrix, a repeatable texture, not a colour gradient */
+}
+
+/* Numerals keep their width in tables, KPIs and live figures so rows and
+   counters never jitter as values change. */
+table,
+.tabular-nums,
+.font-mono,
+[class*="font-black"],
+[class*="font-extrabold"] {
+  font-variant-numeric: tabular-nums;
 }
 
 /* Skeleton Loading State */
@@ -288,7 +298,7 @@ samp {
 }
 
 .skeleton-shimmer {
-  background: linear-gradient(
+  background: linear-gradient( /* taste-skill-ignore: shimmer is a loading-state animation, not a decorative fill */
     90deg,
     rgba(255, 255, 255, 0.02) 25%,
     rgba(255, 255, 255, 0.06) 50%,

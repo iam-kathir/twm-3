@@ -438,7 +438,7 @@ export default function LeaderboardPage() {
             <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden shadow-xl">
               <div className="overflow-x-auto">
                 <table className="w-full text-left font-sans text-sm">
-                  <thead className="bg-surface-raised border-b border-white/[0.08] text-muted uppercase tracking-wider text-xs">
+                  <thead className="bg-surface-raised border-b border-white/[0.08] text-muted text-xs">
                     <tr>
                       <th scope="col" className="py-4 px-6">Participant</th>
                       <th scope="col" className="py-4 px-6">Python Domain</th>
@@ -544,7 +544,7 @@ export default function LeaderboardPage() {
           <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden shadow-xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left font-sans text-sm">
-                <thead className="bg-surface-raised border-b border-white/[0.08] text-muted uppercase tracking-wider text-xs">
+                <thead className="bg-surface-raised border-b border-white/[0.08] text-muted text-xs">
                   <tr>
                     <th scope="col" className="py-4 px-6">Rank</th>
                     <th scope="col" className="py-4 px-6">Participant</th>

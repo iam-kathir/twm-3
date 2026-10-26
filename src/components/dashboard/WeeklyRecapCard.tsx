@@ -218,7 +218,7 @@ export function WeeklyRecapCard() {
 
             {/* Bullet Points with Rule-based Evidence */}
             <div className="space-y-2.5 pt-1">
-              <span className="text-xs font-mono text-muted uppercase tracking-wider block">Audited Weekly Highlights</span>
+              <span className="text-xs text-muted block">Audited Weekly Highlights</span>
               <div className="space-y-2">
                 {recap.highlights.map((highlight, idx) => (
                   <div key={idx} className="flex items-start gap-2.5 text-sm text-ink-secondary leading-relaxed">
@@ -249,7 +249,7 @@ export function WeeklyRecapCard() {
                 {/* Executive Summary Callout */}
                 <div className="p-4 sm:p-5 rounded-xl bg-surface-raised border border-accent/20 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold text-accent uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-accent flex items-center gap-1.5">
                       <Bot className="h-3.5 w-3.5" />
                       <span>Grounded Analyst Synthesis</span>
                     </span>
@@ -266,7 +266,7 @@ export function WeeklyRecapCard() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Verified Strengths */}
                   <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] space-y-2.5">
-                    <span className="text-xs font-mono text-emerald-400 uppercase tracking-wider flex items-center gap-1.5 font-bold">
+                    <span className="text-xs text-emerald-400 flex items-center gap-1.5 font-bold">
                       <CheckCircle2 className="h-3.5 w-3.5" />
                       <span>Verified Strengths</span>
                     </span>
@@ -282,7 +282,7 @@ export function WeeklyRecapCard() {
 
                   {/* Honest Growth Areas */}
                   <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] space-y-2.5">
-                    <span className="text-xs font-mono text-amber-400 uppercase tracking-wider flex items-center gap-1.5 font-bold">
+                    <span className="text-xs text-amber-400 flex items-center gap-1.5 font-bold">
                       <AlertCircle className="h-3.5 w-3.5" />
                       <span>Honest Bottlenecks & Gaps</span>
                     </span>
@@ -300,7 +300,7 @@ export function WeeklyRecapCard() {
                 {/* Action Plan */}
                 {aiRecap.actionPlan.length > 0 && (
                   <div className="space-y-2.5 pt-1">
-                    <span className="text-xs font-mono text-muted uppercase tracking-wider block">Recommended Action Plan</span>
+                    <span className="text-xs text-muted block">Recommended Action Plan</span>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                       {aiRecap.actionPlan.map((action, i) => (
                         <div key={i} className="p-3.5 rounded-xl bg-surface-raised border border-white/[0.06] space-y-1.5">

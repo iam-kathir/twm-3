@@ -106,7 +106,7 @@ export function ManualSyncModal() {
           <button
             onClick={handleStartSync}
             disabled={isSyncing}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-accent hover:bg-accent-hover disabled:opacity-50 text-canvas text-xs font-mono font-bold transition-all shadow-md active:scale-95"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-accent hover:bg-accent-hover disabled:opacity-50 text-canvas text-xs font-semibold transition-all shadow-md active:scale-95"
           >
             <RotateCw className={`h-3.5 w-3.5 ${isSyncing ? "animate-spin" : ""}`} />
             <span>{isSyncing ? "Synchronizing..." : "Execute Sync Now"}</span>
