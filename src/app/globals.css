@@ -224,6 +224,48 @@ table,
   animation-play-state: paused;
 }
 
+/* Border Beam Laser Orbit */
+@keyframes border-beam {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-border-beam {
+  animation: border-beam 6s linear infinite;
+}
+
+/* Flowing Energy Stream */
+@keyframes energy-stream {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.animate-energy-stream {
+  background-size: 200% 100%;
+  animation: energy-stream 2.2s linear infinite;
+}
+
+/* Concentric Radar Ring Ripple */
+@keyframes radar-ripple {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.animate-radar-ripple {
+  animation: radar-ripple 1.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
 /* Accessibility: keyboard focus. !important because components set
    `focus:outline-none` on inputs; focus must never be silenced. */
 :focus-visible {

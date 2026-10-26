@@ -225,15 +225,23 @@ export function HeroSection() {
           </div>
         </motion.div>
 
-        {/* Hero Interactive Cockpit Preview Frame with Floating HUD Badges */}
+        {/* Hero Interactive Cockpit Preview Frame with Floating HUD Badges & Laser Border Beam */}
         <motion.div
           variants={itemVariants}
-          whileHover={{ y: -4 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="mt-16 sm:mt-20 relative rounded-3xl border border-white/[0.12] bg-surface/95 backdrop-blur-2xl shadow-overlay group p-1.5 sm:p-2.5"
+          whileHover={{ y: -6, scale: 1.008 }}
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
+          className="mt-16 sm:mt-20 relative rounded-3xl p-[1px] overflow-hidden group shadow-overlay"
         >
-          {/* Animated subtle border beam highlight */}
-          <div className="absolute -inset-[1px] rounded-3xl bg-gradient-to-r from-accent/20 via-sky-500/20 to-emerald-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10 blur-[1px]" />
+          {/* Animated laser border beam around the entire cockpit preview */}
+          <div
+            className="absolute -inset-[200%] animate-border-beam pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity"
+            style={{
+              background:
+                "conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 280deg, #10B981 330deg, #38BDF8 360deg)",
+            }}
+          />
+
+          <div className="relative rounded-[23px] bg-surface/95 backdrop-blur-2xl p-1.5 sm:p-2.5 border border-white/[0.08] overflow-hidden">
 
           {/* Floating Live Badge 1: Quorum */}
           <motion.div
@@ -324,7 +332,8 @@ export function HeroSection() {
               />
             </div>
           </div>
-        </motion.div>
+        </div>
+      </motion.div>
 
         {/* Live Running Telemetry Event Ticker Ribbon */}
         <motion.div
