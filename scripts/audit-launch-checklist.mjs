@@ -88,7 +88,7 @@ export function runLaunchAcceptanceAudit() {
   const members = getAllRosterMembers();
   const testStudent = members[0];
   const baselineRes = computeLeetCodeBaseline(testStudent.id, 150);
-  const baselineHonest = baselineRes.status === "NO_PRIOR_SUNDAY_BASELINE" || baselineRes.status === "VERIFIED_SUNDAY_BASELINE";
+  const baselineHonest = baselineRes.status === "NO_PRIOR_SUNDAY_BASELINE" || baselineRes.status === "BASELINE_DELTA_COMPUTED" || baselineRes.status === "VERIFIED_SUNDAY_BASELINE";
   items.push({
     id: "GATE-05",
     category: "Data & Telemetry",

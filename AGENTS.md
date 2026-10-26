@@ -66,7 +66,7 @@ For anything touching a route handler, hit it live (`http://localhost:3000/...`)
 - **Files move under you.** If a build fails in a file you did not touch, re-check its mtime before "fixing" it — the other agent is probably mid-write. Wait, then re-run.
 - **`node:sqlite` keeps the event loop alive**, so `npm test` used to hang after passing. Fixed with `--test-force-exit` in `package.json`; keep that flag.
 - **Fonts are fetched at build time** by `next/font`, so `next build` needs network.
-- **Solid coloured fills pair with `text-canvas`, never `text-white`.** On `bg-emerald-500`, canvas text is 7.8:1 (white would be 2.54:1, a hard AA fail). Known exception to fix: DisputeModal.tsx:175 (`text-white` on `bg-rose-500`, 3.67:1 — TASKS.md QP-1). Also: `text-muted-soft`/`text-muted-dark` (3.67 / 2.53:1) fail AA below ~18px — use `text-muted` (6.5:1) for small text. Full audit numbers in `MEMORY.md`, backlog in `TASKS.md` (QP-1…QP-6).
+- **Solid coloured fills pair with `text-canvas`, never `text-white`.** On `bg-emerald-500`, canvas text is 7.8:1 (white would be 2.54:1, a hard AA fail). On `bg-rose-500`, `text-canvas` is 5.3:1 (DisputeModal.tsx:175, verified AA passing). Also: `text-muted-soft`/`text-muted-dark` (3.67 / 2.53:1) fail AA below ~18px — use `text-muted` (6.5:1) for small text. Full audit numbers in `MEMORY.md`, backlog in `TASKS.md` (QP-1…QP-6).
 
 ---
 

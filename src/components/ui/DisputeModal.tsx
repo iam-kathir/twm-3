@@ -165,14 +165,14 @@ export function DisputeModal() {
             <button
               type="button"
               onClick={closeDisputeModal}
-              className="px-4 py-2 rounded-xl text-xs font-mono text-muted hover:text-white hover:bg-white/5 transition-colors"
+              className="px-4 py-2 rounded-xl text-xs font-sans text-muted hover:text-white hover:bg-white/5 transition-colors"
             >
               Cancel
             </button>
 
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-canvas text-xs font-mono font-bold transition-all shadow-md active:scale-95"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-canvas text-xs font-sans font-semibold transition-all shadow-md active:scale-95"
             >
               <Send className="h-3.5 w-3.5" />
               <span>Submit for Audit Review</span>
