@@ -2,7 +2,8 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ShieldCheck, Activity, Terminal } from "lucide-react";
+import { ShieldCheck, Activity } from "lucide-react";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export default function Loading() {
   return (
@@ -18,30 +19,26 @@ export default function Loading() {
         transition={{ type: "spring", stiffness: 280, damping: 24 }}
         className="relative z-10 w-full max-w-md p-8 rounded-3xl border border-white/10 bg-surface/90 backdrop-blur-2xl shadow-overlay text-center"
       >
-        {/* Pulsing Brand Mark */}
-        <div className="relative mx-auto w-20 h-20 mb-6 flex items-center justify-center">
+        {/* Official TWM Brand Logo with ambient glow */}
+        <div className="relative mx-auto mb-6 flex flex-col items-center justify-center">
           <motion.div
             animate={{
-              scale: [1, 1.25, 1],
-              opacity: [0.35, 0.7, 0.35],
+              scale: [1, 1.15, 1],
+              opacity: [0.25, 0.5, 0.25],
             }}
             transition={{
               repeat: Infinity,
               duration: 2.4,
               ease: "easeInOut",
             }}
-            className="absolute inset-0 rounded-2xl bg-accent/25 blur-lg"
+            className="absolute inset-0 rounded-full bg-accent/25 blur-xl pointer-events-none"
           />
-          <div className="relative w-16 h-16 rounded-2xl bg-surface-elevated border border-accent/40 flex items-center justify-center shadow-lg">
-            <Terminal className="h-8 w-8 text-accent animate-pulse" />
+          <div className="relative z-10 flex items-center justify-center">
+            <BrandLogo variant="horizontal" size="xl" href="" showLivePulse={true} />
           </div>
         </div>
 
-        {/* Brand Title & Platform Identification */}
-        <h2 className="text-xl sm:text-2xl font-bold font-sans text-ink tracking-tight">
-          TWM <span className="text-accent">3.1</span>
-        </h2>
-        <p className="mt-1 text-xs sm:text-sm font-sans text-muted">
+        <p className="text-xs sm:text-sm font-sans text-muted">
           Institutional Developer Telemetry Platform
         </p>
 
