@@ -1,0 +1,11 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin
+Disallow: /cockpit
+Disallow: /settings
+Disallow: /onboarding
+
+# Host & Verification
+# TWM 3.1 Class Developer Activity Platform

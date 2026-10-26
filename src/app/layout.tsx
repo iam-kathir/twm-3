@@ -35,6 +35,25 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico",
   },
   manifest: "/site.webmanifest",
+  openGraph: {
+    title: "TWM 3.1 — Track. Win. Maintain.",
+    description: "Institutional-grade developer activity tracking and friendly competition for engineering cohorts.",
+    images: [
+      {
+        url: "/twm_dashboard_view.png",
+        width: 1280,
+        height: 800,
+        alt: "TWM Cockpit Dashboard",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TWM 3.1 — Track. Win. Maintain.",
+    description: "Institutional-grade developer activity tracking and friendly competition for engineering cohorts.",
+    images: ["/twm_dashboard_view.png"],
+  },
 };
 
 export default function RootLayout({
