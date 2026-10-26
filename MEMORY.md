@@ -117,6 +117,27 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-10-26 — Antigravity: Three.js 3D Cyber Constellation, Spotlight Cards & Confetti Celebrations
+- **Goal:** Transform landing page & UI into a mind-blowing, Linear/Raycast-grade experience with interactive 3D WebGL graphics, cursor spotlight cards, confetti celebrations, and stacked sonner toasts.
+- **Three.js 3D Background (`CyberConstellation.tsx`):**
+  - Integrated 220-particle 3D neural constellation canvas in hero with dynamic connection lines, emerald/hyper-mint additive blending, and smooth mouse parallax.
+  - Three concentric orbiting wireframe telemetry rings representing GitHub, LeetCode, and HackerRank.
+  - Full memory disposal on unmount and automatic `prefers-reduced-motion` detection.
+- **Spotlight Cards (`SpotlightCard.tsx`):**
+  - Linear/Raycast-inspired cursor-following radial gradient overlay (`radial-gradient(450px circle at x,y)`) implemented and applied to `PlatformMatrix.tsx` cards with provider-tailored ambient colors.
+- **Confetti Celebrations & Sonner Toasts (`celebrate.ts`):**
+  - High-impact celebratory particle bursts (`canvas-confetti`) with TWM brand colors (Emerald, Hyper-Mint, Gold, Sky).
+  - Mounted `sonner` `<Toaster>` with dark obsidian glass styling in `src/app/layout.tsx`.
+  - Wired interactive celebration clicks on floating HUD badges (Quorum, Sunday Boundary Trophy, Telemetry Stream), launch pill, and the `SundayCountdownClock`.
+- **A11y Dialog Semantics:**
+  - Added `role="dialog"`, `aria-modal="true"`, `aria-labelledby`, `Escape` key listeners, and backdrop click handlers to `DisputeModal.tsx` and `ManualSyncModal.tsx`.
+- **Verification:**
+  - `npx tsc --noEmit`: 0 errors.
+  - `npm run lint`: 0 warnings, 0 errors.
+  - `npm test`: 19/19 passing (10 launch gates + 18 OTP tests).
+  - Routes `http://localhost:3000` & `/leaderboard`: HTTP 200 OK.
+  - Clean working tree committed (`c0cde59`).
+
 ### 2026-10-26 — Buffy (Freebuff): premium pass 2 — de-tokenised labels, zero design-lint FAILs
 - **Goal:** "feel more premium" on top of the flat/quiet pass.
 - **Label sweep finished:** removed every `uppercase` / `tracking-wider` / `tracking-wide` class from `src/**/*.tsx` (0 left); remaining literal caps labels converted to sentence case on `admin` (Total enrolled / Opted-in and participating / Participation status / Participation ratio / Rule reference / Metric target), `settings` (Platform settings / Rule §10.3 compliant) and dashboard. Buttons on accent fills lost `font-mono` and `font-bold` → sans semibold.
