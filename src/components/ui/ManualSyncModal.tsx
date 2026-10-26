@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RotateCw, CheckCircle2, ShieldCheck, X, Server, Database, Globe } from "lucide-react";
 import { useApp } from "@/context/AppContext";
@@ -8,6 +8,15 @@ import { useApp } from "@/context/AppContext";
 export function ManualSyncModal() {
   const { isSyncModalOpen, closeSyncModal, triggerLiveSync, isSyncing, syncStep } = useApp();
   const [hasRun, setHasRun] = useState(false);
+
+  useEffect(() => {
+    if (!isSyncModalOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeSyncModal();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isSyncModalOpen, closeSyncModal]);
 
   if (!isSyncModalOpen) return null;
 
@@ -17,8 +26,15 @@ export function ManualSyncModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+      onClick={closeSyncModal}
+    >
       <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="manual-sync-modal-title"
+        onClick={(e) => e.stopPropagation()}
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -32,7 +48,7 @@ export function ManualSyncModal() {
               <RotateCw className={`h-4 w-4 ${isSyncing ? "animate-spin" : ""}`} />
             </div>
             <div>
-              <h3 className="text-base font-bold text-ink font-sans">
+              <h3 id="manual-sync-modal-title" className="text-base font-bold text-ink font-sans">
                 Live Telemetry Synchronizer
               </h3>
               <p className="text-xs text-muted font-mono">
