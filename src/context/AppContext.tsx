@@ -276,43 +276,22 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isDisputeModalOpen, setIsDisputeModalOpen] = useState(false);
   const [disputeModalMetric, setDisputeModalMetric] = useState<string | undefined>(undefined);
 
-  // Theme state
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  // Theme state: permanently locked to obsidian dark
+  const [theme] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
     try {
-      const savedTheme = localStorage.getItem("twm-theme") as "dark" | "light" | null;
-      const initialTheme = savedTheme === "light" ? "light" : "dark";
-      setTheme(initialTheme);
-      document.documentElement.setAttribute("data-theme", initialTheme);
-      if (initialTheme === "light") {
-        document.documentElement.classList.remove("dark");
-        document.documentElement.classList.add("light");
-      } else {
-        document.documentElement.classList.remove("light");
-        document.documentElement.classList.add("dark");
-      }
+      localStorage.removeItem("twm-theme");
+      document.documentElement.setAttribute("data-theme", "dark");
+      document.documentElement.classList.remove("light");
+      document.documentElement.classList.add("dark");
     } catch {
       // Ignore in restricted environments
     }
   }, []);
 
   const toggleTheme = useCallback(() => {
-    setTheme((prev) => {
-      const next = prev === "dark" ? "light" : "dark";
-      try {
-        localStorage.setItem("twm-theme", next);
-      } catch {}
-      document.documentElement.setAttribute("data-theme", next);
-      if (next === "light") {
-        document.documentElement.classList.remove("dark");
-        document.documentElement.classList.add("light");
-      } else {
-        document.documentElement.classList.remove("light");
-        document.documentElement.classList.add("dark");
-      }
-      return next;
-    });
+    // White theme disabled per project specification - permanently locked to dark obsidian
   }, []);
 
   // Load saved state from localStorage on mount
