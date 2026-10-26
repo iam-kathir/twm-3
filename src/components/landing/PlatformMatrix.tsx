@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Github, Code2, Award, CheckCircle2, AlertTriangle, Layers } from "lucide-react";
+import { SpotlightCard } from "@/components/ui/SpotlightCard";
 
 export function PlatformMatrix() {
   const platforms = [
@@ -13,6 +14,7 @@ export function PlatformMatrix() {
       status: "SUPPORTED_LIVE",
       statusLabel: "Live",
       statusClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+      spotlightColor: "rgba(255, 255, 255, 0.12)",
       description: "Direct OAuth identity verification and public contribution calendar metrics.",
       fields: [
         { name: "Active Contribution Days", state: "Live / Verified", period: "Provider UTC Days" },
@@ -28,6 +30,7 @@ export function PlatformMatrix() {
       status: "SUPPORTED_SNAPSHOT",
       statusLabel: "Snapshot",
       statusClass: "bg-accent/10 text-accent border-accent/20",
+      spotlightColor: "rgba(245, 158, 11, 0.16)",
       description: "HMAC profile bio challenge verification with cumulative problem-solving snapshots.",
       fields: [
         { name: "Cumulative Solved Count", state: "Verified Snapshot", period: "Continuous" },
@@ -43,6 +46,7 @@ export function PlatformMatrix() {
       status: "LIMITED_CAPABILITY",
       statusLabel: "Limited",
       statusClass: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+      spotlightColor: "rgba(16, 185, 129, 0.16)",
       description: "Community profile badges and domain star ratings with honest capability gating.",
       fields: [
         { name: "Domain Badges & Stars", state: "Display Only", period: "Cumulative" },
@@ -77,50 +81,54 @@ export function PlatformMatrix() {
                 key={idx}
                 whileHover={{ y: -6 }}
                 transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                className="rounded-2xl border border-white/[0.08] bg-surface p-7 sm:p-8 flex flex-col justify-between hover:border-white/20 transition-colors group"
               >
-                <div>
-                  <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-                    <div className="flex items-center gap-3">
-                      <div className="p-3 rounded-xl bg-surface-raised border border-white/10 shadow-inner">
-                        <Icon className={`h-6 w-6 ${platform.iconColor}`} />
+                <SpotlightCard
+                  spotlightColor={platform.spotlightColor}
+                  className="p-7 sm:p-8 flex flex-col justify-between h-full hover:border-white/20 group"
+                >
+                  <div>
+                    <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
+                      <div className="flex items-center gap-3">
+                        <div className="p-3 rounded-xl bg-surface-raised border border-white/10 shadow-inner">
+                          <Icon className={`h-6 w-6 ${platform.iconColor}`} />
+                        </div>
+                        <h3 className="font-extrabold text-ink text-xl">{platform.name}</h3>
                       </div>
-                      <h3 className="font-extrabold text-ink text-xl">{platform.name}</h3>
-                    </div>
-                    <span
-                      title={platform.status}
-                      className={`text-xs font-sans px-3 py-1 rounded-full border font-semibold ${platform.statusClass}`}
-                    >
-                      {platform.statusLabel}
-                    </span>
-                  </div>
-
-                  <p className="text-sm sm:text-base text-muted mb-7 leading-relaxed font-sans">
-                    {platform.description}
-                  </p>
-
-                  <div className="space-y-2.5 mb-7">
-                    <span className="text-xs text-muted block font-semibold">
-                      Tracked Fields &amp; Semantics:
-                    </span>
-                    {platform.fields.map((field, fIdx) => (
-                      <div
-                        key={fIdx}
-                        className="flex items-center justify-between p-3 rounded-xl bg-surface-raised/70 border border-white/[0.05] text-xs sm:text-sm font-mono"
+                      <span
+                        title={platform.status}
+                        className={`text-xs font-sans px-3 py-1 rounded-full border font-semibold ${platform.statusClass}`}
                       >
-                        <span className="text-ink font-medium">{field.name}</span>
-                        <span className="text-xs text-muted-soft bg-surface px-2.5 py-1 rounded-md border border-white/[0.06] font-mono">
-                          {field.state}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                        {platform.statusLabel}
+                      </span>
+                    </div>
 
-                <div className="pt-4 border-t border-white/[0.08] text-xs sm:text-sm font-mono text-muted">
-                  <span className="text-muted block mb-1">Cadence:</span>
-                  <span className="text-ink font-semibold">{platform.cadence}</span>
-                </div>
+                    <p className="text-sm sm:text-base text-muted mb-7 leading-relaxed font-sans">
+                      {platform.description}
+                    </p>
+
+                    <div className="space-y-2.5 mb-7">
+                      <span className="text-xs text-muted block font-semibold">
+                        Tracked Fields &amp; Semantics:
+                      </span>
+                      {platform.fields.map((field, fIdx) => (
+                        <div
+                          key={fIdx}
+                          className="flex items-center justify-between p-3 rounded-xl bg-surface-raised/70 border border-white/[0.05] text-xs sm:text-sm font-mono"
+                        >
+                          <span className="text-ink font-medium">{field.name}</span>
+                          <span className="text-xs text-muted-soft bg-surface px-2.5 py-1 rounded-md border border-white/[0.06] font-mono">
+                            {field.state}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-white/[0.08] text-xs sm:text-sm font-mono text-muted">
+                    <span className="text-muted block mb-1">Cadence:</span>
+                    <span className="text-ink font-semibold">{platform.cadence}</span>
+                  </div>
+                </SpotlightCard>
               </motion.div>
             );
           })}

@@ -56,6 +56,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { Toaster } from "sonner";
+
 export default function RootLayout({
   children,
 }: {
@@ -82,6 +84,20 @@ export default function RootLayout({
           <AppProvider>
             {children}
             <ToastContainer />
+            <Toaster
+              position="top-right"
+              theme="dark"
+              toastOptions={{
+                style: {
+                  background: "#0E121A",
+                  border: "1px solid rgba(255, 255, 255, 0.12)",
+                  color: "#F1F5F9",
+                  fontFamily: "var(--font-sans)",
+                  borderRadius: "14px",
+                  boxShadow: "0 20px 40px -15px rgba(0, 0, 0, 0.7)",
+                },
+              }}
+            />
             <CommandPalette />
             <ManualSyncModal />
             <DisputeModal />

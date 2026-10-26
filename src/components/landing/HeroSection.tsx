@@ -18,6 +18,9 @@ import {
   Radio
 } from "lucide-react";
 import { SundayCountdownClock } from "./SundayCountdownClock";
+import { CyberConstellation } from "./CyberConstellation";
+import { fireMilestoneBurst, fireTournamentCelebration } from "@/lib/celebrate";
+import { toast } from "sonner";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -94,11 +97,18 @@ export function HeroSection() {
     e.preventDefault();
     const clean = inviteCode.trim();
     if (!clean) return;
-    router.push(`/onboarding?class=${encodeURIComponent(clean)}`);
+    fireMilestoneBurst(0.5, 0.4);
+    toast.success(`Joining cohort with code ${clean}...`);
+    setTimeout(() => {
+      router.push(`/onboarding?class=${encodeURIComponent(clean)}`);
+    }, 400);
   };
 
   return (
     <section className="relative pt-32 pb-16 md:pt-40 md:pb-28 overflow-hidden text-center">
+      {/* 3D WebGL Cybernetic Constellation Mesh Background */}
+      <CyberConstellation />
+
       {/* Dynamic ambient lighting orbs with breathing motion */}
       <motion.div
         animate={{
@@ -124,18 +134,25 @@ export function HeroSection() {
         animate="visible"
         className="relative max-w-6xl mx-auto px-4 sm:px-6 z-10"
       >
-        {/* Shimmering Launch Pill */}
+        {/* Shimmering Launch Pill with Interactive Celebration Trigger */}
         <motion.div variants={itemVariants} className="inline-block mb-6">
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-accent/30 bg-surface/80 backdrop-blur-xl text-xs font-sans font-semibold text-accent shadow-sm hover:border-accent/60 transition-all cursor-default">
+          <button
+            type="button"
+            onClick={() => {
+              fireMilestoneBurst(0.5, 0.2);
+              toast.info("Class Cohort Pilot 2026 Engine Ready • Rule §9.1 Verified");
+            }}
+            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-accent/30 bg-surface/80 backdrop-blur-xl text-xs font-sans font-semibold text-accent shadow-sm hover:border-accent/60 hover:scale-105 active:scale-95 transition-all cursor-pointer group"
+          >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
             </span>
             <span>Class Cohort Competition Pilot 2026</span>
             <span className="text-white/20">|</span>
-            <span className="text-slate-300 font-medium">Audited Rule 9.1</span>
-            <ArrowRight className="h-3 w-3 text-accent" />
-          </div>
+            <span className="text-slate-300 font-medium group-hover:text-white transition-colors">Audited Rule 9.1</span>
+            <Sparkles className="h-3 w-3 text-accent group-hover:rotate-12 transition-transform" />
+          </button>
         </motion.div>
 
         {/* Headline: Crisp typography with glowing precision emerald accent */}
@@ -222,7 +239,13 @@ export function HeroSection() {
           <motion.div
             variants={floatVariant1}
             animate="animate"
-            className="hidden lg:flex absolute -top-5 -left-5 z-20 items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-surface/95 backdrop-blur-xl border border-emerald-500/35 text-xs font-sans text-ink font-semibold shadow-lg"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              fireMilestoneBurst(0.2, 0.5);
+              toast.info("Authoritative Roster Quorum: 70% threshold verified (§3.3)");
+            }}
+            className="hidden lg:flex absolute -top-5 -left-5 z-20 items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-surface/95 backdrop-blur-xl border border-emerald-500/35 text-xs font-sans text-ink font-semibold shadow-lg cursor-pointer transition-colors hover:border-emerald-500/70"
           >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -238,7 +261,13 @@ export function HeroSection() {
           <motion.div
             variants={floatVariant2}
             animate="animate"
-            className="hidden lg:flex absolute -top-5 -right-5 z-20 items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-surface/95 backdrop-blur-xl border border-amber-500/35 text-xs font-sans text-ink font-semibold shadow-lg"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              fireTournamentCelebration();
+              toast.success("Tournament Celebration! Sunday 23:59:59 IST Hard Boundary active (§9.1)");
+            }}
+            className="hidden lg:flex absolute -top-5 -right-5 z-20 items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-surface/95 backdrop-blur-xl border border-amber-500/35 text-xs font-sans text-ink font-semibold shadow-lg cursor-pointer transition-colors hover:border-amber-500/70"
           >
             <Trophy className="h-4 w-4 text-amber-400" />
             <span>Sunday 23:59:59 IST</span>
@@ -251,7 +280,13 @@ export function HeroSection() {
           <motion.div
             variants={floatVariant3}
             animate="animate"
-            className="hidden lg:flex absolute -bottom-5 -right-4 z-20 items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-surface/95 backdrop-blur-xl border border-sky-500/35 text-xs font-sans text-ink font-semibold shadow-lg"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              fireMilestoneBurst(0.8, 0.7);
+              toast.info("Telemetry Stream Active: Live sync with GitHub, LeetCode, and HackerRank adapters");
+            }}
+            className="hidden lg:flex absolute -bottom-5 -right-4 z-20 items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-surface/95 backdrop-blur-xl border border-sky-500/35 text-xs font-sans text-ink font-semibold shadow-lg cursor-pointer transition-colors hover:border-sky-500/70"
           >
             <Radio className="h-4 w-4 text-sky-400 animate-pulse" />
             <span>Telemetry Stream:</span>

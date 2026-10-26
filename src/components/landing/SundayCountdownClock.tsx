@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Clock, ShieldAlert, Sparkles, Trophy } from "lucide-react";
+import { fireMilestoneBurst } from "@/lib/celebrate";
+import { toast } from "sonner";
 
 interface TimeLeft {
   days: number;
@@ -103,8 +105,13 @@ export function SundayCountdownClock() {
     <motion.div
       initial={{ opacity: 0, scale: 0.96 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
-      className="relative max-w-xl mx-auto rounded-3xl border border-white/[0.08] bg-surface group"
+      whileHover={{ scale: 1.01 }}
+      transition={{ duration: 0.3 }}
+      onClick={() => {
+        fireMilestoneBurst(0.5, 0.3);
+        toast.success("Week 42 Live Competition • Hard Boundary Sun 23:59:59 IST");
+      }}
+      className="relative max-w-xl mx-auto rounded-3xl border border-white/[0.08] hover:border-emerald-500/40 bg-surface group cursor-pointer transition-colors"
     >
       <div className="rounded-3xl p-4 sm:p-5 relative overflow-hidden">
         {/* Subtle ambient interior glow */}
