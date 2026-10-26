@@ -266,6 +266,53 @@ table,
   animation: radar-ripple 1.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
 }
 
+/* 21st.dev Shooting Star Meteors */
+@keyframes meteor {
+  0% {
+    transform: rotate(215deg) translateX(0);
+    opacity: 0.9;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(215deg) translateX(-700px);
+    opacity: 0;
+  }
+}
+
+.animate-meteor {
+  animation: meteor 6s linear infinite;
+}
+
+/* 21st.dev Orbiting Circles */
+@keyframes orbit {
+  0% {
+    transform: rotate(0deg) translateY(calc(var(--radius) * -1)) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateY(calc(var(--radius) * -1)) rotate(-360deg);
+  }
+}
+
+.animate-orbit {
+  animation: orbit var(--duration) linear infinite;
+}
+
+/* 21st.dev Shiny Text Shimmer */
+@keyframes shiny-text {
+  0%, 90%, 100% {
+    background-position: calc(-100% - var(--shimmer-width, 100px)) 0;
+  }
+  30%, 60% {
+    background-position: calc(100% + var(--shimmer-width, 100px)) 0;
+  }
+}
+
+.animate-shiny-text {
+  animation: shiny-text 6s ease-in-out infinite;
+}
+
 /* Accessibility: keyboard focus. !important because components set
    `focus:outline-none` on inputs; focus must never be silenced. */
 :focus-visible {

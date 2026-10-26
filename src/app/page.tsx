@@ -1,6 +1,7 @@
 import React from "react";
 import { NavBar } from "@/components/landing/NavBar";
 import { HeroSection } from "@/components/landing/HeroSection";
+import { OrbitingTelemetryShowcase } from "@/components/landing/OrbitingTelemetryShowcase";
 import { MotionShowcase } from "@/components/landing/MotionShowcase";
 import { CockpitPreview } from "@/components/landing/CockpitPreview";
 import { AppScreensGallery } from "@/components/landing/AppScreensGallery";
@@ -15,6 +16,7 @@ export default function HomePage() {
       <NavBar />
       <main className="flex-1">
         <HeroSection />
+        <OrbitingTelemetryShowcase />
         <MotionShowcase />
         <CockpitPreview />
         <AppScreensGallery />

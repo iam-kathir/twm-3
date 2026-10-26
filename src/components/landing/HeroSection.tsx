@@ -21,6 +21,7 @@ import { SundayCountdownClock } from "./SundayCountdownClock";
 import { CyberConstellation } from "./CyberConstellation";
 import { fireMilestoneBurst, fireTournamentCelebration } from "@/lib/celebrate";
 import { toast } from "sonner";
+import { AnimatedShinyText } from "@/components/ui/AnimatedShinyText";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -148,7 +149,9 @@ export function HeroSection() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
             </span>
-            <span>Class Cohort Competition Pilot 2026</span>
+            <AnimatedShinyText className="text-accent font-semibold">
+              Class Cohort Competition Pilot 2026
+            </AnimatedShinyText>
             <span className="text-white/20">|</span>
             <span className="text-slate-300 font-medium group-hover:text-white transition-colors">Audited Rule 9.1</span>
             <Sparkles className="h-3 w-3 text-accent group-hover:rotate-12 transition-transform" />
