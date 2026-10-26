@@ -50,9 +50,10 @@ export function NavBar() {
           </Link>
           <motion.a
             href="#invite"
-            whileTap={{ scale: 0.98 }}
-            transition={{ duration: 0.15 }}
-            className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-canvas text-sm font-semibold font-sans transition-colors cursor-pointer"
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-canvas text-sm font-semibold font-sans transition-colors cursor-pointer shadow-md"
           >
             <span>Join Class</span>
             <ArrowRight className="h-3.5 w-3.5 stroke-[2.5]" />

@@ -202,6 +202,24 @@ table,
   );
   background-size: 200% 100%;
   animation: shimmer 1.8s infinite cubic-bezier(0.4, 0, 0.6, 1);
+/* Infinite Telemetry Running Marquee */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
 }
 
 /* Accessibility: keyboard focus. !important because components set

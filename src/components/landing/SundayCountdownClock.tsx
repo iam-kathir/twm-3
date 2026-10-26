@@ -129,19 +129,29 @@ export function SundayCountdownClock() {
 
         {/* Digital Clocks Display */}
         <div className="grid grid-cols-4 gap-2 sm:gap-3 py-3.5">
-          {timeUnits.map((unit, idx) => (
-            <div
-              key={unit.label}
-              className="flex flex-col items-center justify-center p-2 sm:p-3 rounded-2xl bg-surface-raised/90 border border-white/[0.08] shadow-inner"
-            >
-              <div className="font-mono text-2xl sm:text-3xl font-extrabold text-white tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                {unit.value}
-              </div>
-              <span className="font-sans text-xs font-medium text-muted mt-1">
-                {unit.label}
-              </span>
-            </div>
-          ))}
+          {timeUnits.map((unit, idx) => {
+            const isSeconds = unit.label === "Secs";
+            return (
+              <motion.div
+                key={unit.label}
+                whileHover={{ y: -3, scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 350, damping: 20 }}
+                className={`relative flex flex-col items-center justify-center p-2 sm:p-3 rounded-2xl bg-surface-raised/95 border transition-colors shadow-inner overflow-hidden ${
+                  isSeconds ? "border-accent/40 bg-accent/[0.04]" : "border-white/[0.08]"
+                }`}
+              >
+                {isSeconds && (
+                  <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
+                )}
+                <div className="font-mono text-2xl sm:text-3xl font-extrabold text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+                  {unit.value}
+                </div>
+                <span className="font-sans text-xs font-medium text-slate-300 mt-1">
+                  {unit.label}
+                </span>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Progress Bar through the week */}
@@ -152,7 +162,7 @@ export function SundayCountdownClock() {
           </div>
           <div className="h-2 w-full rounded-full bg-white/[0.05] overflow-hidden p-0.5 border border-white/[0.06]">
             <motion.div
-              className="h-full rounded-full bg-accent"
+              className="h-full rounded-full bg-gradient-to-r from-emerald-500 via-accent to-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.5)]"
               initial={{ width: 0 }}
               animate={{ width: `${timeLeft.progressPercent}%` }}
               transition={{ duration: 0.8, ease: "easeOut" }}
