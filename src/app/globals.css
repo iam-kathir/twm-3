@@ -202,6 +202,8 @@ table,
   );
   background-size: 200% 100%;
   animation: shimmer 1.8s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
 /* Infinite Telemetry Running Marquee */
 @keyframes marquee {
   0% {
