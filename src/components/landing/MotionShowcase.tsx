@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Github, Code2, Award, Clock, Sparkles, CheckCircle2, ShieldCheck, Zap } from "lucide-react";
+import { Github, Code2, Award, Clock, Sparkles, CheckCircle2, ShieldCheck, Zap, Check } from "lucide-react";
 
 export function MotionShowcase() {
   const [activeTab, setActiveTab] = useState<"github" | "leetcode" | "hackerrank">("github");
@@ -55,7 +55,7 @@ export function MotionShowcase() {
           </p>
 
           {/* Animated Tab Switcher with Glowing Active Pill */}
-          <div className="mt-8 inline-flex p-1.5 rounded-2xl border border-white/10 bg-surface/90 shadow-2xl backdrop-blur-xl">
+          <div className="mt-8 inline-flex p-1.5 rounded-2xl border border-white/10 bg-surface shadow-panel">
             {[
               { id: "github", label: "GitHub Commits", icon: Github, color: "text-sky-400" },
               { id: "leetcode", label: "LeetCode Activity", icon: Code2, color: "text-amber-400" },
@@ -89,7 +89,7 @@ export function MotionShowcase() {
 
         {/* Animated Showcase Card Container */}
         <div
-          className={`relative rounded-3xl border ${currentTheme.border} bg-surface/95 p-8 sm:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.7)] backdrop-blur-2xl overflow-hidden min-h-[400px] flex flex-col justify-between transition-colors duration-500`}
+          className={`relative rounded-3xl border ${currentTheme.border} bg-surface p-8 sm:p-10 shadow-panel overflow-hidden min-h-[400px] flex flex-col justify-between transition-colors duration-500`}
         >
           {/* Header Bar */}
           <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-white/[0.08] text-sm font-sans text-slate-300">
@@ -146,12 +146,12 @@ export function MotionShowcase() {
                             transition={{ delay: i * 0.04, duration: 0.2 }}
                             className={`h-14 sm:h-16 w-full rounded-2xl flex flex-col items-center justify-center font-sans text-xs font-bold transition-all ${
                               active
-                                ? "bg-gradient-to-br from-emerald-400 to-teal-500 text-canvas shadow-lg shadow-emerald-500/25"
+                                ? "bg-accent text-canvas"
                                 : "bg-white/[0.03] text-slate-500 border border-white/[0.08]"
                             }`}
                           >
-                            <span className="text-base font-extrabold">{active ? "✓" : "—"}</span>
-                            <span className="text-[10px] font-semibold">{active ? "Active" : "Rest"}</span>
+                            <span className="text-base font-extrabold flex items-center justify-center">{active ? <Check className="h-4 w-4" strokeWidth={3} /> : "—"}</span>
+                            <span className="text-xs font-medium">{active ? "Active" : "Rest"}</span>
                           </motion.div>
                           <span className="text-xs font-sans text-slate-400 mt-2 block font-medium">{day}</span>
                         </div>
@@ -167,7 +167,7 @@ export function MotionShowcase() {
                     </div>
                     <div className="h-2 w-full rounded-full bg-white/[0.06] overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-accent to-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.5)] transition-all duration-500"
+                        className="h-full rounded-full bg-accent transition-all duration-500"
                         style={{ width: "94.2%" }}
                       />
                     </div>

@@ -44,10 +44,9 @@ export function HeroSection() {
 
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden text-center">
-      {/* Precision Multi-Tone Ambient Atmosphere (Vibrant Hyper-Mint & Royal Indigo Meshes) */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[550px] bg-gradient-to-tr from-accent/25 via-emerald-400/15 to-teal-400/10 rounded-full blur-[130px] pointer-events-none" />
-      <div className="absolute top-20 right-10 w-[600px] h-[450px] bg-gradient-to-bl from-indigo-500/20 via-sky-500/10 to-transparent rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute top-12 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full bg-tech-dots opacity-30 pointer-events-none" />
+      {/* One quiet accent wash — flat, single-hue, no bloom */}
+      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[760px] h-[420px] rounded-full bg-accent/[0.07] blur-[120px] pointer-events-none" />
+      <div className="absolute top-12 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full bg-tech-dots opacity-20 pointer-events-none" />
 
       <motion.div
         variants={containerVariants}
@@ -55,28 +54,14 @@ export function HeroSection() {
         animate="visible"
         className="relative max-w-6xl mx-auto px-4 sm:px-6"
       >
-        {/* Technical Status Tag with High-Visibility Glow */}
-        <motion.div variants={itemVariants} className="inline-flex items-center justify-center mb-8">
-          <div className="inline-flex items-center gap-2.5 px-4 sm:px-5 py-2 rounded-full bg-surface-elevated/90 border border-accent/30 text-xs sm:text-sm font-sans text-ink shadow-[0_0_20px_rgba(16,185,129,0.2)] backdrop-blur-xl">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent" />
-            </span>
-            <span className="font-bold text-white tracking-wide">TWM 3.1 Platform</span>
-            <span className="text-white/20">|</span>
-            <span className="text-slate-300 font-medium">GitHub, LeetCode &amp; HackerRank Live Telemetry</span>
-          </div>
-        </motion.div>
-
-        {/* Solid Authoritative Headline with Luminous Hyper-Mint Gradient */}
+        {/* Headline: one face, one weight, solid ink with a single accent line */}
         <motion.h1
           variants={itemVariants}
-          className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.04] drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-ink tracking-tight leading-[1.06]"
         >
-          Track your code. <br />
-          <span className="bg-gradient-to-r from-accent via-emerald-300 to-teal-200 bg-clip-text text-transparent font-extrabold filter drop-shadow-[0_4px_20px_rgba(16,185,129,0.35)]">
-            Win your consistency.
-          </span>
+          Track your code.
+          <br />
+          <span className="text-accent">Win your consistency.</span>
         </motion.h1>
 
         {/* Informative Subtitle */}
@@ -97,7 +82,7 @@ export function HeroSection() {
         <motion.div variants={itemVariants} id="invite" className="mt-10 max-w-md mx-auto">
           <form
             onSubmit={handleSubmit}
-            className="flex items-center gap-2.5 p-2 rounded-2xl border border-white/15 bg-surface/90 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.7)] focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/30 focus-within:shadow-[0_0_35px_rgba(16,185,129,0.35)] transition-all duration-300"
+            className="flex items-center gap-2.5 p-2 rounded-2xl border border-white/10 bg-surface focus-within:border-accent/60 focus-within:ring-2 focus-within:ring-accent/25 transition-colors duration-200"
           >
             <div className="pl-4 text-muted">
               <KeyRound className="h-5 w-5 text-accent" />
@@ -109,16 +94,16 @@ export function HeroSection() {
               type="text"
               value={inviteCode}
               onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
-              placeholder="CLASS CODE (e.g. CS2026)"
+              placeholder="Class code (e.g. CS2026)"
               maxLength={10}
-              className="w-full bg-transparent border-none text-sm sm:text-base font-sans font-semibold text-white placeholder:text-muted focus:outline-none uppercase tracking-wider px-1 py-1"
+              className="w-full bg-transparent border-none text-sm sm:text-base font-sans font-semibold text-ink placeholder:text-muted placeholder:font-normal focus:outline-none px-1 py-1"
             />
             <motion.button
               type="submit"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 20 }}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-sans text-sm font-bold transition-all shrink-0 shadow-lg shadow-accent/30 cursor-pointer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-sans text-sm font-semibold transition-colors shrink-0 cursor-pointer"
             >
               <span>Join</span>
               <ArrowRight className="h-4 w-4 stroke-[2.5]" />
@@ -142,14 +127,14 @@ export function HeroSection() {
           variants={itemVariants}
           whileHover={{ y: -4 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="mt-16 sm:mt-20 relative rounded-3xl p-[1px] bg-gradient-to-b from-white/20 via-white/5 to-white/0 shadow-[0_25px_80px_rgba(0,0,0,0.85)] group"
+          className="mt-16 sm:mt-20 relative rounded-3xl border border-white/[0.08] bg-surface group"
         >
           {/* Floating Live Badge 1: Quorum */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6, duration: 0.5 }}
-            className="hidden lg:flex absolute -top-5 -left-4 z-20 items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-surface/90 border border-emerald-500/30 backdrop-blur-xl shadow-[0_10px_30px_rgba(16,185,129,0.25)] text-xs font-sans text-white font-medium"
+            className="hidden lg:flex absolute -top-5 -left-4 z-20 items-center gap-2.5 px-4 py-2.5 rounded-xl bg-surface border border-emerald-500/25 text-xs font-sans text-ink font-medium"
           >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -163,16 +148,13 @@ export function HeroSection() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.7, duration: 0.5 }}
-            className="hidden lg:flex absolute -top-5 -right-4 z-20 items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-surface/90 border border-amber-500/30 backdrop-blur-xl shadow-[0_10px_30px_rgba(245,158,11,0.25)] text-xs font-sans text-white font-medium"
+            className="hidden lg:flex absolute -top-5 -right-4 z-20 items-center gap-2.5 px-4 py-2.5 rounded-xl bg-surface border border-amber-500/25 text-xs font-sans text-ink font-medium"
           >
             <Trophy className="h-3.5 w-3.5 text-amber-400" />
             <span>Sunday 23:59:59 IST Hard Boundary</span>
           </motion.div>
 
-          <div className="relative rounded-3xl bg-surface/95 overflow-hidden p-2.5 sm:p-3">
-            {/* Ambient Radial Highlight inside card */}
-            <div className="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none" />
-
+          <div className="relative rounded-3xl bg-surface overflow-hidden p-2.5 sm:p-3">
             {/* Browser Bar */}
             <div className="px-5 py-3.5 bg-surface-raised rounded-t-2xl border-b border-white/[0.06] flex items-center justify-between">
               <div className="flex items-center gap-2">

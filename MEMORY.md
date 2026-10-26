@@ -117,6 +117,15 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-10-26 — Buffy (Freebuff): premium-elegance frontend pass ("simple premium")
+- **Direction applied:** flat, quiet, SaaS-grade restraint — opaque panels on a tone step + one hairline border, no glow, no glass blur, no gradient headline, no heavy drop shadows. Same palette (`#07090E` / `#0E121A` / `#10B981`) and same font source (`next/font` Sora + JetBrains Mono) — invariants kept.
+- **Foundation:** `globals.css` added `--border-strong`, `--radius-panel` (14px) / `--radius-control` (10px), `--shadow-panel` / `--shadow-overlay`; `.glass-surface` made opaque, `.glow-subtle` / `.glow-hover` de-glowed, `.instrument-panel` rounded, new `.meta-label` helper. `tailwind.config.js` maps `shadow-panel|overlay`, `rounded-panel|control`.
+- **Landing:** `NavBar` rebuilt as a plain full-width bar (was floating glass pill with 0.7-alpha 50px shadow); `HeroSection` — solid ink headline with one accent line (gradient text removed), single flat accent wash instead of two blur meshes, invite form no longer glows, preview frame border instead of gradient ring + 80px shadow; `Footer` set in sans sentence case (was mono); `SundayCountdownClock`, `MotionShowcase`, `CockpitPreview`, `AppScreensGallery`, `HowItWorks` de-gradiented / de-shadowed.
+- **Chrome & overlays:** `AppHeader` dropdown, `CommandPalette`, `ToastContainer` (removed aura blob), `ManualSyncModal`, `DisputeModal`, `BulkRosterImportModal`, `search`/`onboarding`/`admin`/`login` dialogs now use `rounded-panel` + `shadow-overlay` instead of `shadow-2xl` / 70px shadows.
+- **Type floor:** swept `text-[9px]` / `text-[10px]` / `text-[11px]` → `text-xs` across `src/**/*.tsx` (0 left), and converted scattered tracked-caps mono micro-labels to sentence-case sans labels on dashboard, leaderboard, settings, search, BrandLogo, CommandPalette, WeeklyRecapCard, login, footer. `✓` glyph in MotionShowcase replaced with lucide `Check`; `★` retained only as rating data.
+- **Verified (all real output):** `npx tsc --noEmit` → 0 · `npm run lint` → "No ESLint warnings or errors" · `npm test` → 19/19 pass, 0 fail · `npx next build` → exit 0 (dev server stopped first, then restarted, `GET /` = 200).
+- **Not done / next agent:** admin + privacy pages still carry `font-mono uppercase tracking-wider` section labels (~15 + 9 occurrences); `DisputeModal.tsx:175` `text-white` on `bg-rose-500` still open as TASKS QP-1; `.taste-skill/` holds untracked lint/inspect artifacts (not committed).
+
 ### 2026-10-22 15:45 IST — Phase 8: ESLint, CI and Automated Quality Gates (P8-1) (Antigravity)
 
 - **Deliverables Completed**:

@@ -41,12 +41,12 @@ export function CockpitPreview() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="rounded-2xl border border-white/10 bg-surface/95 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.7)] overflow-hidden"
+          className="rounded-2xl border border-white/[0.08] bg-surface shadow-panel overflow-hidden"
         >
           {/* Cockpit Top Bar */}
           <div className="border-b border-white/[0.08] bg-surface-raised/80 px-6 sm:px-8 py-5 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-surface-elevated to-surface border border-accent/30 flex items-center justify-center font-bold text-accent font-mono text-base shadow-inner">
+              <div className="h-12 w-12 rounded-2xl bg-surface-raised border border-accent/25 flex items-center justify-center font-bold text-accent font-mono text-base">
                 AS
               </div>
               <div>
@@ -114,7 +114,7 @@ export function CockpitPreview() {
                         />
                       ))}
                     </div>
-                    <span className="text-[11px] text-muted-soft block mt-2">Calendar buckets: UTC Days</span>
+                    <span className="text-xs text-muted-soft block mt-2">Calendar buckets: UTC Days</span>
                   </div>
 
                   <div className="pt-3 border-t border-white/[0.06] flex justify-between text-xs sm:text-sm">
@@ -162,15 +162,15 @@ export function CockpitPreview() {
                   <div className="grid grid-cols-3 gap-2 text-center text-xs">
                     <div className="bg-surface-raised py-2.5 rounded-xl border border-emerald-500/20">
                       <span className="text-emerald-400 block font-black text-base">92</span>
-                      <span className="text-muted mt-0.5 block text-[11px]">Easy</span>
+                      <span className="text-muted mt-0.5 block text-xs">Easy</span>
                     </div>
                     <div className="bg-surface-raised py-2.5 rounded-xl border border-amber-500/20">
                       <span className="text-amber-400 block font-black text-base">78</span>
-                      <span className="text-muted mt-0.5 block text-[11px]">Med</span>
+                      <span className="text-muted mt-0.5 block text-xs">Med</span>
                     </div>
                     <div className="bg-surface-raised py-2.5 rounded-xl border border-rose-500/20">
                       <span className="text-rose-400 block font-black text-base">14</span>
-                      <span className="text-muted mt-0.5 block text-[11px]">Hard</span>
+                      <span className="text-muted mt-0.5 block text-xs">Hard</span>
                     </div>
                   </div>
 

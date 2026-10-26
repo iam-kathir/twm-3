@@ -387,17 +387,17 @@ export default function SettingsPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
                 <div className="p-4 sm:p-5 rounded-xl bg-surface-raised border border-white/[0.06] space-y-1">
-                  <span className="text-xs font-mono text-muted block uppercase">TRACKED REPOSITORIES</span>
+                  <span className="text-xs text-muted font-medium block">Tracked repositories</span>
                   <span className="text-xl sm:text-2xl font-bold font-mono text-white">4 Course Repos</span>
                   <span className="text-xs text-muted-soft block">Public commits only</span>
                 </div>
                 <div className="p-4 sm:p-5 rounded-xl bg-surface-raised border border-white/[0.06] space-y-1">
-                  <span className="text-xs font-mono text-muted block uppercase">BOUNDARY ENFORCEMENT</span>
+                  <span className="text-xs text-muted font-medium block">Boundary enforcement</span>
                   <span className="text-xl sm:text-2xl font-bold font-mono text-emerald-400">Sun 23:59:59 IST</span>
                   <span className="text-xs text-muted-soft block">Strict cutoff under Rule §9.7</span>
                 </div>
                 <div className="p-4 sm:p-5 rounded-xl bg-surface-raised border border-white/[0.06] space-y-1">
-                  <span className="text-xs font-mono text-muted block uppercase">CODE SURVEILLANCE</span>
+                  <span className="text-xs text-muted font-medium block">Code surveillance</span>
                   <span className="text-xl sm:text-2xl font-bold font-mono text-slate-300">0% (Zero Telemetry)</span>
                   <span className="text-xs text-muted-soft block">Timestamps &amp; SHAs only</span>
                 </div>

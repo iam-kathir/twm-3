@@ -183,7 +183,7 @@ export function CommandPalette() {
         exit={{ opacity: 0, scale: 0.95, y: -12 }}
         transition={{ type: "spring", stiffness: 420, damping: 28 }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-xl rounded-2xl bg-surface/95 backdrop-blur-2xl border border-white/10 shadow-[0_24px_70px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.08)] overflow-hidden flex flex-col relative"
+        className="w-full max-w-xl rounded-panel bg-surface border border-white/10 shadow-overlay overflow-hidden flex flex-col relative"
       >
         {/* Subtle Ambient Radial Glow */}
         <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-80 h-32 bg-accent/10 rounded-full blur-2xl pointer-events-none" />
@@ -202,7 +202,7 @@ export function CommandPalette() {
           />
           <button
             onClick={closeCommandPalette}
-            className="flex items-center gap-1 font-mono text-[10px] text-muted hover:text-white px-2 py-1 rounded-md bg-white/5 border border-white/10 transition-colors"
+            className="flex items-center gap-1 text-xs text-muted hover:text-ink px-2 py-1 rounded-md bg-white/5 border border-white/10 transition-colors"
           >
             <span>ESC</span>
           </button>
@@ -213,7 +213,7 @@ export function CommandPalette() {
           {/* Navigation group */}
           {filteredNav.length > 0 && (
             <div>
-              <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-muted">
+              <div className="px-3 py-1.5 text-xs font-medium text-muted">
                 Navigation
               </div>
               <div className="space-y-1">
@@ -250,7 +250,7 @@ export function CommandPalette() {
           {/* Actions group */}
           {filteredActions.length > 0 && (
             <div>
-              <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-muted">
+              <div className="px-3 py-1.5 text-xs font-medium text-muted">
                 Platform Actions
               </div>
               <div className="space-y-1">
@@ -275,7 +275,7 @@ export function CommandPalette() {
                       </div>
                       <div className="flex items-center gap-2">
                         {isSelected && <CornerDownLeft className="h-3 w-3 text-accent" />}
-                        <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${isSelected ? "bg-accent/20 text-accent font-semibold" : "bg-white/5 text-muted"}`}>Run</span>
+                        <span className={`text-xs font-medium px-1.5 py-0.5 rounded ${isSelected ? "bg-accent/20 text-accent font-semibold" : "bg-white/5 text-muted"}`}>Run</span>
                       </div>
                     </button>
                   );
@@ -287,7 +287,7 @@ export function CommandPalette() {
           {/* Students Directory quick match */}
           {q.length > 0 && filteredStudents.length > 0 && (
             <div>
-              <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-muted">
+              <div className="px-3 py-1.5 text-xs font-medium text-muted">
                 Classmates
               </div>
               <div className="space-y-1">
@@ -306,15 +306,15 @@ export function CommandPalette() {
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded-lg bg-surface-raised border border-white/10 flex items-center justify-center font-mono text-[10px] text-accent font-bold">
+                        <div className="w-6 h-6 rounded-lg bg-surface-raised border border-white/10 flex items-center justify-center text-xs text-accent font-semibold">
                           {s.avatarInitial}
                         </div>
                         <span>{s.name}</span>
-                        <span className="font-mono text-[11px] text-muted">@{s.handle}</span>
+                        <span className="font-mono text-xs text-muted">@{s.handle}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         {isSelected && <CornerDownLeft className="h-3 w-3 text-accent" />}
-                        <span className="font-mono text-[10px] text-muted">{s.rollNo}</span>
+                        <span className="text-xs text-muted">{s.rollNo}</span>
                       </div>
                     </button>
                   );
@@ -326,20 +326,20 @@ export function CommandPalette() {
           {filteredNav.length === 0 && filteredActions.length === 0 && filteredStudents.length === 0 && (
             <div className="py-12 text-center text-xs font-mono text-muted space-y-1">
               <p>No matching commands or classmates found for &quot;{search}&quot;</p>
-              <p className="text-[10px] text-slate-500">Try &quot;dashboard&quot;, &quot;sync&quot;, or &quot;dispute&quot;</p>
+              <p className="text-xs text-muted">Try &quot;dashboard&quot;, &quot;sync&quot;, or &quot;dispute&quot;</p>
             </div>
           )}
         </div>
 
         {/* Footer info strip */}
-        <div className="px-4 py-2.5 border-t border-white/[0.08] bg-canvas/80 backdrop-blur-md flex items-center justify-between text-[11px] font-mono text-muted relative z-10">
+        <div className="px-4 py-2.5 border-t border-white/[0.07] bg-canvas flex items-center justify-between text-xs text-muted relative z-10">
           <div className="flex items-center gap-2">
             <Command className="h-3 w-3 text-accent" />
             <span className="text-slate-400">Navigate:</span>
-            <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-[9px]">↑</kbd>
-            <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-[9px]">↓</kbd>
+            <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-xs">↑</kbd>
+            <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-xs">↓</kbd>
             <span className="text-slate-400 ml-1">Select:</span>
-            <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-[9px]">↵</kbd>
+            <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-xs">↵</kbd>
           </div>
           <span className="hidden sm:inline">User: {currentUser.name}</span>
         </div>

@@ -23,7 +23,7 @@ export function ManualSyncModal() {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
         transition={{ duration: 0.2 }}
-        className="w-full max-w-lg rounded-2xl bg-surface border border-white/10 p-6 shadow-2xl overflow-hidden relative"
+        className="w-full max-w-lg rounded-panel bg-surface border border-white/10 p-6 shadow-overlay overflow-hidden relative"
       >
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
@@ -82,14 +82,14 @@ export function ManualSyncModal() {
 
             {/* Live Status readout */}
             {isSyncing && (
-              <div className="mt-3 p-2.5 rounded-lg bg-black/40 border border-white/5 font-mono text-[11px] text-accent flex items-center gap-2">
+              <div className="mt-3 p-2.5 rounded-lg bg-black/40 border border-white/5 font-mono text-xs text-accent flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
                 <span>{syncStep}</span>
               </div>
             )}
           </div>
 
-          <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] text-[11px] font-mono text-muted">
+          <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] text-xs font-mono text-muted">
             <span className="text-accent font-semibold">Rule §9.2 Compliance:</span> Manual sync requests are rate-limited to 1 request per 10 minutes to protect platform quotas and preserve deterministic delta timestamps.
           </div>
         </div>

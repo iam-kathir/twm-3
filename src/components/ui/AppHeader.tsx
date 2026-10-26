@@ -68,7 +68,7 @@ export function AppHeader() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-canvas/90 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+    <header className="sticky top-0 z-40 border-b border-white/[0.07] bg-canvas/90 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Brand & Navigation */}
         <div className="flex items-center gap-6 lg:gap-8">
@@ -183,7 +183,7 @@ export function AppHeader() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 6, scale: 0.96 }}
                   transition={{ type: "spring", stiffness: 420, damping: 28 }}
-                  className="absolute right-0 mt-2.5 w-72 rounded-2xl bg-surface/95 backdrop-blur-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-2.5 z-50 text-sm font-sans"
+                  className="absolute right-0 mt-2.5 w-72 rounded-panel bg-surface border border-white/10 shadow-overlay p-2.5 z-50 text-sm font-sans"
                 >
                   <div className="px-3.5 py-3 border-b border-white/[0.08]">
                     <div className="font-bold text-base text-ink">{currentUser.name}</div>
@@ -267,7 +267,7 @@ export function AppHeader() {
       {isMobileMenuOpen && (
         <div className="md:hidden px-4 pt-2 pb-4 border-t border-white/[0.08] bg-canvas space-y-1">
           <div className="px-3 pb-2">
-            <span className="inline-flex items-center gap-1.5 rounded-md border border-accent/25 bg-accent/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-accent">
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-accent/25 bg-accent/10 px-2 py-0.5 text-xs font-medium text-accent">
               Demo data — 3 adapters wired, no account linked
             </span>
           </div>

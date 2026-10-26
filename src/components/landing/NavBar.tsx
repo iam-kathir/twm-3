@@ -12,16 +12,16 @@ export function NavBar() {
       initial={{ y: -30, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ type: "spring", stiffness: 260, damping: 25, delay: 0.1 }}
-      className="fixed top-4 sm:top-5 inset-x-0 z-50 max-w-6xl mx-auto px-4 sm:px-6 pointer-events-none"
+      className="fixed top-0 inset-x-0 z-50 border-b border-white/[0.07] bg-canvas/85 backdrop-blur-xl"
     >
-      <div className="h-16 sm:h-20 px-5 sm:px-8 rounded-2xl border border-white/[0.08] bg-surface/85 backdrop-blur-2xl shadow-[0_16px_50px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.06)] flex items-center justify-between pointer-events-auto transition-all duration-300 hover:border-white/[0.16] hover:shadow-[0_20px_60px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.1)]">
+      <div className="h-16 sm:h-[72px] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Brand Logo with Live Status */}
         <div className="flex items-center gap-4">
           <BrandLogo variant="horizontal" size="md" showLivePulse={true} href="/" />
         </div>
 
         {/* Center Nav Links with Micro-Interactions */}
-        <nav className="hidden md:flex items-center gap-1.5 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06] text-sm font-sans">
+        <nav className="hidden md:flex items-center gap-1 text-sm font-sans">
           {[
             { label: "Telemetry", href: "#showcase" },
             { label: "Leaderboard", href: "/leaderboard" },
@@ -32,7 +32,7 @@ export function NavBar() {
             <Link
               key={item.label}
               href={item.href}
-              className="relative px-3.5 py-1.5 rounded-lg text-xs lg:text-sm font-medium text-slate-300 transition-all duration-150 hover:text-white hover:bg-white/[0.08] active:scale-95"
+              className="relative px-3 py-2 text-sm font-medium text-muted transition-colors duration-150 hover:text-ink"
             >
               {item.label}
             </Link>
@@ -43,17 +43,16 @@ export function NavBar() {
         <div className="flex items-center gap-3 sm:gap-4">
           <Link
             href="/login"
-            className="hidden sm:inline-flex items-center gap-2 text-xs lg:text-sm text-slate-300 hover:text-white px-3.5 py-2 font-sans transition-colors font-medium rounded-xl hover:bg-white/[0.06]"
+            className="hidden sm:inline-flex items-center gap-2 text-sm text-muted hover:text-ink px-3 py-2 font-sans transition-colors font-medium rounded-lg hover:bg-white/[0.05]"
           >
-            <Github className="h-4 w-4 text-white/80" />
+            <Github className="h-4 w-4" />
             Sign in
           </Link>
           <motion.a
             href="#invite"
-            whileHover={{ scale: 1.03, boxShadow: "0 0 24px -2px rgba(16,185,129,0.4)" }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: "spring", stiffness: 400, damping: 20 }}
-            className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-canvas text-xs sm:text-sm font-bold font-sans transition-all shadow-lg shadow-accent/25 cursor-pointer"
+            whileTap={{ scale: 0.98 }}
+            transition={{ duration: 0.15 }}
+            className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-canvas text-sm font-semibold font-sans transition-colors cursor-pointer"
           >
             <span>Join Class</span>
             <ArrowRight className="h-3.5 w-3.5 stroke-[2.5]" />

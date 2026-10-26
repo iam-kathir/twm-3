@@ -163,7 +163,7 @@ export function WeeklyRecapCard() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {/* GitHub Active Days */}
                 <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] space-y-1">
-                  <span className="text-[11px] font-mono text-muted uppercase tracking-wider block">GitHub Active Days</span>
+                  <span className="block text-xs font-medium text-muted">GitHub active days</span>
                   <div className="flex items-baseline justify-between">
                     <span className="text-2xl font-black font-mono text-white">
                       {recap.student.github ? `${recap.student.github.activeDays} / 7` : "—"}
@@ -175,14 +175,14 @@ export function WeeklyRecapCard() {
                       </span>
                     )}
                   </div>
-                  <span className="text-[11px] text-muted block font-mono">
+                  <span className="text-xs text-muted block font-mono">
                     {recap.student.github ? `${recap.student.github.consistencyRate}% Weekly Consistency` : "No observed commits"}
                   </span>
                 </div>
 
                 {/* LeetCode Weekly Delta */}
                 <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] space-y-1">
-                  <span className="text-[11px] font-mono text-muted uppercase tracking-wider block">LeetCode Weekly Delta</span>
+                  <span className="block text-xs font-medium text-muted">LeetCode weekly delta</span>
                   <div className="flex items-baseline justify-between">
                     <span className="text-2xl font-black font-mono text-white">
                       {recap.student.leetcode ? `+${recap.student.leetcode.weeklyDelta}` : "0"}
@@ -194,14 +194,14 @@ export function WeeklyRecapCard() {
                       </span>
                     )}
                   </div>
-                  <span className="text-[11px] text-muted block font-mono">
+                  <span className="text-xs text-muted block font-mono">
                     Prior Sunday Baseline Finalized
                   </span>
                 </div>
 
                 {/* Consistency Streak */}
                 <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] space-y-1">
-                  <span className="text-[11px] font-mono text-muted uppercase tracking-wider block">Consistency Streak</span>
+                  <span className="block text-xs font-medium text-muted">Consistency streak</span>
                   <div className="flex items-baseline justify-between">
                     <span className="text-2xl font-black font-mono text-white flex items-center gap-1.5">
                       <Flame className="h-5 w-5 text-accent" />
@@ -209,7 +209,7 @@ export function WeeklyRecapCard() {
                     </span>
                     <span className="text-xs font-mono text-emerald-400 font-bold">Active</span>
                   </div>
-                  <span className="text-[11px] text-muted block font-mono">
+                  <span className="text-xs text-muted block font-mono">
                     ≥4 active days / cycle
                   </span>
                 </div>
@@ -253,7 +253,7 @@ export function WeeklyRecapCard() {
                       <Bot className="h-3.5 w-3.5" />
                       <span>Grounded Analyst Synthesis</span>
                     </span>
-                    <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                       Zero Hallucination Verified
                     </span>
                   </div>
@@ -311,7 +311,7 @@ export function WeeklyRecapCard() {
                           <p className="text-[12px] text-ink-secondary leading-snug">
                             {action.description}
                           </p>
-                          <span className="inline-block text-[11px] font-mono px-2 py-0.5 rounded bg-surface border border-white/10 text-muted">
+                          <span className="inline-block text-xs font-mono px-2 py-0.5 rounded bg-surface border border-white/10 text-muted">
                             Target: {action.targetMetric}
                           </span>
                         </div>
@@ -330,7 +330,7 @@ export function WeeklyRecapCard() {
       </AnimatePresence>
 
       {/* Zero Fabrication Footer Guarantee */}
-      <div className="pt-3 border-t border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] font-mono text-muted">
+      <div className="pt-3 border-t border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-muted">
         <span>{recap.disclosures.zeroFabricationNotice}</span>
         <span className="text-accent shrink-0">Rule §9.1 Verified</span>
       </div>

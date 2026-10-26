@@ -28,7 +28,7 @@ function LoginContent() {
   return (
     <div className="min-h-screen bg-canvas text-ink flex flex-col justify-between selection:bg-accent selection:text-canvas relative overflow-hidden bg-tech-dots">
       {/* Precision Ambient Atmosphere */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-to-tr from-accent/10 via-accent/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[560px] h-[360px] bg-accent/[0.06] rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
       <header className="p-6 relative z-10 max-w-5xl mx-auto w-full flex items-center justify-between">
@@ -49,7 +49,7 @@ function LoginContent() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
-          className="w-full max-w-lg rounded-2xl border border-white/10 bg-surface/90 backdrop-blur-2xl p-8 sm:p-10 relative shadow-[0_24px_70px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.08)] space-y-8"
+          className="w-full max-w-lg rounded-panel border border-white/10 bg-surface p-8 sm:p-10 relative shadow-overlay space-y-8"
         >
           {/* Top Logo & Pill */}
           <div className="text-center space-y-3">
@@ -77,7 +77,7 @@ function LoginContent() {
             </motion.button>
 
             {/* University Domains Pill */}
-            <div className="flex items-center justify-center gap-2 text-[11px] font-mono text-muted">
+            <div className="flex items-center justify-center gap-2 text-xs text-muted">
               <GraduationCap className="h-3.5 w-3.5 text-accent" />
               <span>Supported: karunya.edu, .edu.in, .ac.in</span>
             </div>
@@ -89,7 +89,7 @@ function LoginContent() {
                   <Sparkles className="h-3.5 w-3.5" />
                   <span>Local Dev OAuth Simulator</span>
                 </div>
-                <p className="text-[11px] text-slate-300 font-sans">
+                <p className="text-xs text-slate-300 font-sans">
                   GitHub Client ID not yet set in .env.local. Select a seed classmate to log in instantly:
                 </p>
                 <div className="space-y-1.5">
@@ -112,7 +112,7 @@ function LoginContent() {
             ) : (
               /* Quick Demo Link */
               <div className="pt-4 border-t border-white/[0.08] text-center space-y-2">
-                <span className="text-[10px] font-mono font-bold text-muted block uppercase tracking-wider">
+                <span className="text-xs font-semibold text-muted block">
                   Test Shortcut
                 </span>
                 <button
@@ -132,7 +132,7 @@ function LoginContent() {
               <Shield className="h-3.5 w-3.5" />
               <span>Zero Passwords Stored</span>
             </div>
-            <p className="text-[11px] text-muted leading-relaxed font-sans">
+            <p className="text-xs text-muted leading-relaxed font-sans">
               Stateless HMAC-SHA256 tokens tied to verified university roll numbers. No credentials, tokens, or surveillance scripts are ever persisted.
             </p>
           </div>

@@ -214,7 +214,7 @@ export function AppScreensGallery() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
-            className="rounded-2xl border border-white/10 bg-surface p-8 sm:p-10 shadow-2xl overflow-hidden"
+            className="rounded-2xl border border-white/[0.08] bg-surface p-8 sm:p-10 shadow-panel overflow-hidden"
           >
             {/* Top Bar with Screen Meta & View Toggles */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between pb-6 mb-8 border-b border-white/[0.08] gap-4">
@@ -268,7 +268,7 @@ export function AppScreensGallery() {
             </div>
 
             {/* Browser Preview Frame */}
-            <div className="relative rounded-2xl border border-white/10 bg-canvas overflow-hidden shadow-2xl">
+            <div className="relative rounded-2xl border border-white/[0.08] bg-canvas overflow-hidden shadow-panel">
               {/* Fake Browser Toolbar */}
               <div className="px-5 py-3 bg-surface-raised border-b border-white/[0.08] flex items-center justify-between">
                 <div className="flex items-center gap-2">

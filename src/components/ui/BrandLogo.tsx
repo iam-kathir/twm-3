@@ -62,7 +62,7 @@ export function BrandLogo({
         </div>
 
         {showLivePulse && (
-          <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-elevated/90 border border-white/10 text-[10px] font-mono text-muted tracking-wider shadow-sm">
+          <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-elevated/90 border border-white/10 text-xs text-muted">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
@@ -115,13 +115,13 @@ export function BrandLogo({
             >
               TWM
             </span>
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-accent/15 border border-accent/30 text-accent font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider shadow-sm">
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-accent/15 border border-accent/30 text-accent text-xs font-semibold">
               3.1
             </span>
           </div>
 
           {showSubtitle && (
-            <span className="text-[10px] sm:text-xs font-mono text-muted tracking-tight">
+            <span className="text-xs text-muted">
               Track. Win. Maintain.
             </span>
           )}

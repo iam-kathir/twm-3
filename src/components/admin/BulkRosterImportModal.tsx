@@ -100,7 +100,7 @@ export function BulkRosterImportModal({ isOpen, onClose, onSuccess }: BulkRoster
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="w-full max-w-2xl bg-surface border border-white/10 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6 relative max-h-[90vh] overflow-y-auto"
+          className="w-full max-w-2xl bg-surface border border-white/10 rounded-panel p-6 sm:p-8 shadow-overlay space-y-6 relative max-h-[90vh] overflow-y-auto"
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-white/10 pb-4">

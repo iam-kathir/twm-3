@@ -104,9 +104,9 @@ export function SundayCountdownClock() {
       initial={{ opacity: 0, scale: 0.96 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="relative max-w-xl mx-auto rounded-3xl p-[1px] bg-gradient-to-r from-accent/30 via-emerald-400/20 to-teal-400/30 shadow-[0_10px_40px_-10px_rgba(16,185,129,0.25)] group"
+      className="relative max-w-xl mx-auto rounded-3xl border border-white/[0.08] bg-surface group"
     >
-      <div className="rounded-3xl bg-surface/90 backdrop-blur-2xl p-4 sm:p-5 border border-white/[0.08] relative overflow-hidden">
+      <div className="rounded-3xl p-4 sm:p-5 relative overflow-hidden">
         {/* Subtle ambient interior glow */}
         <div className="absolute -top-12 -right-12 w-36 h-36 bg-accent/15 rounded-full blur-2xl pointer-events-none" />
 
@@ -122,7 +122,7 @@ export function SundayCountdownClock() {
               Week 42 Live Competition
             </span>
           </div>
-          <span className="text-[11px] font-sans font-medium text-emerald-400/90 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+          <span className="text-xs font-sans font-medium text-emerald-400/90 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
             Cutoff: Sun 23:59:59 IST
           </span>
         </div>
@@ -137,7 +137,7 @@ export function SundayCountdownClock() {
               <div className="font-mono text-2xl sm:text-3xl font-extrabold text-white tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                 {unit.value}
               </div>
-              <span className="font-sans text-[10px] sm:text-xs font-semibold text-muted uppercase tracking-wider mt-1">
+              <span className="font-sans text-xs font-medium text-muted mt-1">
                 {unit.label}
               </span>
             </div>
@@ -146,13 +146,13 @@ export function SundayCountdownClock() {
 
         {/* Progress Bar through the week */}
         <div className="space-y-1.5 pt-1">
-          <div className="flex items-center justify-between text-[11px] font-sans text-muted">
+          <div className="flex items-center justify-between text-xs font-sans text-muted">
             <span>Tournament Week Progress</span>
             <span className="font-mono text-emerald-400 font-semibold">{timeLeft.progressPercent}% Elapsed</span>
           </div>
           <div className="h-2 w-full rounded-full bg-white/[0.05] overflow-hidden p-0.5 border border-white/[0.06]">
             <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-accent via-emerald-400 to-teal-300 shadow-[0_0_12px_rgba(16,185,129,0.5)]"
+              className="h-full rounded-full bg-accent"
               initial={{ width: 0 }}
               animate={{ width: `${timeLeft.progressPercent}%` }}
               transition={{ duration: 0.8, ease: "easeOut" }}

@@ -493,7 +493,7 @@ export default function AdminHubPage() {
                   </span>
                 )}
                 {tab.tag && (
-                  <span className={`relative z-10 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${isSelected ? "bg-canvas/20 text-canvas" : "bg-accent/20 text-accent"}`}>
+                  <span className={`relative z-10 px-1.5 py-0.5 rounded text-xs font-mono font-bold uppercase ${isSelected ? "bg-canvas/20 text-canvas" : "bg-accent/20 text-accent"}`}>
                     {tab.tag}
                   </span>
                 )}
@@ -800,7 +800,7 @@ export default function AdminHubPage() {
                   style={{ left: "70%" }}
                 >
                   <div className="w-0.5 h-full bg-white/40 shadow-sm" />
-                  <span className="text-[10px] font-mono text-muted-soft mt-1 -translate-x-1/2">
+                  <span className="text-xs font-mono text-muted-soft mt-1 -translate-x-1/2">
                     70% Quorum Line
                   </span>
                 </div>
@@ -907,7 +907,7 @@ export default function AdminHubPage() {
                                     <span>{member.handleGithub}</span>
                                   </span>
                                 ) : (
-                                  <span className="text-muted-soft text-[11px]">—</span>
+                                  <span className="text-muted-soft text-xs">—</span>
                                 )}
                                 {member.handleLeetcode && (
                                   <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-300">
@@ -929,7 +929,7 @@ export default function AdminHubPage() {
                                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                                   <span>{member.latestGithubActiveDays !== null && member.latestGithubActiveDays !== undefined ? `${member.latestGithubActiveDays} Active Days` : "Active Telemetry"}</span>
                                 </div>
-                                <div className="text-[11px] text-muted-soft font-mono">
+                                <div className="text-xs text-muted-soft font-mono">
                                   Boundary: Sun 23:59:59 IST
                                 </div>
                               </div>
@@ -1378,7 +1378,7 @@ export default function AdminHubPage() {
                             <span className="text-xs font-mono font-bold text-accent px-2 py-0.5 rounded bg-accent/10 border border-accent/20">
                               STEP {st.step}
                             </span>
-                            <span className="text-[11px] font-mono text-muted flex items-center space-x-1">
+                            <span className="text-xs font-mono text-muted flex items-center space-x-1">
                               <Clock className="w-3 h-3 text-muted" />
                               <span>{st.timestamp}</span>
                             </span>
@@ -1387,7 +1387,7 @@ export default function AdminHubPage() {
                           <p className="text-xs text-muted leading-relaxed">{st.description}</p>
                         </div>
 
-                        <div className="pt-2 border-t border-white/[0.06] text-[11px] font-mono text-muted space-y-1">
+                        <div className="pt-2 border-t border-white/[0.06] text-xs font-mono text-muted space-y-1">
                           {Object.entries(st.data || {}).slice(0, 3).map(([k, v]: [string, any]) => (
                             <div key={k} className="flex justify-between truncate">
                               <span className="text-muted-soft">{k}:</span>
@@ -1426,7 +1426,7 @@ export default function AdminHubPage() {
                             <div>
                               <span className="font-semibold text-white">{s.studentName}</span>
                               {s.isTied && (
-                                <span className="ml-2 text-[10px] font-mono text-amber-400 font-bold px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
+                                <span className="ml-2 text-xs font-mono text-amber-400 font-bold px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
                                   Tied
                                 </span>
                               )}
@@ -1434,7 +1434,7 @@ export default function AdminHubPage() {
                           </div>
                           <div className="flex items-center space-x-3">
                             <span className="font-mono text-white text-xs font-bold">{s.displayValue}</span>
-                            <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
+                            <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${
                               s.status === "Finalized" ? "bg-accent/10 text-accent border border-accent/20" : "bg-amber-500/10 text-amber-300"
                             }`}>
                               {s.status}
@@ -1453,7 +1453,7 @@ export default function AdminHubPage() {
                           <Sparkles className="w-5 h-5 text-accent" />
                           <span>Grounded AI Natural Language Recap (§10.2)</span>
                         </h3>
-                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-accent/20 text-accent border border-accent/30">
+                        <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-accent/20 text-accent border border-accent/30">
                           ZERO FABRICATION
                         </span>
                       </div>
@@ -1511,7 +1511,7 @@ export default function AdminHubPage() {
                 initial={{ opacity: 0, scale: 0.95, y: 10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                className="relative w-full max-w-lg bg-surface border border-white/10 rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6 z-10 max-h-[90vh] overflow-y-auto"
+                className="relative w-full max-w-lg bg-surface border border-white/10 rounded-panel shadow-overlay p-6 sm:p-8 space-y-6 z-10 max-h-[90vh] overflow-y-auto"
               >
                 <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
                   <div>
@@ -1596,7 +1596,7 @@ export default function AdminHubPage() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="text-[11px] font-mono text-muted flex items-center space-x-1">
+                        <label className="text-xs font-mono text-muted flex items-center space-x-1">
                           <Github className="w-3 h-3" />
                           <span>GitHub</span>
                         </label>
@@ -1610,7 +1610,7 @@ export default function AdminHubPage() {
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-[11px] font-mono text-muted flex items-center space-x-1">
+                        <label className="text-xs font-mono text-muted flex items-center space-x-1">
                           <Code2 className="w-3 h-3 text-amber-400" />
                           <span>LeetCode</span>
                         </label>
@@ -1625,7 +1625,7 @@ export default function AdminHubPage() {
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-[11px] font-mono text-muted flex items-center space-x-1">
+                      <label className="text-xs font-mono text-muted flex items-center space-x-1">
                         <Award className="w-3 h-3 text-emerald-400" />
                         <span>HackerRank</span>
                       </label>
@@ -1697,7 +1697,7 @@ export default function AdminHubPage() {
       <footer className="border-t border-white/[0.08] bg-canvas px-6 py-4 text-xs text-muted-soft">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>TWM 3.0 Platform • Administrator Governance &amp; Audit Registry</span>
-          <span className="font-mono text-[11px]">Rule §3.3 &amp; §9.7 Compliance Enforced</span>
+          <span className="font-mono text-xs">Rule §3.3 &amp; §9.7 Compliance Enforced</span>
         </div>
       </footer>
     </div>

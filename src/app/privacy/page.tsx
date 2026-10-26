@@ -183,7 +183,7 @@ export default function PrivacyPolicyPage() {
             </nav>
 
             <div className="p-5 rounded-2xl bg-surface border border-white/[0.06] space-y-3 text-xs text-muted mt-6">
-              <span className="font-mono text-white font-bold block uppercase text-[11px]">
+              <span className="font-mono text-white font-bold block uppercase text-xs">
                 Your Privacy Controls
               </span>
               <p>

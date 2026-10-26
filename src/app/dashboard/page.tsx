@@ -85,7 +85,7 @@ export default function DashboardPage() {
             </button>
 
             <div className="px-4 py-2 rounded-xl bg-surface-raised border border-white/[0.08] text-right">
-              <span className="text-muted-soft block text-[10px] uppercase font-mono tracking-wider">LAST SYNC</span>
+              <span className="block text-xs font-medium text-muted">Last sync</span>
               <span className="text-emerald-400 font-semibold text-sm">{lastSyncTime}</span>
             </div>
           </div>
@@ -94,25 +94,25 @@ export default function DashboardPage() {
         {/* 4 Quick Telemetry KPI Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           <div className="p-6 rounded-2xl border border-white/[0.08] bg-surface space-y-2 shadow-lg">
-            <span className="text-xs sm:text-sm font-mono text-muted uppercase tracking-wider block font-semibold">WEEKLY ACTIVE DAYS</span>
+            <span className="text-xs sm:text-sm font-medium text-muted block">Weekly active days</span>
             <div className="text-3xl sm:text-4xl font-bold font-mono text-white">{currentUser.github.activeDaysWeek} / 7 Days</div>
             <span className="text-xs font-mono text-emerald-400 block font-medium">Qualifying consistency</span>
           </div>
 
           <div className="p-6 rounded-2xl border border-white/[0.08] bg-surface space-y-2 shadow-lg">
-            <span className="text-xs sm:text-sm font-mono text-muted uppercase tracking-wider block font-semibold">CONSISTENCY RATE</span>
+            <span className="text-xs sm:text-sm font-medium text-muted block">Consistency rate</span>
             <div className="text-3xl sm:text-4xl font-bold font-mono text-accent">{Math.round((currentUser.github.activeDaysWeek / 7) * 100)}%</div>
             <span className="text-xs font-mono text-muted-soft block">Rule §9.4 enforced</span>
           </div>
 
           <div className="p-6 rounded-2xl border border-white/[0.08] bg-surface space-y-2 shadow-lg">
-            <span className="text-xs sm:text-sm font-mono text-muted uppercase tracking-wider block font-semibold">RETRIEVAL COVERAGE</span>
+            <span className="text-xs sm:text-sm font-medium text-muted block">Retrieval coverage</span>
             <div className="text-3xl sm:text-4xl font-bold font-mono text-emerald-400">94.2%</div>
             <span className="text-xs font-mono text-muted-soft block">Passes &gt;90% threshold</span>
           </div>
 
           <div className="p-6 rounded-2xl border border-white/[0.08] bg-surface space-y-2 shadow-lg">
-            <span className="text-xs sm:text-sm font-mono text-muted uppercase tracking-wider block font-semibold">LEETCODE DELTA</span>
+            <span className="text-xs sm:text-sm font-medium text-muted block">LeetCode delta</span>
             <div className="text-3xl sm:text-4xl font-bold font-mono text-accent">
               {currentUser.leetcode.weeklyDelta ? `+${currentUser.leetcode.weeklyDelta} Solved` : `${currentUser.leetcode.totalSolved} Solved`}
             </div>
@@ -150,7 +150,7 @@ export default function DashboardPage() {
               {/* GitHub 4-Week Activity Matrix */}
               <div className="space-y-2 p-3.5 rounded-xl bg-surface-raised border border-white/[0.06]">
                 <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-muted uppercase tracking-wider font-semibold">Activity Heatmap (4-Week)</span>
+                  <span className="text-muted font-semibold">Activity heatmap (4 weeks)</span>
                   <span className="text-emerald-400 font-bold">{currentUser.github.activeDaysWeek * 4 + 3} commits</span>
                 </div>
                 <div className="grid grid-cols-7 gap-1.5 pt-1">
@@ -175,7 +175,7 @@ export default function DashboardPage() {
                     );
                   })}
                 </div>
-                <div className="flex items-center justify-between text-[11px] font-mono text-muted pt-1">
+                <div className="flex items-center justify-between text-xs text-muted pt-1">
                   <span>Less</span>
                   <div className="flex items-center gap-1">
                     <span className="w-2.5 h-2.5 rounded-[2px] bg-white/[0.04]" />
@@ -245,7 +245,7 @@ export default function DashboardPage() {
 
               {/* Cumulative Solved Metric */}
               <div>
-                <span className="text-xs font-mono text-muted uppercase tracking-wider block">Cumulative Solved:</span>
+                <span className="text-xs text-muted font-medium block">Cumulative solved</span>
                 <div className="text-3xl sm:text-4xl font-extrabold font-mono text-ink mt-0.5 flex items-baseline gap-2">
                   <span>{currentUser.leetcode.totalSolved}</span>
                   <span className="text-sm font-medium text-muted">/ 3,200 total</span>
@@ -346,14 +346,13 @@ export default function DashboardPage() {
                     </div>
                     <div>
                       <span className="text-sm font-bold text-ink block leading-none">Python Domain</span>
-                      <span className="text-[11px] text-muted">Gold Star Standard</span>
+                      <span className="text-xs text-muted">Gold Star Standard</span>
                     </div>
                   </div>
                   <div className="text-right">
                     <span className="text-sm font-bold text-amber-400 flex items-center gap-0.5">
                       {"★".repeat(currentUser.hackerrank.pythonStars || 5)}
-                    </span>
-                    <span className="text-[10px] text-muted-soft block">{currentUser.hackerrank.pythonStars || 5} Stars</span>
+                    </span>                      <span className="text-xs text-muted-soft block">{currentUser.hackerrank.pythonStars || 5} Stars</span>
                   </div>
                 </div>
 
@@ -365,15 +364,14 @@ export default function DashboardPage() {
                     </div>
                     <div>
                       <span className="text-sm font-bold text-ink block leading-none">Problem Solving</span>
-                      <span className="text-[11px] text-muted">Data Structures &amp; Algos</span>
+                      <span className="text-xs text-muted">Data Structures &amp; Algos</span>
                     </div>
                   </div>
                   <div className="text-right">
                     <span className="text-sm font-bold text-emerald-400 flex items-center gap-0.5">
                       {"★".repeat(currentUser.hackerrank.problemSolvingStars || 4)}
                       <span className="text-white/20">{"☆".repeat(Math.max(0, 5 - (currentUser.hackerrank.problemSolvingStars || 4)))}</span>
-                    </span>
-                    <span className="text-[10px] text-muted-soft block">{currentUser.hackerrank.problemSolvingStars || 4} Stars</span>
+                    </span>                      <span className="text-xs text-muted-soft block">{currentUser.hackerrank.problemSolvingStars || 4} Stars</span>
                   </div>
                 </div>
               </div>
@@ -387,7 +385,7 @@ export default function DashboardPage() {
                   </span>
                   <span className="text-ink font-semibold">hr-proof-8f12a...</span>
                 </div>
-                <p className="text-[11px] text-muted-soft leading-relaxed">
+                <p className="text-xs text-muted-soft leading-relaxed">
                   Section 5.6 Rule: Cumulative badges are verified evidence but excluded from weekly competition deltas.
                 </p>
               </div>
@@ -409,7 +407,7 @@ export default function DashboardPage() {
               <h3 className="text-lg font-bold text-ink tracking-tight">
                 Weekly Developer Recap (Week 42)
               </h3>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-raised text-muted border border-white/[0.06]">
+              <span className="text-xs font-medium px-2 py-0.5 rounded bg-surface-raised text-muted border border-white/[0.06]">
                 Non-Judgmental Synthesis
               </span>
             </div>

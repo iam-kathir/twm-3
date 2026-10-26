@@ -40,14 +40,6 @@ export function ToastContainer() {
             ? "text-rose-400"
             : "text-sky-400";
 
-          const bgAura = isSuccess
-            ? "from-emerald-500/10 via-transparent to-transparent"
-            : isWarning
-            ? "from-amber-500/10 via-transparent to-transparent"
-            : isError
-            ? "from-rose-500/10 via-transparent to-transparent"
-            : "from-sky-500/10 via-transparent to-transparent";
-
           const progressBg = isSuccess
             ? "bg-emerald-400"
             : isWarning
@@ -63,11 +55,8 @@ export function ToastContainer() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 16, scale: 0.92 }}
               transition={{ type: "spring", stiffness: 380, damping: 26 }}
-              className={`pointer-events-auto p-4 rounded-2xl bg-surface/90 backdrop-blur-2xl border ${borderColor} shadow-[0_20px_50px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.06)] flex items-start gap-3.5 relative overflow-hidden`}
+              className={`pointer-events-auto p-4 rounded-panel bg-surface border ${borderColor} shadow-overlay flex items-start gap-3.5 relative overflow-hidden`}
             >
-              {/* Subtle Ambient Radial Glow */}
-              <div className={`absolute -top-12 -left-12 w-32 h-32 bg-gradient-to-br ${bgAura} rounded-full blur-xl pointer-events-none`} />
-
               <div className={`p-1.5 rounded-xl bg-white/[0.04] border border-white/[0.06] shrink-0 mt-0.5`}>
                 <Icon className={`h-4 w-4 ${iconColor}`} />
               </div>
@@ -77,18 +66,18 @@ export function ToastContainer() {
                   {toast.title}
                 </div>
                 {toast.description && (
-                  <div className="text-[11px] text-muted mt-0.5 leading-relaxed font-sans">
+                  <div className="text-xs text-muted mt-0.5 leading-relaxed font-sans">
                     {toast.description}
                   </div>
                 )}
-                <div className="text-[9px] font-mono text-muted mt-1.5 opacity-80">
+                <div className="text-xs text-muted mt-1.5 opacity-80">
                   {toast.timestamp}
                 </div>
               </div>
 
               <button
                 onClick={() => dismissToast(toast.id)}
-                className="text-muted hover:text-white p-1 rounded-lg hover:bg-white/[0.06] transition-colors absolute top-3 right-3 z-20"
+                className="text-muted hover:text-ink p-1 rounded-lg hover:bg-white/[0.06] transition-colors absolute top-3 right-3 z-20"
                 aria-label="Dismiss notification"
               >
                 <X className="h-3.5 w-3.5" />

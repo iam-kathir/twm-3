@@ -278,7 +278,7 @@ function OnboardingContent() {
         </header>
 
         <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-12">
-          <div className="w-full max-w-lg rounded-2xl border border-red-500/20 bg-surface p-8 sm:p-10 shadow-2xl space-y-6 text-center">
+          <div className="w-full max-w-lg rounded-panel border border-status-error/30 bg-surface p-8 sm:p-10 shadow-overlay space-y-6 text-center">
             <div className="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center mx-auto">
               <ShieldAlert className="h-7 w-7" />
             </div>
@@ -348,7 +348,7 @@ function OnboardingContent() {
 
       {/* Main Step Area */}
       <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-xl rounded-2xl border border-white/10 bg-surface p-8 sm:p-10 shadow-2xl">
+        <div className="w-full max-w-xl rounded-panel border border-white/10 bg-surface p-8 sm:p-10 shadow-overlay">
           {loadingSession ? (
             <div className="py-20 flex flex-col items-center justify-center gap-3 text-muted">
               <Loader2 className="h-6 w-6 animate-spin text-accent" />
@@ -506,7 +506,7 @@ function OnboardingContent() {
                                 Enter 6-Digit Passcode:
                               </label>
                               {expiryRemaining > 0 && (
-                                <span className="text-[11px] font-mono text-amber-400 flex items-center gap-1">
+                                <span className="text-xs font-mono text-amber-400 flex items-center gap-1">
                                   <Clock className="h-3 w-3" />
                                   Expires in {formatTimer(expiryRemaining)}
                                 </span>

@@ -18,9 +18,17 @@
   --surface-card: #121620;
   --surface-highlight: #1B2330;
 
-  --border: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.07);
   --border-subtle: rgba(255, 255, 255, 0.05);
   --border-active: rgba(16, 185, 129, 0.4);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  /* Elevation: panels sit on the ground (tone step + hairline). Shadows are
+     reserved for real overlays (menus, dialogs, popovers). */
+  --radius-panel: 14px;
+  --radius-control: 10px;
+  --shadow-panel: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-overlay: 0 12px 32px -8px rgba(0, 0, 0, 0.55);
 
   --ink: #F3F5F9;
   --ink-rgb: 243 245 249;
@@ -78,6 +86,12 @@ html.light {
   --border: rgba(31, 35, 40, 0.12);
   --border-subtle: rgba(31, 35, 40, 0.08);
   --border-active: rgba(5, 150, 105, 0.6);
+  --border-strong: rgba(31, 35, 40, 0.22);
+
+  --radius-panel: 14px;
+  --radius-control: 10px;
+  --shadow-panel: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-overlay: 0 12px 32px -8px rgba(15, 23, 42, 0.16);
 
   --ink: #0F172A;
   --ink-rgb: 15 23 42;
@@ -210,31 +224,40 @@ samp {
   background: #3B4252;
 }
 
-/* Precision Panels & Glass Surfaces (Linear / Raycast tier) */
+/* Quiet surfaces: opaque fill one tone from the ground, one hairline border.
+   No blur, no bloom — elevation reads from tone, not from light. */
 .glass-surface {
-  background-color: rgba(var(--surface-rgb), 0.82);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background-color: rgb(var(--surface-rgb));
   border: 1px solid var(--border);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-panel);
 }
 
 .glow-subtle {
-  box-shadow: 0 0 24px -4px rgba(var(--accent-rgb), 0.15);
+  box-shadow: var(--shadow-panel);
 }
 
 .glow-hover {
-  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .glow-hover:hover {
-  box-shadow: 0 0 24px -4px rgba(var(--accent-rgb), 0.22);
   border-color: rgba(var(--accent-rgb), 0.35);
 }
 
 .instrument-panel {
   background-color: var(--surface);
   border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+}
+
+/* Sentence-case meta label: replaces the scattered 10px tracked capitals. */
+.meta-label {
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--muted);
+  font-family: var(--font-sans), system-ui, sans-serif;
 }
 
 .instrument-card {

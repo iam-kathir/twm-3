@@ -33,7 +33,7 @@ export function HowItWorks() {
             repeat the rhythm of the platform matrix above it. */}
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-14">
           <div>
-            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
+            <span className="text-xs font-semibold text-accent">
               Deterministic flow
             </span>
             <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold text-ink tracking-tight">

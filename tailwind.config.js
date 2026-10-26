@@ -27,6 +27,14 @@ module.exports = {
         "status-warning": "rgb(var(--status-warning-rgb) / <alpha-value>)",
         "status-error": "rgb(var(--status-error-rgb) / <alpha-value>)",
       },
+      boxShadow: {
+        panel: "var(--shadow-panel)",
+        overlay: "var(--shadow-overlay)",
+      },
+      borderRadius: {
+        panel: "var(--radius-panel)",
+        control: "var(--radius-control)",
+      },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "'Helvetica Neue'", "Arial", "sans-serif"],
         mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "'Liberation Mono'", "'Courier New'", "monospace"],

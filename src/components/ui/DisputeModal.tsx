@@ -45,7 +45,7 @@ export function DisputeModal() {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
         transition={{ duration: 0.2 }}
-        className="w-full max-w-lg rounded-2xl bg-surface border border-white/10 p-6 shadow-2xl overflow-hidden"
+        className="w-full max-w-lg rounded-panel bg-surface border border-white/10 p-6 shadow-overlay"
       >
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
@@ -75,7 +75,7 @@ export function DisputeModal() {
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] font-mono text-muted mb-1">
+              <label className="block text-xs font-mono text-muted mb-1">
                 Platform
               </label>
               <select
@@ -90,7 +90,7 @@ export function DisputeModal() {
             </div>
 
             <div>
-              <label className="block text-[11px] font-mono text-muted mb-1">
+              <label className="block text-xs font-mono text-muted mb-1">
                 Affected Metric
               </label>
               <select
@@ -106,7 +106,7 @@ export function DisputeModal() {
           </div>
 
           <div>
-            <label className="block text-[11px] font-mono text-muted mb-1">
+            <label className="block text-xs font-mono text-muted mb-1">
               Dispute Rationale &amp; Claim Details
             </label>
             <textarea
@@ -120,7 +120,7 @@ export function DisputeModal() {
           </div>
 
           <div>
-            <label className="block text-[11px] font-mono text-muted mb-1">
+            <label className="block text-xs font-mono text-muted mb-1">
               Public Evidence URL
             </label>
             <div className="relative">
@@ -137,7 +137,7 @@ export function DisputeModal() {
           </div>
 
           <div>
-            <label className="block text-[11px] font-mono text-muted mb-1">
+            <label className="block text-xs font-mono text-muted mb-1">
               Governing Rule Clause
             </label>
             <select

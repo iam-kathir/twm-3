@@ -103,7 +103,7 @@ export function PlatformMatrix() {
                         className="flex items-center justify-between p-3 rounded-xl bg-surface-raised/70 border border-white/[0.05] text-xs sm:text-sm font-mono"
                       >
                         <span className="text-ink font-medium">{field.name}</span>
-                        <span className="text-[11px] text-muted-soft bg-surface px-2.5 py-1 rounded-md border border-white/[0.06] font-mono">
+                        <span className="text-xs text-muted-soft bg-surface px-2.5 py-1 rounded-md border border-white/[0.06] font-mono">
                           {field.state}
                         </span>
                       </div>

@@ -113,7 +113,7 @@ export default function SearchPage() {
             </div>
 
             {/* Evidence Legend Pill */}
-            <div className="flex items-center gap-2 bg-gradient-to-r from-surface to-surface-raised border border-white/[0.08] px-4 py-2.5 rounded-2xl shadow-lg">
+            <div className="flex items-center gap-2 bg-surface border border-white/[0.08] px-4 py-2.5 rounded-xl shadow-panel">
               <span className="text-xs text-muted font-mono uppercase tracking-wider font-semibold mr-1">Verification Standard:</span>
               <div className="flex items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 font-mono text-xs font-semibold shadow-sm">
@@ -391,7 +391,7 @@ export default function SearchPage() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               transition={{ duration: 0.2 }}
-              className="bg-surface border border-white/10 rounded-2xl max-w-2xl w-full p-6 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto"
+              className="bg-surface border border-white/10 rounded-panel max-w-2xl w-full p-6 space-y-6 shadow-overlay relative max-h-[90vh] overflow-y-auto"
             >
               {/* Close Button */}
               <button
@@ -409,7 +409,7 @@ export default function SearchPage() {
                 <div>
                   <div className="flex items-center space-x-2">
                     <h2 className="text-xl font-bold text-white">{selectedDev.name}</h2>
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono">
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-medium">
                       COHORT VERIFIED
                     </span>
                   </div>
@@ -425,19 +425,19 @@ export default function SearchPage() {
               {/* Telemetry Metric Cards */}
               <div className="grid grid-cols-3 gap-3">
                 <div className="p-3 bg-canvas rounded-xl border border-white/[0.06] text-xs space-y-1">
-                  <span className="text-[10px] font-mono text-muted block uppercase">ACTIVE RHYTHM</span>
+                  <span className="text-xs font-medium text-muted block">Active rhythm</span>
                   <span className="text-sm font-bold text-accent font-mono">{selectedDev.activeRhythm}</span>
-                  <span className="text-[10px] text-muted block">Weekly regularity</span>
+                  <span className="text-xs text-muted block">Weekly regularity</span>
                 </div>
                 <div className="p-3 bg-canvas rounded-xl border border-white/[0.06] text-xs space-y-1">
-                  <span className="text-[10px] font-mono text-muted block uppercase">GITHUB TELEMETRY</span>
+                  <span className="text-xs font-medium text-muted block">GitHub telemetry</span>
                   <span className="text-sm font-bold text-white font-mono">{selectedDev.platforms.github.repos} Repos</span>
-                  <span className="text-[10px] text-emerald-400 block font-mono">{selectedDev.platforms.github.matchRate}</span>
+                  <span className="text-xs text-emerald-400 block font-medium">{selectedDev.platforms.github.matchRate}</span>
                 </div>
                 <div className="p-3 bg-canvas rounded-xl border border-white/[0.06] text-xs space-y-1">
-                  <span className="text-[10px] font-mono text-muted block uppercase">LEETCODE PROBLEMS</span>
+                  <span className="text-xs font-medium text-muted block">LeetCode problems</span>
                   <span className="text-sm font-bold text-provider-leetcode-brand font-mono">{selectedDev.platforms.leetcode.solved} Solved</span>
-                  <span className="text-[10px] text-muted block">{selectedDev.platforms.hackerrank.stars}★ HackerRank (Display Only)</span>
+                  <span className="text-xs text-muted block">{selectedDev.platforms.hackerrank.stars}★ HackerRank (Display Only)</span>
                 </div>
               </div>
 
@@ -447,7 +447,7 @@ export default function SearchPage() {
                   <h4 className="text-xs font-mono text-muted uppercase tracking-wider">
                     Audited Skill Artifacts (Rule §10.3)
                   </h4>
-                  <span className="text-[11px] font-mono text-emerald-400">
+                  <span className="text-xs font-mono text-emerald-400">
                     {selectedDev.tags.filter(t => t.evidence === "EXPLICIT_SOURCE").length} Explicit Manifests Verified
                   </span>
                 </div>
@@ -460,7 +460,7 @@ export default function SearchPage() {
                       <div className="space-y-1">
                         <div className="flex items-center space-x-2">
                           <span className="font-semibold text-white font-mono">#{tag.name}</span>
-                          <span className={`px-2 py-0.5 rounded text-[10px] font-mono border ${
+                          <span className={`px-2 py-0.5 rounded text-xs font-medium border ${
                             tag.evidence === "EXPLICIT_SOURCE"
                               ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                               : tag.evidence === "SUPPORTED_INFERENCE"
@@ -474,7 +474,7 @@ export default function SearchPage() {
                           {tag.sourceDetail}
                         </p>
                       </div>
-                      <div className="text-[10px] font-mono text-muted shrink-0 flex items-center space-x-1">
+                      <div className="text-xs font-medium text-muted shrink-0 flex items-center space-x-1">
                         <GitCommit className="w-3 h-3 text-accent" />
                         <span>Sha Audited</span>
                       </div>
@@ -489,7 +489,7 @@ export default function SearchPage() {
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
                   <span>Telemetry Observation Boundary (IST 23:59:59) Validated</span>
                 </div>
-                <span className="text-muted text-[11px]">Rule §9.7</span>
+                <span className="text-muted text-xs">Rule §9.7</span>
               </div>
 
               {/* Modal Action Buttons */}
@@ -522,7 +522,7 @@ export default function SearchPage() {
       <footer className="border-t border-white/[0.08] bg-canvas px-6 py-4 text-xs text-muted">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>TWM 3.0 Platform • Peer Discovery &amp; Skill Verification</span>
-          <span className="font-mono text-[11px]">Rule §10.3: Grounded in Verified Artifacts</span>
+          <span className="font-mono text-xs">Rule §10.3: Grounded in Verified Artifacts</span>
         </div>
       </footer>
     </div>

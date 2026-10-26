@@ -291,7 +291,7 @@ export default function LeaderboardPage() {
             <div className="flex items-center gap-3.5 p-3.5 px-4 rounded-xl bg-surface-raised border border-white/[0.08] self-start sm:self-auto font-sans text-sm shadow-sm">
               <Users className="h-5 w-5 text-accent" />
               <div>
-                <span className="text-muted block text-xs uppercase tracking-wider font-semibold">PARTICIPATION RATIO</span>
+                <span className="text-muted block text-xs font-semibold">Participation ratio</span>
                 <span className="text-white font-bold">{participatingCount} / {totalRoster} students ({participationPercentage}%)</span>
               </div>
               <span className="text-xs px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold font-sans">
@@ -390,7 +390,7 @@ export default function LeaderboardPage() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
                 <div className="p-4 rounded-xl bg-surface border border-white/5 space-y-1.5">
-                  <span className="text-white font-bold block text-xs text-accent uppercase tracking-wider font-sans">
+                  <span className="block text-xs font-semibold text-accent font-sans">
                     RULE 9.6: TIE POLICY
                   </span>
                   <p className="text-xs text-muted leading-relaxed font-sans">
@@ -398,7 +398,7 @@ export default function LeaderboardPage() {
                   </p>
                 </div>
                 <div className="p-4 rounded-xl bg-surface border border-white/5 space-y-1.5">
-                  <span className="text-white font-bold block text-xs text-accent uppercase tracking-wider font-sans">
+                  <span className="block text-xs font-semibold text-accent font-sans">
                     RULE 9.7: SUNDAY BOUNDARY
                   </span>
                   <p className="text-xs text-muted leading-relaxed font-sans">
@@ -406,7 +406,7 @@ export default function LeaderboardPage() {
                   </p>
                 </div>
                 <div className="p-4 rounded-xl bg-surface border border-white/5 space-y-1.5">
-                  <span className="text-white font-bold block text-xs text-accent uppercase tracking-wider font-sans">
+                  <span className="block text-xs font-semibold text-accent font-sans">
                     RULE 5.6: CAPABILITY GATING
                   </span>
                   <p className="text-xs text-muted leading-relaxed font-sans">
@@ -464,7 +464,7 @@ export default function LeaderboardPage() {
                               <div className="font-sans font-semibold text-white text-base flex items-center gap-2">
                                 <span>{item.name}</span>
                                 {item.isCurrentUser && (
-                                  <span className="text-[10px] px-2 py-0.5 rounded bg-accent text-canvas font-bold">
+                                  <span className="text-xs px-2 py-0.5 rounded bg-accent text-canvas font-semibold">
                                     YOU
                                   </span>
                                 )}
@@ -515,7 +515,7 @@ export default function LeaderboardPage() {
                               <ShieldCheck className="h-3.5 w-3.5" />
                               {item.status}
                             </span>
-                            <span className="block text-[10px] font-mono text-muted" title="Cryptographic SHA-256 evidence digest">
+                            <span className="block text-xs font-medium text-muted" title="Cryptographic SHA-256 evidence digest">
                               {item.evidenceHash}
                             </span>
                           </div>
@@ -527,7 +527,7 @@ export default function LeaderboardPage() {
                             <span className="inline-block px-2.5 py-1 rounded text-xs font-sans bg-white/5 text-muted border border-white/10">
                               Excluded from Weekly Delta (Rule 5.6)
                             </span>
-                            <span className="text-[10px] font-sans text-emerald-400/80 bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10">
+                            <span className="text-xs font-medium text-emerald-400/80 bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10">
                               SHA-256 Evidence Verified
                             </span>
                           </div>
@@ -585,7 +585,7 @@ export default function LeaderboardPage() {
 
                           {item.isTied && (
                             <span
-                              className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-muted-soft font-sans font-medium"
+                              className="text-xs px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-muted-soft font-sans font-medium"
                               title="Tied score (Rule 9.6: standard competition ranking 1, 2, 2, 4)"
                             >
                               Tied
@@ -604,7 +604,7 @@ export default function LeaderboardPage() {
                             <div className="font-sans font-semibold text-white text-base flex items-center gap-2">
                               <span>{item.name}</span>
                               {item.isCurrentUser && (
-                                <span className="text-[10px] px-2 py-0.5 rounded bg-accent text-canvas font-bold">
+                                <span className="text-xs px-2 py-0.5 rounded bg-accent text-canvas font-semibold">
                                   YOU
                                 </span>
                               )}
