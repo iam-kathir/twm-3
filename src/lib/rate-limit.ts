@@ -9,9 +9,9 @@ interface RateLimitRecord {
 
 const store = new Map<string, RateLimitRecord>();
 
-// Periodically clean up stale records every 5 minutes
+// Periodically clean up stale records every 5 minutes (unreferenced so it doesn't hold event loop open)
 if (typeof setInterval !== "undefined") {
-  setInterval(() => {
+  const timer = setInterval(() => {
     const now = Date.now();
     for (const [key, record] of store.entries()) {
       record.timestamps = record.timestamps.filter((ts) => now - ts < 300000);
@@ -20,6 +20,10 @@ if (typeof setInterval !== "undefined") {
       }
     }
   }, 300000);
+
+  if (typeof timer === "object" && timer !== null && "unref" in timer) {
+    (timer as { unref: () => void }).unref();
+  }
 }
 
 export interface RateLimitOptions {

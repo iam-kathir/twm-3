@@ -157,6 +157,7 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 | Task ID | Task Description | Scope & Requirements | Target Files | Owner / Status |
 | :--- | :--- | :--- | :--- | :--- |
 | **P8-1** | **ESLint 8 & Next.js Core Web Vitals CI Gates** | Installed compatible `eslint@^8.57.1` and `eslint-config-next@^14.2.35` with standard `.eslintrc.json`. Created GitHub Actions workflow (`.github/workflows/ci.yml`) testing PRs and pushes to `main` with reproducible `npm ci`, isolated mock email configuration, `npx tsc --noEmit`, `npm run lint`, `npm test`, and `npm run build`. Hardened `.gitignore` against accidental secret and database leaks. | [`.eslintrc.json`](.eslintrc.json)<br>[`.github/workflows/ci.yml`](.github/workflows/ci.yml)<br>[`package.json`](package.json)<br>[`.gitignore`](.gitignore) | **Antigravity (IDE)** — ✅ **DONE** |
+| **P8-2** | **Production Health Probes, WAL Sync Tuning, Daemon Compaction, CI Expansion & Environment Validator** | Production `/api/health` endpoint with latency probe and quorum metrics, `PRAGMA synchronous = NORMAL;`, `timer.unref()` event loop protection, autonomous retention maintenance in scheduler, CI pipeline expansion with `audit:launch` and `simulate`, and fail-closed `src/lib/env.ts` pre-flight validator. | [`/api/health`](src/app/api/health/route.ts)<br>[`src/lib/env.ts`](src/lib/env.ts)<br>[`.github/workflows/ci.yml`](.github/workflows/ci.yml)<br>[`scripts/boundary-scheduler.mjs`](scripts/boundary-scheduler.mjs) | **Antigravity (IDE) & `opencode` (CLI)** — ✅ **DONE** |
 
 ---
 

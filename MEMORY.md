@@ -117,6 +117,27 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-11-06 — Antigravity & opencode: Production Health Probes, WAL Tuning, CI Hardening & Environment Validator (P8-2)
+- **Goal:** Deliver production observability, database performance tuning, automated daemon compaction, CI pipeline gates, and startup environment validation.
+- **Production Healthcheck Probe (`/api/health`, `docker-compose.yml`):**
+  - Created `GET /api/health` measuring SQLite database query latency (< 1ms), quick integrity check, 70% quorum percentage, next Sunday 23:59:59 IST boundary countdown, and configuration readiness.
+  - Updated `docker-compose.yml` healthcheck test command to query `/api/health`.
+- **Database Durability & Event Loop Safety (`src/lib/db.ts`, `src/lib/rate-limit.ts`):**
+  - Enabled `PRAGMA synchronous = NORMAL;` alongside WAL journal mode in SQLite initialization for ACID crash safety and high write concurrency.
+  - Added `.unref()` to the sliding-window in-memory rate-limiter timer so background cleanup does not hold the Node.js event loop open.
+- **Autonomous Retention & Compaction in Scheduler (`scripts/boundary-scheduler.mjs`):**
+  - Wired `cleanupStaleOtpChallenges(7)` and passive `PRAGMA wal_checkpoint(PASSIVE);` directly into every 3-hour daemon cycle.
+- **GitHub Actions CI Quality Pipeline Expansion (`.github/workflows/ci.yml`):**
+  - Integrated `npm run audit:launch` (Section 21 acceptance checklist) and `npm run simulate` (7-day tournament lifecycle verification) into automated PR and push validation jobs.
+- **Startup Environment Pre-Flight Validator (`src/lib/env.ts`):**
+  - Created fail-closed validator for `TWM_SESSION_SECRET`, `COLLEGE_EMAIL_DOMAINS`, and provider credentials with typed diagnostics and security tests.
+- **Verification Gates:**
+  - `npm test`: 20/20 test suites passed.
+  - `npm run audit:launch`: 10/10 launch gates passed (100%).
+  - `npm run simulate`: 6/6 chronological steps and invariant gates passed.
+  - `npx tsc --noEmit`: 0 errors.
+  - `npm run lint`: 0 warnings, 0 errors.
+
 ### 2026-11-06 — Antigravity & agy: Data Sovereignty Disconnect API, Docker Compose Networking & DB Pruning (P7-9)
 - **Goal:** Complete pending backend, infrastructure, and data sovereignty requirements while frontend undergoes UI upgrades without touching client visual components.
 - **Data Sovereignty & Erasure API (`/api/auth/disconnect`, `src/lib/db.ts`):**

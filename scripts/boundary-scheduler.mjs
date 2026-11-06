@@ -16,7 +16,7 @@
  */
 
 import http from "node:http";
-import { getRosterQuorumStats, getAllRosterMembers, getDb } from "../src/lib/db.ts";
+import { getRosterQuorumStats, getAllRosterMembers, getDb, cleanupStaleOtpChallenges } from "../src/lib/db.ts";
 import { executeWeeklyFinalization } from "../src/lib/finalizer.ts";
 
 const PORT = process.env.PORT || 3000;
@@ -124,6 +124,18 @@ export async function runSchedulerCycle(forceFinalize = false) {
   console.log(`• Boundary Gap Compliance: ${Number(hoursToBoundary) <= 3 ? "PASS (<= 3h)" : "OUTSIDE_WINDOW (> 3h)"}`);
   console.log(`• Finalization Window:     ${isFinalizationWindow ? "ACTIVE (Sunday 23:45+ IST)" : "INACTIVE"}`);
   console.log(`• Execution Triggered:     ${shouldExecute ? "YES" : "NO"}`);
+
+  // 3. Automated Retention & Stale Challenge Maintenance (§17.3)
+  try {
+    const { deletedCount } = cleanupStaleOtpChallenges(7);
+    if (deletedCount > 0) {
+      console.log(`\n🧹 Retention Maintenance: Pruned ${deletedCount} stale OTP challenge(s) older than 7 days.`);
+    }
+    const db = getDb();
+    db.exec("PRAGMA wal_checkpoint(PASSIVE);");
+  } catch (err) {
+    console.error("⚠️ Background database maintenance warning:", err instanceof Error ? err.message : String(err));
+  }
 
   if (shouldExecute) {
     console.log(`\n🚀 Executing Weekly Closeout for Week ${currentWeek}...`);

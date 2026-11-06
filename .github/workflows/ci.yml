@@ -44,5 +44,11 @@ jobs:
       - name: Automated Unit & Foundation Tests
         run: npm test
 
+      - name: Master Launch Acceptance Checklist Audit Gate (§21)
+        run: npm run audit:launch
+
+      - name: 7-Day Tournament Simulation & Invariant Verification Gate
+        run: npm run simulate
+
       - name: Production Build Verification
         run: npm run build

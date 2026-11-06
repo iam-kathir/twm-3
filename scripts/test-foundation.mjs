@@ -12,6 +12,7 @@ import { runTournamentSimulation } from "./simulate-tournament-week.mjs";
 import { createDatabaseBackup, verifyBackupFile, restoreDatabaseFromBackup } from "../src/lib/backup.ts";
 import { runLaunchAcceptanceAudit } from "./audit-launch-checklist.mjs";
 import { signSessionToken, verifySessionToken, formatStudentDisplayName, isInstitutionalCollegeEmail, buildStudentSession } from "../src/lib/auth.ts";
+import { validateServerEnv } from "../src/lib/env.ts";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -655,6 +656,18 @@ describe("TWM Foundation Suite", () => {
       assert.equal(member.handle_leetcode, null);
       assert.equal(member.handle_hackerrank, null);
       assert.equal(member.is_active, 0);
+    });
+  });
+
+  describe("Section 17.1 & §17.4 Server Environment & Fail-Closed Pre-Flight Diagnostics", () => {
+    it("validates server environment configurations accurately", () => {
+      const res = validateServerEnv();
+      assert.ok(typeof res.isValid === "boolean");
+      assert.ok(["development", "test", "production"].includes(res.mode));
+      assert.ok(Array.isArray(res.issues));
+      assert.ok(Array.isArray(res.warnings));
+      assert.ok(Array.isArray(res.features.allowedCollegeDomains));
+      assert.ok(res.features.allowedCollegeDomains.length > 0);
     });
   });
 });
