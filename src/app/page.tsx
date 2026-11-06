@@ -1,11 +1,11 @@
 import React from "react";
 import { NavBar } from "@/components/landing/NavBar";
 import { HeroSection } from "@/components/landing/HeroSection";
-import { OrbitingTelemetryShowcase } from "@/components/landing/OrbitingTelemetryShowcase";
+import { BoundaryChecker } from "@/components/landing/BoundaryChecker";
 import { MotionShowcase } from "@/components/landing/MotionShowcase";
 import { CockpitPreview } from "@/components/landing/CockpitPreview";
-import { AppScreensGallery } from "@/components/landing/AppScreensGallery";
 import { PlatformMatrix } from "@/components/landing/PlatformMatrix";
+import { OrbitingTelemetryShowcase } from "@/components/landing/OrbitingTelemetryShowcase";
 import { FairnessGuarantees } from "@/components/landing/FairnessGuarantees";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { Footer } from "@/components/landing/Footer";
@@ -16,11 +16,11 @@ export default function HomePage() {
       <NavBar />
       <main className="flex-1">
         <HeroSection />
-        <OrbitingTelemetryShowcase />
+        <BoundaryChecker />
         <MotionShowcase />
         <CockpitPreview />
-        <AppScreensGallery />
         <PlatformMatrix />
+        <OrbitingTelemetryShowcase />
         <FairnessGuarantees />
         <HowItWorks />
       </main>
@@ -28,5 +28,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-

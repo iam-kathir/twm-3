@@ -79,37 +79,37 @@ export default function PrivacyPolicyPage() {
   const [activeSection, setActiveSection] = useState("principles");
 
   return (
-    <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans selection:bg-accent selection:text-canvas">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans selection:bg-accent selection:text-canvas" data-measure="readable">
       <AppHeader />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12" aria-labelledby="privacy-heading">
         {/* Navigation Breadcrumb */}
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-xs sm:text-sm font-mono text-muted hover:text-white transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-muted hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-md px-1 py-1"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             <span>Back to Platform Overview</span>
           </Link>
 
-          <span className="text-xs font-mono text-muted-soft">
+          <span className="text-sm text-muted">
             Policy Version 3.1 • Last Revised October 2026
           </span>
         </div>
 
         {/* Hero Header */}
         <div className="space-y-4 max-w-4xl">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-bold">
-            <Shield className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-bold">
+            <Shield className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Institutional Governance • Fairness Rules §1.2, §18 &amp; §19</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+          <h1 id="privacy-heading" className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight max-w-[72ch]">
             Privacy, Fairness &amp; Student Data Governance Policy
           </h1>
 
-          <p className="text-base sm:text-lg text-muted leading-relaxed">
+          <p className="text-base sm:text-lg text-muted leading-relaxed max-w-[72ch]">
             TWM (&quot;Track. Win. Maintain.&quot;) is designed around a single non-negotiable principle: <strong>friendly competition should inspire practice, never inflict surveillance or punitive anxiety</strong>. This document specifies our cryptographic guarantees, telemetry boundaries, and student privacy rights.
           </p>
         </div>
@@ -117,41 +117,41 @@ export default function PrivacyPolicyPage() {
         {/* 4 Core Guarantees Callout Banner */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl bg-surface border border-white/[0.08] space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-accent flex items-center justify-center font-bold text-xs font-mono">
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-accent flex items-center justify-center font-bold text-xs">
               01
             </div>
-            <h4 className="font-bold text-white text-sm">Zero Code Reading</h4>
-            <p className="text-xs text-muted leading-relaxed">
+            <h3 className="font-bold text-white text-base">Zero Code Reading</h3>
+            <p className="text-sm text-muted leading-relaxed">
               We never clone, inspect, or store private code, file contents, or proprietary repository diffs.
             </p>
           </div>
 
           <div className="p-5 rounded-2xl bg-surface border border-white/[0.08] space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-accent flex items-center justify-center font-bold text-xs font-mono">
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-accent flex items-center justify-center font-bold text-xs">
               02
             </div>
-            <h4 className="font-bold text-white text-sm">Non-Punitive Missing Data</h4>
-            <p className="text-xs text-muted leading-relaxed">
+            <h3 className="font-bold text-white text-base">Non-Punitive Missing Data</h3>
+            <p className="text-sm text-muted leading-relaxed">
               Network delays, API rate limits, or missing observations are never treated as &quot;0&quot; or proof of inactivity.
             </p>
           </div>
 
           <div className="p-5 rounded-2xl bg-surface border border-white/[0.08] space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-accent flex items-center justify-center font-bold text-xs font-mono">
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-accent flex items-center justify-center font-bold text-xs">
               03
             </div>
-            <h4 className="font-bold text-white text-sm">Pseudonymous Identity</h4>
-            <p className="text-xs text-muted leading-relaxed">
+            <h3 className="font-bold text-white text-base">Pseudonymous Identity</h3>
+            <p className="text-sm text-muted leading-relaxed">
               Switch anytime to &quot;Handle Only&quot; or &quot;Anonymous Candidate #42&quot; on class leaderboards.
             </p>
           </div>
 
           <div className="p-5 rounded-2xl bg-surface border border-white/[0.08] space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-accent flex items-center justify-center font-bold text-xs font-mono">
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-accent flex items-center justify-center font-bold text-xs">
               04
             </div>
-            <h4 className="font-bold text-white text-sm">1-Click Full Portability</h4>
-            <p className="text-xs text-muted leading-relaxed">
+            <h3 className="font-bold text-white text-base">1-Click Full Portability</h3>
+            <p className="text-sm text-muted leading-relaxed">
               Download your complete telemetry history in JSON/CSV and disconnect adapters whenever you want.
             </p>
           </div>
@@ -159,31 +159,32 @@ export default function PrivacyPolicyPage() {
 
         {/* Policy Body Layout with Sticky Index */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          {/* Left Table of Contents */}
-          <aside className="lg:col-span-4 lg:sticky lg:top-24 space-y-3">
-            <span className="text-xs text-muted font-bold block px-2">
+          {/* Left Table of Contents - section index */}
+          <aside className="lg:col-span-4 lg:sticky lg:top-24 space-y-3" aria-label="Policy sections index">
+            <span className="text-sm text-muted font-bold block px-2">
               Policy Sections
             </span>
-            <nav className="space-y-1">
+            <nav className="space-y-1" aria-label="Privacy policy sections">
               {POLICY_SECTIONS.map((sec) => (
                 <a
                   key={sec.id}
                   href={`#${sec.id}`}
                   onClick={() => setActiveSection(sec.id)}
-                  className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center space-x-3 block ${
+                  aria-current={activeSection === sec.id ? "true" : undefined}
+                  className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center space-x-3 block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
                     activeSection === sec.id
                       ? "bg-accent/15 text-accent border border-accent/30 font-bold"
                       : "text-muted hover:text-white hover:bg-surface border border-transparent"
                   }`}
                 >
-                  <sec.icon className="w-4 h-4 shrink-0" />
-                  <span className="truncate">{sec.title}</span>
+                  <sec.icon className="w-4 h-4 shrink-0" aria-hidden="true" />
+                  <span>{sec.title}</span>
                 </a>
               ))}
             </nav>
 
-            <div className="p-5 rounded-2xl bg-surface border border-white/[0.06] space-y-3 text-xs text-muted mt-6">
-              <span className="text-white font-bold block text-xs">
+            <div className="p-5 rounded-2xl bg-surface border border-white/[0.06] space-y-3 text-sm text-muted mt-6">
+              <span className="text-white font-bold block text-sm">
                 Your Privacy Controls
               </span>
               <p>
@@ -191,7 +192,7 @@ export default function PrivacyPolicyPage() {
               </p>
               <Link
                 href="/settings"
-                className="inline-flex items-center space-x-1.5 text-accent hover:text-white font-mono font-bold pt-1"
+                className="inline-flex items-center space-x-1.5 text-accent hover:text-white font-bold pt-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-md px-1 py-0.5"
               >
                 <span>Open Privacy Settings</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -203,7 +204,7 @@ export default function PrivacyPolicyPage() {
           <div className="lg:col-span-8 space-y-12">
             {/* Section 1 */}
             <section id="principles" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent text-xs font-bold">
+              <div className="flex items-center space-x-3 text-accent text-sm font-bold">
                 <Shield className="w-4 h-4" />
                 <span>Section 1</span>
               </div>
@@ -217,7 +218,7 @@ export default function PrivacyPolicyPage() {
                 <p>
                   TWM is <strong>not</strong> an academic surveillance system, exam proctor, keystroke logger, or punitive grading instrument. The platform is intentionally segregated from official gradebooks and cannot be used by academic institutions to inflict penalties, demerits, or compulsory tracking.
                 </p>
-                <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs font-mono text-muted flex items-start space-x-2.5">
+                <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] text-sm text-muted flex items-start space-x-2.5">
                   <CheckCircle2 className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                   <span>
                     Rule §1.2 Invariant: Participation in competitive class leaderboards is entirely opt-in. Opting out never limits access to course materials, assignments, or cohort resources.
@@ -228,7 +229,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 2 */}
             <section id="data-collection" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent text-xs font-bold">
+              <div className="flex items-center space-x-3 text-accent text-sm font-bold">
                 <Code2 className="w-4 h-4" />
                 <span>Section 2</span>
               </div>
@@ -246,7 +247,7 @@ export default function PrivacyPolicyPage() {
                       <Github className="w-4 h-4 text-provider-github" />
                       <span>GitHub Telemetry</span>
                     </div>
-                    <p className="text-xs text-muted leading-relaxed">
+                    <p className="text-sm text-muted leading-relaxed">
                       We collect public commit timestamps within tracked repositories to calculate active development days in UTC. Commit author emails are checked strictly to prevent username impersonation (§9.1). We <strong>never</strong> inspect commit diffs, clone source trees, or read repository contents.
                     </p>
                   </div>
@@ -256,7 +257,7 @@ export default function PrivacyPolicyPage() {
                       <Code2 className="w-4 h-4 text-provider-leetcode-brand" />
                       <span>LeetCode Telemetry</span>
                     </div>
-                    <p className="text-xs text-muted leading-relaxed">
+                    <p className="text-sm text-muted leading-relaxed">
                       We collect public profile problem completion aggregates (Easy, Medium, Hard breakdown) and timestamped Sunday baselines to calculate honest weekly delta progression (§9.7). Private submissions or code solution text are never scraped.
                     </p>
                   </div>
@@ -266,7 +267,7 @@ export default function PrivacyPolicyPage() {
                       <Award className="w-4 h-4 text-provider-hackerrank" />
                       <span>HackerRank Evidence</span>
                     </div>
-                    <p className="text-xs text-muted leading-relaxed">
+                    <p className="text-sm text-muted leading-relaxed">
                       Because HackerRank lacks public event timestamps, badge evidence is classified as display-only and strictly excluded from weekly competition point deltas under Section 5.6. Evidence is anchored using an immutable SHA-256 digest (`hr-proof-...`).
                     </p>
                   </div>
@@ -276,7 +277,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 3 */}
             <section id="zero-fabrication" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent text-xs font-bold">
+              <div className="flex items-center space-x-3 text-accent text-sm font-bold">
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Section 3</span>
               </div>
@@ -303,7 +304,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 4 */}
             <section id="identity-visibility" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent text-xs font-bold">
+              <div className="flex items-center space-x-3 text-accent text-sm font-bold">
                 <Eye className="w-4 h-4" />
                 <span>Section 4</span>
               </div>
@@ -317,20 +318,20 @@ export default function PrivacyPolicyPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
                   <div className="p-4 rounded-xl bg-surface border border-white/10 space-y-1">
-                    <span className="text-xs font-mono font-bold text-white block">Tier 1: Full Name</span>
-                    <p className="text-xs text-muted">
+                    <span className="text-sm font-bold text-white block">Tier 1: Full Name</span>
+                    <p className="text-sm text-muted">
                       Displays your official enrolled name and roll number alongside verified scores.
                     </p>
                   </div>
                   <div className="p-4 rounded-xl bg-surface border border-white/10 space-y-1">
-                    <span className="text-xs font-mono font-bold text-white block">Tier 2: Handle Only</span>
-                    <p className="text-xs text-muted">
+                    <span className="text-sm font-bold text-white block">Tier 2: Handle Only</span>
+                    <p className="text-sm text-muted">
                       Masks legal name; renders only your verified GitHub username (e.g. @octocat).
                     </p>
                   </div>
                   <div className="p-4 rounded-xl bg-surface border border-white/10 space-y-1">
-                    <span className="text-xs font-mono font-bold text-white block">Tier 3: Anonymous</span>
-                    <p className="text-xs text-muted">
+                    <span className="text-sm font-bold text-white block">Tier 3: Anonymous</span>
+                    <p className="text-sm text-muted">
                       Displays as &quot;Candidate #42&quot; with private scores visible solely to you.
                     </p>
                   </div>
@@ -340,7 +341,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 5 */}
             <section id="authentication" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent text-xs font-bold">
+              <div className="flex items-center space-x-3 text-accent text-sm font-bold">
                 <Lock className="w-4 h-4" />
                 <span>Section 5</span>
               </div>
@@ -364,7 +365,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 6 */}
             <section id="disputes" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent text-xs font-bold">
+              <div className="flex items-center space-x-3 text-accent text-sm font-bold">
                 <Scale className="w-4 h-4" />
                 <span>Section 6</span>
               </div>
@@ -376,10 +377,10 @@ export default function PrivacyPolicyPage() {
                   Under <strong>Rule §10.1</strong>, competition fairness is governed by an immutable SQLite dispute ledger. Any student can file a dispute if an observation was impacted by sync latency, timezone boundary offsets, or secondary branch commits:
                 </p>
                 <div className="p-4 rounded-xl bg-surface border border-white/10 space-y-2">
-                  <span className="text-xs font-mono font-bold text-white block">
+                  <span className="text-sm font-bold text-white block">
                     Two-Person Approval Requirement:
                   </span>
-                  <p className="text-xs text-muted leading-relaxed">
+                  <p className="text-sm text-muted leading-relaxed">
                     Disputes require explicit approval with justification from an elected student representative and the faculty co-admin. No single administrator can unilaterally mutate scores or alter leaderboard standings.
                   </p>
                 </div>
@@ -388,7 +389,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 7 */}
             <section id="retention-export" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent text-xs font-bold">
+              <div className="flex items-center space-x-3 text-accent text-sm font-bold">
                 <Database className="w-4 h-4" />
                 <span>Section 7</span>
               </div>
@@ -401,21 +402,21 @@ export default function PrivacyPolicyPage() {
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                   <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.08] space-y-2">
-                    <span className="text-xs font-mono font-bold text-white flex items-center space-x-1.5">
+                    <span className="text-sm font-bold text-white flex items-center space-x-1.5">
                       <Download className="w-4 h-4 text-accent" />
                       <span>Instant Data Export</span>
                     </span>
-                    <p className="text-xs text-muted">
+                    <p className="text-sm text-muted">
                       Download your raw observations, weekly ranks, and audit snapshots anytime in CSV or structured JSON formats from <Link href="/settings" className="text-accent hover:underline">Settings</Link>.
                     </p>
                   </div>
 
                   <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.08] space-y-2">
-                    <span className="text-xs font-mono font-bold text-white flex items-center space-x-1.5">
+                    <span className="text-sm font-bold text-white flex items-center space-x-1.5">
                       <UserX className="w-4 h-4 text-rose-400" />
                       <span>Complete Account Purge</span>
                     </span>
-                    <p className="text-xs text-muted">
+                    <p className="text-sm text-muted">
                       Request permanent deletion of your account and telemetry records. Once confirmed by co-admin signature, records are expunged from the SQLite store.
                     </p>
                   </div>
@@ -425,7 +426,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 8 */}
             <section id="governance" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent text-xs font-bold">
+              <div className="flex items-center space-x-3 text-accent text-sm font-bold">
                 <Users className="w-4 h-4" />
                 <span>Section 8</span>
               </div>
@@ -445,7 +446,7 @@ export default function PrivacyPolicyPage() {
             {/* Contact / Inquiries Box */}
             <div className="p-6 rounded-2xl bg-surface border border-white/10 space-y-3">
               <h3 className="text-base font-bold text-white">Questions or Governance Inquiries?</h3>
-              <p className="text-xs sm:text-sm text-muted leading-relaxed">
+              <p className="text-sm text-muted leading-relaxed max-w-[72ch]">
                 If you have questions regarding telemetry attribution, boundary timezones, or data rights under TWM Master Plan v3.1, contact your course faculty co-admin or file an audited request via the <Link href="/admin" className="text-accent hover:underline">Admin Hub</Link>.
               </p>
             </div>

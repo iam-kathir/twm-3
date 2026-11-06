@@ -7,6 +7,7 @@ import { ToastContainer } from "@/components/ui/ToastContainer";
 import { CommandPalette } from "@/components/ui/CommandPalette";
 import { ManualSyncModal } from "@/components/ui/ManualSyncModal";
 import { DisputeModal } from "@/components/ui/DisputeModal";
+import { Toaster } from "sonner";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -20,7 +21,19 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+// NEXT_PUBLIC_APP_URL is the documented public origin (see .env.example §6).
+// Safe fallback keeps metadataBase valid for local/dev and never leaks secrets.
+function getSiteUrl(): string {
+  const raw = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  try {
+    return raw ? new URL(raw).origin : "http://localhost:3000";
+  } catch {
+    return "http://localhost:3000";
+  }
+}
+
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: "TWM 3.1 — Track. Win. Maintain. | Class Developer Activity Platform",
   description: "A class-focused multi-platform developer activity and friendly competition platform. Connect your GitHub, LeetCode, and HackerRank profiles to track verified progress.",
   icons: {
@@ -56,8 +69,6 @@ export const metadata: Metadata = {
   },
 };
 
-import { Toaster } from "sonner";
-
 export default function RootLayout({
   children,
 }: {
@@ -89,12 +100,12 @@ export default function RootLayout({
               theme="dark"
               toastOptions={{
                 style: {
-                  background: "#0E121A",
-                  border: "1px solid rgba(255, 255, 255, 0.12)",
-                  color: "#F1F5F9",
+                  background: "var(--surface)",
+                  border: "1px solid var(--border-strong)",
+                  color: "var(--ink)",
                   fontFamily: "var(--font-sans)",
-                  borderRadius: "14px",
-                  boxShadow: "0 20px 40px -15px rgba(0, 0, 0, 0.7)",
+                  borderRadius: "var(--radius-panel)",
+                  boxShadow: "var(--shadow-overlay)",
                 },
               }}
             />

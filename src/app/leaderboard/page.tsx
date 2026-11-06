@@ -267,35 +267,47 @@ export default function LeaderboardPage() {
   const activeRankedEntries = platform === "github" ? githubRanked : leetcodeRanked;
 
   return (
-    <div className="min-h-screen bg-canvas text-ink flex flex-col selection:bg-accent selection:text-canvas">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col selection:bg-accent selection:text-canvas overflow-x-hidden">
       <AppHeader />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-6 min-w-0">
         {/* Title & 70% Threshold Banner (§3.3) */}
         <div className="rounded-2xl border border-white/[0.08] bg-surface p-7 sm:p-8 space-y-6 shadow-xl">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 min-w-0">
               <div className="flex items-center gap-2.5">
-                <Trophy className="h-6 w-6 text-accent" />
+                <Trophy className="h-6 w-6 text-accent shrink-0" aria-hidden="true" />
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                  {isRepresentative ? "CSE 2026 Class Leaderboard" : "Participating Members Leaderboard"}
+                  {isRepresentative ? "Representative Class Leaderboard" : "Participating Members Leaderboard"}
                 </h1>
               </div>
               <p className="text-sm text-muted font-sans">
-                Class: B.Tech CSE 2026 <span className="mx-1.5 opacity-40">|</span> Period: Week 42 (Mon 00:00 to Sun 23:59:59 IST)
+                Class: B.Tech CSE 2026 <span className="mx-1.5 opacity-40" aria-hidden="true">|</span> Period: Week 42 (Mon 00:00 to Sun 23:59:59 IST)
+              </p>
+              <p className="text-[13px] text-muted" aria-live="polite">
+                Quorum: <strong className="text-white">{participatingCount} / {totalRoster}</strong> ({participationPercentage}%) —{" "}
+                <strong className={isRepresentative ? "text-emerald-400" : "text-amber-400"}>
+                  {isRepresentative ? "Representative Class Leaderboard" : "Participating Members Leaderboard"}
+                </strong>
               </p>
             </div>
 
             {/* 70% Participation Ratio Badge */}
-            <div className="flex items-center gap-3.5 p-3.5 px-4 rounded-xl bg-surface-raised border border-white/[0.08] self-start sm:self-auto font-sans text-sm shadow-sm">
-              <Users className="h-5 w-5 text-accent" />
-              <div>
-                <span className="text-muted block text-xs font-semibold">Participation ratio</span>
-                <span className="text-white font-bold">{participatingCount} / {totalRoster} students ({participationPercentage}%)</span>
+            <div className="flex items-center gap-3.5 p-3.5 px-4 rounded-xl bg-surface-raised border border-white/[0.08] self-start sm:self-auto font-sans text-sm shadow-sm min-w-0">
+              <Users className="h-5 w-5 text-accent shrink-0" aria-hidden="true" />
+              <div className="min-w-0">
+                <span className="text-muted block text-[13px] font-semibold">Participation ratio</span>
+                <span className="text-white font-bold tabular-nums">{participatingCount} / {totalRoster} students ({participationPercentage}%)</span>
               </div>
-              <span className="text-xs px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold font-sans">
-                Representative (&gt;= 70%)
+              <span
+                className={`text-[13px] px-2.5 py-1 rounded-md border font-semibold font-sans shrink-0 ${
+                  isRepresentative
+                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                    : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                }`}
+              >
+                {isRepresentative ? "Representative (>= 70%)" : "Participating (< 70%)"}
               </span>
             </div>
           </div>
@@ -434,15 +446,19 @@ export default function LeaderboardPage() {
               </div>
             </div>
 
-            {/* HackerRank Verified Badges Table */}
+            {/* HackerRank Verified Badges Table — no weekly rank; providers never merged */}
+            <p className="text-[13px] text-muted" aria-live="polite">
+              <strong className="text-white">{isRepresentative ? "Representative Class Leaderboard" : "Participating Members Leaderboard"}</strong> —
+              {participatingCount} / {totalRoster} ({participationPercentage}%). HackerRank badges below are display-only and excluded from weekly deltas (§5.6).
+            </p>
             <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden shadow-xl">
               <div className="overflow-x-auto">
-                <table className="w-full text-left font-sans text-sm">
-                  <thead className="bg-surface-raised border-b border-white/[0.08] text-muted text-xs">
+                <table className="w-full min-w-[640px] text-left font-sans text-sm">
+                  <thead className="bg-surface-raised border-b border-white/[0.08] text-muted text-[13px]">
                     <tr>
                       <th scope="col" className="py-4 px-6">Participant</th>
-                      <th scope="col" className="py-4 px-6">Python Domain</th>
-                      <th scope="col" className="py-4 px-6">Problem Solving</th>
+                      <th scope="col" className="py-4 px-6 text-right tabular-nums">Python Domain</th>
+                      <th scope="col" className="py-4 px-6 text-right tabular-nums">Problem Solving</th>
                       <th scope="col" className="py-4 px-6">Audit Status</th>
                       <th scope="col" className="py-4 px-6 text-right">Attribution Policy</th>
                     </tr>
@@ -469,15 +485,15 @@ export default function LeaderboardPage() {
                                   </span>
                                 )}
                               </div>
-                              <span className="text-muted-soft text-xs font-mono">{item.handle}</span>
+                              <span className="text-muted text-[12px] font-mono">{item.handle}</span>
                             </div>
                           </div>
                         </td>
 
                         {/* Python Stars */}
-                        <td className="py-4 px-6">
-                          <div className="flex items-center gap-1.5 text-amber-400 font-bold">
-                            <span className="text-white text-base">{item.pythonStars}</span>
+                        <td className="py-4 px-6 text-right tabular-nums">
+                          <div className="flex items-center gap-1.5 text-amber-400 font-bold justify-end">
+                            <span className="text-white text-base tabular-nums">{item.pythonStars}</span>
                             <div className="flex items-center">
                               {Array.from({ length: 5 }).map((_, i) => (
                                 <Star
@@ -492,9 +508,9 @@ export default function LeaderboardPage() {
                         </td>
 
                         {/* Problem Solving Stars */}
-                        <td className="py-4 px-6">
-                          <div className="flex items-center gap-1.5 text-amber-400 font-bold">
-                            <span className="text-white text-base">{item.problemSolvingStars}</span>
+                        <td className="py-4 px-6 text-right tabular-nums">
+                          <div className="flex items-center gap-1.5 text-amber-400 font-bold justify-end">
+                            <span className="text-white text-base tabular-nums">{item.problemSolvingStars}</span>
                             <div className="flex items-center">
                               {Array.from({ length: 5 }).map((_, i) => (
                                 <Star
@@ -541,18 +557,23 @@ export default function LeaderboardPage() {
           </div>
         ) : (
           /* Deterministic Competition Leaderboard Table */
+          <>
+            <p className="text-[13px] text-muted" aria-live="polite">
+              <strong className="text-white">{isRepresentative ? "Representative Class Leaderboard" : "Participating Members Leaderboard"}</strong> —
+              {participatingCount} / {totalRoster} ({participationPercentage}%). {platform === "github" ? "GitHub active days" : "LeetCode solved delta"} only; providers are never merged into one score.
+            </p>
           <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden shadow-xl">
             <div className="overflow-x-auto">
-              <table className="w-full text-left font-sans text-sm">
-                <thead className="bg-surface-raised border-b border-white/[0.08] text-muted text-xs">
+              <table className="w-full min-w-[640px] text-left font-sans text-sm">
+                <thead className="bg-surface-raised border-b border-white/[0.08] text-muted text-[13px]">
                   <tr>
-                    <th scope="col" className="py-4 px-6">Rank</th>
+                    <th scope="col" className="py-4 px-6 text-right tabular-nums">Rank</th>
                     <th scope="col" className="py-4 px-6">Participant</th>
-                    <th scope="col" className="py-4 px-6">
+                    <th scope="col" className="py-4 px-6 text-right tabular-nums">
                       {platform === "github" ? "Observed Active Days" : "Weekly Solved Delta"}
                     </th>
-                    <th scope="col" className="py-4 px-6">Retrieval Coverage</th>
-                    <th scope="col" className="py-4 px-6">Last Freshness</th>
+                    <th scope="col" className="py-4 px-6 text-right tabular-nums">Retrieval Coverage</th>
+                    <th scope="col" className="py-4 px-6 text-right tabular-nums">Last Freshness</th>
                     <th scope="col" className="py-4 px-6 text-right">Standing</th>
                   </tr>
                 </thead>
@@ -565,27 +586,27 @@ export default function LeaderboardPage() {
                       }`}
                     >
                       {/* Rank & Tied Indicator */}
-                      <td className="py-4 px-6 font-bold text-base">
-                        <div className="flex items-center gap-2">
+                      <td className="py-4 px-6 font-bold text-base text-right tabular-nums">
+                        <div className="flex items-center gap-2 justify-end">
                           {item.rank === 1 ? (
-                            <span className="h-7 w-7 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 flex items-center justify-center text-sm font-bold shadow-sm">
+                            <span className="h-7 w-7 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 flex items-center justify-center text-sm font-bold shadow-sm tabular-nums">
                               1
                             </span>
                           ) : item.rank === 2 ? (
-                            <span className="h-7 w-7 rounded-full bg-slate-300/20 text-slate-200 border border-slate-300/40 flex items-center justify-center text-sm font-bold shadow-sm">
+                            <span className="h-7 w-7 rounded-full bg-slate-300/20 text-slate-200 border border-slate-300/40 flex items-center justify-center text-sm font-bold shadow-sm tabular-nums">
                               2
                             </span>
                           ) : item.rank === 3 ? (
-                            <span className="h-7 w-7 rounded-full bg-amber-700/20 text-amber-600 border border-amber-700/40 flex items-center justify-center text-sm font-bold shadow-sm">
+                            <span className="h-7 w-7 rounded-full bg-amber-700/20 text-amber-600 border border-amber-700/40 flex items-center justify-center text-sm font-bold shadow-sm tabular-nums">
                               3
                             </span>
                           ) : (
-                            <span className="text-muted pl-2 text-sm">{item.rank}</span>
+                            <span className="text-muted text-sm tabular-nums">{item.rank}</span>
                           )}
 
                           {item.isTied && (
                             <span
-                              className="text-xs px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-muted-soft font-sans font-medium"
+                              className="text-[12px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-muted font-sans font-medium"
                               title="Tied score (Rule 9.6: standard competition ranking 1, 2, 2, 4)"
                             >
                               Tied
@@ -600,48 +621,53 @@ export default function LeaderboardPage() {
                           <div className="h-9 w-9 rounded-full bg-surface-raised border border-white/10 flex items-center justify-center text-xs font-bold text-white shadow-sm">
                             {item.name.substring(0, 2).toUpperCase()}
                           </div>
-                          <div>
-                            <div className="font-sans font-semibold text-white text-base flex items-center gap-2">
+                          <div className="min-w-0">
+                            <div className="font-sans font-semibold text-white text-base flex items-center gap-2 flex-wrap">
                               <span>{item.name}</span>
                               {item.isCurrentUser && (
-                                <span className="text-xs px-2 py-0.5 rounded bg-accent text-canvas font-semibold">
+                                <span className="text-[12px] px-2 py-0.5 rounded bg-accent text-canvas font-semibold">
                                   YOU
                                 </span>
                               )}
                             </div>
-                            <span className="text-muted-soft text-xs font-mono">{item.handle}</span>
+                            <span className="text-muted text-[12px] font-mono">{item.handle}</span>
                           </div>
                         </div>
                       </td>
 
-                      {/* Metric Value */}
-                      <td className="py-4 px-6 font-bold text-white text-base">
+                      {/* Metric Value — numeric, right-aligned */}
+                      <td className="py-4 px-6 font-bold text-white text-base text-right tabular-nums">
                         {item.value}
                       </td>
 
                       {/* Retrieval Coverage */}
-                      <td className="py-4 px-6">
+                      <td className="py-4 px-6 text-right tabular-nums">
                         <span className={item.coveragePass ? "text-emerald-400 font-semibold" : "text-amber-400"}>
                           {item.coverage}
                         </span>
                       </td>
 
                       {/* Last Freshness */}
-                      <td className="py-4 px-6 text-muted">
+                      <td className="py-4 px-6 text-muted text-right tabular-nums">
                         {item.freshness}
                       </td>
 
                       {/* Standing Badge & Dispute Action */}
                       <td className="py-4 px-6 text-right">
-                        <div className="flex items-center justify-end gap-2.5">
+                        <div className="flex items-center justify-end gap-2.5 flex-wrap">
                           <span
-                            className={`inline-block px-2.5 py-1 rounded text-xs font-medium border ${
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[12px] font-medium border ${
                               item.status === "Finalized"
                                 ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                                 : "bg-amber-500/10 text-amber-400 border-amber-500/20"
                             }`}
                           >
-                            {item.status}
+                            {item.status === "Finalized" ? (
+                              <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+                            ) : (
+                              <AlertCircle className="h-3.5 w-3.5" aria-hidden="true" />
+                            )}
+                            {item.status === "Finalized" ? "Finalized — verified" : "Provisional — re-sync pending"}
                           </span>
 
                           {item.isCurrentUser && (
@@ -661,11 +687,12 @@ export default function LeaderboardPage() {
               </table>
             </div>
           </div>
+          </>
         )}
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.08] bg-canvas py-6 text-xs text-muted font-sans">
+      <footer className="border-t border-white/[0.08] bg-canvas py-6 text-[12px] text-muted font-sans">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>TWM 3.1 Platform | Deterministic Ranks &amp; Roster Denominator</div>
           <div className="text-muted">

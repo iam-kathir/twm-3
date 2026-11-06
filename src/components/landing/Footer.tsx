@@ -16,7 +16,7 @@ export function Footer() {
               <span className="text-ink font-medium text-sm">
                 Track. Win. Maintain.
               </span>
-              <span className="text-muted text-xs">
+              <span className="text-muted text-sm">
                 Engineering cohort telemetry and peer progress platform
               </span>
             </div>
@@ -46,7 +46,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Integrity Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted">
           <div className="flex items-center gap-2">
             <span>&copy; {new Date().getFullYear()} TWM Class Platform</span>
             <span className="text-white/20">/</span>

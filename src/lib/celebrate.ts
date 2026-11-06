@@ -1,10 +1,20 @@
 import confetti from "canvas-confetti";
 
 /**
+ * Reduced-motion guard: celebratory particle motion is itself motion,
+ * so skip it entirely when the user prefers reduced motion. The UI
+ * state change it celebrates is still announced via toast/status text.
+ */
+function prefersReducedMotion(): boolean {
+  if (typeof window === "undefined") return true;
+  return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+}
+
+/**
  * Fires full-screen celebratory confetti with TWM brand colors (Emerald, Mint, Gold, Cyan)
  */
 export function fireTournamentCelebration() {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || prefersReducedMotion()) return;
 
   const duration = 2.5 * 1000;
   const animationEnd = Date.now() + duration;
@@ -15,6 +25,7 @@ export function fireTournamentCelebration() {
     ticks: 60,
     zIndex: 9999,
     colors: ["#10B981", "#34D399", "#F59E0B", "#38BDF8", "#FFFFFF"],
+    disableForReducedMotion: true,
   };
 
   const interval: ReturnType<typeof setInterval> = setInterval(function () {
@@ -42,7 +53,7 @@ export function fireTournamentCelebration() {
  * Targeted micro-burst for interactive buttons, badge claims, and copy actions
  */
 export function fireMilestoneBurst(x = 0.5, y = 0.5) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || prefersReducedMotion()) return;
 
   confetti({
     particleCount: 50,

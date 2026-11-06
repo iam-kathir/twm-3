@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Search,
   Activity,
@@ -15,10 +15,8 @@ import {
   ShieldAlert,
   ArrowRight,
   User,
-  Sliders,
-  Sparkles,
-  Command,
-  CornerDownLeft
+  CornerDownLeft,
+  Command
 } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 
@@ -39,11 +37,20 @@ export function CommandPalette() {
   const [search, setSearch] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<Element | null>(null);
 
   useEffect(() => {
     if (isCommandPaletteOpen) {
-      setTimeout(() => inputRef.current?.focus(), 50);
+      previousFocusRef.current = document.activeElement;
       setSelectedIndex(0);
+      const t = setTimeout(() => inputRef.current?.focus(), 50);
+      return () => {
+        clearTimeout(t);
+        if (previousFocusRef.current instanceof HTMLElement) {
+          previousFocusRef.current.focus();
+        }
+      };
     } else {
       setSearch("");
     }
@@ -53,7 +60,22 @@ export function CommandPalette() {
     setSelectedIndex(0);
   }, [search]);
 
-  if (!isCommandPaletteOpen) return null;
+  const q = search.toLowerCase().trim();
+
+  // Cap the classmate list so a broad query never renders an unbounded list.
+  const filteredStudents = useMemo(
+    () =>
+      q.length > 0
+        ? leaderboard
+            .filter((s) =>
+              s.name.toLowerCase().includes(q) ||
+              s.handle.toLowerCase().includes(q) ||
+              s.rollNo.toLowerCase().includes(q)
+            )
+            .slice(0, 8)
+        : [],
+    [leaderboard, q]
+  );
 
   const navigateTo = (path: string) => {
     closeCommandPalette();
@@ -122,20 +144,12 @@ export function CommandPalette() {
     }
   ];
 
-  const q = search.toLowerCase().trim();
-
   const filteredNav = navItems.filter((item) =>
     item.label.toLowerCase().includes(q)
   );
 
   const filteredActions = actionItems.filter((item) =>
     item.label.toLowerCase().includes(q)
-  );
-
-  const filteredStudents = leaderboard.filter((s) =>
-    s.name.toLowerCase().includes(q) ||
-    s.handle.toLowerCase().includes(q) ||
-    s.rollNo.toLowerCase().includes(q)
   );
 
   type FlatItem =
@@ -148,6 +162,12 @@ export function CommandPalette() {
     ...filteredActions.map((item) => ({ kind: "action" as const, ...item })),
     ...filteredStudents.map((s) => ({ kind: "student" as const, ...s }))
   ];
+
+  const activeItemId = (() => {
+    const item = flatItems[selectedIndex];
+    if (!item) return undefined;
+    return item.kind === "student" ? `student-${item.rollNo}` : item.id;
+  })();
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Escape") {
@@ -167,17 +187,40 @@ export function CommandPalette() {
         else if (item.kind === "action") item.action();
         else if (item.kind === "student") navigateTo(`/search?q=${encodeURIComponent(item.name)}`);
       }
+    } else if (e.key === "Tab") {
+      // Keep focus inside the dialog.
+      const dialog = dialogRef.current;
+      if (!dialog) return;
+      const focusable = dialog.querySelectorAll<HTMLElement>(
+        'input, button, [href], [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     }
   };
 
   let currentIndexTracker = 0;
 
+  if (!isCommandPaletteOpen) return null;
+
   return (
     <div
       onClick={closeCommandPalette}
-      className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 p-4 bg-black/85 backdrop-blur-xl"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 p-4 bg-black/85"
     >
       <motion.div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Command palette"
         initial={{ opacity: 0, scale: 0.95, y: -12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: -12 }}
@@ -185,12 +228,9 @@ export function CommandPalette() {
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-xl rounded-panel bg-surface border border-white/10 shadow-overlay overflow-hidden flex flex-col relative"
       >
-        {/* Subtle Ambient Radial Glow */}
-        <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-80 h-32 bg-accent/10 rounded-full blur-2xl pointer-events-none" />
-
         {/* Search Input Bar */}
         <div className="flex items-center px-4 py-3.5 border-b border-white/[0.08] gap-3 bg-surface-raised/50 relative z-10">
-          <Search className="h-4 w-4 text-accent shrink-0" />
+          <Search className="h-4 w-4 text-accent shrink-0" aria-hidden="true" />
           <input
             ref={inputRef}
             type="text"
@@ -198,22 +238,28 @@ export function CommandPalette() {
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type a command, page, or classmate name..."
-            className="flex-1 bg-transparent text-sm text-ink placeholder:text-muted focus:outline-none font-sans"
+            aria-label="Search commands, pages, or classmates"
+            role="combobox"
+            aria-expanded="true"
+            aria-controls="cmdk-list"
+            aria-activedescendant={activeItemId}
+            className="flex-1 bg-transparent text-base text-ink placeholder:text-muted focus:outline-none font-sans"
           />
           <button
             onClick={closeCommandPalette}
-            className="flex items-center gap-1 text-xs text-muted hover:text-ink px-2 py-1 rounded-md bg-white/5 border border-white/10 transition-colors"
+            aria-label="Close command palette"
+            className="flex items-center gap-1 text-sm text-muted hover:text-ink px-2 py-1 rounded-md bg-white/5 border border-white/10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             <span>ESC</span>
           </button>
         </div>
 
         {/* Results List */}
-        <div className="max-h-96 overflow-y-auto p-2 space-y-4 relative z-10">
+        <div id="cmdk-list" role="listbox" aria-label="Commands and results" className="max-h-96 overflow-y-auto p-2 space-y-4 relative z-10">
           {/* Navigation group */}
           {filteredNav.length > 0 && (
             <div>
-              <div className="px-3 py-1.5 text-xs font-medium text-muted">
+              <div className="px-3 py-1.5 text-sm font-medium text-muted">
                 Navigation
               </div>
               <div className="space-y-1">
@@ -224,21 +270,24 @@ export function CommandPalette() {
                   return (
                     <button
                       key={item.id}
+                      id={item.id}
+                      role="option"
+                      aria-selected={isSelected}
                       onClick={() => navigateTo(item.path)}
                       onMouseEnter={() => setSelectedIndex(itemIndex)}
-                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-sans transition-all group text-left ${
+                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-sans transition-colors group text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
                         isSelected
-                          ? "bg-accent/15 border border-accent/30 text-white font-semibold shadow-sm"
-                          : "text-slate-300 hover:bg-white/[0.04] border border-transparent"
+                          ? "bg-accent/15 border border-accent/30 text-white font-semibold"
+                          : "text-slate-300 hover:bg-white/[0.06] border border-transparent"
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <Icon className={`h-4 w-4 transition-colors ${isSelected ? "text-accent" : "text-slate-400 group-hover:text-accent"}`} />
+                        <Icon className={`h-4 w-4 ${isSelected ? "text-accent" : "text-slate-400"}`} aria-hidden="true" />
                         <span>{item.label}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        {isSelected && <CornerDownLeft className="h-3 w-3 text-accent" />}
-                        <ArrowRight className={`h-3.5 w-3.5 transition-all ${isSelected ? "text-accent translate-x-0 opacity-100" : "text-slate-600 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"}`} />
+                        {isSelected && <CornerDownLeft className="h-3.5 w-3.5 text-accent" aria-hidden="true" />}
+                        <ArrowRight className={`h-4 w-4 ${isSelected ? "text-accent" : "text-slate-500"}`} aria-hidden="true" />
                       </div>
                     </button>
                   );
@@ -250,7 +299,7 @@ export function CommandPalette() {
           {/* Actions group */}
           {filteredActions.length > 0 && (
             <div>
-              <div className="px-3 py-1.5 text-xs font-medium text-muted">
+              <div className="px-3 py-1.5 text-sm font-medium text-muted">
                 Platform Actions
               </div>
               <div className="space-y-1">
@@ -261,21 +310,24 @@ export function CommandPalette() {
                   return (
                     <button
                       key={item.id}
+                      id={item.id}
+                      role="option"
+                      aria-selected={isSelected}
                       onClick={item.action}
                       onMouseEnter={() => setSelectedIndex(itemIndex)}
-                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-sans transition-all group text-left ${
+                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-sans transition-colors group text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
                         isSelected
-                          ? "bg-accent/15 border border-accent/30 text-white font-semibold shadow-sm"
-                          : "text-slate-300 hover:bg-white/[0.04] border border-transparent"
+                          ? "bg-accent/15 border border-accent/30 text-white font-semibold"
+                          : "text-slate-300 hover:bg-white/[0.06] border border-transparent"
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <Icon className={`h-4 w-4 transition-colors ${isSelected ? "text-accent" : "text-slate-400 group-hover:text-accent"}`} />
+                        <Icon className={`h-4 w-4 ${isSelected ? "text-accent" : "text-slate-400"}`} aria-hidden="true" />
                         <span>{item.label}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        {isSelected && <CornerDownLeft className="h-3 w-3 text-accent" />}
-                        <span className={`text-xs font-medium px-1.5 py-0.5 rounded ${isSelected ? "bg-accent/20 text-accent font-semibold" : "bg-white/5 text-muted"}`}>Run</span>
+                        {isSelected && <CornerDownLeft className="h-3.5 w-3.5 text-accent" aria-hidden="true" />}
+                        <span className={`text-sm font-medium px-1.5 py-0.5 rounded ${isSelected ? "bg-accent/20 text-accent font-semibold" : "bg-white/5 text-muted"}`}>Run</span>
                       </div>
                     </button>
                   );
@@ -287,7 +339,7 @@ export function CommandPalette() {
           {/* Students Directory quick match */}
           {q.length > 0 && filteredStudents.length > 0 && (
             <div>
-              <div className="px-3 py-1.5 text-xs font-medium text-muted">
+              <div className="px-3 py-1.5 text-sm font-medium text-muted">
                 Classmates
               </div>
               <div className="space-y-1">
@@ -297,24 +349,27 @@ export function CommandPalette() {
                   return (
                     <button
                       key={s.rollNo}
+                      id={`student-${s.rollNo}`}
+                      role="option"
+                      aria-selected={isSelected}
                       onClick={() => navigateTo(`/search?q=${encodeURIComponent(s.name)}`)}
                       onMouseEnter={() => setSelectedIndex(itemIndex)}
-                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-sans transition-all group text-left ${
+                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-sans transition-colors group text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
                         isSelected
-                          ? "bg-accent/15 border border-accent/30 text-white font-semibold shadow-sm"
-                          : "text-slate-300 hover:bg-white/[0.04] border border-transparent"
+                          ? "bg-accent/15 border border-accent/30 text-white font-semibold"
+                          : "text-slate-300 hover:bg-white/[0.06] border border-transparent"
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded-lg bg-surface-raised border border-white/10 flex items-center justify-center text-xs text-accent font-semibold">
+                        <div className="w-6 h-6 rounded-lg bg-surface-raised border border-white/10 flex items-center justify-center text-sm text-accent font-semibold" aria-hidden="true">
                           {s.avatarInitial}
                         </div>
                         <span>{s.name}</span>
-                        <span className="font-mono text-xs text-muted">@{s.handle}</span>
+                        <span className="text-sm text-muted">@{s.handle}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        {isSelected && <CornerDownLeft className="h-3 w-3 text-accent" />}
-                        <span className="text-xs text-muted">{s.rollNo}</span>
+                        {isSelected && <CornerDownLeft className="h-3.5 w-3.5 text-accent" aria-hidden="true" />}
+                        <span className="text-sm text-muted">{s.rollNo}</span>
                       </div>
                     </button>
                   );
@@ -324,22 +379,22 @@ export function CommandPalette() {
           )}
 
           {filteredNav.length === 0 && filteredActions.length === 0 && filteredStudents.length === 0 && (
-            <div className="py-12 text-center text-xs font-mono text-muted space-y-1">
+            <div role="status" className="py-12 text-center text-sm text-muted space-y-1">
               <p>No matching commands or classmates found for &quot;{search}&quot;</p>
-              <p className="text-xs text-muted">Try &quot;dashboard&quot;, &quot;sync&quot;, or &quot;dispute&quot;</p>
+              <p className="text-sm text-muted">Try &quot;dashboard&quot;, &quot;sync&quot;, or &quot;dispute&quot;</p>
             </div>
           )}
         </div>
 
         {/* Footer info strip */}
-        <div className="px-4 py-2.5 border-t border-white/[0.07] bg-canvas flex items-center justify-between text-xs text-muted relative z-10">
+        <div className="px-4 py-2.5 border-t border-white/[0.07] bg-canvas flex items-center justify-between text-sm text-muted relative z-10">
           <div className="flex items-center gap-2">
-            <Command className="h-3 w-3 text-accent" />
-            <span className="text-slate-400">Navigate:</span>
-            <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-xs">↑</kbd>
-            <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-xs">↓</kbd>
-            <span className="text-slate-400 ml-1">Select:</span>
-            <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-xs">↵</kbd>
+            <Command className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+            <span className="text-slate-300">Navigate:</span>
+            <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-sm">↑</kbd>
+            <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-sm">↓</kbd>
+            <span className="text-slate-300 ml-1">Select:</span>
+            <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-sm">↵</kbd>
           </div>
           <span className="hidden sm:inline">User: {currentUser.name}</span>
         </div>

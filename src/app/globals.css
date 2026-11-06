@@ -22,6 +22,14 @@
   --border-subtle: rgba(255, 255, 255, 0.05);
   --border-active: rgba(16, 185, 129, 0.4);
   --border-strong: rgba(255, 255, 255, 0.14);
+  /* Border rgb triplets so Tailwind can apply opacity modifiers
+     (border-border/60) without a second copy of each colour. */
+  --border-rgb: 255 255 255;
+  --border-subtle-rgb: 255 255 255;
+  --border-strong-rgb: 255 255 255;
+  /* Focus ring: single accent source; :focus-visible below is the only
+     outline definition and must never be silenced by focus:outline-none. */
+  --focus-ring: var(--accent);
 
   /* Elevation: panels sit on the ground (tone step + hairline). Shadows are
      reserved for real overlays (menus, dialogs, popovers). */
@@ -316,9 +324,13 @@ table,
 /* Accessibility: keyboard focus. !important because components set
    `focus:outline-none` on inputs; focus must never be silenced. */
 :focus-visible {
-  outline: 2px solid var(--accent) !important;
+  outline: 2px solid var(--focus-ring) !important;
   outline-offset: 2px;
 }
+
+/* Small/status text rule: anything under ~18px uses text-muted (6.5:1)
+   or brighter (ink-secondary / ink / accent / status tokens). Never use
+   text-muted-soft or text-muted-dark below 18px; see AGENTS.md audit. */
 
 /* Accessibility: Reduced Motion */
 @media (prefers-reduced-motion: reduce) {

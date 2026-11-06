@@ -80,10 +80,12 @@ export function DisputeModal() {
           </div>
 
           <button
+            type="button"
             onClick={closeDisputeModal}
+            aria-label="Close dispute form"
             className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
           >
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
 
@@ -91,13 +93,14 @@ export function DisputeModal() {
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-mono text-muted mb-1">
+              <label htmlFor="dispute-platform" className="block text-[13px] font-mono text-muted mb-1">
                 Platform
               </label>
               <select
+                id="dispute-platform"
                 value={platform}
                 onChange={(e) => setPlatform(e.target.value as any)}
-                className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs font-mono text-ink focus:border-accent focus:outline-none"
+                className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-[13px] font-mono text-ink focus:border-accent focus:outline-none"
               >
                 <option value="GitHub">GitHub</option>
                 <option value="LeetCode">LeetCode</option>
@@ -106,13 +109,14 @@ export function DisputeModal() {
             </div>
 
             <div>
-              <label className="block text-xs font-mono text-muted mb-1">
-                Affected Metric
+              <label htmlFor="dispute-metric" className="block text-[13px] font-mono text-muted mb-1">
+                Affected metric
               </label>
               <select
+                id="dispute-metric"
                 value={metric}
                 onChange={(e) => setMetric(e.target.value as any)}
-                className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs font-mono text-ink focus:border-accent focus:outline-none"
+                className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-[13px] font-mono text-ink focus:border-accent focus:outline-none"
               >
                 <option value="github_active_days">Active Contribution Days</option>
                 <option value="leetcode_delta">LeetCode Delta</option>
@@ -122,44 +126,52 @@ export function DisputeModal() {
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-muted mb-1">
-              Dispute Rationale &amp; Claim Details
+            <label htmlFor="dispute-claim" className="block text-[13px] font-mono text-muted mb-1">
+              Dispute rationale &amp; claim details
             </label>
             <textarea
+              id="dispute-claim"
               required
               rows={3}
               value={claim}
               onChange={(e) => setClaim(e.target.value)}
               placeholder="e.g. Commit 8f1e pushed at 23:51 IST was recorded in git reflog but omitted from public contribution graph due to default branch merge delay."
-              className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs text-ink focus:border-accent focus:outline-none placeholder:text-muted-soft"
+              aria-describedby="dispute-required-hint"
+              className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-[13px] text-ink focus:border-accent focus:outline-none placeholder:text-muted"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-muted mb-1">
-              Public Evidence URL
+            <label htmlFor="dispute-evidence" className="block text-[13px] font-mono text-muted mb-1">
+              Public evidence URL
             </label>
             <div className="relative">
               <input
+                id="dispute-evidence"
                 required
                 type="url"
                 value={evidenceUrl}
                 onChange={(e) => setEvidenceUrl(e.target.value)}
                 placeholder="https://github.com/.../commit/... or https://leetcode.com/submissions/..."
-                className="w-full pl-8 pr-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs font-mono text-ink focus:border-accent focus:outline-none placeholder:text-muted-soft"
+                aria-describedby="dispute-required-hint"
+                className="w-full pl-8 pr-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-[13px] font-mono text-ink focus:border-accent focus:outline-none placeholder:text-muted"
               />
-              <LinkIcon className="h-3.5 w-3.5 text-muted absolute left-2.5 top-2.5" />
+              <LinkIcon className="h-3.5 w-3.5 text-muted absolute left-2.5 top-2.5" aria-hidden="true" />
             </div>
           </div>
+          <p id="dispute-required-hint" className="text-[12px] text-muted">
+            Both the rationale and a public evidence URL are required. Empty or invalid entries are not submitted.
+          </p>
 
           <div>
-            <label className="block text-xs font-mono text-muted mb-1">
-              Governing Rule Clause
+            <label htmlFor="dispute-rule" className="block text-[13px] font-mono text-muted mb-1">
+              Governing rule clause
             </label>
             <select
+              id="dispute-rule"
               value={ruleReference}
               onChange={(e) => setRuleReference(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-xs font-mono text-ink focus:border-accent focus:outline-none"
+              className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-[13px] font-mono text-ink focus:border-accent focus:outline-none"
             >
               <option value="Rule §9.4: Timezone Normalization (IST 23:59:59)">
                 Rule §9.4: Timezone Normalization (IST 23:59:59)
@@ -188,10 +200,10 @@ export function DisputeModal() {
 
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-canvas text-xs font-sans font-semibold transition-all shadow-md active:scale-95"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-canvas text-[13px] font-sans font-semibold transition-colors shadow-md"
             >
-              <Send className="h-3.5 w-3.5" />
-              <span>Submit for Audit Review</span>
+              <Send className="h-3.5 w-3.5" aria-hidden="true" />
+              <span>Submit for audit review</span>
             </button>
           </div>
         </form>

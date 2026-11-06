@@ -48,26 +48,23 @@ export function BrandLogo({
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         transition={{ type: "spring", stiffness: 400, damping: 25 }}
-        className={`inline-flex items-center gap-2.5 group cursor-pointer ${className}`}
+        className={`inline-flex min-w-0 max-w-full items-center gap-2.5 group cursor-pointer ${className}`}
       >
-        <div className="relative flex items-center">
+        <div className="relative flex min-w-0 items-center">
           <Image
             src="/logo-horizontal.svg"
             alt="TWM — Track. Win. Maintain."
             width={w}
             height={h}
-            className="transition-all duration-300 group-hover:brightness-110"
+            className="h-auto max-w-full transition-[filter] duration-200 group-hover:brightness-110"
             priority
           />
         </div>
 
         {showLivePulse && (
-          <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-elevated/90 border border-white/10 text-xs text-muted">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-            </span>
-            <span className="text-emerald-400 font-bold">LIVE</span>
+          <span className="hidden shrink-0 items-center gap-1.5 rounded-full border border-border bg-surface-raised px-2 py-0.5 text-xs text-muted lg:inline-flex">
+            <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-accent" />
+            <span className="font-semibold text-accent">LIVE</span>
           </span>
         )}
       </motion.div>
@@ -108,7 +105,7 @@ export function BrandLogo({
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
             <span
-              className={`font-black text-ink tracking-tight font-sans transition-colors group-hover:text-white ${
+              className={`font-black text-ink tracking-tight font-sans transition-colors group-hover:text-ink ${
                 size === "lg" || size === "xl" ? "text-xl sm:text-2xl" : "text-base sm:text-lg"
               }`}
             >
@@ -128,10 +125,11 @@ export function BrandLogo({
       )}
 
       {showLivePulse && !showSubtitle && (
-        <span className="relative flex h-2 w-2 ml-0.5" title="Telemetry Engine Active">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-        </span>
+        <span
+          aria-hidden="true"
+          title="Telemetry engine active (static indicator)"
+          className="ml-0.5 h-2 w-2 shrink-0 rounded-full bg-accent"
+        />
       )}
     </motion.div>
   );

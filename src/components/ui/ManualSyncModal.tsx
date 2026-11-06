@@ -1,39 +1,76 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { RotateCw, CheckCircle2, ShieldCheck, X, Server, Database, Globe } from "lucide-react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { motion } from "framer-motion";
+import { RotateCw, X, Globe, Database, ShieldCheck } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 
 export function ManualSyncModal() {
   const { isSyncModalOpen, closeSyncModal, triggerLiveSync, isSyncing, syncStep } = useApp();
-  const [hasRun, setHasRun] = useState(false);
+  const [hasRequested, setHasRequested] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const previousFocusRef = useRef<Element | null>(null);
 
   useEffect(() => {
     if (!isSyncModalOpen) return;
+    previousFocusRef.current = document.activeElement;
+    setHasRequested(false);
+    // Move focus into the dialog on open so keyboard users land inside it.
+    const t = setTimeout(() => closeRef.current?.focus(), 50);
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeSyncModal();
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeSyncModal();
+      } else if (e.key === "Tab") {
+        // Simple focus trap within the dialog.
+        const dialog = dialogRef.current;
+        if (!dialog) return;
+        const focusable = dialog.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      clearTimeout(t);
+      // Restore focus to the control that opened the modal.
+      if (previousFocusRef.current instanceof HTMLElement) {
+        previousFocusRef.current.focus();
+      }
+    };
   }, [isSyncModalOpen, closeSyncModal]);
 
-  if (!isSyncModalOpen) return null;
-
-  const handleStartSync = async () => {
-    setHasRun(true);
+  const handleStartSync = useCallback(async () => {
+    setHasRequested(true);
     await triggerLiveSync();
-  };
+  }, [triggerLiveSync]);
+
+  // Keep dialog mounted briefly for exit animation; AnimatePresence reads `open`.
+  if (!isSyncModalOpen) return null;
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75"
       onClick={closeSyncModal}
     >
       <motion.div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="manual-sync-modal-title"
+        aria-describedby="manual-sync-modal-desc"
         onClick={(e) => e.stopPropagation()}
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -45,67 +82,71 @@ export function ManualSyncModal() {
         <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-lg bg-accent/10 border border-accent/20 text-accent">
-              <RotateCw className={`h-4 w-4 ${isSyncing ? "animate-spin" : ""}`} />
+              <RotateCw className={`h-4 w-4 ${isSyncing ? "animate-spin" : ""}`} aria-hidden="true" />
             </div>
             <div>
               <h3 id="manual-sync-modal-title" className="text-base font-bold text-ink font-sans">
                 Live Telemetry Synchronizer
               </h3>
-              <p className="text-xs text-muted font-mono">
+              <p id="manual-sync-modal-desc" className="text-sm text-muted">
                 Manual Crawler Trigger • Rate-Limit Protected
               </p>
             </div>
           </div>
 
           <button
+            ref={closeRef}
             onClick={closeSyncModal}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+            aria-label="Close sync dialog"
+            className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
 
         {/* Sync Progress & Steps */}
         <div className="my-6 space-y-4">
           <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] space-y-3">
-            <div className="flex items-center justify-between text-xs font-mono">
+            <div className="flex items-center justify-between text-sm">
               <span className="text-muted">Execution Status</span>
-              <span className={`font-semibold ${isSyncing ? "text-accent" : hasRun ? "text-emerald-400" : "text-slate-400"}`}>
-                {isSyncing ? "Sync In Progress..." : hasRun ? "Completed (Fresh)" : "Ready"}
+              <span role="status" aria-live="polite" className={`font-semibold ${isSyncing ? "text-accent" : hasRequested ? "text-slate-200" : "text-slate-300"}`}>
+                {isSyncing ? "Sync In Progress…" : hasRequested ? "Sync Requested" : "Ready"}
               </span>
             </div>
 
-            {/* Pipeline Steps */}
+            {/* Pipeline Steps - queued, not claimed complete until notifications confirm */}
             <div className="space-y-2.5 pt-2">
-              <div className="flex items-center gap-2.5 text-xs font-mono">
-                <Globe className="h-3.5 w-3.5 text-accent shrink-0" />
-                <span className="text-slate-300">GitHub REST API (4 Course Repositories)</span>
-                {hasRun && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 ml-auto" />}
+              <div className="flex items-center gap-2.5 text-sm">
+                <Globe className="h-4 w-4 text-accent shrink-0" aria-hidden="true" />
+                <span className="text-slate-200">GitHub REST API (4 Course Repositories)</span>
               </div>
 
-              <div className="flex items-center gap-2.5 text-xs font-mono">
-                <Database className="h-3.5 w-3.5 text-accent shrink-0" />
-                <span className="text-slate-300">LeetCode GraphQL Verified Delta</span>
-                {hasRun && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 ml-auto" />}
+              <div className="flex items-center gap-2.5 text-sm">
+                <Database className="h-4 w-4 text-accent shrink-0" aria-hidden="true" />
+                <span className="text-slate-200">LeetCode GraphQL Verified Delta</span>
               </div>
 
-              <div className="flex items-center gap-2.5 text-xs font-mono">
-                <ShieldCheck className="h-3.5 w-3.5 text-accent shrink-0" />
-                <span className="text-slate-300">Sunday 23:59:59 IST Boundary Audit</span>
-                {hasRun && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 ml-auto" />}
+              <div className="flex items-center gap-2.5 text-sm">
+                <ShieldCheck className="h-4 w-4 text-accent shrink-0" aria-hidden="true" />
+                <span className="text-slate-200">Sunday 23:59:59 IST Boundary Audit</span>
               </div>
             </div>
 
             {/* Live Status readout */}
             {isSyncing && (
-              <div className="mt-3 p-2.5 rounded-lg bg-black/40 border border-white/5 font-mono text-xs text-accent flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
+              <div role="status" aria-live="polite" className="mt-3 p-2.5 rounded-lg bg-black/40 border border-white/10 text-sm text-accent flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" aria-hidden="true" />
                 <span>{syncStep}</span>
               </div>
             )}
+            {hasRequested && !isSyncing && (
+              <p className="mt-3 text-sm text-muted">
+                Sync request sent. Check notifications for the confirmed outcome — this dialog does not claim success before the server responds.
+              </p>
+            )}
           </div>
 
-          <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] text-xs font-mono text-muted">
+          <div className="p-3.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-muted">
             <span className="text-accent font-semibold">Rule §9.2 Compliance:</span> Manual sync requests are rate-limited to 1 request per 10 minutes to protect platform quotas and preserve deterministic delta timestamps.
           </div>
         </div>
@@ -114,7 +155,7 @@ export function ManualSyncModal() {
         <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/[0.08]">
           <button
             onClick={closeSyncModal}
-            className="px-4 py-2 rounded-xl text-xs font-mono text-muted hover:text-white hover:bg-white/5 transition-colors"
+            className="px-4 py-2.5 rounded-xl text-sm text-muted hover:text-white hover:bg-white/10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             Close
           </button>
@@ -122,10 +163,11 @@ export function ManualSyncModal() {
           <button
             onClick={handleStartSync}
             disabled={isSyncing}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-accent hover:bg-accent-hover disabled:opacity-50 text-canvas text-xs font-semibold transition-all shadow-md active:scale-95"
+            aria-busy={isSyncing}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-canvas text-sm font-semibold transition-colors shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
-            <RotateCw className={`h-3.5 w-3.5 ${isSyncing ? "animate-spin" : ""}`} />
-            <span>{isSyncing ? "Synchronizing..." : "Execute Sync Now"}</span>
+            <RotateCw className={`h-4 w-4 ${isSyncing ? "animate-spin" : ""}`} aria-hidden="true" />
+            <span>{isSyncing ? "Synchronizing…" : "Execute Sync Now"}</span>
           </button>
         </div>
       </motion.div>

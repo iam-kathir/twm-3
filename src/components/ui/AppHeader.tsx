@@ -64,41 +64,39 @@ export function AppHeader() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/[0.07] bg-canvas/90 backdrop-blur-xl">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+    <header className="sticky top-0 z-40 border-b border-border bg-canvas">
+      <div className="mx-auto flex h-20 min-w-0 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
         {/* Brand & Navigation */}
-        <div className="flex items-center gap-6 lg:gap-8">
-          <BrandLogo variant="horizontal" size="md" showLivePulse={true} href="/" />
+        <div className="flex min-w-0 flex-1 items-center gap-3 lg:gap-6">
+          <BrandLogo variant="horizontal" size="md" showLivePulse={true} href="/" className="min-w-0" />
 
           {/* Three adapters exist, but the accounts and figures on these screens are still
               illustrative. Claiming "live" here would break the ground rule. */}
           <div
             title="Three provider adapters are wired (GitHub, LeetCode, HackerRank). The accounts and figures shown on these screens are illustrative until a student links one."
-            className="hidden xl:inline-flex items-center gap-2 rounded-xl border border-accent/25 bg-accent/10 px-3 py-1.5 font-sans text-xs text-accent shadow-sm cursor-help transition-all hover:bg-accent/15"
+            className="hidden shrink-0 cursor-help items-center gap-2 whitespace-nowrap rounded-xl border border-accent/25 bg-accent/10 px-3 py-1.5 font-sans text-xs text-accent shadow-sm transition-colors hover:bg-accent/15 xl:inline-flex"
           >
-            <span className="relative flex h-2 w-2">
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
-            </span>
-            <span className="font-semibold tracking-wide">Demo data · 3 adapters wired</span>
+            <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-accent" />
+            <span className="font-semibold">Demo data · 3 adapters wired</span>
           </div>
 
-          <nav className="hidden md:flex items-center gap-1.5 p-1 rounded-2xl bg-surface/50 border border-white/[0.05]">
+          <nav className="hidden min-w-0 items-center gap-1.5 rounded-2xl border border-border-subtle bg-surface p-1 lg:flex">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
                 <NextLink
                   key={link.href}
                   href={link.href}
-                  className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                  className={`relative whitespace-nowrap px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
                     isActive
-                      ? "text-white font-semibold"
-                      : "text-muted hover:text-white hover:bg-white/[0.04]"
+                      ? "text-ink font-semibold"
+                      : "text-muted hover:text-ink hover:bg-white/[0.04]"
                   }`}
                 >
                   {isActive && (
                     <motion.span
                       layoutId="header-active-nav"
-                      className="absolute inset-0 rounded-xl bg-surface-raised border border-white/10 shadow-sm"
+                      className="absolute inset-0 rounded-xl bg-surface-raised border border-border shadow-sm"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -110,16 +108,17 @@ export function AppHeader() {
         </div>
 
         {/* Global Utilities & Profile */}
-        <div className="flex items-center gap-3.5">
-          {/* Quick Search / Cmd+K Pill */}
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          {/* Quick Search / Cmd+K Pill: icon-only below lg so 768px never overflows */}
           <button
             onClick={openCommandPalette}
-            className="hidden sm:flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm text-muted hover:text-ink transition-all font-sans shadow-sm group"
+            aria-label="Search or command"
+            className="group flex shrink-0 items-center gap-2.5 rounded-xl border border-border bg-surface p-2.5 font-sans text-sm text-muted shadow-sm transition-colors hover:bg-surface-raised hover:text-ink lg:px-4 lg:py-2.5"
           >
-            <Search className="h-4 w-4 text-slate-400 group-hover:text-accent transition-colors" />
-            <span className="text-slate-400 group-hover:text-slate-200">Search or command...</span>
-            <kbd className="hidden lg:inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-md bg-white/5 border border-white/10 text-muted font-sans font-semibold">
-              <Command className="h-3 w-3" /> K
+            <Search className="h-4 w-4 shrink-0 text-muted transition-colors group-hover:text-accent" />
+            <span className="hidden whitespace-nowrap text-muted transition-colors group-hover:text-ink-secondary lg:inline">Search or command...</span>
+            <kbd className="hidden items-center gap-1 rounded-md border border-border bg-white/5 px-2 py-0.5 font-sans text-xs font-semibold text-muted xl:inline-flex">
+              <Command className="h-3 w-3 shrink-0" /> K
             </kbd>
           </button>
 
@@ -127,33 +126,35 @@ export function AppHeader() {
           <button
             onClick={triggerLiveSync}
             disabled={isSyncing}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm font-sans text-ink transition-all disabled:opacity-50"
+            className="flex shrink-0 items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2.5 font-sans text-sm text-ink transition-colors hover:bg-surface-raised disabled:opacity-50 lg:px-4"
             title="Execute Live Telemetry Crawl"
           >
-            <RotateCw className={`h-4 w-4 text-accent ${isSyncing ? "animate-spin" : ""}`} />
-            <span className="hidden sm:inline text-muted font-medium">
+            <RotateCw className={`h-4 w-4 shrink-0 text-accent ${isSyncing ? "animate-spin" : ""}`} />
+            <span className="hidden whitespace-nowrap text-muted font-medium lg:inline">
               {isSyncing ? "Syncing..." : lastSyncTime}
             </span>
           </button>
 
           {/* User Profile Menu */}
-          <div className="relative" ref={profileRef}>
+          <div className="relative shrink-0" ref={profileRef}>
             <button
               onClick={() => setIsProfileOpen((prev) => !prev)}
-              className="flex items-center gap-3 p-1.5 sm:px-3 sm:py-2 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 transition-colors shadow-sm"
+              aria-label="Account menu"
+              aria-expanded={isProfileOpen}
+              className="flex min-w-0 shrink-0 items-center gap-3 rounded-xl border border-border bg-surface p-1.5 shadow-sm transition-colors hover:bg-surface-raised sm:px-3 sm:py-2"
             >
-              <div className="w-9 h-9 rounded-xl bg-surface-raised border border-accent/40 flex items-center justify-center font-mono text-sm font-bold text-accent shadow-sm">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-accent/40 bg-surface-raised font-mono text-sm font-bold text-accent shadow-sm">
                 {userInitials}
               </div>
-              <div className="hidden lg:block text-left">
-                <div className="text-sm font-semibold text-ink leading-tight">
+              <div className="hidden min-w-0 text-left lg:block">
+                <div className="truncate text-sm font-semibold leading-tight text-ink">
                   {currentUser.name}
                 </div>
-                <div className="text-xs font-mono text-muted">
+                <div className="truncate text-xs font-mono text-muted">
                   {currentUser.role === "co-admin" ? "Faculty Co-Admin" : currentUser.rollNo}
                 </div>
               </div>
-              <ChevronDown className={`h-4 w-4 text-slate-400 ml-0.5 transition-transform duration-200 ${isProfileOpen ? "rotate-180" : ""}`} />
+              <ChevronDown className={`h-4 w-4 shrink-0 text-muted ml-0.5 transition-transform duration-200 ${isProfileOpen ? "rotate-180" : ""}`} />
             </button>
 
             {/* Profile Dropdown */}
@@ -164,13 +165,13 @@ export function AppHeader() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 6, scale: 0.96 }}
                   transition={{ type: "spring", stiffness: 420, damping: 28 }}
-                  className="absolute right-0 mt-2.5 w-72 rounded-panel bg-surface border border-white/10 shadow-overlay p-2.5 z-50 text-sm font-sans"
+                  className="absolute right-0 mt-2.5 w-72 max-w-[calc(100vw-2rem)] rounded-panel bg-surface border border-border shadow-overlay p-2.5 z-50 text-sm font-sans"
                 >
-                  <div className="px-3.5 py-3 border-b border-white/[0.08]">
+                  <div className="px-3.5 py-3 border-b border-border-subtle">
                     <div className="font-bold text-base text-ink">{currentUser.name}</div>
                     <div className="text-xs font-mono text-muted truncate mt-0.5">{currentUser.email}</div>
-                    <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono bg-white/5 border border-white/10 text-accent">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                    <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono bg-white/5 border border-border text-accent">
+                      <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-accent" />
                       <span>Role: {currentUser.role === "co-admin" ? "Co-Admin Reviewer" : "Verified Student"}</span>
                     </div>
                   </div>
@@ -179,18 +180,18 @@ export function AppHeader() {
                     <NextLink
                       href="/settings"
                       onClick={() => setIsProfileOpen(false)}
-                      className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
+                      className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-ink-secondary hover:text-ink hover:bg-white/5 transition-colors font-medium"
                     >
-                      <Settings className="h-4 w-4 text-slate-400" />
+                      <Settings className="h-4 w-4 shrink-0 text-muted" />
                       <span>Account Settings</span>
                     </NextLink>
 
                     <NextLink
                       href="/privacy"
                       onClick={() => setIsProfileOpen(false)}
-                      className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition-colors font-medium"
+                      className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-ink-secondary hover:text-ink hover:bg-white/5 transition-colors font-medium"
                     >
-                      <Shield className="h-4 w-4 text-slate-400" />
+                      <Shield className="h-4 w-4 shrink-0 text-muted" />
                       <span>Privacy &amp; Governance</span>
                     </NextLink>
 
@@ -199,9 +200,9 @@ export function AppHeader() {
                         setIsProfileOpen(false);
                         openDisputeModal();
                       }}
-                      className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-rose-400 hover:bg-white/5 transition-colors text-left font-medium"
+                      className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-ink-secondary hover:text-status-error hover:bg-white/5 transition-colors text-left font-medium"
                     >
-                      <ShieldAlert className="h-4 w-4 text-rose-400" />
+                      <ShieldAlert className="h-4 w-4 shrink-0 text-status-error" />
                       <span>Lodge Score Dispute</span>
                     </button>
 
@@ -210,22 +211,22 @@ export function AppHeader() {
                         setIsProfileOpen(false);
                         switchRole(currentUser.role === "student" ? "co-admin" : "student");
                       }}
-                      className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-accent hover:bg-white/5 transition-colors text-left font-medium"
+                      className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-ink-secondary hover:text-accent hover:bg-white/5 transition-colors text-left font-medium"
                     >
-                      <div className="flex items-center gap-3">
-                        <Shield className="h-4 w-4 text-accent" />
+                      <div className="flex min-w-0 items-center gap-3">
+                        <Shield className="h-4 w-4 shrink-0 text-accent" />
                         <span>Switch to {currentUser.role === "student" ? "Co-Admin View" : "Student View"}</span>
                       </div>
                     </button>
                   </div>
 
-                  <div className="pt-1.5 border-t border-white/[0.08]">
+                  <div className="pt-1.5 border-t border-border-subtle">
                     <NextLink
                       href="/login"
                       onClick={() => setIsProfileOpen(false)}
-                      className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-white/5 transition-colors font-medium"
+                      className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-muted hover:text-status-error hover:bg-white/5 transition-colors font-medium"
                     >
-                      <LogOut className="h-4 w-4" />
+                      <LogOut className="h-4 w-4 shrink-0" />
                       <span>Sign Out</span>
                     </NextLink>
                   </div>
@@ -234,10 +235,12 @@ export function AppHeader() {
             </AnimatePresence>
           </div>
 
-          {/* Mobile Menu Trigger */}
+          {/* Mobile Menu Trigger: shows wherever the desktop nav does not */}
           <button
             onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-            className="md:hidden p-2 rounded-xl bg-surface border border-white/10 text-slate-400 hover:text-white"
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMobileMenuOpen}
+            className="shrink-0 rounded-xl border border-border bg-surface p-2 text-muted transition-colors hover:text-ink lg:hidden"
           >
             {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -246,7 +249,7 @@ export function AppHeader() {
 
       {/* Mobile Nav Drawer */}
       {isMobileMenuOpen && (
-        <div className="md:hidden px-4 pt-2 pb-4 border-t border-white/[0.08] bg-canvas space-y-1">
+        <div className="border-t border-border-subtle bg-canvas px-4 pt-2 pb-4 space-y-1 lg:hidden">
           <div className="px-3 pb-2">
             <span className="inline-flex items-center gap-1.5 rounded-md border border-accent/25 bg-accent/10 px-2 py-0.5 text-xs font-medium text-accent">
               Demo data — 3 adapters wired, no account linked
@@ -257,7 +260,7 @@ export function AppHeader() {
               key={link.href}
               href={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-xl text-xs font-mono text-slate-300 hover:text-white hover:bg-white/5"
+              className="block rounded-xl px-3 py-2 text-sm font-medium text-ink-secondary transition-colors hover:bg-white/5 hover:text-ink"
             >
               {link.label}
             </NextLink>
@@ -267,9 +270,9 @@ export function AppHeader() {
               setIsMobileMenuOpen(false);
               openCommandPalette();
             }}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-mono text-slate-300 hover:text-white hover:bg-white/5 text-left"
+            className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-ink-secondary transition-colors hover:bg-white/5 hover:text-ink text-left"
           >
-            <Search className="h-3.5 w-3.5 text-accent" />
+            <Search className="h-3.5 w-3.5 shrink-0 text-accent" />
             <span>Search or command (Cmd+K)</span>
           </button>
         </div>

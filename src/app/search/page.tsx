@@ -47,20 +47,39 @@ export default function SearchPage() {
 
   const [developers, setDevelopers] = useState<SearchableDeveloper[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/search")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success && Array.isArray(data.developers)) {
-          setDevelopers(data.developers);
+    let cancelled = false;
+    const loadDevelopers = async () => {
+      setLoading(true);
+      setLoadError(null);
+      try {
+        const res = await fetch("/api/search");
+        const data = await res.json();
+        if (!res.ok || !data.success || !Array.isArray(data.developers)) {
+          if (!cancelled) setLoadError("The cohort directory is unavailable right now. Check your connection and try again.");
+          return;
         }
-      })
-      .catch((err) => {
-        console.error("Failed to load cohort directory:", err);
-      })
-      .finally(() => setLoading(false));
+        if (!cancelled) setDevelopers(data.developers);
+      } catch (err) {
+        if (!cancelled) setLoadError("The cohort directory could not be loaded. Check your connection and try again.");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    loadDevelopers();
+    return () => { cancelled = true; };
   }, []);
+
+  useEffect(() => {
+    if (!selectedDev) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedDev(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedDev]);
 
   const filteredDevelopers = useMemo(() => {
     return developers.filter((dev) => {
@@ -91,11 +110,11 @@ export default function SearchPage() {
   }, [developers, searchQuery, selectedTag, evidenceFilter]);
 
   return (
-    <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans selection:bg-accent selection:text-canvas">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans selection:bg-accent selection:text-canvas overflow-x-hidden">
       <AppHeader />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 min-w-0">
         {/* Title & Philosophy Banner */}
         <div className="space-y-3">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -142,17 +161,20 @@ export default function SearchPage() {
               <input
                 id="developer-search-input"
                 name="developer-search"
-                type="text"
+                type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by student name, roll number, GitHub handle, or technology..."
-                className="w-full pl-12 pr-4 py-3.5 bg-canvas border border-white/[0.08] rounded-xl text-base text-white placeholder-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all font-sans shadow-inner"
+                aria-describedby="developer-search-hint"
+                className="w-full pl-12 pr-20 py-3.5 bg-canvas border border-white/[0.08] rounded-xl text-base text-white placeholder:text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors font-sans shadow-inner"
               />
+              <span id="developer-search-hint" className="sr-only">Search filters the verified cohort directory below.</span>
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-muted hover:text-white"
+                  aria-label="Clear search"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-muted hover:text-white px-2 py-1 rounded-md"
                 >
                   Clear
                 </button>
@@ -196,7 +218,7 @@ export default function SearchPage() {
               <button
                 key={tag}
                 onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all duration-200 ${
+                className={`px-3 py-1.5 rounded-lg text-[13px] font-mono transition-colors duration-200 ${
                   selectedTag === tag
                     ? "bg-accent text-canvas font-bold border border-accent"
                     : "bg-surface-raised text-muted hover:text-white border border-white/[0.06] hover:border-white/20"
@@ -208,13 +230,18 @@ export default function SearchPage() {
           </div>
         </div>
 
-        {/* Results Count & Empty State */}
-        <div className="flex items-center justify-between text-sm text-muted px-1 font-mono">
+        {/* Results Count */}
+        <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-muted px-1 font-mono" aria-live="polite">
           <span>
             {loading ? (
               <span className="flex items-center gap-2">
-                <RefreshCw className="w-3.5 h-3.5 animate-spin text-accent" />
-                <span>Loading verified class roster...</span>
+                <RefreshCw className="w-3.5 h-3.5 animate-spin text-accent" aria-hidden="true" />
+                <span>Loading verified class roster…</span>
+              </span>
+            ) : loadError ? (
+              <span className="inline-flex items-center gap-2 text-amber-400">
+                <AlertCircle className="w-4 h-4" aria-hidden="true" />
+                <span>Directory unavailable.</span>
               </span>
             ) : (
               <>
@@ -222,10 +249,20 @@ export default function SearchPage() {
               </>
             )}
           </span>
-          <span className="text-xs text-muted">
+          <span className="text-[12px] text-muted">
             Rule §10.3: Telemetry evidence verified
           </span>
         </div>
+
+        {loadError && !loading && (
+          <div role="alert" className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5 text-sm text-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <p className="flex items-start gap-2">
+              <AlertCircle className="h-5 w-5 shrink-0" aria-hidden="true" />
+              <span><strong className="block">Directory unavailable.</strong>{loadError}</span>
+            </p>
+            <button type="button" onClick={() => window.location.reload()} className="shrink-0 rounded-xl border border-amber-500/30 px-4 py-2 text-sm font-semibold text-amber-200 transition-colors hover:bg-amber-500/20">Retry</button>
+          </div>
+        )}
 
         {/* Loading Skeleton */}
         {loading && (
@@ -250,7 +287,7 @@ export default function SearchPage() {
         )}
 
         {/* Developer Cards Grid */}
-        {!loading && (
+        {!loading && !loadError && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <AnimatePresence>
               {filteredDevelopers.map((dev) => (
@@ -261,7 +298,7 @@ export default function SearchPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.25 }}
-                  className="bg-surface border border-white/[0.08] rounded-2xl p-7 hover:border-white/20 transition-all duration-300 flex flex-col justify-between group shadow-xl"
+                  className="bg-surface border border-white/[0.08] rounded-2xl p-7 hover:border-white/20 transition-colors duration-300 flex flex-col justify-between group shadow-xl"
                 >
                   <div className="space-y-5">
                     {/* Header Row */}
@@ -360,23 +397,25 @@ export default function SearchPage() {
           </div>
         )}
 
-        {/* Empty state fallback */}
-        {!loading && filteredDevelopers.length === 0 && (
-          <div className="text-center py-16 bg-surface border border-dashed border-white/10 rounded-2xl">
-            <Search className="w-8 h-8 text-muted mx-auto mb-3" />
+        {/* Empty state fallback — honest, not a silent zero */}
+        {!loading && !loadError && filteredDevelopers.length === 0 && (
+          <div className="text-center py-16 px-6 bg-surface border border-dashed border-white/10 rounded-2xl">
+            <Search className="w-8 h-8 text-muted mx-auto mb-3" aria-hidden="true" />
             <h3 className="text-base font-semibold text-ink">No developers match your query</h3>
-            <p className="text-xs text-muted max-w-sm mx-auto mt-1">
-              Try clearing tags or searching for broader terms like TypeScript, Python, or Go.
+            <p className="text-sm text-muted max-w-sm mx-auto mt-2 leading-relaxed">
+              No verified classmates match the current search, tag and evidence filters.
+              Try clearing filters or searching for broader terms like TypeScript, Python, or Go.
             </p>
             <button
+              type="button"
               onClick={() => {
                 setSearchQuery("");
                 setSelectedTag(null);
                 setEvidenceFilter("ALL");
               }}
-              className="mt-4 px-4 py-1.5 rounded-lg bg-surface-raised border border-white/10 text-xs text-white hover:bg-white/10 transition-colors"
+              className="mt-5 px-4 py-2 rounded-lg bg-surface-raised border border-white/10 text-sm text-white hover:bg-white/10 transition-colors"
             >
-              Reset Filters
+              Reset filters
             </button>
           </div>
         )}
@@ -385,8 +424,12 @@ export default function SearchPage() {
       {/* Interactive Telemetry Inspection Modal */}
       <AnimatePresence>
         {selectedDev && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md" onClick={() => setSelectedDev(null)}>
             <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="search-inspect-title"
+              onClick={(e) => e.stopPropagation()}
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -395,10 +438,12 @@ export default function SearchPage() {
             >
               {/* Close Button */}
               <button
+                type="button"
                 onClick={() => setSelectedDev(null)}
+                aria-label={`Close details for ${selectedDev.name}`}
                 className="absolute top-4 right-4 p-2 rounded-lg bg-surface-raised hover:bg-white/10 text-muted hover:text-white transition-colors"
               >
-                <X className="w-4 h-4" />
+                <X className="w-4 h-4" aria-hidden="true" />
               </button>
 
               {/* Modal Header */}
@@ -408,7 +453,7 @@ export default function SearchPage() {
                 </div>
                 <div>
                   <div className="flex items-center space-x-2">
-                    <h2 className="text-xl font-bold text-white">{selectedDev.name}</h2>
+                    <h2 id="search-inspect-title" className="text-xl font-bold text-white">{selectedDev.name}</h2>
                     <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-medium">
                       COHORT VERIFIED
                     </span>
@@ -519,10 +564,10 @@ export default function SearchPage() {
       </AnimatePresence>
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.08] bg-canvas px-6 py-4 text-xs text-muted">
+      <footer className="border-t border-white/[0.08] bg-canvas px-6 py-4 text-[12px] text-muted">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>TWM 3.0 Platform • Peer Discovery &amp; Skill Verification</span>
-          <span className="font-mono text-xs">Rule §10.3: Grounded in Verified Artifacts</span>
+          <span>TWM 3.1 Platform • Peer discovery &amp; skill verification</span>
+          <span className="font-mono text-[12px]">Rule §10.3: grounded in verified artifacts</span>
         </div>
       </footer>
     </div>

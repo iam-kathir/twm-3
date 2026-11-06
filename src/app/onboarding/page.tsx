@@ -37,6 +37,20 @@ interface StudentSessionData {
   cohort?: string;
 }
 
+function errorMessageFromStatus(status: number, data: any, fallback: string): string {
+  const serverMsg = data?.message || data?.error;
+  if (status === 429) {
+    const wait = data?.retryAfterSeconds ?? data?.cooldownSeconds;
+    return serverMsg
+      ? `${serverMsg}${wait ? ` Try again in ${wait} seconds.` : ""}`
+      : `Too many requests. Please wait${wait ? ` ${wait} seconds` : " a moment"} and try again.`;
+  }
+  if (status >= 500) {
+    return serverMsg ?? "The verification service returned a server error. Please try again shortly.";
+  }
+  return serverMsg ?? fallback;
+}
+
 function OnboardingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -47,6 +61,8 @@ function OnboardingContent() {
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [loadingSession, setLoadingSession] = useState(true);
+  const [sessionError, setSessionError] = useState<string | null>(null);
+  const [sessionNonce, setSessionNonce] = useState(0);
   const [student, setStudent] = useState<StudentSessionData | null>(null);
 
   // Email OTP Verification State
@@ -66,19 +82,26 @@ function OnboardingContent() {
   const [weeklyRecap, setWeeklyRecap] = useState(true);
 
   // LeetCode HMAC Challenge State
-  const [challengeCode, setChallengeCode] = useState("twm-verify-init-challenge");
+  const [challengeCode, setChallengeCode] = useState("");
+  const [challengeLoading, setChallengeLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState<string | null>(null);
   const [verifyingLeetCode, setVerifyingLeetCode] = useState(false);
   const [leetCodeVerified, setLeetCodeVerified] = useState(false);
   const [leetCodeError, setLeetCodeError] = useState<string | null>(null);
-  const [hackerRankUsername, setHackerRankUsername] = useState("aarav_codes");
+  const [hackerRankUsername, setHackerRankUsername] = useState("");
 
   // Load authenticated session on mount
   useEffect(() => {
     async function loadSession() {
+      setLoadingSession(true);
+      setSessionError(null);
       try {
         const res = await fetch("/api/auth/session");
         const data = await res.json();
+        if (!res.ok && !data.authenticated && !data.fallbackDefaultUser) {
+          throw new Error(errorMessageFromStatus(res.status, data, "Could not load your student session."));
+        }
         if (data.authenticated && data.session) {
           const s = data.session;
           setStudent({
@@ -104,16 +127,24 @@ function OnboardingContent() {
             cohort: "B.Tech CSE - Batch 2026 (Sec A)",
           });
           setEmailInput(fallback.email || "");
+        } else {
+          setStudent(null);
+          setSessionError("No authenticated student session was found. Sign in again to continue onboarding.");
         }
       } catch (err) {
         console.error("Failed to load student session:", err);
+        setSessionError(
+          err instanceof Error && err.message
+            ? err.message
+            : "Failed to load your student session. Check your connection and retry."
+        );
       } finally {
         setLoadingSession(false);
       }
     }
 
     loadSession();
-  }, []);
+  }, [sessionNonce]);
 
   // Cooldown & Expiry countdown timers
   useEffect(() => {
@@ -153,9 +184,12 @@ function OnboardingContent() {
         setOtpRequested(true);
         setCooldownRemaining(data.cooldownSeconds || 60);
         setExpiryRemaining(600); // 10 minutes
-        setOtpSuccessMsg(data.message || "Verification code dispatched to your institutional inbox.");
+        setOtpSuccessMsg(data.message || "Verification code sent to your institutional inbox.");
       } else {
-        setOtpError(data.message || data.error || "Failed to request verification code.");
+        if (res.status === 429 && (data.cooldownSeconds ?? data.retryAfterSeconds)) {
+          setCooldownRemaining(data.cooldownSeconds ?? data.retryAfterSeconds);
+        }
+        setOtpError(errorMessageFromStatus(res.status, data, "Failed to request verification code."));
       }
     } catch {
       setOtpError("Network error. Unable to reach verification service.");
@@ -190,9 +224,11 @@ function OnboardingContent() {
         setOtpInput("");
       } else {
         const errorMsg =
-          data.attemptsRemaining !== undefined
-            ? `${data.message} (${data.attemptsRemaining} attempts remaining)`
-            : data.message || data.error || "Verification failed.";
+          res.status === 429
+            ? errorMessageFromStatus(res.status, data, "Verification failed.")
+            : data.attemptsRemaining !== undefined
+              ? `${data.message} (${data.attemptsRemaining} attempts remaining)`
+              : errorMessageFromStatus(res.status, data, "Verification failed.");
         setOtpError(errorMsg);
       }
     } catch {
@@ -205,6 +241,9 @@ function OnboardingContent() {
   // HMAC Challenge for LeetCode
   useEffect(() => {
     if (step === 3 && !leetCodeVerified && student) {
+      let cancelled = false;
+      setChallengeLoading(true);
+      setLeetCodeError(null);
       fetch("/api/auth/hmac-challenge", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -215,20 +254,36 @@ function OnboardingContent() {
           handle: "aarav_coder",
         }),
       })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.challengeCode) {
+        .then(async (res) => {
+          const data = await res.json();
+          if (cancelled) return;
+          if (res.ok && data.challengeCode) {
             setChallengeCode(data.challengeCode);
+          } else {
+            setLeetCodeError(errorMessageFromStatus(res.status, data, "Could not generate a verification challenge. Try again."));
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          if (!cancelled) setLeetCodeError("Could not reach the verification route. Try again.");
+        })
+        .finally(() => {
+          if (!cancelled) setChallengeLoading(false);
+        });
+      return () => {
+        cancelled = true;
+      };
     }
   }, [step, leetCodeVerified, student]);
 
-  const copyChallenge = () => {
-    navigator.clipboard.writeText(challengeCode);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const copyChallenge = async () => {
+    setCopyError(null);
+    try {
+      await navigator.clipboard.writeText(challengeCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopyError("Could not copy the code automatically. Select the code above and copy it manually.");
+    }
   };
 
   const verifyLeetCode = async () => {
@@ -248,10 +303,10 @@ function OnboardingContent() {
         }),
       });
       const data = await res.json();
-      if (data.verified) {
+      if (res.ok && data.verified) {
         setLeetCodeVerified(true);
       } else {
-        setLeetCodeError(data.error ?? data.message ?? "Verification failed.");
+        setLeetCodeError(errorMessageFromStatus(res.status, data, "Verification failed. Make sure the challenge code is pasted in your public LeetCode bio."));
       }
     } catch {
       setLeetCodeError("Could not reach the verification route. Try again.");
@@ -280,16 +335,16 @@ function OnboardingContent() {
         <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-12">
           <div className="w-full max-w-lg rounded-panel border border-status-error/30 bg-surface p-8 sm:p-10 shadow-overlay space-y-6 text-center">
             <div className="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center mx-auto">
-              <ShieldAlert className="h-7 w-7" />
+              <ShieldAlert className="h-7 w-7" aria-hidden="true" />
             </div>
             <div>
               <h1 className="text-2xl font-extrabold text-white tracking-tight">Roster Match Not Found</h1>
               <p className="text-sm text-muted mt-2 leading-relaxed">
-                GitHub account <span className="font-mono text-white font-bold">@{unmatchedGithub}</span> is not listed
+                GitHub account <span className="font-semibold text-white">@{unmatchedGithub}</span> is not listed
                 on the active cohort roster.
               </p>
             </div>
-            <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] text-xs font-mono text-muted text-left space-y-2">
+            <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] text-sm text-muted text-left space-y-2">
               <p className="text-white font-semibold">Authorized Cohort Enrolment Required:</p>
               <ul className="list-disc pl-4 space-y-1">
                 <li>Verify you signed into GitHub with your college-linked handle.</li>
@@ -298,14 +353,14 @@ function OnboardingContent() {
             </div>
             <Link
               href="/login"
-              className="inline-flex w-full py-3.5 rounded-xl bg-surface-raised hover:bg-white/10 border border-white/10 text-white font-bold text-sm items-center justify-center gap-2 transition-colors"
+              className="inline-flex w-full py-3.5 rounded-xl bg-surface-raised hover:bg-white/10 border border-white/10 text-white font-bold text-sm items-center justify-center gap-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               <span>Back to Login</span>
             </Link>
           </div>
         </main>
 
-        <footer className="p-6 text-center text-xs font-mono text-muted-soft">
+        <footer className="p-6 text-center text-sm text-muted">
           TWM 3.1 • Zero Fabrication Enforced
         </footer>
       </div>
@@ -319,40 +374,69 @@ function OnboardingContent() {
         <BrandLogo showLivePulse={true} />
 
         {/* Step Indicator */}
-        <div className="flex items-center gap-2 text-xs font-mono text-muted">
+        <nav aria-label="Onboarding progress" className="flex items-center gap-2 text-sm text-muted">
           <span
-            className={`px-2.5 py-0.5 rounded-full ${
+            aria-current={step === 1 ? "step" : undefined}
+            className={`px-2.5 py-1 rounded-full ${
               step === 1 ? "bg-accent text-canvas font-bold" : "bg-surface-raised border border-white/[0.06]"
             }`}
           >
             1. Identity &amp; Email
           </span>
-          <span className="text-white/20">&rarr;</span>
+          <span className="text-white/40" aria-hidden="true">&rarr;</span>
           <span
-            className={`px-2.5 py-0.5 rounded-full ${
+            aria-current={step === 2 ? "step" : undefined}
+            className={`px-2.5 py-1 rounded-full ${
               step === 2 ? "bg-accent text-canvas font-bold" : "bg-surface-raised border border-white/[0.06]"
             }`}
           >
             2. Privacy
           </span>
-          <span className="text-white/20">&rarr;</span>
+          <span className="text-white/40" aria-hidden="true">&rarr;</span>
           <span
-            className={`px-2.5 py-0.5 rounded-full ${
+            aria-current={step === 3 ? "step" : undefined}
+            className={`px-2.5 py-1 rounded-full ${
               step === 3 ? "bg-accent text-canvas font-bold" : "bg-surface-raised border border-white/[0.06]"
             }`}
           >
             3. Accounts
           </span>
-        </div>
+        </nav>
       </header>
 
       {/* Main Step Area */}
       <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-xl rounded-panel border border-white/10 bg-surface p-8 sm:p-10 shadow-overlay">
           {loadingSession ? (
-            <div className="py-20 flex flex-col items-center justify-center gap-3 text-muted">
-              <Loader2 className="h-6 w-6 animate-spin text-accent" />
-              <p className="text-xs font-mono">Loading student identity session...</p>
+            <div className="py-20 flex flex-col items-center justify-center gap-3 text-muted" role="status" aria-live="polite">
+              <Loader2 className="h-6 w-6 animate-spin text-accent" aria-hidden="true" />
+              <p className="text-sm">Loading student identity session…</p>
+            </div>
+          ) : sessionError || !student ? (
+            <div className="py-8 space-y-5">
+              <div role="alert" className="p-4 rounded-xl bg-red-500/10 border border-red-500/25 text-sm text-red-300 flex items-start gap-2.5">
+                <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" aria-hidden="true" />
+                <div>
+                  <p className="font-bold text-white">Identity session unavailable</p>
+                  <p className="leading-relaxed mt-1">{sessionError ?? "We could not verify your student identity."}</p>
+                </div>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  type="button"
+                  onClick={() => setSessionNonce((n) => n + 1)}
+                  className="flex-1 py-3.5 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-semibold text-base flex items-center justify-center gap-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                >
+                  <RefreshCw className="h-4 w-4" aria-hidden="true" />
+                  <span>Retry Loading Session</span>
+                </button>
+                <Link
+                  href="/login"
+                  className="flex-1 py-3.5 rounded-xl border border-white/10 hover:bg-white/5 text-muted hover:text-white transition-colors text-sm font-semibold flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                >
+                  <span>Back to Login</span>
+                </Link>
+              </div>
             </div>
           ) : (
             <AnimatePresence mode="wait">
@@ -368,43 +452,43 @@ function OnboardingContent() {
                 >
                   <div>
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold mb-3">
-                      <UserCheck className="h-4 w-4" />
+                      <UserCheck className="h-4 w-4" aria-hidden="true" />
                       <span>Roster Match Confirmed</span>
                     </div>
                     <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                       Confirm Student Identity
                     </h1>
-                    <p className="text-xs sm:text-sm text-muted mt-2 leading-relaxed">
+                    <p className="text-sm text-muted mt-2 leading-relaxed">
                       Verify your institutional college email via one-time passcode (OTP) to unlock competitive class
                       rankings.
                     </p>
                   </div>
 
                   {/* Student Card */}
-                  <div className="p-5 rounded-2xl bg-surface-raised border border-white/[0.08] font-mono text-sm space-y-3 shadow-inner">
+                  <div className="p-5 rounded-2xl bg-surface-raised border border-white/[0.08] text-sm space-y-3 shadow-inner">
                     <div className="flex justify-between pb-2.5 border-b border-white/[0.06]">
-                      <span className="text-muted text-xs">Student Name:</span>
-                      <span className="text-white font-bold font-sans text-sm">{student?.name || "Aarav Sharma"}</span>
+                      <span className="text-muted text-sm">Student Name:</span>
+                      <span className="text-white font-bold text-sm">{student?.name ?? "Unavailable"}</span>
                     </div>
                     <div className="flex justify-between pb-2.5 border-b border-white/[0.06]">
-                      <span className="text-muted text-xs">Register Number:</span>
-                      <span className="text-accent font-bold text-sm">{student?.rollNo || "2022BCSE042"}</span>
+                      <span className="text-muted text-sm">Register Number:</span>
+                      <span className="text-accent font-bold text-sm">{student?.rollNo ?? "Unavailable"}</span>
                     </div>
                     <div className="flex justify-between pb-2.5 border-b border-white/[0.06]">
-                      <span className="text-muted text-xs">Cohort:</span>
-                      <span className="text-ink-secondary text-xs">{student?.cohort || "B.Tech CSE - Batch 2026"}</span>
+                      <span className="text-muted text-sm">Cohort:</span>
+                      <span className="text-ink-secondary text-sm">{student?.cohort ?? "Unavailable"}</span>
                     </div>
                     <div className="flex items-center justify-between pt-1">
-                      <span className="text-muted text-xs">Email Status:</span>
+                      <span className="text-muted text-sm">Email Status:</span>
                       {student?.emailVerified ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold font-mono">
-                          <CheckCircle2 className="h-3.5 w-3.5" />
-                          VERIFIED
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold">
+                          <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+                          Verified
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-bold font-mono">
-                          <AlertCircle className="h-3.5 w-3.5" />
-                          VERIFICATION_REQUIRED
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/25 text-xs font-bold">
+                          <AlertCircle className="h-3.5 w-3.5" aria-hidden="true" />
+                          Verification Required
                         </span>
                       )}
                     </div>
@@ -414,36 +498,43 @@ function OnboardingContent() {
                   {!student?.emailVerified ? (
                     <div className="p-5 rounded-2xl border border-white/10 bg-canvas space-y-4">
                       <div className="flex items-center gap-2">
-                        <Mail className="h-4 w-4 text-accent" />
-                        <h3 className="text-sm font-bold text-white font-mono">Institutional Email OTP</h3>
+                        <Mail className="h-4 w-4 text-accent" aria-hidden="true" />
+                        <h2 className="text-sm font-bold text-white">Institutional Email OTP</h2>
                       </div>
 
                       {/* Feedback Alerts */}
                       {otpError && (
                         <div
                           role="alert"
-                          className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-mono flex items-start gap-2"
+                          className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/25 text-sm text-red-300 flex items-start gap-2.5"
                         >
-                          <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-                          <div className="leading-relaxed">{otpError}</div>
+                          <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" aria-hidden="true" />
+                          <div className="leading-relaxed">Error: {otpError}</div>
                         </div>
                       )}
 
                       {otpSuccessMsg && (
                         <div
                           role="status"
-                          className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono flex items-start gap-2"
+                          aria-live="polite"
+                          className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-sm text-emerald-300 flex items-start gap-2.5"
                         >
-                          <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" />
+                          <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" aria-hidden="true" />
                           <div className="leading-relaxed">{otpSuccessMsg}</div>
                         </div>
                       )}
 
                       {!otpRequested ? (
                         /* Stage A: Email Input & Request OTP */
-                        <div className="space-y-3">
+                        <form
+                          className="space-y-3"
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            handleRequestOtp();
+                          }}
+                        >
                           <div>
-                            <label className="block text-xs font-mono text-muted mb-1.5" htmlFor="college-email-input">
+                            <label className="block text-sm text-muted mb-1.5" htmlFor="college-email-input">
                               Official College Email (.ac.in / .edu):
                             </label>
                             <input
@@ -452,38 +543,51 @@ function OnboardingContent() {
                               value={emailInput}
                               onChange={(e) => setEmailInput(e.target.value)}
                               placeholder="rollno@college.ac.in"
-                              className="w-full bg-surface-raised border border-white/10 rounded-xl px-3.5 py-2.5 text-sm font-mono text-white placeholder:text-muted-soft focus:outline-none focus:border-accent"
+                              autoComplete="email"
+                              aria-invalid={otpError ? "true" : undefined}
+                              aria-describedby={otpError ? "otp-error" : "college-email-help"}
+                              className="w-full bg-surface-raised border border-white/10 rounded-xl px-3.5 py-3 text-base text-white placeholder:text-muted focus:outline-none focus:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                             />
+                            <p id="college-email-help" className="text-sm text-muted mt-1.5">
+                              Use the email on your college roster. A 6-digit code will be sent to this address.
+                            </p>
+                            {otpError && <p id="otp-error" className="sr-only">{otpError}</p>}
                           </div>
 
                           <button
-                            type="button"
-                            onClick={handleRequestOtp}
+                            type="submit"
                             disabled={sendingOtp || cooldownRemaining > 0 || !emailInput.trim()}
-                            className="w-full py-3 rounded-xl bg-accent hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 text-canvas font-semibold text-sm flex items-center justify-center gap-2 transition-all"
+                            aria-busy={sendingOtp}
+                            className="w-full py-3 rounded-xl bg-accent hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 text-canvas font-semibold text-base flex items-center justify-center gap-2 transition-colors disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                           >
                             {sendingOtp ? (
                               <>
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                                <span>Generating Secure OTP...</span>
+                                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                                <span>Sending Verification Code…</span>
                               </>
                             ) : cooldownRemaining > 0 ? (
                               <>
-                                <Clock className="h-4 w-4" />
+                                <Clock className="h-4 w-4" aria-hidden="true" />
                                 <span>Resend Cooldown ({cooldownRemaining}s)</span>
                               </>
                             ) : (
                               <>
-                                <KeyRound className="h-4 w-4" />
+                                <KeyRound className="h-4 w-4" aria-hidden="true" />
                                 <span>Send Verification Code</span>
                               </>
                             )}
                           </button>
-                        </div>
+                        </form>
                       ) : (
                         /* Stage B: Enter 6-digit OTP & Verify */
-                        <div className="space-y-4">
-                          <div className="flex items-center justify-between text-xs font-mono text-muted">
+                        <form
+                          className="space-y-4"
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            handleVerifyOtp();
+                          }}
+                        >
+                          <div className="flex items-center justify-between text-sm text-muted">
                             <span className="truncate max-w-[240px]">
                               To: <strong className="text-white">{emailInput}</strong>
                             </span>
@@ -494,7 +598,7 @@ function OnboardingContent() {
                                 setOtpError(null);
                                 setOtpSuccessMsg(null);
                               }}
-                              className="text-accent hover:underline text-xs"
+                              className="text-accent hover:underline text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded px-1"
                             >
                               Change Email
                             </button>
@@ -502,12 +606,12 @@ function OnboardingContent() {
 
                           <div>
                             <div className="flex justify-between items-center mb-1.5">
-                              <label className="block text-xs font-mono text-muted" htmlFor="otp-input">
+                              <label className="block text-sm text-muted" htmlFor="otp-input">
                                 Enter 6-Digit Passcode:
                               </label>
                               {expiryRemaining > 0 && (
-                                <span className="text-xs font-mono text-amber-400 flex items-center gap-1">
-                                  <Clock className="h-3 w-3" />
+                                <span className="text-sm text-amber-300 flex items-center gap-1" role="timer" aria-label={`Code expires in ${formatTimer(expiryRemaining)}`}>
+                                  <Clock className="h-3.5 w-3.5" aria-hidden="true" />
                                   Expires in {formatTimer(expiryRemaining)}
                                 </span>
                               )}
@@ -521,9 +625,16 @@ function OnboardingContent() {
                               value={otpInput}
                               onChange={(e) => setOtpInput(e.target.value.replace(/\D/g, ""))}
                               placeholder="123456"
-                              className="w-full bg-surface-raised border border-white/10 rounded-xl px-4 py-3 text-center text-2xl font-mono tracking-widest text-white placeholder:text-muted-soft focus:outline-none focus:border-accent"
+                              autoComplete="one-time-code"
+                              aria-invalid={otpError ? "true" : undefined}
+                              aria-describedby={otpError ? "otp-error" : "otp-help"}
+                              className="w-full bg-surface-raised border border-white/10 rounded-xl px-4 py-3 text-center text-2xl tracking-widest text-white placeholder:text-muted focus:outline-none focus:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                               autoFocus
                             />
+                            <p id="otp-help" className="text-sm text-muted mt-1.5">
+                              Enter the 6-digit code from your inbox. Codes expire after 10 minutes.
+                            </p>
+                            {otpError && <p id="otp-error" className="sr-only">{otpError}</p>}
                           </div>
 
                           <div className="flex gap-2.5">
@@ -531,50 +642,58 @@ function OnboardingContent() {
                               type="button"
                               onClick={handleRequestOtp}
                               disabled={sendingOtp || cooldownRemaining > 0}
-                              className="px-4 py-3 rounded-xl bg-surface-raised hover:bg-white/10 border border-white/10 text-xs font-mono font-bold text-muted hover:text-white disabled:opacity-50 transition-colors flex items-center gap-1.5"
+                              aria-busy={sendingOtp}
+                              className="px-4 py-3 rounded-xl bg-surface-raised hover:bg-white/10 border border-white/10 text-sm font-bold text-muted hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                             >
-                              <RefreshCw className={`h-3.5 w-3.5 ${sendingOtp ? "animate-spin" : ""}`} />
+                              <RefreshCw className={`h-3.5 w-3.5 ${sendingOtp ? "animate-spin" : ""}`} aria-hidden="true" />
                               <span>{cooldownRemaining > 0 ? `${cooldownRemaining}s` : "Resend"}</span>
                             </button>
 
                             <button
-                              type="button"
-                              onClick={handleVerifyOtp}
+                              type="submit"
                               disabled={verifyingOtp || otpInput.trim().length !== 6}
-                              className="flex-1 py-3 rounded-xl bg-accent hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 text-canvas font-semibold text-sm flex items-center justify-center gap-2 transition-all"
+                              aria-busy={verifyingOtp}
+                              className="flex-1 py-3 rounded-xl bg-accent hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 text-canvas font-semibold text-base flex items-center justify-center gap-2 transition-colors disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                             >
                               {verifyingOtp ? (
                                 <>
-                                  <Loader2 className="h-4 w-4 animate-spin" />
-                                  <span>Verifying Passcode...</span>
+                                  <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                                  <span>Verifying Passcode…</span>
                                 </>
                               ) : (
                                 <>
-                                  <CheckCircle2 className="h-4 w-4" />
+                                  <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
                                   <span>Verify &amp; Activate</span>
                                 </>
                               )}
                             </button>
                           </div>
-                        </div>
+                        </form>
                       )}
                     </div>
                   ) : (
-                    <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 shrink-0" />
+                    <div role="status" className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-sm text-emerald-300 flex items-center gap-2.5">
+                      <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden="true" />
                       <span>Institutional college email confirmed. Ready for next step.</span>
                     </div>
                   )}
 
                   {/* Proceed to Step 2 */}
                   <button
+                    type="button"
                     onClick={() => setStep(2)}
                     disabled={!student?.emailVerified}
-                    className="w-full py-4 rounded-xl bg-accent hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 disabled:cursor-not-allowed text-canvas font-semibold text-base flex items-center justify-center gap-2.5 hover:scale-[1.01] active:scale-[0.99] transition-all"
+                    aria-describedby={!student?.emailVerified ? "step1-blocked" : undefined}
+                    className="w-full py-4 rounded-xl bg-accent hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 disabled:cursor-not-allowed text-canvas font-semibold text-base flex items-center justify-center gap-2.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                   >
                     <span>Continue to Privacy Settings</span>
-                    <ArrowRight className="h-5 w-5" />
+                    <ArrowRight className="h-5 w-5" aria-hidden="true" />
                   </button>
+                  {!student?.emailVerified && (
+                    <p id="step1-blocked" className="text-sm text-muted text-center">
+                      Verify your college email above to continue.
+                    </p>
+                  )}
                 </motion.div>
               )}
 
@@ -590,7 +709,7 @@ function OnboardingContent() {
                 >
                   <div>
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent border border-accent/20 text-xs font-bold mb-3">
-                      <Sliders className="h-4 w-4" />
+                      <Sliders className="h-4 w-4" aria-hidden="true" />
                       <span>Control Your Experience</span>
                     </div>
                     <h1 className="text-3xl font-extrabold text-white tracking-tight">Privacy Preferences</h1>
@@ -599,93 +718,108 @@ function OnboardingContent() {
                     </p>
                   </div>
 
-                  <div className="space-y-4">
+                  <fieldset className="space-y-4">
+                    <legend className="sr-only">Leaderboard and profile visibility</legend>
                     {/* Leaderboard Opt-In Toggle */}
-                    <div
+                    <button
+                      type="button"
                       onClick={() => setOptInLeaderboard(!optInLeaderboard)}
-                      className="p-5 rounded-2xl border border-white/10 bg-surface-raised flex items-start justify-between gap-4 cursor-pointer hover:border-white/20 transition-all shadow-sm"
+                      aria-pressed={optInLeaderboard}
+                      className="w-full p-5 rounded-2xl border border-white/10 bg-surface-raised flex items-start justify-between gap-4 hover:border-white/25 transition-colors text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
-                      <div>
-                        <h4 className="text-base font-bold text-white">Participate in Class Leaderboards</h4>
-                        <p className="text-sm text-muted mt-1 leading-relaxed">
+                      <span>
+                        <span className="text-base font-bold text-white block">Participate in Class Leaderboards</span>
+                        <span className="text-sm text-muted mt-1 leading-relaxed block">
                           Appear on platform-specific weekly boards (GitHub active days, LeetCode solved count).
-                        </p>
-                      </div>
-                      <div
+                        </span>
+                      </span>
+                      <span
+                        aria-hidden="true"
                         className={`h-7 w-12 rounded-full p-1 transition-colors shrink-0 ${
                           optInLeaderboard ? "bg-accent" : "bg-canvas border border-white/10"
                         }`}
                       >
-                        <div
-                          className={`h-5 w-5 rounded-full bg-canvas transition-transform ${
+                        <span
+                          aria-hidden="true"
+                          className={`h-5 w-5 rounded-full bg-canvas block transition-transform ${
                             optInLeaderboard ? "translate-x-5" : "translate-x-0"
                           }`}
                         />
-                      </div>
-                    </div>
+                      </span>
+                    </button>
 
                     {/* Public Profile Toggle */}
-                    <div
+                    <button
+                      type="button"
                       onClick={() => setPublicProfile(!publicProfile)}
-                      className="p-5 rounded-2xl border border-white/10 bg-surface-raised flex items-start justify-between gap-4 cursor-pointer hover:border-white/20 transition-all shadow-sm"
+                      aria-pressed={publicProfile}
+                      className="w-full p-5 rounded-2xl border border-white/10 bg-surface-raised flex items-start justify-between gap-4 hover:border-white/25 transition-colors text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
-                      <div>
-                        <h4 className="text-base font-bold text-white">Public Profile Visibility</h4>
-                        <p className="text-sm text-muted mt-1 leading-relaxed">
+                      <span>
+                        <span className="text-base font-bold text-white block">Public Profile Visibility</span>
+                        <span className="text-sm text-muted mt-1 leading-relaxed block">
                           Allow classmates to see your connected handles and tech interest tags.
-                        </p>
-                      </div>
-                      <div
+                        </span>
+                      </span>
+                      <span
+                        aria-hidden="true"
                         className={`h-7 w-12 rounded-full p-1 transition-colors shrink-0 ${
                           publicProfile ? "bg-accent" : "bg-canvas border border-white/10"
                         }`}
                       >
-                        <div
-                          className={`h-5 w-5 rounded-full bg-canvas transition-transform ${
+                        <span
+                          aria-hidden="true"
+                          className={`h-5 w-5 rounded-full bg-canvas block transition-transform ${
                             publicProfile ? "translate-x-5" : "translate-x-0"
                           }`}
                         />
-                      </div>
-                    </div>
+                      </span>
+                    </button>
 
                     {/* Weekly Recap Toggle */}
-                    <div
+                    <button
+                      type="button"
                       onClick={() => setWeeklyRecap(!weeklyRecap)}
-                      className="p-5 rounded-2xl border border-white/10 bg-surface-raised flex items-start justify-between gap-4 cursor-pointer hover:border-white/20 transition-all shadow-sm"
+                      aria-pressed={weeklyRecap}
+                      className="w-full p-5 rounded-2xl border border-white/10 bg-surface-raised flex items-start justify-between gap-4 hover:border-white/25 transition-colors text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
-                      <div>
-                        <h4 className="text-base font-bold text-white">Weekly Developer Recap</h4>
-                        <p className="text-sm text-muted mt-1 leading-relaxed">
+                      <span>
+                        <span className="text-base font-bold text-white block">Weekly Developer Recap</span>
+                        <span className="text-sm text-muted mt-1 leading-relaxed block">
                           Receive a private Sunday night summary of your coding rhythm and small next targets.
-                        </p>
-                      </div>
-                      <div
+                        </span>
+                      </span>
+                      <span
+                        aria-hidden="true"
                         className={`h-7 w-12 rounded-full p-1 transition-colors shrink-0 ${
                           weeklyRecap ? "bg-accent" : "bg-canvas border border-white/10"
                         }`}
                       >
-                        <div
-                          className={`h-5 w-5 rounded-full bg-canvas transition-transform ${
+                        <span
+                          aria-hidden="true"
+                          className={`h-5 w-5 rounded-full bg-canvas block transition-transform ${
                             weeklyRecap ? "translate-x-5" : "translate-x-0"
                           }`}
                         />
-                      </div>
-                    </div>
-                  </div>
+                      </span>
+                    </button>
+                  </fieldset>
 
                   <div className="flex gap-4 pt-2">
                     <button
+                      type="button"
                       onClick={() => setStep(1)}
-                      className="px-6 py-4 rounded-xl border border-white/10 hover:bg-white/5 text-sm font-semibold text-muted hover:text-white transition-colors"
+                      className="px-6 py-4 rounded-xl border border-white/10 hover:bg-white/5 text-sm font-semibold text-muted hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
                       Back
                     </button>
                     <button
+                      type="button"
                       onClick={() => setStep(3)}
-                      className="flex-1 py-4 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-semibold text-base flex items-center justify-center gap-2.5 hover:scale-[1.01] active:scale-[0.99] transition-all"
+                      className="flex-1 py-4 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-semibold text-base flex items-center justify-center gap-2.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                     >
                       <span>Connect Developer Profiles</span>
-                      <ArrowRight className="h-5 w-5" />
+                      <ArrowRight className="h-5 w-5" aria-hidden="true" />
                     </button>
                   </div>
                 </motion.div>
@@ -703,7 +837,7 @@ function OnboardingContent() {
                 >
                   <div>
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent border border-accent/20 text-xs font-bold mb-3">
-                      <ShieldCheck className="h-4 w-4" />
+                      <ShieldCheck className="h-4 w-4" aria-hidden="true" />
                       <span>Proof of Control</span>
                     </div>
                     <h1 className="text-3xl font-extrabold text-white tracking-tight">Connect Your Accounts</h1>
@@ -715,34 +849,34 @@ function OnboardingContent() {
                   {/* 1. GitHub Connection */}
                   <div className="p-5 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 flex items-center justify-between">
                     <div className="flex items-center gap-3.5">
-                      <Github className="h-6 w-6 text-white" />
+                      <Github className="h-6 w-6 text-white" aria-hidden="true" />
                       <div>
                         <div className="text-base font-bold text-white">
-                          GitHub: @{student?.handleGithub || "aarav-dev"}
+                          GitHub: @{student?.handleGithub || "Unknown"}
                         </div>
-                        <div className="text-xs font-mono text-emerald-400 mt-0.5">
+                        <div className="text-sm text-emerald-400 mt-0.5">
                           OAuth Verified • Active Days Live
                         </div>
                       </div>
                     </div>
-                    <CheckCircle2 className="h-6 w-6 text-emerald-400" />
+                    <CheckCircle2 className="h-6 w-6 text-emerald-400" aria-label="GitHub verified" />
                   </div>
 
                   {/* 2. LeetCode HMAC Challenge Verification */}
-                  <div className="p-5 sm:p-6 rounded-2xl border border-white/10 bg-surface-raised space-y-4 shadow-sm">
+                  <div className="p-5 sm:p-6 rounded-2xl border border-white/10 bg-surface-raised space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
-                        <Code2 className="h-6 w-6 text-provider-leetcode-brand" />
+                        <Code2 className="h-6 w-6 text-provider-leetcode-brand" aria-hidden="true" />
                         <span className="text-base font-bold text-white">LeetCode Profile</span>
                       </div>
                       {leetCodeVerified ? (
-                        <span className="text-xs font-mono px-3 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 font-bold">
-                          <CheckCircle2 className="h-4 w-4" />
-                          HMAC_VERIFIED
+                        <span className="text-xs px-3 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 font-bold">
+                          <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+                          HMAC Verified
                         </span>
                       ) : (
-                        <span className="text-xs font-mono px-3 py-1 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold">
-                          PENDING_PROOF
+                        <span className="text-xs px-3 py-1 rounded-lg bg-amber-500/10 text-amber-300 border border-amber-500/25 font-bold">
+                          Pending proof
                         </span>
                       )}
                     </div>
@@ -752,28 +886,48 @@ function OnboardingContent() {
                         <p className="text-sm text-muted leading-relaxed">
                           To prove ownership, paste this 15-minute challenge code into your public LeetCode Bio:
                         </p>
-                        <div className="flex items-center gap-2.5">
-                          <code className="flex-1 bg-canvas border border-white/10 p-3 rounded-xl text-sm font-mono text-accent select-all font-bold">
-                            {challengeCode}
-                          </code>
-                          <button
-                            onClick={copyChallenge}
-                            className="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-ink-secondary hover:text-white transition-colors"
-                            title="Copy Code"
-                          >
-                            {copied ? <Check className="h-5 w-5 text-emerald-400" /> : <Copy className="h-5 w-5" />}
-                          </button>
-                        </div>
+                        {challengeLoading ? (
+                          <div role="status" aria-live="polite" className="flex items-center gap-2.5 p-3 rounded-xl bg-canvas border border-white/10 text-sm text-muted min-h-[52px]">
+                            <Loader2 className="h-4 w-4 animate-spin text-accent" aria-hidden="true" />
+                            <span>Generating verification challenge…</span>
+                          </div>
+                        ) : challengeCode ? (
+                          <div className="flex items-center gap-2.5">
+                            <code className="flex-1 bg-canvas border border-white/10 p-3 rounded-xl text-sm text-accent select-all font-bold break-all">
+                              {challengeCode}
+                            </code>
+                            <button
+                              type="button"
+                              onClick={copyChallenge}
+                              aria-label="Copy challenge code"
+                              className="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-ink-secondary hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                            >
+                              {copied ? <Check className="h-5 w-5 text-emerald-400" aria-hidden="true" /> : <Copy className="h-5 w-5" aria-hidden="true" />}
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="p-3 rounded-xl bg-canvas border border-white/10 text-sm text-muted flex items-center gap-2.5 min-h-[52px]">
+                            <AlertCircle className="h-4 w-4 text-amber-300 shrink-0" aria-hidden="true" />
+                            <span>No challenge code is available yet. Use the retry control below.</span>
+                          </div>
+                        )}
+                        {copyError && (
+                          <p role="alert" className="text-sm text-red-300 bg-red-500/10 border border-red-500/25 rounded-xl p-3 leading-relaxed">
+                            {copyError}
+                          </p>
+                        )}
 
                         <button
+                          type="button"
                           onClick={verifyLeetCode}
-                          disabled={verifyingLeetCode}
-                          className="w-full py-3 px-4 rounded-xl bg-canvas hover:bg-white/5 border border-accent/30 text-accent text-sm font-mono font-bold flex items-center justify-center gap-2 transition-colors"
+                          disabled={verifyingLeetCode || challengeLoading || !challengeCode}
+                          aria-busy={verifyingLeetCode}
+                          className="w-full py-3 px-4 rounded-xl bg-canvas hover:bg-white/5 border border-accent/30 text-accent text-sm font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                         >
                           {verifyingLeetCode ? (
                             <>
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                              <span>Checking LeetCode Bio...</span>
+                              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                              <span>Checking LeetCode Bio…</span>
                             </>
                           ) : (
                             <span>Verify Challenge Now</span>
@@ -783,49 +937,60 @@ function OnboardingContent() {
                         {leetCodeError && (
                           <p
                             role="alert"
-                            className="text-xs font-mono text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl p-3 leading-relaxed"
+                            className="text-sm text-red-300 bg-red-500/10 border border-red-500/25 rounded-xl p-3 leading-relaxed"
                           >
                             {leetCodeError}
                           </p>
                         )}
                       </div>
                     ) : (
-                      <div className="text-sm font-mono text-emerald-400 bg-emerald-500/10 p-3 rounded-xl border border-emerald-500/20 font-semibold">
+                      <div role="status" className="text-sm text-emerald-300 bg-emerald-500/10 p-3 rounded-xl border border-emerald-500/25 font-semibold">
                         Ownership verified! You can now remove the challenge code from your bio.
                       </div>
                     )}
                   </div>
 
                   {/* 3. HackerRank Profile Handle */}
-                  <div className="p-5 rounded-2xl border border-white/10 bg-surface-raised flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3.5">
-                      <Award className="h-6 w-6 text-provider-hackerrank" />
-                      <div>
-                        <div className="text-base font-bold text-white">HackerRank Handle</div>
-                        <div className="text-xs font-mono text-muted mt-0.5">Cumulative Badge Display Only</div>
+                  <div className="p-5 rounded-2xl border border-white/10 bg-surface-raised space-y-3">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3.5">
+                        <Award className="h-6 w-6 text-provider-hackerrank" aria-hidden="true" />
+                        <div>
+                          <div className="text-base font-bold text-white">HackerRank Handle</div>
+                          <div className="text-sm text-muted mt-0.5">Cumulative badge display only — excluded from weekly competition.</div>
+                        </div>
                       </div>
                     </div>
-                    <input
-                      type="text"
-                      value={hackerRankUsername}
-                      onChange={(e) => setHackerRankUsername(e.target.value)}
-                      className="w-40 bg-canvas border border-white/10 rounded-xl px-3.5 py-2 text-sm font-mono text-white placeholder:text-muted-soft focus:outline-none focus:border-accent"
-                      placeholder="username"
-                    />
+                    <div>
+                      <label htmlFor="hackerrank-handle" className="block text-sm text-muted mb-1.5">
+                        HackerRank username (optional)
+                      </label>
+                      <input
+                        id="hackerrank-handle"
+                        type="text"
+                        value={hackerRankUsername}
+                        onChange={(e) => setHackerRankUsername(e.target.value)}
+                        placeholder="username"
+                        autoComplete="username"
+                        className="w-full bg-canvas border border-white/10 rounded-xl px-3.5 py-2.5 text-base text-white placeholder:text-muted focus:outline-none focus:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                      />
+                    </div>
                   </div>
 
                   <div className="flex gap-4 pt-2">
                     <button
+                      type="button"
                       onClick={() => setStep(2)}
-                      className="px-6 py-4 rounded-xl border border-white/10 hover:bg-white/5 text-sm font-semibold text-muted hover:text-white transition-colors"
+                      className="px-6 py-4 rounded-xl border border-white/10 hover:bg-white/5 text-sm font-semibold text-muted hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
                       Back
                     </button>
                     <button
+                      type="button"
                       onClick={handleFinish}
-                      className="flex-1 py-4 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-semibold text-base flex items-center justify-center gap-2.5 hover:scale-[1.01] active:scale-[0.99] transition-all"
+                      className="flex-1 py-4 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-semibold text-base flex items-center justify-center gap-2.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                     >
-                      <Sparkles className="h-5 w-5" />
+                      <Sparkles className="h-5 w-5" aria-hidden="true" />
                       <span>Complete Setup &amp; Launch Dashboard</span>
                     </button>
                   </div>
@@ -837,7 +1002,7 @@ function OnboardingContent() {
       </main>
 
       {/* Footer */}
-      <footer className="p-6 text-center text-xs font-mono text-muted-soft">
+      <footer className="p-6 text-center text-sm text-muted">
         Class Community: B.Tech CSE 2026 • Independent Co-Admin Audited
       </footer>
     </div>
@@ -848,8 +1013,8 @@ export default function OnboardingPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-canvas text-ink flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-accent" />
+        <div className="min-h-screen bg-canvas text-ink flex items-center justify-center" role="status" aria-label="Loading onboarding">
+          <Loader2 className="h-8 w-8 animate-spin text-accent" aria-hidden="true" />
         </div>
       }
     >
