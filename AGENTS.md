@@ -17,13 +17,15 @@ Do not start editing before step 1. Three agents work in this repository simulta
 The repository operates under a 3-agent autonomous engineering model managed by Antigravity:
 
 - **Antigravity (IDE Lead & Orchestrator):** Leads architecture, multi-file code generation, UI animations, database migrations, and master ledger coordination. Directly allocates and supervises tasks for the other two agents in `TASKS.md` and `MEMORY.md`.
-- **`agy` (Antigravity CLI Subagent):** High-velocity interactive terminal agent inside the shell. Handles live endpoint testing, CLI slash commands, background daemon supervision, and immediate validation cycles.
-- **OpenCode (CLI Deep Auditor & Quality Subagent):** Launched via `C:\Users\kathi\opencode-fresh.cmd` (auto-injects `HF_TOKEN`, `GITHUB_TOKEN`). Specializes in deep code audits, contrast/WCAG compliance sweeps (e.g., QP backlog), and static analysis.
-- **Parallel Coordination Rules:**
-  1. **Strict Task Segregation:** Always check `TASKS.md` and `MEMORY.md` before picking up a task. Never work on the same task ID or edit the same file concurrently.
-  2. **Explicit Staging Only:** **Never run `git add -A`**. Stage only the explicit file paths you modified.
-  3. **Shared Skills Junctions:** All skills are linked across Claude, Codex, OpenCode, Antigravity, and the workspace via NTFS Directory Junctions (`mklink /J`), avoiding Windows `EPERM` symlink limitations.
-  4. **Single Source of Truth:** Update `MEMORY.md` session log after completing every work unit.
+- **`agy` (Antigravity CLI Subagent):** High-velocity interactive terminal agent inside the shell (`C:\Users\kathi\AppData\Local\agy\bin\agy.exe`). Handles live endpoint testing, CLI slash commands, background daemon supervision, build runners, and immediate validation cycles.
+- **OpenCode (CLI Deep Auditor & Quality Subagent):** Launched via `C:\Users\kathi\opencode-fresh.cmd` (auto-injects `HF_TOKEN`, `GITHUB_TOKEN`). Specializes in deep code audits, contrast/WCAG compliance sweeps (e.g., QP backlog), design-taste inspections, and static analysis.
+- **Parallel Coordination Rules (Mandatory User Instructions):**
+  1. **Mandatory Live To-Do List Protocol:** Every agent on every task MUST instantiate, display, and maintain an explicit, trackable To-Do checklist (`[ ]`, `[/]`, `[x]`). Work step-by-step and pair each progress update with status against the list.
+  2. **Continuous Standing Wakefulness & Parallel Sync:** Work happens concurrently in parallel across agents. The orchestrator and agents must stay active ("stay awake until the work stops"), continuously surveillance the workspace for concurrent changes, inspect diffs, verify build and test gates, and synchronize all `.md` files (`AGENTS.md`, `MEMORY.md`, `TASKS.md`, `README.md`) in lockstep.
+  3. **Strict Task Segregation:** Always check `TASKS.md` and `MEMORY.md` before picking up a task. Never work on the same task ID or edit the same file concurrently.
+  4. **Explicit Staging Only:** **Never run `git add -A`**. Stage only the explicit file paths you modified.
+  5. **Shared Skills Junctions:** All skills are linked across Claude, Codex, OpenCode, Antigravity, and the workspace via NTFS Directory Junctions (`mklink /J`), avoiding Windows `EPERM` symlink limitations.
+  6. **Single Source of Truth:** Update `MEMORY.md` session log and `TASKS.md` status after completing every work unit.
 
 ---
 

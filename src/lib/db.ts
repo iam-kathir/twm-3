@@ -670,7 +670,7 @@ export function getLatestActiveOtpChallenge(studentId: string, email: string): E
   return db.prepare(`
     SELECT * FROM email_otp_challenges
     WHERE student_id = ? AND LOWER(email) = LOWER(?) AND consumed_at IS NULL
-    ORDER BY created_at DESC
+    ORDER BY created_at DESC, rowid DESC
     LIMIT 1
   `).get(studentId, email) as unknown as EmailOtpChallengeRow | undefined;
 }

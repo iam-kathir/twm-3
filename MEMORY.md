@@ -64,14 +64,16 @@ TWM ("Track. Win. Maintain.") is an institutional-grade, class-scoped developer 
 ## 🤝 Multi-Agent Protocol & Global Skill Ecosystem
 
 ### Tri-Agent Parallel Engineering Model (Managed by Antigravity):
-- **Antigravity (IDE Lead & Orchestrator):** Manages task scheduling, multi-file full-stack code generation, Next.js architecture, UI animations, database design, and master ledger coordination. Directly coordinates work between `agy` and `OpenCode`.
-- **`agy` (Antigravity CLI Subagent):** High-velocity terminal agent running in the shell. Owns rapid terminal diagnostics, live endpoint cURL checks, background cron daemon maintenance, and instant slash command workflows.
-- **OpenCode (CLI Deep Auditor & Quality Subagent):** Launched via `C:\Users\kathi\opencode-fresh.cmd` (injects `HF_TOKEN`, `GITHUB_TOKEN`). Specializes in deep codebase audits, contrast/WCAG compliance sweeps (e.g. QP-2 through QP-4), and mechanical static analysis.
-- **Parallel Work Coordination Rules:**
-  - Tasks in `TASKS.md` and `MEMORY.md` are tagged with explicit owners (`Antigravity`, `agy`, or `OpenCode`).
-  - Strict file-boundary isolation: agents never write to the same file concurrently.
-  - Never run blanket `git add -A`; stage explicit paths only.
-  - `MEMORY.md` session log is updated at the conclusion of every work unit.
+- **Antigravity (IDE Lead & Master Orchestrator):** Manages task scheduling, multi-file full-stack code generation, Next.js architecture, UI animations, database design, and master ledger coordination. Directly coordinates work between `agy` and `OpenCode`.
+- **`agy` (Antigravity CLI Subagent):** High-velocity terminal agent running in the shell (`C:\Users\kathi\AppData\Local\agy\bin\agy.exe`). Owns rapid terminal diagnostics, live endpoint cURL checks, background cron daemon maintenance, build runners, and instant slash command workflows.
+- **OpenCode (CLI Deep Auditor & Quality Subagent):** Launched via `C:\Users\kathi\opencode-fresh.cmd` (auto-injects `HF_TOKEN`, `GITHUB_TOKEN`). Specializes in deep codebase audits, contrast/WCAG compliance sweeps (e.g. QP-2 through QP-4), design-taste inspections, and mechanical static analysis.
+- **Parallel Work Coordination Rules (Mandatory User Instructions):**
+  1. **Mandatory Live To-Do List Protocol:** Every agent on every task MUST instantiate, display, and maintain an explicit, trackable To-Do checklist (`[ ]`, `[/]`, `[x]`). Work step-by-step and pair each progress update with status against the list.
+  2. **Continuous Standing Wakefulness & Parallel Sync:** Work happens concurrently in parallel across agents. The orchestrator and agents must stay active ("stay awake until the work stops"), continuously surveillance the workspace for concurrent changes, inspect diffs, verify build and test gates, and synchronize all `.md` files (`AGENTS.md`, `MEMORY.md`, `TASKS.md`, `README.md`) in lockstep.
+  3. **Strict Task Segregation:** Always check `TASKS.md` and `MEMORY.md` before picking up a task. Never work on the same task ID or edit the same file concurrently.
+  4. **Explicit Staging Only:** **Never run `git add -A`**. Stage only the explicit file paths you modified.
+  5. **Shared Skills Junctions:** All skills are linked across Claude, Codex, OpenCode, Antigravity, and the workspace via NTFS Directory Junctions (`mklink /J`), avoiding Windows `EPERM` symlink limitations.
+  6. **Single Source of Truth:** Update `MEMORY.md` session log and `TASKS.md` status after completing every work unit.
 
 ### Global Skills Installed Across All 5 Agent Hosts:
 All skills are permanently installed and linked across **Claude Code, OpenAI Codex, OpenCode, Antigravity IDE, and the Workspace**:
@@ -84,7 +86,7 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ---
 
-## 🎯 Master Live Task Board (Phases 0–8)
+## 🎯 Master Live Task Board (Phases 0–9)
 
 | Task ID | Component / Milestone | Owner / Status | Scope & File References |
 | :--- | :--- | :--- | :--- |
@@ -112,6 +114,8 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 | **P7-2** | **Hot Backup & Atomic Restore Scripts** | Antigravity — ✅ **DONE** | SQLite WAL-safe backup with SHA256 integrity verification. [`scripts/backup-db.mjs`](scripts/backup-db.mjs)<br>[`scripts/restore-db.mjs`](scripts/restore-db.mjs) |
 | **P7-3** | **College Email OTP Verification** | Antigravity — ✅ **DONE** | Secure 6-digit OTP delivery, Resend & SendGrid adapters, rate limiting, and 18 unit tests. [`src/lib/otp.ts`](src/lib/otp.ts)<br>[`src/lib/email/`](src/lib/email/) |
 | **P8-1** | **ESLint 8 & CI Quality Gate Workflow** | Antigravity — ✅ **DONE** | ESLint 8 + Next Core Web Vitals configuration and automated GitHub Actions CI pipeline. [`.eslintrc.json`](.eslintrc.json)<br>[`.github/workflows/ci.yml`](.github/workflows/ci.yml) |
+| **P8-2** | **Production Healthcheck & WAL Sync Tuning** | Antigravity & OpenCode — ✅ **DONE** | `/api/health` latency probe, `PRAGMA synchronous = NORMAL`, `.unref()` timers, and env validator. [`/api/health`](src/app/api/health/route.ts) |
+| **FE-1..8** | **Phase 9 Frontend Elevation ("TWM Precision Ledger")** | OpenCode & Antigravity — ✅ **DONE** | Whole-app precision overhaul: flat typographic ledger, `BoundaryChecker.tsx`, responsive headers, dead-code removal, design-taste QA (0 FAIL). |
 
 ---
 

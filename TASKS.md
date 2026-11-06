@@ -29,12 +29,14 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
    - Provider brand colors strictly tokenized (`--provider-github`, `--provider-leetcode`, `--provider-leetcode-brand`, `--provider-hackerrank`). Resolves previous collision with LeetCode brand orange.
 5. **Tri-Agent Parallel Collaboration Protocol (Triumvirate Architecture)**:
    - **Antigravity (IDE Lead & Master Orchestrator)**: Leads system architecture, core engine design, Next.js UI animations/pages, database migrations, and work allocation across agents.
-   - **`agy` (CLI Subagent - Rapid Automation & Daemon Controller)**: Runs terminal pipelines, builds, automated tests, background cron workers (`scripts/boundary-scheduler.mjs`), cURL verification, and interactive checks.
-   - **`opencode` (CLI Subagent - Deep Code Auditor & Quality Engineer)**: Executes deep static code audits, WCAG 2.1 AA contrast sweeps (QP backlog), typography checks, and accessibility verifications.
-   - **Parallel Work Principles**:
-     - Strict task partitioning: Agents never work on the same task ID or edit the same file concurrently.
-     - Never execute blanket `git add -A`; stage explicit paths only.
-     - Update [`MEMORY.md`](file:///d:/Track.%20Win.%20Maintain/TWM%203.O/MEMORY.md) session log after every completed milestone.
+   - **`agy` (CLI Subagent - Rapid Automation & Daemon Controller)**: High-velocity terminal agent in the shell (`C:\Users\kathi\AppData\Local\agy\bin\agy.exe`). Runs terminal pipelines, builds, automated tests, background cron workers (`scripts/boundary-scheduler.mjs`), cURL verification, and interactive checks.
+   - **`opencode` (CLI Subagent - Deep Code Auditor & Quality Engineer)**: CLI auditor launched via `C:\Users\kathi\opencode-fresh.cmd` (auto-injects `HF_TOKEN`, `GITHUB_TOKEN`). Executes deep static code audits, WCAG 2.1 AA contrast sweeps (QP backlog), design-taste inspections, and accessibility verifications.
+   - **Parallel Work Principles (Mandatory User Instructions)**:
+     - **Mandatory Live To-Do List Protocol**: Every agent on every task MUST instantiate, display, and maintain an explicit, trackable To-Do checklist (`[ ]`, `[/]`, `[x]`). Work step-by-step and pair each progress update with status against the list.
+     - **Continuous Standing Wakefulness & Parallel Sync**: Work occurs concurrently in parallel across agents. Agents must stay active ("stay awake until the work stops"), surveillance the workspace for concurrent changes, inspect diffs, verify build and test gates, and keep all `.md` files (`AGENTS.md`, `MEMORY.md`, `TASKS.md`, `README.md`) synchronized.
+     - **Strict Task Partitioning**: Agents never work on the same task ID or edit the same file concurrently.
+     - **Explicit Staging Only**: **Never execute blanket `git add -A`**; stage explicit modified paths only.
+     - **Single Source of Truth**: Update [`MEMORY.md`](file:///d:/Track.%20Win.%20Maintain/TWM%203.O/MEMORY.md) session log and [`TASKS.md`](file:///d:/Track.%20Win.%20Maintain/TWM%203.O/TASKS.md) status after completing every work unit.
 
 ---
 
@@ -50,6 +52,7 @@ TWM is a class-focused developer telemetry, activity tracking, and friendly comp
 [ Phase 6: Data Sovereignty & Governance Policy ] ──────────► COMPLETED (100%)
 [ Phase 7: Launch Readiness, Backups & Containerization ] ──► COMPLETED (100%)
 [ Phase 8: ESLint, CI and Automated Quality Gates ] ────────► COMPLETED (100%)
+[ Phase 9: Frontend Elevation - TWM Precision Ledger ] ─────► COMPLETED (100%)
 ```
 
 ---

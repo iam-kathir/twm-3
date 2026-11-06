@@ -301,7 +301,7 @@ describe("TWM College Email OTP Verification & Auth Hardening", () => {
       const otpHash = hashOTP(otp, salt);
 
       // Reset any active challenges for otherStudent
-      invalidateActiveOtpChallenges(otherStudentId, otherStudentEmail);
+      db.prepare("DELETE FROM email_otp_challenges WHERE student_id = ?").run(otherStudentId);
 
       createEmailOtpChallenge({
         id: lockChallengeId,

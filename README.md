@@ -27,6 +27,9 @@ Developed and verified on Node 24.
 | `npm start` | Serve the production build |
 | `npm test` | Automated `node:test` suite (`scripts/test-foundation.mjs` + `scripts/test-otp-verification.mjs`) |
 | `npm run simulate` | Simulate a 7-day tournament week against a throwaway DB |
+| `npm run audit:launch` | Section 21 Master Launch Acceptance Checklist programmatic audit |
+| `npm run backup` | Online atomic SQLite WAL database backup (`VACUUM INTO`) |
+| `npm run restore` | Atomic database restore with SHA-256 verification and safety snapshot |
 | `npm run lint` | Next.js Core Web Vitals ESLint audit (`next lint`) |
 
 ---
@@ -85,6 +88,8 @@ database service. Backups via `npm run` scripts `backup-db.mjs` / `restore-db.mj
 | `/api/auth/email/verify-otp` | POST | Timing-safe OTP verification & session cookie upgrade |
 | `/api/auth/hmac-challenge` | POST | One-time HMAC nonce for telemetry ingestion |
 | `/api/auth/session` | GET/PATCH | Session issue / read / identity tier update |
+| `/api/auth/disconnect` | POST/DELETE | 1-click platform disconnect & data sovereignty erasure (§17.4, §18.4) |
+| `/api/health` | GET | Production healthcheck, DB query latency, quorum status & env diagnostics |
 | `/api/telemetry/github` | POST | Commit + activity ingestion |
 | `/api/telemetry/leetcode` | POST | Solved-problem ingestion |
 | `/api/telemetry/hackerrank` | POST | Badge evidence ingestion |
@@ -127,6 +132,23 @@ docker compose up --build
 The image is a multi-stage Next.js standalone build running as a non-root user, with the SQLite
 database and backups on a named volume (`twm-data`). The compose file also runs the 3-hour
 boundary scheduler daemon against the same volume.
+
+---
+
+## Multi-Agent Autonomous Engineering Architecture
+
+This repository operates under a continuous 3-agent parallel engineering model orchestrated by Antigravity:
+
+- **Antigravity (IDE Lead & Master Orchestrator):** Leads system architecture, Next.js UI animations/pages, database migrations, and work allocation across agents.
+- **`agy` (CLI Subagent - Rapid Automation & Daemon Controller):** High-velocity terminal agent in the shell (`C:\Users\kathi\AppData\Local\agy\bin\agy.exe`). Runs terminal pipelines, builds, automated tests, background cron workers (`scripts/boundary-scheduler.mjs`), cURL verification, and interactive checks.
+- **`opencode` (CLI Subagent - Deep Code Auditor & Quality Engineer):** CLI auditor launched via `C:\Users\kathi\opencode-fresh.cmd` (auto-injects `HF_TOKEN`, `GITHUB_TOKEN`). Executes deep static code audits, WCAG 2.1 AA contrast sweeps, design-taste inspections, and accessibility verifications.
+
+### Parallel Coordination & Live To-Do Protocol (Mandatory Rules)
+
+1. **Mandatory Live To-Do List:** Every agent on every task must maintain an active, trackable To-Do checklist (`[ ]`, `[/]`, `[x]`). Work step-by-step and pair each progress update with status against the list.
+2. **Standing Wakefulness & Continuous Sync:** Agents remain actively surveillance-ready ("stay awake until work stops") to monitor concurrent file edits, verify cross-agent integrity, and keep documentation (`AGENTS.md`, `MEMORY.md`, `TASKS.md`, `README.md`) in lockstep.
+3. **Explicit Staging Only:** **Never run `git add -A`**. Stage only the explicit file paths you modified.
+4. **Single Source of Truth:** Update [`MEMORY.md`](MEMORY.md) session log and [`TASKS.md`](TASKS.md) after completing every work unit.
 
 ---
 
