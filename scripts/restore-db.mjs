@@ -73,6 +73,7 @@ try {
   console.log(`  • hmac_nonces:            ${result.tables.hmac_nonces} rows`);
   console.log(`  • disputes:               ${result.tables.disputes} rows`);
   console.log(`  • weekly_standings:       ${result.tables.weekly_standings} rows`);
+  console.log(`  • email_otp_challenges:   ${result.tables.email_otp_challenges ?? 0} rows`);
 
   console.log("\n✔ DATABASE RESTORE VERIFIED (EXIT 0)");
   process.exit(0);

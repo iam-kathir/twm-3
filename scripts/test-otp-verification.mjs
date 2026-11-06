@@ -33,6 +33,7 @@ import {
   consumeOtpChallenge,
   getLatestActiveOtpChallenge,
   invalidateActiveOtpChallenges,
+  cleanupStaleOtpChallenges,
 } from "../src/lib/db.ts";
 
 // Set environment for test mode
@@ -368,6 +369,64 @@ describe("TWM College Email OTP Verification & Auth Hardening", () => {
 
       const tamperedResult = verifySessionToken(tamperedToken);
       assert.equal(tamperedResult, null, "Tampered signature must fail verification closed");
+    });
+  });
+
+  describe("7. Stale Challenge Pruning & Retention (§17.3)", () => {
+    it("prunes expired and consumed challenges older than threshold while preserving active challenges", () => {
+      const db = getDb();
+      const testStudent = testStudentId;
+      const pastTime = Date.now() - (10 * 24 * 60 * 60 * 1000); // 10 days ago
+      const recentTime = Date.now() + (5 * 60 * 1000); // 5 min in future
+
+      // Insert mock stale challenge
+      createEmailOtpChallenge({
+        id: "otp-stale-1",
+        studentId: testStudent,
+        email: "stale1@karunya.edu",
+        otpHash: "mockhash1",
+        salt: "mocksalt1",
+        expiresAt: pastTime,
+        resendAvailableAt: pastTime,
+      });
+
+      // Insert mock consumed challenge
+      createEmailOtpChallenge({
+        id: "otp-consumed-1",
+        studentId: testStudent,
+        email: "stale2@karunya.edu",
+        otpHash: "mockhash2",
+        salt: "mocksalt2",
+        expiresAt: pastTime,
+        resendAvailableAt: pastTime,
+      });
+      consumeOtpChallenge("otp-consumed-1", pastTime);
+
+      // Insert mock fresh active challenge
+      createEmailOtpChallenge({
+        id: "otp-fresh-1",
+        studentId: testStudent,
+        email: "fresh@karunya.edu",
+        otpHash: "mockhash3",
+        salt: "mocksalt3",
+        expiresAt: recentTime,
+        resendAvailableAt: Date.now(),
+      });
+
+      // Run cleanup with 7-day retention
+      const { deletedCount } = cleanupStaleOtpChallenges(7);
+      assert.ok(deletedCount >= 2, `Expected at least 2 pruned rows, got ${deletedCount}`);
+
+      // Verify active challenge remains untouched
+      const freshRow = db.prepare("SELECT * FROM email_otp_challenges WHERE id = ?").get("otp-fresh-1");
+      assert.ok(freshRow, "Active fresh OTP challenge must not be pruned");
+
+      // Verify stale rows are gone
+      const staleRow = db.prepare("SELECT * FROM email_otp_challenges WHERE id IN (?, ?)").all("otp-stale-1", "otp-consumed-1");
+      assert.equal(staleRow.length, 0, "Stale challenges must be pruned");
+
+      // Clean up test active row
+      db.prepare("DELETE FROM email_otp_challenges WHERE id = ?").run("otp-fresh-1");
     });
   });
 });

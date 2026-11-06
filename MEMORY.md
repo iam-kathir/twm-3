@@ -117,6 +117,26 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-11-06 — Antigravity & agy: Data Sovereignty Disconnect API, Docker Compose Networking & DB Pruning (P7-9)
+- **Goal:** Complete pending backend, infrastructure, and data sovereignty requirements while frontend undergoes UI upgrades without touching client visual components.
+- **Data Sovereignty & Erasure API (`/api/auth/disconnect`, `src/lib/db.ts`):**
+  - Created `POST` and `DELETE` endpoints at `src/app/api/auth/disconnect/route.ts` implementing 1-click provider disconnect (`disconnectStudentProvider`) and complete data wipe (`deleteStudentTelemetryData`) per §17.4 non-surveillance and §18.4 portability guarantees.
+  - Rate limited (10 requests/10 min) with strict authenticated session hydration (`getCurrentSession()`).
+- **Docker Compose Inter-Container Networking (`docker-compose.yml`, `scripts/boundary-scheduler.mjs`):**
+  - Configured `BASE_URL=http://twm-web:3000` in `docker-compose.yml` for `twm-scheduler` service.
+  - Updated `scripts/boundary-scheduler.mjs` to dynamically bind to `BASE_URL`, `TWM_WEB_URL`, or `http://localhost:${PORT}` fallback, preventing container connection failure in production Docker deployments.
+- **SQLite WAL Backup & Restore Engine Table Statistics (`src/lib/backup.ts`, `scripts/*-db.mjs`):**
+  - Updated `BackupMetadata`, `RestoreResult`, `createDatabaseBackup`, and `restoreDatabaseFromBackup` to track `email_otp_challenges` across all backup manifests and restore verification summaries.
+  - Updated `scripts/backup-db.mjs` and `scripts/restore-db.mjs` outputs.
+- **Stale Challenge Database Pruning Helper (`src/lib/db.ts`):**
+  - Implemented `cleanupStaleOtpChallenges(maxAgeDays)` to purge expired or consumed OTP challenges past the 7-day retention threshold (§17.3).
+- **Verification Gates (Executed via `agy`):**
+  - `npm test`: **20/20 test suites passing** (10 launch gates + 20 OTP/sovereignty unit tests).
+  - `npx tsc --noEmit`: 0 errors (clean exit 0).
+  - `npm run lint`: 0 warnings, 0 errors.
+  - `npm run audit:launch`: 10/10 gates passed (100% launch acceptance).
+  - `node scripts/boundary-scheduler.mjs --once`: Clean execution (exit 0).
+
 ### 2026-10-26 — Antigravity & agy: 21st.dev Orbiting Telemetry Showcase & Micro-Motion Suite
 - **Goal:** Elevate landing hero & countdown mechanics with 21st.dev UI patterns, dual-orbit telemetry nodes, meteor animations, animated shiny badges, rolling digit tickers, and gyroscopic tilt.
 - **21st.dev UI Suite:**

@@ -39,6 +39,7 @@ services:
     command: ["node", "scripts/boundary-scheduler.mjs"]
     environment:
       - NODE_ENV=production
+      - BASE_URL=http://twm-web:3000
       - HOSTNAME=0.0.0.0
     volumes:
       - twm-data:/app/data

@@ -57,6 +57,7 @@ try {
   console.log(`  • hmac_nonces:            ${meta.tables.hmac_nonces} rows`);
   console.log(`  • disputes:               ${meta.tables.disputes} rows`);
   console.log(`  • weekly_standings:       ${meta.tables.weekly_standings} rows`);
+  console.log(`  • email_otp_challenges:   ${meta.tables.email_otp_challenges ?? 0} rows`);
 
   if (result.prunedCount > 0) {
     console.log(`\n🧹 Retention policy applied: Pruned ${result.prunedCount} older snapshot(s) (retaining latest ${maxBackups}).`);

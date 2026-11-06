@@ -1,8 +1,8 @@
-import { test, describe, it } from "node:test";
+import { test, describe, it, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { computeCompetitionRanks } from "../src/lib/leaderboard.ts";
 import { checkRateLimit } from "../src/lib/rate-limit.ts";
-import { getDb, getAllRosterMembers, insertRosterMember, getRosterQuorumStats, registerHmacNonce, verifyAndConsumeNonce, insertDispute, resolveDisputeInDb, getAllDisputes, getWeeklyStandingsFromDb } from "../src/lib/db.ts";
+import { getDb, getAllRosterMembers, insertRosterMember, getRosterQuorumStats, registerHmacNonce, verifyAndConsumeNonce, insertDispute, resolveDisputeInDb, getAllDisputes, getWeeklyStandingsFromDb, disconnectStudentProvider, deleteStudentTelemetryData } from "../src/lib/db.ts";
 import { executeWeeklyFinalization } from "../src/lib/finalizer.ts";
 import { getPreviousSundayBoundaryIST, computeLeetCodeBaseline } from "../src/lib/baseline.ts";
 import { generateDeterministicWeeklyRecap } from "../src/lib/recap.ts";
@@ -590,6 +590,71 @@ describe("TWM Foundation Suite", () => {
       db.prepare("DELETE FROM roster_members WHERE roll_no IN (?, ?)").run(testRoll1, testRoll2);
       const restoredQuorum = getRosterQuorumStats();
       assert.equal(restoredQuorum.totalEnrolled, initialQuorum.totalEnrolled);
+    });
+  });
+
+  describe("Section 17.4 & §18.4 Student Data Sovereignty, Provider Disconnect & Complete Wipe", () => {
+    const db = getDb();
+    const testStudentId = "std-sovereignty-test";
+    const testRollNo = "2022BCSE999";
+
+    before(() => {
+      // Clean up previous test runs if any
+      db.prepare("DELETE FROM roster_members WHERE id = ?").run(testStudentId);
+
+      // Insert test student
+      db.prepare(`
+        INSERT INTO roster_members (
+          id, roll_no, name, email, class_section, handle_github, handle_leetcode, handle_hackerrank, is_active, is_current_user
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 0)
+      `).run(testStudentId, testRollNo, "Data Sovereignty Student", "sovereignty@college.edu", "CSE-A", "test_gh_sovereign", "test_lc_sovereign", "test_hr_sovereign");
+
+      // Insert mock telemetry observations
+      db.prepare(`
+        INSERT INTO telemetry_observations (
+          id, student_id, platform, metric_name, metric_value, display_value, observed_at
+        ) VALUES 
+          ('obs-sov-1', ?, 'github', 'github_active_days', 5, '5 / 7 Days', datetime('now')),
+          ('obs-sov-2', ?, 'leetcode', 'leetcode_problems_solved', 42, '42 Solved', datetime('now'))
+      `).run(testStudentId, testStudentId);
+    });
+
+    after(() => {
+      db.prepare("DELETE FROM roster_members WHERE id = ?").run(testStudentId);
+    });
+
+    it("disconnects single platform adapter and cleans up platform observations (§18.4)", () => {
+      const result = disconnectStudentProvider(testStudentId, "github");
+      assert.equal(result.unlinked, true);
+      assert.equal(result.deletedObservations, 1);
+
+      // Verify handle_github is null but handle_leetcode remains
+      const member = db.prepare("SELECT * FROM roster_members WHERE id = ?").get(testStudentId);
+      assert.equal(member.handle_github, null);
+      assert.equal(member.handle_leetcode, "test_lc_sovereign");
+
+      // Verify github observation is deleted but leetcode observation remains
+      const obsGithub = db.prepare("SELECT * FROM telemetry_observations WHERE student_id = ? AND platform = 'github'").all(testStudentId);
+      assert.equal(obsGithub.length, 0);
+      const obsLeetcode = db.prepare("SELECT * FROM telemetry_observations WHERE student_id = ? AND platform = 'leetcode'").all(testStudentId);
+      assert.equal(obsLeetcode.length, 1);
+    });
+
+    it("executes complete 1-click data wipe per §17.4 non-surveillance policy", () => {
+      const wipeResult = deleteStudentTelemetryData(testStudentId);
+      assert.equal(wipeResult.unlinked, true);
+      assert.equal(wipeResult.deletedObservations, 1); // the remaining leetcode observation
+
+      // Verify all observations are erased
+      const allObs = db.prepare("SELECT * FROM telemetry_observations WHERE student_id = ?").all(testStudentId);
+      assert.equal(allObs.length, 0);
+
+      // Verify handles unlinked and marked inactive
+      const member = db.prepare("SELECT * FROM roster_members WHERE id = ?").get(testStudentId);
+      assert.equal(member.handle_github, null);
+      assert.equal(member.handle_leetcode, null);
+      assert.equal(member.handle_hackerrank, null);
+      assert.equal(member.is_active, 0);
     });
   });
 });

@@ -723,9 +723,87 @@ export function getRosterMemberByEmail(email: string): RosterMemberRow | undefin
   return db.prepare("SELECT * FROM roster_members WHERE LOWER(email) = LOWER(?)").get(email) as unknown as RosterMemberRow | undefined;
 }
 
+/**
+ * Prunes expired or consumed email OTP challenges older than maxAgeDays (default: 7 days)
+ * Preserves disk space and maintains query performance (§17.3 retention defaults).
+ */
+export function cleanupStaleOtpChallenges(maxAgeDays: number = 7): { deletedCount: number } {
+  const db = getDb();
+  const cutoffMs = Date.now() - (maxAgeDays * 24 * 60 * 60 * 1000);
+  const result = db.prepare(`
+    DELETE FROM email_otp_challenges
+    WHERE (consumed_at IS NOT NULL AND consumed_at < ?)
+       OR (expires_at < ?)
+  `).run(cutoffMs, cutoffMs);
+  return { deletedCount: Number(result.changes) };
+}
+
 export function getRosterMemberByGithub(handle: string): RosterMemberRow | undefined {
   const db = getDb();
   return db.prepare("SELECT * FROM roster_members WHERE LOWER(handle_github) = LOWER(?)").get(handle) as unknown as RosterMemberRow | undefined;
+}
+
+/**
+ * Disconnects a specific platform adapter for a student (§18.4, §17.4 data sovereignty).
+ * Clears handle and removes platform-specific telemetry observations.
+ */
+export function disconnectStudentProvider(
+  studentId: string,
+  platform: "github" | "leetcode" | "hackerrank"
+): { unlinked: boolean; deletedObservations: number } {
+  const db = getDb();
+  const columnMap = {
+    github: "handle_github",
+    leetcode: "handle_leetcode",
+    hackerrank: "handle_hackerrank",
+  };
+  const column = columnMap[platform];
+  if (!column) {
+    throw new Error(`Invalid platform: ${platform}`);
+  }
+
+  db.exec("BEGIN TRANSACTION;");
+  try {
+    db.prepare(`UPDATE roster_members SET ${column} = NULL WHERE id = ?`).run(studentId);
+    const obsResult = db.prepare(`
+      DELETE FROM telemetry_observations
+      WHERE student_id = ? AND platform = ?
+    `).run(studentId, platform);
+    db.exec("COMMIT;");
+    return { unlinked: true, deletedObservations: Number(obsResult.changes) };
+  } catch (err) {
+    db.exec("ROLLBACK;");
+    throw err;
+  }
+}
+
+/**
+ * 1-Click Complete Data Wipe / Disconnect (§17.4 & §18.4)
+ * Removes all telemetry observations, active OTP challenges, and unlinks handles.
+ */
+export function deleteStudentTelemetryData(studentId: string): {
+  deletedObservations: number;
+  unlinked: boolean;
+} {
+  const db = getDb();
+  db.exec("BEGIN TRANSACTION;");
+  try {
+    const obsRes = db.prepare("DELETE FROM telemetry_observations WHERE student_id = ?").run(studentId);
+    db.prepare("DELETE FROM email_otp_challenges WHERE student_id = ?").run(studentId);
+    db.prepare(`
+      UPDATE roster_members
+      SET handle_github = NULL, handle_leetcode = NULL, handle_hackerrank = NULL, is_active = 0
+      WHERE id = ?
+    `).run(studentId);
+    db.exec("COMMIT;");
+    return {
+      deletedObservations: Number(obsRes.changes),
+      unlinked: true,
+    };
+  } catch (err) {
+    db.exec("ROLLBACK;");
+    throw err;
+  }
 }
 
 

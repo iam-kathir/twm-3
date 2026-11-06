@@ -20,7 +20,7 @@ import { getRosterQuorumStats, getAllRosterMembers, getDb } from "../src/lib/db.
 import { executeWeeklyFinalization } from "../src/lib/finalizer.ts";
 
 const PORT = process.env.PORT || 3000;
-const BASE_URL = `http://localhost:${PORT}`;
+const BASE_URL = process.env.BASE_URL || process.env.TWM_WEB_URL || `http://${process.env.HOSTNAME || "localhost"}:${PORT}`;
 
 // IST is UTC + 5h 30m
 function getISTDate(date = new Date()) {

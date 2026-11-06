@@ -16,6 +16,7 @@ export interface BackupMetadata {
     hmac_nonces: number;
     disputes: number;
     weekly_standings: number;
+    email_otp_challenges?: number;
   };
   integrityCheck: string;
 }
@@ -42,6 +43,7 @@ export interface RestoreResult {
     hmac_nonces: number;
     disputes: number;
     weekly_standings: number;
+    email_otp_challenges?: number;
   };
   error?: string;
 }
@@ -115,6 +117,7 @@ export function createDatabaseBackup(options: {
     hmac_nonces: 0,
     disputes: 0,
     weekly_standings: 0,
+    email_otp_challenges: 0,
   };
 
   try {
@@ -137,6 +140,7 @@ export function createDatabaseBackup(options: {
       hmac_nonces: getCount("hmac_nonces"),
       disputes: getCount("disputes"),
       weekly_standings: getCount("weekly_standings"),
+      email_otp_challenges: getCount("email_otp_challenges"),
     };
   } finally {
     backupDb.close();
@@ -369,6 +373,7 @@ export function restoreDatabaseFromBackup(
     hmac_nonces: 0,
     disputes: 0,
     weekly_standings: 0,
+    email_otp_challenges: 0,
   };
 
   try {
@@ -393,6 +398,7 @@ export function restoreDatabaseFromBackup(
       hmac_nonces: getCount("hmac_nonces"),
       disputes: getCount("disputes"),
       weekly_standings: getCount("weekly_standings"),
+      email_otp_challenges: getCount("email_otp_challenges"),
     };
   } finally {
     restoredDb.close();
