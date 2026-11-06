@@ -117,6 +117,23 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-10-26 — Antigravity & agy: 21st.dev Orbiting Telemetry Showcase & Micro-Motion Suite
+- **Goal:** Elevate landing hero & countdown mechanics with 21st.dev UI patterns, dual-orbit telemetry nodes, meteor animations, animated shiny badges, rolling digit tickers, and gyroscopic tilt.
+- **21st.dev UI Suite:**
+  - `OrbitingTelemetryShowcase.tsx`: Dual-orbit concentric telemetry ring visualization with live provider status indicators (GitHub, LeetCode, HackerRank, College SSO).
+  - `OrbitingCircles.tsx`: GPU-accelerated CSS path animation orbiting child nodes around center hub.
+  - `Meteors.tsx`: Dynamic obsidian meteor shower effect with trail gradients.
+  - `AnimatedShinyText.tsx`: Linear-style shimmering typography badge for hero announcements.
+- **Micro-Motion & Ticker Overhaul (`SundayCountdownClock.tsx`):**
+  - Smooth rolling digit ticker for countdown numbers avoiding layout jitter.
+  - Gyroscopic 3D card tilt with spring return physics.
+  - Laser border beams and radar pulse ripples for active live tournament status.
+- **Verification:**
+  - `npx tsc --noEmit`: 0 errors.
+  - `npm run lint`: 0 warnings, 0 errors.
+  - `npm test`: 19/19 test suites passed.
+  - Clean git tree on `main` (`c63c432`, `d23e24f`).
+
 ### 2026-10-26 — Antigravity: Three.js 3D Cyber Constellation, Spotlight Cards & Confetti Celebrations
 - **Goal:** Transform landing page & UI into a mind-blowing, Linear/Raycast-grade experience with interactive 3D WebGL graphics, cursor spotlight cards, confetti celebrations, and stacked sonner toasts.
 - **Three.js 3D Background (`CyberConstellation.tsx`):**
