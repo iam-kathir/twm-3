@@ -120,8 +120,7 @@ database service. Backups via `npm run` scripts `backup-db.mjs` / `restore-db.mj
 5. **Provider capability disparity.** HackerRank exposes no public event timestamps, so its badge
    evidence is display-only and excluded from weekly competition deltas. Providers are never merged
    into one opaque score.
-6. **One palette, one font.** Tokens live in `src/app/globals.css`; fonts are set once via
-   `next/font` in `src/app/layout.tsx`.
+6. **Brand colour hierarchy.** Linear-tier obsidian foundation (`#07090E`), Electric Blue functional interaction (`#3478F6`), Violet brand identity (`#6555F5`), Cyan highlights (`#16C8E8`), official 3D ribbon monogram gradient, and Precision Emerald (`#10B981`) strictly isolated for verified success states. Fonts are set once via `next/font` in `src/app/layout.tsx`.
 
 ---
 
