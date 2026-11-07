@@ -25,23 +25,23 @@ export function BrandLogo({
   className = "",
 }: BrandLogoProps) {
   const iconSizes = {
-    sm: 28,
-    md: 36,
-    lg: 44,
-    xl: 52,
+    sm: 30,
+    md: 38,
+    lg: 46,
+    xl: 54,
   };
 
   const px = iconSizes[size];
 
   if (variant === "horizontal") {
     const horizontalWidths = {
-      sm: 110,
-      md: 148,
-      lg: 185,
-      xl: 225,
+      sm: 130,
+      md: 165,
+      lg: 200,
+      xl: 240,
     };
     const w = horizontalWidths[size];
-    const h = Math.round((w * 360) / 980);
+    const h = Math.max(22, Math.round((w * 100) / 652));
 
     const logoContent = (
       <motion.div
@@ -53,10 +53,10 @@ export function BrandLogo({
         <div className="relative flex min-w-0 items-center">
           <Image
             src="/logo-horizontal.svg"
-            alt="TWM — Track. Win. Maintain."
+            alt="TWM — Track · Win · Maintain"
             width={w}
             height={h}
-            className="h-auto max-w-full transition-[filter] duration-200 group-hover:brightness-110"
+            className="h-auto max-w-full transition-[filter] duration-200 group-hover:brightness-110 object-contain"
             priority
           />
         </div>
@@ -85,18 +85,18 @@ export function BrandLogo({
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
-      className={`inline-flex items-center gap-3.5 group select-none cursor-pointer ${className}`}
+      className={`inline-flex items-center gap-3 group select-none cursor-pointer ${className}`}
     >
       <div
-        className="relative rounded-xl overflow-hidden border border-white/10 bg-surface-elevated flex items-center justify-center transition-colors duration-300 group-hover:border-accent/40"
+        className="relative rounded-xl overflow-hidden border border-white/10 bg-surface-elevated flex items-center justify-center transition-colors duration-300 group-hover:border-sky-500/40 p-1"
         style={{ width: px, height: px }}
       >
         <Image
           src="/icon.svg"
           alt="TWM Platform Icon"
-          width={Math.round(px * 0.72)}
-          height={Math.round(px * 0.72)}
-          className="transition-transform duration-300 group-hover:scale-110"
+          width={Math.round(px * 0.88)}
+          height={Math.round((px * 0.88 * 176) / 376)}
+          className="transition-transform duration-300 group-hover:scale-110 object-contain"
           priority
         />
       </div>
@@ -117,8 +117,8 @@ export function BrandLogo({
           </div>
 
           {showSubtitle && (
-            <span className="text-xs text-muted">
-              Track. Win. Maintain.
+            <span className="text-xs text-muted leading-tight font-medium">
+              Track · Win · Maintain
             </span>
           )}
         </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import { NavBar } from "@/components/landing/NavBar";
 import { HeroSection } from "@/components/landing/HeroSection";
+import { StatsBar } from "@/components/landing/StatsBar";
 import { BoundaryChecker } from "@/components/landing/BoundaryChecker";
 import { MotionShowcase } from "@/components/landing/MotionShowcase";
 import { CockpitPreview } from "@/components/landing/CockpitPreview";
@@ -16,6 +17,7 @@ export default function HomePage() {
       <NavBar />
       <main className="flex-1">
         <HeroSection />
+        <StatsBar />
         <BoundaryChecker />
         <MotionShowcase />
         <CockpitPreview />
