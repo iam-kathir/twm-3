@@ -21,11 +21,17 @@ export function getDb(): DatabaseSync {
 
   const db = new DatabaseSync(DB_FILE);
 
-  // Enable WAL mode for high concurrent throughput, durability & foreign keys
-  db.exec("PRAGMA journal_mode = WAL;");
+  // Set busy_timeout first so concurrent processes wait for lock release on Windows
+  db.exec("PRAGMA busy_timeout = 5000;");
+
+  // Enable WAL mode for high concurrent throughput & foreign keys
+  try {
+    db.exec("PRAGMA journal_mode = WAL;");
+  } catch {
+    // Database already in WAL mode by another connection
+  }
   db.exec("PRAGMA synchronous = NORMAL;");
   db.exec("PRAGMA foreign_keys = ON;");
-  db.exec("PRAGMA busy_timeout = 5000;");
 
   initSchema(db);
   seedInitialRosterIfEmpty(db);

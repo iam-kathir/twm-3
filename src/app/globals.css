@@ -343,6 +343,76 @@ table,
   animation: orbit var(--duration) linear infinite;
 }
 
+/* TWM Developer Activity Universe: Multi-Layer Orbital Engine */
+@keyframes orbit-universe-cw {
+  from {
+    transform: rotate(var(--initial-angle, 0deg)) translateY(calc(var(--radius, 100px) * -1)) rotate(calc(-1 * var(--initial-angle, 0deg)));
+  }
+  to {
+    transform: rotate(calc(var(--initial-angle, 0deg) + 360deg)) translateY(calc(var(--radius, 100px) * -1)) rotate(calc(-1 * (var(--initial-angle, 0deg) + 360deg)));
+  }
+}
+
+@keyframes orbit-universe-ccw {
+  from {
+    transform: rotate(var(--initial-angle, 0deg)) translateY(calc(var(--radius, 100px) * -1)) rotate(calc(-1 * var(--initial-angle, 0deg)));
+  }
+  to {
+    transform: rotate(calc(var(--initial-angle, 0deg) - 360deg)) translateY(calc(var(--radius, 100px) * -1)) rotate(calc(-1 * (var(--initial-angle, 0deg) - 360deg)));
+  }
+}
+
+.animate-orbit-universe-cw {
+  animation: orbit-universe-cw var(--duration, 25s) linear infinite;
+  transform-origin: center center;
+}
+
+.animate-orbit-universe-ccw {
+  animation: orbit-universe-ccw var(--duration, 25s) linear infinite;
+  transform-origin: center center;
+}
+
+/* Orbital Radar Scanning Sweep */
+@keyframes radar-sweep {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-radar-sweep {
+  animation: radar-sweep 16s linear infinite;
+}
+
+/* Energy Core Breathing & Pulse */
+@keyframes energy-pulse-glow {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.03);
+  }
+}
+
+.animate-energy-pulse {
+  animation: energy-pulse-glow 3.5s ease-in-out infinite;
+}
+
+/* Reduced Motion Override for Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .animate-orbit-universe-cw,
+  .animate-orbit-universe-ccw,
+  .animate-radar-sweep,
+  .animate-energy-pulse {
+    animation: none !important;
+    transform: rotate(var(--initial-angle, 0deg)) translateY(calc(var(--radius, 100px) * -1)) rotate(calc(-1 * var(--initial-angle, 0deg))) !important;
+  }
+}
+
 /* 21st.dev Shiny Text Shimmer */
 @keyframes shiny-text {
   0%, 90%, 100% {

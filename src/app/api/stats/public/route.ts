@@ -20,6 +20,7 @@ export async function GET() {
         meetsQuorum: quorum.meetsQuorum,
         label: quorum.label,
         platformCount: 3,
+        generatedAt: new Date().toISOString(),
       },
       {
         headers: {
@@ -35,3 +36,4 @@ export async function GET() {
     );
   }
 }
+
