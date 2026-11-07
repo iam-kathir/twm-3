@@ -199,6 +199,9 @@ export default function AdminHubPage() {
         });
         
         await fetchRosterData();
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("twm:roster-updated"));
+        }
         
         const newLog: AuditLogEntry = {
           id: `log-${Date.now()}`,

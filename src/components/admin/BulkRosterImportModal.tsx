@@ -96,6 +96,10 @@ export function BulkRosterImportModal({ isOpen, onClose, onSuccess }: BulkRoster
         skipped: data.skipped || [],
       });
 
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("twm:roster-updated"));
+      }
+
       onSuccess();
     } catch (err: unknown) {
       setErrorMessage(err instanceof Error ? err.message : "Network error during batch import");

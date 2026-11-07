@@ -132,12 +132,14 @@ export function StatsBar() {
   );
 
   const fetchStats = useCallback((signal?: AbortSignal) => {
-    fetch("/api/stats/public", { signal })
+    fetch("/api/stats/public", { signal, cache: "no-cache" })
       .then((res) => {
+        if (res.status === 304) return null; // Unchanged ETag — keep current state
         if (!res.ok) throw new Error("Stats unavailable");
         return res.json();
       })
       .then((data) => {
+        if (!data) return;
         const validated = validateCohortStats(data);
         if (validated) {
           setStats(validated);
@@ -157,18 +159,27 @@ export function StatsBar() {
     const controller = new AbortController();
     fetchStats(controller.signal);
 
-    // Revalidate quietly when browser tab gains focus without showing flickering skeletons
-    const handleVisibilityChange = () => {
+    // Revalidate quietly when browser tab gains focus or on window focus
+    const handleRevalidate = () => {
       if (document.visibilityState === "visible") {
         fetchStats();
       }
     };
 
-    document.addEventListener("visibilitychange", handleVisibilityChange);
+    // Real-time synchronization when roster updates occur anywhere in the application
+    const handleRosterUpdated = () => {
+      fetchStats();
+    };
+
+    document.addEventListener("visibilitychange", handleRevalidate);
+    window.addEventListener("focus", handleRevalidate);
+    window.addEventListener("twm:roster-updated", handleRosterUpdated);
 
     return () => {
       controller.abort();
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      document.removeEventListener("visibilitychange", handleRevalidate);
+      window.removeEventListener("focus", handleRevalidate);
+      window.removeEventListener("twm:roster-updated", handleRosterUpdated);
     };
   }, [fetchStats]);
 

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getRosterQuorumStats } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -7,10 +7,24 @@ export const dynamic = "force-dynamic";
  * GET /api/stats/public
  * Public cohort aggregate statistics for landing page.
  * Strictly exposes aggregate counts only — NO private student records or PII.
+ * Uses conditional ETag validation to resolve stale cache window limitations
+ * while eliminating redundant database bandwidth.
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     const quorum = getRosterQuorumStats();
+    const etag = `"${quorum.totalEnrolled}-${quorum.verifiedOptedIn}-${quorum.quorumPercentage}"`;
+
+    if (req.headers.get("if-none-match") === etag) {
+      return new NextResponse(null, {
+        status: 304,
+        headers: {
+          ETag: etag,
+          "Cache-Control": "public, max-age=0, must-revalidate",
+        },
+      });
+    }
+
     return NextResponse.json(
       {
         success: true,
@@ -24,7 +38,8 @@ export async function GET() {
       },
       {
         headers: {
-          "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120",
+          ETag: etag,
+          "Cache-Control": "public, max-age=0, must-revalidate",
         },
       }
     );

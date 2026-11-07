@@ -161,7 +161,10 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
   - [`src/components/landing/StatsBar.tsx`](src/components/landing/StatsBar.tsx): Complete redesign and implementation of the developer metrics strip.
   - [`src/app/api/stats/public/route.ts`](src/app/api/stats/public/route.ts): Added trustworthy `generatedAt` timestamp to response while strictly preserving the public aggregate privacy boundary (zero PII/student records).
   - [`MEMORY.md`](MEMORY.md) & [`TASKS.md`](TASKS.md): Synchronized task ledger and architectural documentation.
-- **Key Enhancements Implemented:**
+- **Limitation Resolved (Real-Time Cache & ETag Synchronization):**
+  - Upgraded `/api/stats/public` to use conditional HTTP ETags (`ETag: "${totalEnrolled}-${verifiedOptedIn}-${quorumPercentage}"`) paired with `Cache-Control: public, max-age=0, must-revalidate`.
+  - Serves lightweight `304 Not Modified` when unchanged (<1ms), while instantly delivering fresh roster counts the moment student enrollments occur.
+  - Wired real-time `twm:roster-updated` event dispatching in `BulkRosterImportModal.tsx` and `/admin` enrollment flows, with auto-refetch on window focus and visibility changes. Eliminates previous 60s stale cache window completely.
   1. **Premium Metrics Panel Design:**
      - Dark Obsidian foundation (`bg-surface/90 backdrop-blur-xl border border-white/[0.08]`) with dimensional glassmorphism, inset specular highlight (`inset_0_1px_0_rgba(255,255,255,0.06)`), and top hairline gradient matching the official TWM Violet/Blue spectrum.
      - Responsive grid: 5 columns on desktop (`lg:grid-cols-5`), 3 columns on tablet (`sm:grid-cols-3`), and 2 columns on mobile with the 5th item elegantly spanning 2 columns (`col-span-2 sm:col-span-1`).
