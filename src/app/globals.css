@@ -343,32 +343,35 @@ table,
   animation: orbit var(--duration) linear infinite;
 }
 
-/* TWM Developer Activity Universe: Multi-Layer Orbital Engine */
-@keyframes orbit-universe-cw {
+/* =========================================================================
+   TWM Developer Activity Universe: Continuous Multi-Layer Orbital Engine
+   ========================================================================= */
+
+@keyframes orbit-layer-cw {
   from {
-    transform: rotate(var(--initial-angle, 0deg)) translateY(calc(var(--radius, 100px) * -1)) rotate(calc(-1 * var(--initial-angle, 0deg)));
+    transform: rotate(0deg);
   }
   to {
-    transform: rotate(calc(var(--initial-angle, 0deg) + 360deg)) translateY(calc(var(--radius, 100px) * -1)) rotate(calc(-1 * (var(--initial-angle, 0deg) + 360deg)));
+    transform: rotate(360deg);
   }
 }
 
-@keyframes orbit-universe-ccw {
+@keyframes orbit-layer-ccw {
   from {
-    transform: rotate(var(--initial-angle, 0deg)) translateY(calc(var(--radius, 100px) * -1)) rotate(calc(-1 * var(--initial-angle, 0deg)));
+    transform: rotate(0deg);
   }
   to {
-    transform: rotate(calc(var(--initial-angle, 0deg) - 360deg)) translateY(calc(var(--radius, 100px) * -1)) rotate(calc(-1 * (var(--initial-angle, 0deg) - 360deg)));
+    transform: rotate(-360deg);
   }
 }
 
-.animate-orbit-universe-cw {
-  animation: orbit-universe-cw var(--duration, 25s) linear infinite;
+.animate-orbit-cw {
+  animation: orbit-layer-cw var(--duration, 30s) linear infinite;
   transform-origin: center center;
 }
 
-.animate-orbit-universe-ccw {
-  animation: orbit-universe-ccw var(--duration, 25s) linear infinite;
+.animate-orbit-ccw {
+  animation: orbit-layer-ccw var(--duration, 30s) linear infinite;
   transform-origin: center center;
 }
 
@@ -383,7 +386,8 @@ table,
 }
 
 .animate-radar-sweep {
-  animation: radar-sweep 16s linear infinite;
+  animation: radar-sweep 18s linear infinite;
+  transform-origin: center center;
 }
 
 /* Energy Core Breathing & Pulse */
@@ -404,12 +408,11 @@ table,
 
 /* Reduced Motion Override for Accessibility */
 @media (prefers-reduced-motion: reduce) {
-  .animate-orbit-universe-cw,
-  .animate-orbit-universe-ccw,
+  .animate-orbit-cw,
+  .animate-orbit-ccw,
   .animate-radar-sweep,
   .animate-energy-pulse {
     animation: none !important;
-    transform: rotate(var(--initial-angle, 0deg)) translateY(calc(var(--radius, 100px) * -1)) rotate(calc(-1 * var(--initial-angle, 0deg))) !important;
   }
 }
 

@@ -142,7 +142,7 @@ export function HeroSection() {
           <motion.div
             variants={itemVariants}
             style={{ scale: visualScale, opacity: visualOpacity }}
-            className="lg:col-span-5 flex items-center justify-center relative min-h-[420px] sm:min-h-[500px]"
+            className="lg:col-span-5 flex items-center justify-center relative w-full min-h-[340px] sm:min-h-[480px] lg:min-h-[540px]"
           >
             <HeroOrbitalUniverse />
           </motion.div>

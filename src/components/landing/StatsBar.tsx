@@ -3,69 +3,12 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Users, Trophy, ShieldCheck, Zap, Code2 } from "lucide-react";
+import {
+  ValidatedCohortStats,
+  validateCohortStatsPayload,
+} from "@/lib/stats-validator";
 
-/**
- * Public cohort aggregate statistics contract (§2 & §5).
- * Only public aggregates — zero PII or private student records exposed.
- */
-interface PublicCohortStats {
-  totalEnrolled: number | null;
-  verifiedOptedIn: number;
-  quorumPercentage: number;
-  meetsQuorum: boolean;
-  label: string;
-  platformCount: number;
-  generatedAt?: string;
-}
-
-/**
- * Validates the public stats API payload (§7).
- * Fail-closed: invalid or unexpected fields resolve to neutral fallbacks rather than fabricating data.
- */
-function validateCohortStats(data: unknown): PublicCohortStats | null {
-  if (!data || typeof data !== "object") return null;
-  const record = data as Record<string, unknown>;
-  if (record.success !== true) return null;
-
-  const rawTotal = record.totalEnrolled;
-  const totalEnrolled =
-    typeof rawTotal === "number" && Number.isFinite(rawTotal) && rawTotal >= 0
-      ? rawTotal
-      : null;
-
-  const rawVerified = record.verifiedOptedIn;
-  const verifiedOptedIn =
-    typeof rawVerified === "number" && Number.isFinite(rawVerified) && rawVerified >= 0
-      ? rawVerified
-      : 0;
-
-  const rawQuorum = record.quorumPercentage;
-  const quorumPercentage =
-    typeof rawQuorum === "number" && Number.isFinite(rawQuorum) && rawQuorum >= 0 && rawQuorum <= 100
-      ? Math.round(rawQuorum)
-      : 0;
-
-  const meetsQuorum = typeof record.meetsQuorum === "boolean" ? record.meetsQuorum : false;
-  const label = typeof record.label === "string" ? record.label : "";
-
-  const rawPlatformCount = record.platformCount;
-  const platformCount =
-    typeof rawPlatformCount === "number" && Number.isFinite(rawPlatformCount) && rawPlatformCount > 0
-      ? rawPlatformCount
-      : 3;
-
-  const generatedAt = typeof record.generatedAt === "string" ? record.generatedAt : undefined;
-
-  return {
-    totalEnrolled,
-    verifiedOptedIn,
-    quorumPercentage,
-    meetsQuorum,
-    label,
-    platformCount,
-    generatedAt,
-  };
-}
+export { validateCohortStatsPayload, type ValidatedCohortStats };
 
 /**
  * Smooth count-up animation hook (§11).
@@ -121,9 +64,14 @@ function useCountUp(target: number | null, shouldAnimate = true, durationMs = 80
 }
 
 export function StatsBar() {
-  const [stats, setStats] = useState<PublicCohortStats | null>(null);
+  const [stats, setStats] = useState<ValidatedCohortStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isUnavailable, setIsUnavailable] = useState(false);
   const prefersReducedMotion = useReducedMotion();
+
+  const activeControllerRef = useRef<AbortController | null>(null);
+  const requestIdRef = useRef<number>(0);
+  const inFlightRef = useRef<boolean>(false);
 
   // Smooth count-up for enrolled cohort count (only when valid data arrives)
   const animatedEnrolled = useCountUp(
@@ -131,54 +79,92 @@ export function StatsBar() {
     !prefersReducedMotion && stats?.totalEnrolled !== null
   );
 
-  const fetchStats = useCallback((signal?: AbortSignal) => {
-    fetch("/api/stats/public", { signal, cache: "no-cache" })
-      .then((res) => {
-        if (res.status === 304) return null; // Unchanged ETag — keep current state
-        if (!res.ok) throw new Error("Stats unavailable");
-        return res.json();
-      })
-      .then((data) => {
-        if (!data) return;
-        const validated = validateCohortStats(data);
-        if (validated) {
-          setStats(validated);
+  const fetchStats = useCallback(() => {
+    // Avoid background fetch if tab is hidden (§D.7)
+    if (typeof document !== "undefined" && document.visibilityState === "hidden") {
+      return;
+    }
+
+    // Cancel in-flight request if present (§D.2)
+    if (activeControllerRef.current) {
+      activeControllerRef.current.abort();
+      activeControllerRef.current = null;
+    }
+
+    const controller = new AbortController();
+    activeControllerRef.current = controller;
+    const currentReqId = ++requestIdRef.current;
+    inFlightRef.current = true;
+
+    fetch("/api/stats/public", { signal: controller.signal, cache: "no-cache" })
+      .then(async (res) => {
+        if (currentReqId !== requestIdRef.current) return;
+        if (res.status === 304) {
+          // Unchanged ETag — existing validated stats remain current (§D.9)
+          return;
+        }
+        if (!res.ok) {
+          throw new Error(`HTTP_${res.status}`);
+        }
+        const data = await res.json();
+        if (currentReqId !== requestIdRef.current) return;
+
+        const validation = validateCohortStatsPayload(data);
+        if (validation.isValid) {
+          setStats(validation.data);
+          setIsUnavailable(false);
+        } else {
+          console.warn("[StatsBar] Rejected payload:", validation.reason);
+          // Only show unavailable if we have no existing verified data
+          setIsUnavailable((prev) => (stats === null ? true : prev));
         }
       })
       .catch((err) => {
-        if (err.name !== "AbortError") {
-          // Keep neutral fallback state without fabricating numbers
+        if (currentReqId !== requestIdRef.current) return;
+        if (err.name === "AbortError" || controller.signal.aborted) {
+          // Intentional cancellation — silent return (§D.11)
+          return;
+        }
+        console.warn("[StatsBar] Fetch failed:", err.message);
+        if (!stats) {
+          setIsUnavailable(true);
         }
       })
       .finally(() => {
-        setLoading(false);
+        if (currentReqId === requestIdRef.current) {
+          inFlightRef.current = false;
+          setLoading(false);
+          activeControllerRef.current = null;
+        }
       });
-  }, []);
+  }, [stats]);
 
   useEffect(() => {
-    const controller = new AbortController();
-    fetchStats(controller.signal);
+    // Initial fetch on mount
+    fetchStats();
 
-    // Revalidate quietly when browser tab gains focus or on window focus
-    const handleRevalidate = () => {
+    const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
         fetchStats();
       }
     };
 
-    // Real-time synchronization when roster updates occur anywhere in the application
+    const handleWindowFocus = () => {
+      fetchStats();
+    };
+
     const handleRosterUpdated = () => {
       fetchStats();
     };
 
-    document.addEventListener("visibilitychange", handleRevalidate);
-    window.addEventListener("focus", handleRevalidate);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("focus", handleWindowFocus);
     window.addEventListener("twm:roster-updated", handleRosterUpdated);
 
     return () => {
-      controller.abort();
-      document.removeEventListener("visibilitychange", handleRevalidate);
-      window.removeEventListener("focus", handleRevalidate);
+      activeControllerRef.current?.abort();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("focus", handleWindowFocus);
       window.removeEventListener("twm:roster-updated", handleRosterUpdated);
     };
   }, [fetchStats]);
@@ -263,6 +249,10 @@ export function StatsBar() {
                   <span className="tabular-nums font-sans">
                     {animatedEnrolled ?? stats.totalEnrolled}
                   </span>
+                ) : isUnavailable ? (
+                  <span className="font-sans text-lg sm:text-xl font-bold text-muted" title="Cohort metrics currently unavailable">
+                    —
+                  </span>
                 ) : (
                   <span className="font-sans text-lg sm:text-xl font-bold text-slate-200" title="Class roster active">
                     Class
@@ -273,11 +263,21 @@ export function StatsBar() {
                 Enrolled Cohort
               </div>
 
-              {/* Optional Quorum Status Badge (§6) — Grounded in Section 3.3 SQLite Quorum */}
+              {/* Quorum Status Badge (§6) — Grounded in Section 3.3 SQLite Quorum */}
               {!loading && stats && stats.meetsQuorum && (
                 <div className="inline-flex items-center gap-1.5 mt-2 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] sm:text-[11px] font-mono font-medium leading-none">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" aria-hidden="true" />
                   <span>{stats.quorumPercentage}% Quorum</span>
+                </div>
+              )}
+              {!loading && stats && !stats.meetsQuorum && (
+                <div className="inline-flex items-center gap-1.5 mt-2 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-muted-soft text-[10px] sm:text-[11px] font-mono font-medium leading-none">
+                  <span>{stats.quorumPercentage}% Participating</span>
+                </div>
+              )}
+              {!loading && isUnavailable && (
+                <div className="inline-flex items-center gap-1.5 mt-2 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-muted-soft text-[10px] sm:text-[11px] font-mono font-medium leading-none">
+                  <span>Quorum Pending</span>
                 </div>
               )}
             </div>
@@ -391,6 +391,24 @@ export function StatsBar() {
             </div>
           </motion.div>
         </div>
+
+        {/* Honest Non-Fabricated Telemetry & Response Freshness Metadata (§E) */}
+        {stats && (stats.generatedAt || stats.latestObservationAt) && (
+          <div className="mt-4 pt-3 border-t border-white/[0.04] flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono text-muted-soft">
+            {stats.latestObservationAt ? (
+              <span title="Genuine SQLite observation record timestamp">
+                Latest Telemetry: {new Date(stats.latestObservationAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+              </span>
+            ) : (
+              <span>Observation store: Active</span>
+            )}
+            {stats.generatedAt && (
+              <span title="API response generation timestamp (not observation timestamp)">
+                Snapshot generated: {new Date(stats.generatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+              </span>
+            )}
+          </div>
+        )}
       </motion.div>
     </section>
   );

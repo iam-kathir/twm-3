@@ -127,10 +127,32 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 | **BRAND-5** | **Complete Brand Colour System Refinement** | Antigravity — ✅ **DONE** | Dark Obsidian + Violet (`#6555F5`) / Electric Blue (`#3478F6`) / Cyan (`#16C8E8`), matching official 3D ribbon logo gradient. Controlled migration across 10 pages and 20 components, semantic success emerald strictly retained. |
 | **FE-STATS** | **StatsBar Metrics Strip & Animation System** | Antigravity — ✅ **DONE** | Fully enhanced developer metrics panel: easeOutExpo number count-up, metric-specific icon micro-animations, viewport-aware entrance choreography, fail-closed API validation, dimensional glassmorphism, responsive 5-column / 3-column / 2-column layout, and full prefers-reduced-motion compliance. |
 | **HERO-1** | **Developer Activity Universe Landing Hero** | Antigravity — ✅ **DONE** | Transformed landing page hero into a futuristic SaaS experience: central 3D ribbon TWM core with glassmorphic squircle and pulse rings, 3-layer orbital universe where all 15 nodes revolve (GitHub pure white, LeetCode 3D mark, HackerRank with upright counter-rotation; 6 activity nodes counter-clockwise; 6 analytics nodes clockwise), interactive provider focus mode with contextual telemetry drawer, animated SVG energy connection paths, 3 floating illustrative preview micro-stat cards with zero-fabrication badges, animated radar sweep, and full reduced-motion accessibility. |
+| **REFINE-1** | **Hero & StatsBar Engineering Refinement (A–E)** | Antigravity — ✅ **DONE** | Resolved all 5 audit issues: (A) Responsive container-measured orbital radii ($R_1 = 50\%$, $R_2 = 75\%$, $R_3 = 100\%$ with $\ge 8$px core clearance on 320px) and docked mobile micro-stats; (B) Removed false HMAC/live claims, deployed neutral "TWM Core" badge and honest brand slogan toast; (C) Strict fail-closed validator (`validateCohortStatsPayload`) verifying non-negative integer counts, mathematical consistency of quorum %, and supported platformCount; (D) Resilient StatsBar lifecycle with AbortController, `requestIdRef`, tab visibility listener, and smooth revalidation; (E) Freshness semantics distinguishing `generatedAt` from SQLite `latestObservationAt` while preserving zero-PII public boundary. 25/25 automated unit tests in `scripts/test-hero-stats-refinement.mjs`. |
 
 ---
 
 ## Session log
+
+### 2026-11-07 — Antigravity: HERO-1 & FE-STATS A–E Engineering Refinement & Full Verification
+- **User Directive:** "Resolve all five identified issues (A–E) in the Hero Orbital Universe and StatsBar implementations: (A) Fix responsive orbital clipping and overflow; (B) Remove misleading engine verification claims; (C) Harden StatsBar API validation; (D) Correct StatsBar request and refresh lifecycle; (E) Correct data freshness semantics."
+- **Files Modified & Added:**
+  - `src/lib/stats-validator.ts`: Strict fail-closed validation function `validateCohortStatsPayload` enforcing non-negative integer counts, `verifiedOptedIn <= totalEnrolled`, quorum percentage consistency, and 70% quorum threshold boolean validation.
+  - `src/components/landing/hero/hero-constants.ts`: Pure mathematical function `calculateResponsiveOrbitalRadii(containerWidth)` scaling concentric tracks ($R_1 = 50\%$, $R_2 = 75\%$, $R_3 = 100\%$) within container width constraints ($260$px–$580$px) with $\ge 8$px core clearance on 320px mobile viewports.
+  - `src/components/landing/hero/HeroCore.tsx`: Replaced misleading pulsing green "Engine" badge and HMAC claims with neutral "TWM Core" brand indicator and non-cryptographic slogan toast.
+  - `src/components/landing/hero/HeroMicroStats.tsx`: Implemented dual-zone layout: floating micro-cards for viewports $\ge 640$px, and docked inline preview row for mobile ($< 640$px) positioned safely below orbital trajectory.
+  - `src/components/landing/hero/HeroOrbitalUniverse.tsx`: Container-measured responsive orbital geometry with ResizeObserver, requestAnimationFrame debouncing, and observer.disconnect() cleanup.
+  - `src/components/landing/HeroSection.tsx`: Responsive orbital canvas column min-heights (`min-h-[340px] sm:min-h-[480px] lg:min-h-[540px]`).
+  - `src/app/api/stats/public/route.ts`: Separate `generatedAt` from genuine SQLite `SELECT MAX(observed_at) FROM telemetry_observations` as `latestObservationAt`, preserving zero-PII public aggregate boundary.
+  - `src/components/landing/StatsBar.tsx`: Resilient data fetching with AbortController, requestIdRef stale protection, document.visibilityState pause/resume, and fallback to neutral `"Quorum Pending"` and `"—"` states.
+  - `scripts/test-hero-stats-refinement.mjs`: 25 automated unit tests verifying Categories A through E.
+- **Verification Gates Executed:**
+  - `npx tsc --noEmit`: 0 errors.
+  - `npm run lint`: 0 errors / 0 warnings.
+  - `npm test`: 45/45 tests passing (Foundation + OTP + Hero-Stats Refinement).
+  - `npm run audit:launch`: 10/10 automated gates verified.
+  - `npm run simulate`: 100% tournament invariants satisfied.
+  - `npm run build`: 13 static pages and 20 dynamic API routes compiled cleanly.
+  - **Browser Viewport Verification (Playwright MCP):** Verified all 10 viewports (320px, 360px, 390px, 430px, 640px, 768px, 1024px, 1280px, 1440px, 1920px): `hasHorizontalScroll: false`, `outsideCount: 0`.
 
 ### 2026-11-07 — Antigravity: Developer Activity Universe Landing Hero Transformation (HERO-1)
 - **User Directive:** "Transform the existing TWM landing page Hero Section into a premium, futuristic, animation-rich SaaS experience based on the concept: THE DEVELOPER ACTIVITY UNIVERSE."

@@ -11,44 +11,44 @@ interface HeroCoreProps {
 export function HeroCore({ onCoreClick }: HeroCoreProps) {
   return (
     <div className="relative z-30 flex items-center justify-center">
-      {/* Outer Breathing Energy Ring */}
-      <div className="absolute w-36 h-36 sm:w-44 sm:h-44 rounded-full border border-brand-primary/25 animate-energy-pulse pointer-events-none" />
-      <div className="absolute w-44 h-44 sm:w-52 sm:h-52 rounded-full border border-brand-highlight/15 animate-energy-pulse [animation-delay:1.5s] pointer-events-none" />
-
       {/* Dimensional Glassmorphic TWM Core Frame */}
       <motion.button
         type="button"
         whileHover={{ scale: 1.06, rotate: 1 }}
         whileTap={{ scale: 0.96 }}
         onClick={onCoreClick}
-        title="TWM Telemetry Engine Core — Click for verification pulse"
-        aria-label="TWM Telemetry Engine Core"
-        className="group relative flex w-28 h-28 sm:w-34 sm:h-34 items-center justify-center rounded-3xl bg-gradient-to-b from-[#18202E]/95 via-[#121620]/95 to-[#0A0D14]/95 p-3 sm:p-4 border border-brand-primary/40 shadow-[0_0_40px_rgba(101,85,245,0.30)] hover:shadow-[0_0_60px_rgba(101,85,245,0.50)] hover:border-brand-highlight/50 transition-[border-color,box-shadow] duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-primary"
+        title="TWM Core — Developer Activity Universe"
+        aria-label="TWM Developer Activity Universe Core"
+        className="group relative flex w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 items-center justify-center rounded-2xl sm:rounded-3xl bg-gradient-to-b from-[#18202E]/95 via-[#121620]/95 to-[#0A0D14]/95 p-2.5 sm:p-3.5 lg:p-4 border border-brand-primary/40 shadow-[0_0_30px_rgba(101,85,245,0.25)] hover:shadow-[0_0_50px_rgba(101,85,245,0.45)] hover:border-brand-highlight/50 transition-[border-color,box-shadow] duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-primary"
       >
+        {/* Outer Breathing Energy Rings (Relative Inset Bounds Guarantee Zero Orbital Intrusion) */}
+        <div className="absolute -inset-2.5 sm:-inset-4 rounded-full border border-brand-primary/25 animate-energy-pulse pointer-events-none" />
+        <div className="absolute -inset-5 sm:-inset-7 rounded-full border border-brand-highlight/15 animate-energy-pulse [animation-delay:1.5s] pointer-events-none" />
+
         {/* Soft Inner Rim Highlight */}
-        <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-white/[0.08] to-transparent pointer-events-none" />
+        <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-tr from-white/[0.08] to-transparent pointer-events-none" />
 
         {/* Official 3D Ribbon Monogram */}
         <div className="relative w-full h-full flex items-center justify-center">
           <Image
             src="/icon.svg"
             alt="TWM Platform Official Monogram"
-            width={112}
-            height={44}
+            width={96}
+            height={38}
             priority
-            className="object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_0_18px_rgba(101,85,245,0.45)]"
+            className="object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_0_16px_rgba(101,85,245,0.45)]"
           />
         </div>
 
-        {/* Telemetry Active Status Pulse Pill */}
-        <span className="absolute -bottom-2.5 px-2 py-0.5 rounded-full border border-status-verified/40 bg-surface-elevated/95 backdrop-blur-md flex items-center gap-1.5 shadow-sm">
-          <span className="h-1.5 w-1.5 rounded-full bg-status-verified animate-ping" />
-          <span className="h-1.5 w-1.5 rounded-full bg-status-verified" />
-          <span className="text-[10px] font-mono font-bold text-status-verified uppercase tracking-wider">
-            Engine
+        {/* Decorative Brand Monogram Pill (Neutral Brand Identity — Zero False Operational Verification Claims) */}
+        <span className="absolute -bottom-2 sm:-bottom-2.5 px-2 sm:px-2.5 py-0.5 rounded-full border border-white/10 bg-surface-elevated/95 backdrop-blur-md flex items-center gap-1.5 shadow-sm">
+          <span className="h-1.5 w-1.5 rounded-full bg-brand-primary" />
+          <span className="text-[9px] sm:text-[10px] font-mono font-semibold text-slate-300 uppercase tracking-wider">
+            TWM Core
           </span>
         </span>
       </motion.button>
     </div>
   );
 }
+

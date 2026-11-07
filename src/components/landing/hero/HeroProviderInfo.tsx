@@ -103,3 +103,4 @@ export function HeroProviderInfo({ provider, onClose }: HeroProviderInfoProps) {
     </AnimatePresence>
   );
 }
+

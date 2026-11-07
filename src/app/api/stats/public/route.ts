@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getRosterQuorumStats } from "@/lib/db";
+import { getRosterQuorumStats, getDb } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -9,11 +9,23 @@ export const dynamic = "force-dynamic";
  * Strictly exposes aggregate counts only — NO private student records or PII.
  * Uses conditional ETag validation to resolve stale cache window limitations
  * while eliminating redundant database bandwidth.
+ *
+ * Data freshness semantics (§E):
+ * - generatedAt: ISO timestamp when this API response was generated.
+ * - latestObservationAt: Genuine ISO timestamp of the latest recorded observation in SQLite (or null).
  */
 export async function GET(req: NextRequest) {
   try {
     const quorum = getRosterQuorumStats();
-    const etag = `"${quorum.totalEnrolled}-${quorum.verifiedOptedIn}-${quorum.quorumPercentage}"`;
+    const db = getDb();
+
+    // Query genuine latest observation timestamp if present in DB (§E.4)
+    const latestObsRow = db
+      .prepare("SELECT MAX(observed_at) as latest FROM telemetry_observations")
+      .get() as { latest: string | null } | undefined;
+    const latestObservationAt = latestObsRow?.latest ?? null;
+
+    const etag = `"${quorum.totalEnrolled}-${quorum.verifiedOptedIn}-${quorum.quorumPercentage}-${latestObservationAt}"`;
 
     if (req.headers.get("if-none-match") === etag) {
       return new NextResponse(null, {
@@ -35,6 +47,7 @@ export async function GET(req: NextRequest) {
         label: quorum.label,
         platformCount: 3,
         generatedAt: new Date().toISOString(),
+        latestObservationAt,
       },
       {
         headers: {

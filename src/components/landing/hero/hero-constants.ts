@@ -1,18 +1,14 @@
-import React from "react";
+import type { LucideIcon } from "lucide-react";
 import {
   GitCommit,
   ShieldCheck,
   Code2,
-  GitBranch,
   CheckCircle2,
-  Radio,
   BarChart3,
   Trophy,
-  TrendingUp,
-  Target,
-  CalendarCheck,
   Flame,
-  LucideIcon
+  Users,
+  Target,
 } from "lucide-react";
 
 export type ProviderId = "github" | "leetcode" | "hackerrank";
@@ -70,124 +66,94 @@ export interface OrbitalNodeItem {
   name: string;
   label: string;
   icon: LucideIcon;
-  initialAngle: number; // degrees (0 to 360)
+  angle: number; // degrees (0 to 360)
   colorClass: string;
   glowColor: string;
 }
 
-// Layer 2: Activity & Verification Orbit (Counter-Clockwise, ~30s)
+/**
+ * Layer 2: Activity & Verification Orbit (Counter-Clockwise, ~34s)
+ * 4 curated, meaningful telemetry streams evenly spaced at 90° intervals
+ */
 export const ACTIVITY_VERIFICATION_NODES: OrbitalNodeItem[] = [
   {
     id: "act-commit",
-    name: "Git Commit",
-    label: "Commit Observation",
+    name: "Git Rhythm",
+    label: "7-Day Commit Rhythm",
     icon: GitCommit,
-    initialAngle: 0,
+    angle: 0,
     colorClass: "text-brand-highlight",
-    glowColor: "rgba(22, 200, 232, 0.4)",
+    glowColor: "rgba(22, 200, 232, 0.45)",
   },
   {
-    id: "act-pulse",
-    name: "Telemetry Pulse",
-    label: "Telemetry Stream",
-    icon: Radio,
-    initialAngle: 60,
-    colorClass: "text-brand-secondary",
-    glowColor: "rgba(52, 120, 246, 0.4)",
-  },
-  {
-    id: "act-shield",
-    name: "Verified Shield",
-    label: "HMAC Bio Gate",
-    icon: ShieldCheck,
-    initialAngle: 120,
-    colorClass: "text-status-verified",
-    glowColor: "rgba(16, 185, 129, 0.4)",
-  },
-  {
-    id: "act-code",
-    name: "Code Syntax",
+    id: "act-solve",
+    name: "Problem Velocity",
     label: "Algorithmic Solves",
     icon: Code2,
-    initialAngle: 180,
-    colorClass: "text-brand-primary",
-    glowColor: "rgba(101, 85, 245, 0.4)",
+    angle: 90,
+    colorClass: "text-[#FFA116]",
+    glowColor: "rgba(255, 161, 22, 0.45)",
   },
   {
-    id: "act-branch",
-    name: "Repository Branch",
-    label: "Active Branch Ingestion",
-    icon: GitBranch,
-    initialAngle: 240,
-    colorClass: "text-brand-highlight",
-    glowColor: "rgba(22, 200, 232, 0.4)",
+    id: "act-domain",
+    name: "Domain Badges",
+    label: "Verified Skill Stars",
+    icon: CheckCircle2,
+    angle: 180,
+    colorClass: "text-[#2EC866]",
+    glowColor: "rgba(46, 200, 102, 0.45)",
   },
   {
     id: "act-audit",
-    name: "Observation Audit",
-    label: "Two-Person Audit Gate",
-    icon: CheckCircle2,
-    initialAngle: 300,
-    colorClass: "text-brand-secondary",
-    glowColor: "rgba(52, 120, 246, 0.4)",
+    name: "HMAC Proof",
+    label: "Two-Person Verification",
+    icon: ShieldCheck,
+    angle: 270,
+    colorClass: "text-brand-primary",
+    glowColor: "rgba(101, 85, 245, 0.45)",
   },
 ];
 
-// Layer 3: Analytics & Achievement Orbit (Clockwise, ~38s)
+/**
+ * Layer 3: Analytics & Achievement Orbit (Clockwise, ~44s)
+ * 4 curated pillars of competition and governance evenly spaced at 90° intervals (offset 45°)
+ */
 export const ANALYTICS_ACHIEVEMENT_NODES: OrbitalNodeItem[] = [
   {
-    id: "ana-barchart",
-    name: "Multi-Platform Analytics",
-    label: "Weekly Velocity",
-    icon: BarChart3,
-    initialAngle: 30,
-    colorClass: "text-brand-secondary",
-    glowColor: "rgba(52, 120, 246, 0.35)",
-  },
-  {
-    id: "ana-trophy",
-    name: "Deterministic Standings",
+    id: "ana-standings",
+    name: "Standings",
     label: "1, 2, 2, 4 Tie Policy",
     icon: Trophy,
-    initialAngle: 90,
+    angle: 45,
     colorClass: "text-amber-400",
-    glowColor: "rgba(245, 158, 11, 0.35)",
+    glowColor: "rgba(245, 158, 11, 0.4)",
   },
   {
-    id: "ana-trending",
-    name: "Developer Momentum",
-    label: "Consistent Coding",
-    icon: TrendingUp,
-    initialAngle: 150,
-    colorClass: "text-status-verified",
-    glowColor: "rgba(16, 185, 129, 0.35)",
-  },
-  {
-    id: "ana-target",
-    name: "Sunday Boundary Target",
+    id: "ana-boundary",
+    name: "Sunday Boundary",
     label: "23:59:59 IST Close",
     icon: Target,
-    initialAngle: 210,
-    colorClass: "text-brand-primary",
-    glowColor: "rgba(101, 85, 245, 0.35)",
+    angle: 135,
+    colorClass: "text-brand-secondary",
+    glowColor: "rgba(52, 120, 246, 0.4)",
   },
   {
-    id: "ana-calendar",
-    name: "Cohort Calendar",
-    label: "7-Day Active Days",
-    icon: CalendarCheck,
-    initialAngle: 270,
-    colorClass: "text-brand-highlight",
-    glowColor: "rgba(22, 200, 232, 0.35)",
+    id: "ana-quorum",
+    name: "Cohort Quorum",
+    label: "≥ 70% Class Demarcation",
+    icon: Users,
+    angle: 225,
+    colorClass: "text-emerald-400",
+    glowColor: "rgba(16, 185, 129, 0.4)",
   },
   {
-    id: "ana-streak",
-    name: "Active Streak",
-    label: "Momentum Maintenance",
+    id: "ana-momentum",
+    name: "Active Momentum",
+    label: "Consistency Trajectory",
     icon: Flame,
-    initialAngle: 330,
-    colorClass: "text-amber-400",
-    glowColor: "rgba(245, 158, 11, 0.35)",
+    angle: 315,
+    colorClass: "text-brand-highlight",
+    glowColor: "rgba(22, 200, 232, 0.4)",
   },
 ];
 
@@ -208,25 +174,57 @@ export const FLOATING_MICRO_CARDS: FloatingMicroCard[] = [
     metric: "7 / 7 Active Days",
     subtext: "Illustrative preview",
     icon: CheckCircle2,
-    iconColor: "text-status-verified",
-    positionClasses: "top-2 -left-2 sm:top-6 sm:-left-6",
+    iconColor: "text-emerald-400",
+    positionClasses: "top-1 left-1 sm:top-2 sm:left-2 lg:top-3 lg:left-3",
   },
   {
     id: "card-baseline",
     title: "Sunday Baseline Delta",
     metric: "+14 Solved",
     subtext: "Illustrative preview",
-    icon: TrendingUp,
+    icon: BarChart3,
     iconColor: "text-brand-secondary",
-    positionClasses: "bottom-4 -right-2 sm:bottom-8 sm:-right-4",
+    positionClasses: "bottom-1 right-1 sm:bottom-2 sm:right-2 lg:bottom-3 lg:right-3",
   },
   {
     id: "card-audit",
     title: "Cryptographic Audit",
-    metric: "SHA-256 Verified",
+    metric: "Section 9.6 Verified",
     subtext: "Illustrative preview",
     icon: ShieldCheck,
     iconColor: "text-brand-highlight",
-    positionClasses: "-bottom-6 left-6 sm:-bottom-4 sm:left-12",
+    positionClasses: "bottom-1 left-2 sm:bottom-2 sm:left-4 lg:bottom-3 lg:left-5",
   },
 ];
+
+export interface OrbitalRadii {
+  innerRadius: number;
+  middleRadius: number;
+  outerRadius: number;
+  containerSize: number;
+}
+
+/**
+ * Mathematically calculates responsive orbital radii based on container width.
+ * Ensures all nodes remain safely inside the container across viewports from 320px to 1920px.
+ */
+export function calculateResponsiveOrbitalRadii(containerWidth: number): OrbitalRadii {
+  const clampedWidth = Math.max(
+    260,
+    Math.min(Number.isFinite(containerWidth) ? containerWidth : 540, 580)
+  );
+
+  // Clearance margins for outer node badges
+  const outerNodeAllowance = clampedWidth < 380 ? 22 : clampedWidth < 500 ? 26 : 30;
+
+  const outerRadius = Math.max(105, Math.floor(clampedWidth / 2 - outerNodeAllowance));
+  const middleRadius = Math.round(outerRadius * 0.75);
+  const innerRadius = Math.max(65, Math.round(outerRadius * 0.50));
+
+  return {
+    innerRadius,
+    middleRadius,
+    outerRadius,
+    containerSize: clampedWidth,
+  };
+}
