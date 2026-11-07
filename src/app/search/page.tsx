@@ -117,7 +117,7 @@ export default function SearchPage() {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 min-w-0">
         {/* Title & Philosophy Banner */}
         <div className="space-y-3">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="space-y-2">
               <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-accent/10 border border-accent/20 text-accent text-xs sm:text-sm font-mono font-semibold">
                 <Sparkles className="w-4 h-4" />

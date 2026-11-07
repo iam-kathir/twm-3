@@ -515,7 +515,7 @@ export default function AdminHubPage() {
                 aria-pressed={isSelected}
                 className={`relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center space-x-2 shrink-0 ${
                   isSelected
-                    ? "text-canvas font-bold"
+                    ? "bg-accent text-canvas font-bold"
                     : "text-muted hover:text-white bg-surface/50 hover:bg-surface border border-transparent hover:border-white/10"
                 }`}
               >

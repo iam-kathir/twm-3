@@ -333,7 +333,7 @@ function OnboardingContent() {
         </header>
 
         <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-12">
-          <div className="w-full max-w-lg rounded-panel border border-status-error/30 bg-surface p-8 sm:p-10 shadow-overlay space-y-6 text-center">
+          <div className="w-full max-w-lg rounded-panel border border-status-error/30 bg-surface p-8 sm:p-10 shadow-none space-y-6 text-center">
             <div className="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center mx-auto">
               <ShieldAlert className="h-7 w-7" aria-hidden="true" />
             </div>
@@ -406,7 +406,7 @@ function OnboardingContent() {
 
       {/* Main Step Area */}
       <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-xl rounded-panel border border-white/10 bg-surface p-8 sm:p-10 shadow-overlay">
+        <div className="w-full max-w-xl rounded-panel border border-white/10 bg-surface p-8 sm:p-10 shadow-none">
           {loadingSession ? (
             <div className="py-20 flex flex-col items-center justify-center gap-3 text-muted" role="status" aria-live="polite">
               <Loader2 className="h-6 w-6 animate-spin text-accent" aria-hidden="true" />
@@ -417,7 +417,7 @@ function OnboardingContent() {
               <div role="alert" className="p-4 rounded-xl bg-red-500/10 border border-red-500/25 text-sm text-red-300 flex items-start gap-2.5">
                 <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" aria-hidden="true" />
                 <div>
-                  <p className="font-bold text-white">Identity session unavailable</p>
+                  <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white">Identity session unavailable</h1>
                   <p className="leading-relaxed mt-1">{sessionError ?? "We could not verify your student identity."}</p>
                 </div>
               </div>

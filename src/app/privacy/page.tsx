@@ -105,7 +105,7 @@ export default function PrivacyPolicyPage() {
             <span>Institutional Governance • Fairness Rules §1.2, §18 &amp; §19</span>
           </div>
 
-          <h1 id="privacy-heading" className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight max-w-[72ch]">
+          <h1 id="privacy-heading" className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight max-w-[72ch]">
             Privacy, Fairness &amp; Student Data Governance Policy
           </h1>
 
@@ -208,7 +208,7 @@ export default function PrivacyPolicyPage() {
                 <Shield className="w-4 h-4" />
                 <span>Section 1</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-lg sm:text-2xl font-bold text-white">
                 1. Core Philosophy &amp; Non-Surveillance Commitment
               </h2>
               <div className="text-ink-secondary text-sm sm:text-base leading-relaxed space-y-3">
@@ -233,7 +233,7 @@ export default function PrivacyPolicyPage() {
                 <Code2 className="w-4 h-4" />
                 <span>Section 2</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-lg sm:text-2xl font-bold text-white">
                 2. What Telemetry We Collect (And What We Strictly Exclude)
               </h2>
               <div className="text-ink-secondary text-sm sm:text-base leading-relaxed space-y-3">
@@ -281,7 +281,7 @@ export default function PrivacyPolicyPage() {
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Section 3</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-lg sm:text-2xl font-bold text-white">
                 3. The Zero-Fabrication &amp; Non-Punitive Invariant
               </h2>
               <div className="text-ink-secondary text-sm sm:text-base leading-relaxed space-y-3">
@@ -308,7 +308,7 @@ export default function PrivacyPolicyPage() {
                 <Eye className="w-4 h-4" />
                 <span>Section 4</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-lg sm:text-2xl font-bold text-white">
                 4. Student Identity Tiers &amp; Granular Visibility
               </h2>
               <div className="text-ink-secondary text-sm sm:text-base leading-relaxed space-y-3">
@@ -345,7 +345,7 @@ export default function PrivacyPolicyPage() {
                 <Lock className="w-4 h-4" />
                 <span>Section 5</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-lg sm:text-2xl font-bold text-white">
                 5. Cryptographic Bio Verification &amp; Zero Passwords
               </h2>
               <div className="text-ink-secondary text-sm sm:text-base leading-relaxed space-y-3">
@@ -369,7 +369,7 @@ export default function PrivacyPolicyPage() {
                 <Scale className="w-4 h-4" />
                 <span>Section 6</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-lg sm:text-2xl font-bold text-white">
                 6. Two-Person Audit Integrity &amp; Dispute Rights
               </h2>
               <div className="text-ink-secondary text-sm sm:text-base leading-relaxed space-y-3">
@@ -393,7 +393,7 @@ export default function PrivacyPolicyPage() {
                 <Database className="w-4 h-4" />
                 <span>Section 7</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-lg sm:text-2xl font-bold text-white">
                 7. Data Portability, Erasure &amp; The Right to Disconnect
               </h2>
               <div className="text-ink-secondary text-sm sm:text-base leading-relaxed space-y-3">
@@ -430,7 +430,7 @@ export default function PrivacyPolicyPage() {
                 <Users className="w-4 h-4" />
                 <span>Section 8</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-lg sm:text-2xl font-bold text-white">
                 8. Institutional Scope &amp; Zero Commercial Sharing
               </h2>
               <div className="text-ink-secondary text-sm sm:text-base leading-relaxed space-y-3">

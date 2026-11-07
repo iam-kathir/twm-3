@@ -61,7 +61,7 @@ function LoginContent() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
-          className="w-full max-w-lg rounded-panel border border-white/10 bg-surface p-8 sm:p-10 relative shadow-overlay space-y-8"
+          className="w-full max-w-lg rounded-panel border border-white/10 bg-surface p-8 sm:p-10 relative shadow-none space-y-8"
         >
           {/* Top Logo & Pill */}
           <div className="text-center space-y-3">

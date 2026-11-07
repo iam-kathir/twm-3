@@ -2,206 +2,256 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Github,
-  Code2,
-  Award,
-  Clock,
-  ShieldCheck,
-  AlertCircle,
+import { 
+  Github, 
+  Code2, 
+  Award, 
+  Activity, 
+  Clock, 
+  ShieldCheck, 
+  AlertCircle, 
+  Sparkles, 
   CheckCircle,
+  HelpCircle
 } from "lucide-react";
 
 export function CockpitPreview() {
   const [recapMode, setRecapMode] = useState<"ai" | "deterministic">("ai");
 
   return (
-    <section id="cockpit" className="scroll-mt-24 py-12 md:py-16 border-t border-white/[0.08] bg-canvas">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <p className="text-sm font-semibold text-accent">Cohort momentum — sample view</p>
-        <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-ink">
-          How your activity appears in TWM
-        </h2>
-        <p className="mt-3 text-base text-muted leading-relaxed max-w-2xl">
-          Zero fabrication. Every metric shows its origin, window, freshness, and capability gate. The card below is
-          a sample — live numbers appear only after you verify and opt in.
-        </p>
+    <section id="cockpit" className="py-20 md:py-32 relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-14">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-elevated border border-white/10 text-xs font-mono text-muted mb-4 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+            <span>Interactive Cockpit Preview</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-ink tracking-tight">
+            How Your Activity Appears in TWM
+          </h2>
+          <p className="mt-4 text-base sm:text-lg text-muted leading-relaxed">
+            Zero fabrication. Every single metric openly displays its origin, coverage window, freshness, and capability gate status.
+          </p>
+        </div>
 
-        <div className="mt-8 rounded-panel border border-white/10 bg-surface overflow-hidden">
-          <div className="border-b border-white/[0.08] bg-surface-raised px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+        {/* The Dashboard Cockpit Mock Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="rounded-2xl border border-white/[0.08] bg-surface shadow-panel overflow-hidden"
+        >
+          {/* Cockpit Top Bar */}
+          <div className="border-b border-white/[0.08] bg-surface-raised/80 px-6 sm:px-8 py-5 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="h-11 w-11 rounded-control bg-canvas border border-white/10 flex items-center justify-center font-bold text-accent font-mono text-sm" aria-hidden="true">
-                SS
+              <div className="h-12 w-12 rounded-2xl bg-surface-raised border border-accent/25 flex items-center justify-center font-bold text-accent font-mono text-base">
+                AS
               </div>
               <div>
-                <p className="font-bold text-ink text-base">Sample student (demo)</p>
-                <p className="text-sm text-muted font-mono mt-0.5">
-                  CSE 2026 · <span className="text-emerald-400 font-medium">Opted in to tournament</span>
-                </p>
+                <div className="flex items-center gap-2.5">
+                  <h3 className="font-bold text-ink text-base sm:text-lg">Aarav Sharma</h3>
+                  <span className="text-xs sm:text-sm font-mono text-muted">@aarav-dev</span>
+                </div>
+                <div className="text-xs sm:text-sm font-mono text-muted flex items-center gap-2.5 mt-0.5">
+                  <span>Class: CSE 2026 (Section A)</span>
+                  <span>•</span>
+                  <span className="text-emerald-400 flex items-center gap-1.5 font-medium">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                    Opted-In to Tournament
+                  </span>
+                </div>
               </div>
             </div>
 
-            <p className="flex items-center gap-2 text-sm font-mono bg-canvas border border-white/10 px-3 py-2 rounded-control text-muted">
-              <Clock className="h-4 w-4 text-accent" aria-hidden="true" />
-              <span>Last synced 14m ago · Asia/Kolkata (IST)</span>
-            </p>
+            {/* Freshness & Timezone metadata */}
+            <div className="flex items-center gap-2.5 text-xs sm:text-sm font-mono bg-surface border border-white/10 px-4 py-2 rounded-xl text-muted shadow-sm">
+              <Clock className="h-4 w-4 text-accent" />
+              <span>Last Synced: 14m ago</span>
+              <span className="text-white/10">|</span>
+              <span className="text-ink font-medium">Asia/Kolkata (IST)</span>
+            </div>
           </div>
 
-          <p className="mx-4 sm:mx-6 mt-4 text-sm font-semibold text-ink bg-surface-raised border border-white/10 rounded-lg px-3 py-2">
-            Demo data — sample student view. Values are illustrative, not live telemetry.
-          </p>
-
-          <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 bg-canvas/40">
-            <div className="rounded-panel border border-white/[0.08] bg-surface p-5 flex flex-col justify-between">
+          {/* Provider Grid */}
+          <div className="p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 bg-canvas/40">
+            {/* 1. GitHub Provider Card */}
+            <motion.div
+              whileHover={{ y: -4 }}
+              transition={{ type: "spring", stiffness: 350, damping: 25 }}
+              className="rounded-2xl border border-white/[0.08] bg-surface/90 p-6 sm:p-7 flex flex-col justify-between hover:border-white/20 transition-all shadow-md group"
+            >
               <div>
-                <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
-                  <p className="flex items-center gap-2 text-ink font-bold text-base">
-                    <Github className="h-5 w-5 text-white" aria-hidden="true" />
+                <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
+                  <div className="flex items-center gap-2.5 text-ink font-bold text-base sm:text-lg">
+                    <Github className="h-5 w-5 text-white" />
                     <span>GitHub</span>
-                  </p>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-sm font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                    <CheckCircle className="h-3.5 w-3.5" aria-hidden="true" />
-                    Supported live
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <CheckCircle className="h-3 w-3" />
+                    SUPPORTED_LIVE
                   </span>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-4 font-mono">
                   <div>
-                    <div className="flex justify-between text-sm text-muted mb-2 font-medium">
-                      <span>Observed active days:</span>
-                      <span className="text-ink font-extrabold text-base">6 / 7 days</span>
+                    <div className="flex justify-between text-xs sm:text-sm text-muted mb-2 font-medium">
+                      <span>Observed Active Days:</span>
+                      <span className="text-ink font-black text-base">6 / 7 Days</span>
                     </div>
-                    <div className="flex gap-1.5" aria-label="6 of 7 days active">
+                    {/* Active days visual squares */}
+                    <div className="flex gap-2">
                       {[1, 1, 1, 1, 0, 1, 1].map((active, i) => (
                         <div
                           key={i}
                           title={`Day ${i + 1}: ${active ? "Active commit observed" : "No commits"}`}
-                          className={`h-7 flex-1 rounded-md ${active ? "bg-emerald-400" : "bg-surface-raised border border-white/[0.06]"}`}
+                          className={`h-7 flex-1 rounded-lg transition-all ${
+                            active
+                              ? "bg-emerald-400 scale-100"
+                              : "bg-surface-raised border border-white/[0.04]"
+                          }`}
                         />
                       ))}
                     </div>
-                    <p className="text-sm text-muted block mt-2">Calendar buckets: UTC days</p>
+                    <span className="text-xs text-muted-soft block mt-2">Calendar buckets: UTC Days</span>
                   </div>
 
-                  <div className="pt-3 border-t border-white/[0.06] flex justify-between text-sm">
-                    <span className="text-muted">Retrieval coverage:</span>
-                    <span className="text-emerald-400 font-bold">94% (passes)</span>
+                  <div className="pt-3 border-t border-white/[0.06] flex justify-between text-xs sm:text-sm">
+                    <span className="text-muted flex items-center gap-1.5">
+                      Retrieval Coverage:
+                      <span title="Percentage of days successfully observed via GitHub API">
+                        <HelpCircle className="h-3.5 w-3.5 text-muted-soft" />
+                      </span>
+                    </span>
+                    <span className="text-emerald-400 font-bold">94.2% (Passes)</span>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-white/[0.06] flex items-center justify-between text-sm text-muted">
-                <span>Weekly consistency:</span>
-                <span className="text-accent font-extrabold text-base">86%</span>
+              <div className="mt-6 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs sm:text-sm font-mono text-muted">
+                <span>Weekly Consistency:</span>
+                <span className="text-accent font-black text-base">85.7%</span>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="rounded-panel border border-white/[0.08] bg-surface p-5 flex flex-col justify-between">
+            {/* 2. LeetCode Provider Card */}
+            <motion.div
+              whileHover={{ y: -4 }}
+              transition={{ type: "spring", stiffness: 350, damping: 25 }}
+              className="rounded-2xl border border-white/[0.08] bg-surface/90 p-6 sm:p-7 flex flex-col justify-between hover:border-white/20 transition-all shadow-md group"
+            >
               <div>
-                <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
-                  <p className="flex items-center gap-2 text-ink font-bold text-base">
-                    <Code2 className="h-5 w-5 text-provider-leetcode-brand" aria-hidden="true" />
+                <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
+                  <div className="flex items-center gap-2.5 text-ink font-bold text-base sm:text-lg">
+                    <Code2 className="h-5 w-5 text-provider-leetcode-brand" />
                     <span>LeetCode</span>
-                  </p>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-sm font-mono font-semibold bg-accent/10 text-accent border border-accent/20">
-                    <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
-                    HMAC verified
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-accent/10 text-accent border border-accent/20">
+                    <ShieldCheck className="h-3 w-3" />
+                    HMAC_VERIFIED
                   </span>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-4 font-mono">
                   <div className="flex justify-between items-baseline">
-                    <span className="text-sm text-muted">Cumulative solved:</span>
-                    <span className="text-2xl text-ink font-extrabold tabular-nums">184</span>
+                    <span className="text-xs sm:text-sm text-muted">Cumulative Solved:</span>
+                    <span className="text-2xl text-ink font-black">184</span>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2 text-center text-sm">
-                    <div className="bg-surface-raised py-2.5 rounded-control border border-emerald-500/20">
-                      <span className="text-emerald-400 block font-extrabold text-base">92</span>
-                      <span className="text-muted mt-0.5 block text-sm">Easy</span>
+                  <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                    <div className="bg-surface-raised py-2.5 rounded-xl border border-emerald-500/20">
+                      <span className="text-emerald-400 block font-black text-base">92</span>
+                      <span className="text-muted mt-0.5 block text-xs">Easy</span>
                     </div>
-                    <div className="bg-surface-raised py-2.5 rounded-control border border-amber-500/20">
-                      <span className="text-amber-400 block font-extrabold text-base">78</span>
-                      <span className="text-muted mt-0.5 block text-sm">Medium</span>
+                    <div className="bg-surface-raised py-2.5 rounded-xl border border-amber-500/20">
+                      <span className="text-amber-400 block font-black text-base">78</span>
+                      <span className="text-muted mt-0.5 block text-xs">Med</span>
                     </div>
-                    <div className="bg-surface-raised py-2.5 rounded-control border border-rose-500/20">
-                      <span className="text-rose-400 block font-extrabold text-base">14</span>
-                      <span className="text-muted mt-0.5 block text-sm">Hard</span>
+                    <div className="bg-surface-raised py-2.5 rounded-xl border border-rose-500/20">
+                      <span className="text-rose-400 block font-black text-base">14</span>
+                      <span className="text-muted mt-0.5 block text-xs">Hard</span>
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-white/[0.06] flex justify-between text-sm">
-                    <span className="text-muted">Weekly delta:</span>
-                    <span className="text-accent font-bold">+12 solved</span>
+                  <div className="pt-3 border-t border-white/[0.06] flex justify-between text-xs sm:text-sm">
+                    <span className="text-muted">Weekly Delta:</span>
+                    <span className="text-accent font-bold">+12 Solved</span>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-white/[0.06] flex items-center justify-between text-sm text-muted">
-                <span>Method: pre-boundary observation</span>
+              <div className="mt-6 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs sm:text-sm font-mono text-muted">
+                <span>Method: Pre-boundary observation</span>
                 <span className="text-emerald-400 font-semibold">Finalized</span>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="rounded-panel border border-white/[0.08] bg-surface p-5 flex flex-col justify-between sm:col-span-2 lg:col-span-1">
+            {/* 3. HackerRank Provider Card */}
+            <motion.div
+              whileHover={{ y: -4 }}
+              transition={{ type: "spring", stiffness: 350, damping: 25 }}
+              className="rounded-2xl border border-white/[0.08] bg-surface/90 p-6 sm:p-7 flex flex-col justify-between hover:border-white/20 transition-all shadow-md group"
+            >
               <div>
-                <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
-                  <p className="flex items-center gap-2 text-ink font-bold text-base">
-                    <Award className="h-5 w-5 text-provider-hackerrank" aria-hidden="true" />
+                <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
+                  <div className="flex items-center gap-2.5 text-ink font-bold text-base sm:text-lg">
+                    <Award className="h-5 w-5 text-provider-hackerrank" />
                     <span>HackerRank</span>
-                  </p>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-sm font-mono font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                    <AlertCircle className="h-3.5 w-3.5" aria-hidden="true" />
-                    Limited
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                    <AlertCircle className="h-3 w-3" />
+                    LIMITED
                   </span>
                 </div>
 
-                <div className="space-y-4">
-                  <div className="flex justify-between items-baseline gap-2">
-                    <span className="text-sm text-muted">Badges observed:</span>
-                    <span className="text-ink font-bold text-sm text-right">5-star Python, 4-star PS</span>
+                <div className="space-y-4 font-mono">
+                  <div className="flex justify-between items-baseline">
+                    <span className="text-xs sm:text-sm text-muted">Badges Observed:</span>
+                    <span className="text-ink font-black text-sm sm:text-base">5-star Python, 4-star PS</span>
                   </div>
 
-                  <p className="p-3.5 rounded-control bg-surface-raised border border-white/[0.06] text-sm text-muted leading-relaxed">
-                    Profile linked. Cumulative stats shown for display; excluded from period ranking because there
-                    are no public timestamps.
-                  </p>
+                  <div className="p-3.5 rounded-xl bg-surface-raised border border-white/[0.06] text-xs sm:text-sm text-slate-300 font-sans leading-relaxed">
+                    Profile linked. Cumulative stats shown for display; excluded from period ranking per capability rule (Rule 5.6).
+                  </div>
                 </div>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-white/[0.06] flex items-center justify-between text-sm text-muted">
-                <span>Eligibility status:</span>
-                <span className="text-accent font-bold">Display only</span>
+              <div className="mt-6 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs sm:text-sm font-sans text-slate-400">
+                <span>Eligibility Status:</span>
+                <span className="text-accent font-bold">Display Only</span>
               </div>
-            </div>
+            </motion.div>
           </div>
 
-          <div className="border-t border-white/[0.08] bg-surface p-4 sm:p-6">
+          {/* Weekly Developer Recap Footer Strip */}
+          <div className="border-t border-white/[0.08] bg-surface/95 p-6 sm:p-8">
             <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-              <div>
-                <h3 className="font-bold text-base text-ink">Weekly developer recap</h3>
-                <p className="text-sm text-muted">Non-judgmental peer recap — grounded in the sample above.</p>
+              <div className="flex items-center gap-2.5">
+                <Sparkles className="h-5 w-5 text-accent" />
+                <h4 className="font-bold text-base sm:text-lg text-white">Weekly Developer Synthesis</h4>
+                <span className="text-xs font-sans px-2.5 py-0.5 rounded-md bg-surface-raised border border-white/[0.06] text-slate-300">
+                  Non-Judgmental Peer Recap
+                </span>
               </div>
-              <div className="flex items-center gap-1 bg-canvas p-1 rounded-control border border-white/10 text-sm" role="group" aria-label="Recap mode">
+              <div className="flex items-center gap-1 bg-canvas p-1 rounded-xl border border-white/10 text-xs sm:text-sm font-sans">
                 <button
                   type="button"
                   onClick={() => setRecapMode("ai")}
-                  aria-pressed={recapMode === "ai"}
-                  className={`min-h-[40px] px-3.5 py-1.5 rounded-md transition-colors ${
-                    recapMode === "ai" ? "bg-accent text-canvas font-bold" : "text-muted hover:text-ink"
+                  className={`px-3.5 py-1.5 rounded-lg transition-all ${
+                    recapMode === "ai" ? "bg-accent text-canvas font-bold" : "text-muted hover:text-white"
                   }`}
                 >
-                  AI explanation
+                  AI Explanation
                 </button>
                 <button
                   type="button"
                   onClick={() => setRecapMode("deterministic")}
-                  aria-pressed={recapMode === "deterministic"}
-                  className={`min-h-[40px] px-3.5 py-1.5 rounded-md transition-colors ${
-                    recapMode === "deterministic" ? "bg-accent text-canvas font-bold" : "text-muted hover:text-ink"
+                  className={`px-3.5 py-1.5 rounded-lg transition-all ${
+                    recapMode === "deterministic" ? "bg-accent text-canvas font-bold" : "text-muted hover:text-white"
                   }`}
                 >
-                  Pure metrics view
+                  Pure Metrics View
                 </button>
               </div>
             </div>
@@ -214,12 +264,9 @@ export function CockpitPreview() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.2 }}
-                  className="text-sm text-muted leading-relaxed bg-canvas p-4 rounded-control border border-white/[0.06]"
+                  className="text-sm sm:text-base text-slate-300 leading-relaxed font-sans bg-canvas/80 p-5 rounded-xl border border-white/[0.06]"
                 >
-                  &ldquo;You showed steady momentum this week with <strong className="text-ink">6 active days on GitHub</strong> and
-                  an <strong className="text-ink">86% consistency rate</strong>. On LeetCode, 12 verified problems were
-                  closed before the Sunday boundary. <em>Next week focus:</em> two Medium tree problems would sustain
-                  the pattern.&rdquo;
+                  &ldquo;You demonstrated steady momentum this week with <strong>6 active days observed on GitHub</strong> and an <strong>85.7% consistency rate</strong>. Your commit activity was distributed across semester repositories with 94.2% data coverage. On LeetCode, 12 verified problems were closed before Sunday 23:59 IST. <em>Next week focus:</em> try solving two Medium Tree problems on LeetCode to sustain your pattern.&rdquo;
                 </motion.p>
               ) : (
                 <motion.div
@@ -228,16 +275,16 @@ export function CockpitPreview() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.2 }}
-                  className="text-sm text-muted bg-canvas p-4 rounded-control border border-white/[0.06] space-y-1.5"
+                  className="text-xs sm:text-sm font-sans text-slate-300 bg-canvas/80 p-5 rounded-xl border border-white/[0.06] space-y-1.5"
                 >
-                  <p>GitHub active days: 6/7 (UTC) · Coverage: 94% · Period: Mon–Sun IST</p>
-                  <p>LeetCode boundary change: +12 solved (172 → 184)</p>
-                  <p>HackerRank: excluded from delta calculation (display only)</p>
+                  <div>• GitHub Active Days: 6/7 (UTC) | Coverage: 94.2% | Period: Mon–Sun IST</div>
+                  <div>• LeetCode Boundary Change: +12 Solved | Base: 172 -&gt; Current: 184</div>
+                  <div>• HackerRank: Excluded from delta calculation (cumulative display only: Rule 5.6)</div>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
