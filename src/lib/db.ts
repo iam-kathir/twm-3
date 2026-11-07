@@ -523,6 +523,11 @@ export function getAllDisputes(): DisputeRow[] {
   return db.prepare("SELECT * FROM disputes ORDER BY submitted_at DESC").all() as unknown as DisputeRow[];
 }
 
+export function getDisputeById(id: string): DisputeRow | undefined {
+  const db = getDb();
+  return db.prepare("SELECT * FROM disputes WHERE id = ?").get(id) as unknown as DisputeRow | undefined;
+}
+
 export function insertDispute(d: {
   id: string;
   studentId: string;
@@ -542,14 +547,41 @@ export function insertDispute(d: {
   stmt.run(d.id, d.studentId, d.studentName, d.rollNo, d.metric, d.platform, d.claim, d.evidenceUrl, d.ruleReference);
 }
 
-export function resolveDisputeInDb(id: string, status: "approved" | "rejected", note: string, reviewer: string): void {
+export function resolveDisputeInDb(id: string, status: "approved" | "rejected", note: string, reviewer: string): DisputeRow {
   const db = getDb();
+  const dispute = getDisputeById(id);
+  if (!dispute) {
+    throw new Error(`DISPUTE_NOT_FOUND: Dispute '${id}' does not exist.`);
+  }
+
+  if (dispute.status !== "pending") {
+    throw new Error(`DISPUTE_ALREADY_RESOLVED: Dispute '${id}' is already finalized as '${dispute.status}'.`);
+  }
+
+  // Section 10.1 Separation-of-Duties: A student cannot review or resolve their own dispute
+  const normalizedReviewer = reviewer.trim().toLowerCase();
+  const normalizedClaimantId = (dispute.student_id || "").trim().toLowerCase();
+  const normalizedClaimantName = (dispute.student_name || "").trim().toLowerCase();
+  const normalizedClaimantRoll = (dispute.roll_no || "").trim().toLowerCase();
+
+  if (
+    normalizedReviewer === normalizedClaimantId ||
+    normalizedReviewer === normalizedClaimantName ||
+    normalizedReviewer === normalizedClaimantRoll ||
+    normalizedReviewer.startsWith(`${normalizedClaimantName} `) ||
+    normalizedReviewer.includes(normalizedClaimantRoll)
+  ) {
+    throw new Error("CONFLICT_OF_INTEREST: Student claimant cannot resolve their own dispute per Section 10.1 two-person audit rules.");
+  }
+
   const now = new Date().toISOString();
   db.prepare(`
     UPDATE disputes 
     SET status = ?, resolution_note = ?, reviewed_by = ?, reviewed_at = ?, resolved_at = ?
     WHERE id = ?
   `).run(status, note, reviewer, now, now, id);
+
+  return getDisputeById(id)!;
 }
 
 // ---------------------------------------------------------------------------

@@ -102,16 +102,27 @@ export async function PATCH(req: NextRequest) {
     const currentUser = getCurrentUserMember();
     const reviewerName = reviewer || (currentUser ? `${currentUser.name} (Co-Admin)` : "Faculty Co-Admin");
 
-    resolveDisputeInDb(id, status, resolutionNote || "Resolved per Rule §9.7 audit criteria.", reviewerName);
+    const resolved = resolveDisputeInDb(id, status, resolutionNote || "Resolved per Rule §9.7 audit criteria.", reviewerName);
 
     return NextResponse.json({
       success: true,
       id,
-      status,
-      reviewedBy: reviewerName,
+      status: resolved.status,
+      reviewedBy: resolved.reviewed_by,
+      reviewedAt: resolved.reviewed_at,
       message: `Dispute ${id} marked ${status} in SQLite audit log.`,
     });
-  } catch (error) {
+  } catch (error: any) {
+    const msg = error instanceof Error ? error.message : String(error);
+    if (msg.includes("CONFLICT_OF_INTEREST")) {
+      return NextResponse.json({ error: msg }, { status: 403 });
+    }
+    if (msg.includes("DISPUTE_NOT_FOUND")) {
+      return NextResponse.json({ error: msg }, { status: 404 });
+    }
+    if (msg.includes("DISPUTE_ALREADY_RESOLVED")) {
+      return NextResponse.json({ error: msg }, { status: 409 });
+    }
     console.error("Dispute resolution error:", error);
     return NextResponse.json({ error: "Failed to update dispute status." }, { status: 500 });
   }

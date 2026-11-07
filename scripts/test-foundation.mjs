@@ -4,7 +4,7 @@ import { computeCompetitionRanks } from "../src/lib/leaderboard.ts";
 import { checkRateLimit } from "../src/lib/rate-limit.ts";
 import { getDb, getAllRosterMembers, insertRosterMember, getRosterQuorumStats, registerHmacNonce, verifyAndConsumeNonce, insertDispute, resolveDisputeInDb, getAllDisputes, getWeeklyStandingsFromDb, disconnectStudentProvider, deleteStudentTelemetryData } from "../src/lib/db.ts";
 import { executeWeeklyFinalization } from "../src/lib/finalizer.ts";
-import { getPreviousSundayBoundaryIST, computeLeetCodeBaseline } from "../src/lib/baseline.ts";
+import { getPreviousSundayBoundaryIST, computeLeetCodeBaseline, evaluateObservationBoundaryEligibility } from "../src/lib/baseline.ts";
 import { generateDeterministicWeeklyRecap } from "../src/lib/recap.ts";
 import { synthesizeDeterministicGroundedRecap, generateGroundedAIRecap } from "../src/lib/ai-recap.ts";
 import { getCohortDevelopers } from "../src/lib/search.ts";
@@ -150,6 +150,49 @@ describe("TWM Foundation Suite", () => {
       assert.ok(stored.length >= 7, "Standings must be retrieved from SQLite");
       assert.equal(stored[0].rank, 1);
     });
+
+    it("rejects unsupported platforms and composite merged scores at runtime (§1.2, §5.6)", () => {
+      assert.throws(
+        () => {
+          // @ts-ignore
+          executeWeeklyFinalization({ platform: "hackerrank" });
+        },
+        /UNSUPPORTED_COMPETITION_PLATFORM/,
+        "HackerRank must be excluded from weekly finalization"
+      );
+
+      assert.throws(
+        () => {
+          // @ts-ignore
+          executeWeeklyFinalization({ platform: "merged" });
+        },
+        /UNSUPPORTED_COMPETITION_PLATFORM/,
+        "Merged scores must be rejected at runtime"
+      );
+    });
+
+    it("evaluates observation boundary eligibility within 3h, stale (>3h), and post-boundary (§9.1, §9.7)", () => {
+      const boundaryIso = "2026-10-18T18:29:59.999Z"; // Sunday 23:59:59.999 IST
+      const boundaryMs = new Date(boundaryIso).getTime();
+
+      // 1. Observed 45m before boundary -> Finalized
+      const validObs = new Date(boundaryMs - 45 * 60 * 1000).toISOString();
+      const validRes = evaluateObservationBoundaryEligibility(validObs, boundaryIso);
+      assert.equal(validRes.status, "Finalized");
+      assert.equal(validRes.isEligible, true);
+
+      // 2. Observed 4h before boundary -> Provisional (stale gap > 3h)
+      const staleObs = new Date(boundaryMs - 4 * 3600 * 1000).toISOString();
+      const staleRes = evaluateObservationBoundaryEligibility(staleObs, boundaryIso);
+      assert.equal(staleRes.status, "Provisional");
+      assert.equal(staleRes.isEligible, false);
+
+      // 3. Observed 1 second after boundary -> Excluded
+      const postObs = new Date(boundaryMs + 1000).toISOString();
+      const postRes = evaluateObservationBoundaryEligibility(postObs, boundaryIso);
+      assert.equal(postRes.status, "Excluded");
+      assert.equal(postRes.isEligible, false);
+    });
   });
 
   describe("Dispute Resolution & Audit Trail (§10.1)", () => {
@@ -172,14 +215,60 @@ describe("TWM Foundation Suite", () => {
       assert.ok(created);
       assert.equal(created.status, "pending");
 
-      // Resolve dispute
-      resolveDisputeInDb(testId, "approved", "Valid signature", "Faculty Co-Admin");
+      // Resolve dispute by faculty co-admin
+      resolveDisputeInDb(testId, "approved", "Valid signature", "Faculty Co-Admin Prof. Sharma");
 
       const listAfter = getAllDisputes();
       const resolved = listAfter.find((d) => d.id === testId);
       assert.ok(resolved);
       assert.equal(resolved.status, "approved");
-      assert.equal(resolved.reviewed_by, "Faculty Co-Admin");
+      assert.equal(resolved.reviewed_by, "Faculty Co-Admin Prof. Sharma");
+    });
+
+    it("enforces separation of duties and blocks claimant self-resolution (Conflict of Interest)", () => {
+      const testId = `DSP-SELF-${Date.now()}`;
+      insertDispute({
+        id: testId,
+        studentId: "usr-aarav",
+        studentName: "Aarav Sharma",
+        rollNo: "2022BCSE042",
+        metric: "leetcode_delta",
+        platform: "LeetCode",
+        claim: "Self resolution conflict of interest test.",
+        evidenceUrl: "https://leetcode.com/test",
+        ruleReference: "Rule §10.1",
+      });
+
+      // Attempt self-resolution using student claimant's name -> MUST throw CONFLICT_OF_INTEREST
+      assert.throws(
+        () => {
+          resolveDisputeInDb(testId, "approved", "Self approved", "Aarav Sharma");
+        },
+        /CONFLICT_OF_INTEREST/,
+        "Student claimant must not be permitted to resolve their own dispute"
+      );
+
+      // Attempt self-resolution using student claimant's roll_no -> MUST throw CONFLICT_OF_INTEREST
+      assert.throws(
+        () => {
+          resolveDisputeInDb(testId, "approved", "Self approved", "2022BCSE042");
+        },
+        /CONFLICT_OF_INTEREST/,
+        "Claimant roll number must not be permitted to resolve own dispute"
+      );
+
+      // Legitimate faculty review should succeed
+      const approved = resolveDisputeInDb(testId, "approved", "Approved by neutral reviewer", "Prof. Ramanujan (Faculty Chair)");
+      assert.equal(approved.status, "approved");
+
+      // Re-resolution attempt on already resolved dispute -> MUST throw DISPUTE_ALREADY_RESOLVED
+      assert.throws(
+        () => {
+          resolveDisputeInDb(testId, "rejected", "Second review attempt", "Another Reviewer");
+        },
+        /DISPUTE_ALREADY_RESOLVED/,
+        "Cannot resolve already finalized dispute"
+      );
     });
   });
 

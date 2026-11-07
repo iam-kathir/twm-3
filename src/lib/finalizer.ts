@@ -14,6 +14,7 @@ import { getDb, getAllRosterMembers, saveWeeklyFinalizedStandings } from "./db.t
 import type { WeeklyStandingRow } from "./db.ts";
 import { computeCompetitionRanks } from "./leaderboard.ts";
 import type { RawParticipant } from "./leaderboard.ts";
+import { evaluateObservationBoundaryEligibility } from "./baseline.ts";
 
 export interface FinalizationReport {
   weekNumber: number;
@@ -49,6 +50,11 @@ export function executeWeeklyFinalization(options: {
   const year = options.year ?? 2026;
   const platform = options.platform;
 
+  // Runtime enforcement: only independent GitHub and LeetCode tracks are competitive
+  if (platform !== "github" && platform !== "leetcode") {
+    throw new Error(`UNSUPPORTED_COMPETITION_PLATFORM: Platform '${platform}' is not eligible for weekly competition delta finalization per Plan §1.2 & §5.6. HackerRank and aggregate scores are excluded.`);
+  }
+
   // Sunday 23:59:59 IST in ISO string (UTC+05:30 -> 18:29:59 UTC). Defaults to current time if unprovided
   const boundaryIso = options.boundaryDateIso || new Date().toISOString();
   const boundaryMs = new Date(boundaryIso).getTime();
@@ -69,9 +75,8 @@ export function executeWeeklyFinalization(options: {
     `).get(m.id, platform, boundaryIso) as any;
 
     if (obs) {
-      const observedMs = new Date(obs.observed_at).getTime();
-      const gapSeconds = Math.max(0, Math.floor((boundaryMs - observedMs) / 1000));
-      const isWithin3Hours = gapSeconds <= 3 * 3600;
+      const eligibility = evaluateObservationBoundaryEligibility(obs.observed_at, boundaryIso);
+      const isWithin3Hours = eligibility.status === "Finalized";
 
       rawParticipants.push({
         id: m.id,
@@ -81,10 +86,10 @@ export function executeWeeklyFinalization(options: {
         value: obs.display_value,
         coverage: isWithin3Hours ? "Pre-boundary valid" : "Stale observation",
         coveragePass: isWithin3Hours,
-        freshness: `${Math.round(gapSeconds / 60)}m gap`,
-        status: isWithin3Hours ? "Finalized" : "Provisional",
+        freshness: `${Math.round(eligibility.boundaryGapSeconds / 60)}m gap`,
+        status: eligibility.status === "Finalized" ? "Finalized" : "Provisional",
         isCurrentUser: m.is_current_user === 1,
-        boundaryGapSeconds: gapSeconds,
+        boundaryGapSeconds: eligibility.boundaryGapSeconds,
       });
     }
   }

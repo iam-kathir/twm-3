@@ -72,6 +72,82 @@ export function getPreviousSundayBoundaryIST(referenceDate: Date = new Date()): 
 }
 
 /**
+ * Calculates the upcoming or current Sunday 23:59:59.999 IST closing boundary
+ * relative to a given reference date.
+ */
+export function getCurrentSundayClosingBoundaryIST(referenceDate: Date = new Date()): Date {
+  const istOffsetMs = 5.5 * 60 * 60 * 1000;
+  const istTimeMs = referenceDate.getTime() + istOffsetMs;
+  const istDate = new Date(istTimeMs);
+
+  const dayOfWeek = istDate.getUTCDay(); // 0 is Sunday
+  const daysUntilSunday = dayOfWeek === 0 ? 0 : 7 - dayOfWeek;
+
+  const closingSundayDate = new Date(istTimeMs + daysUntilSunday * 24 * 60 * 60 * 1000);
+  const y = closingSundayDate.getUTCFullYear();
+  const m = closingSundayDate.getUTCMonth();
+  const d = closingSundayDate.getUTCDate();
+
+  const boundaryUtcMs = Date.UTC(y, m, d, 23, 59, 59, 999) - istOffsetMs;
+  return new Date(boundaryUtcMs);
+}
+
+/**
+ * Section 9.1 & §9.7 Observation Boundary Eligibility Evaluator
+ * Validates whether an observation timestamp is eligible, provisional, or excluded.
+ */
+export function evaluateObservationBoundaryEligibility(
+  observedAt: Date | string,
+  boundaryDate: Date | string = getCurrentSundayClosingBoundaryIST()
+): {
+  status: "Finalized" | "Provisional" | "Excluded";
+  boundaryGapSeconds: number;
+  isEligible: boolean;
+  reason: string;
+} {
+  const observedMs = typeof observedAt === "string" ? new Date(observedAt).getTime() : observedAt.getTime();
+  const boundaryMs = typeof boundaryDate === "string" ? new Date(boundaryDate).getTime() : boundaryDate.getTime();
+
+  if (isNaN(observedMs)) {
+    throw new Error("Invalid observedAt date passed to boundary evaluator.");
+  }
+  if (isNaN(boundaryMs)) {
+    throw new Error("Invalid boundaryDate passed to boundary evaluator.");
+  }
+
+  // Hard Rule: Observations after Sunday 23:59:59 IST boundary are excluded for that week (§9.1)
+  if (observedMs > boundaryMs) {
+    const afterGapSeconds = Math.floor((observedMs - boundaryMs) / 1000);
+    return {
+      status: "Excluded",
+      boundaryGapSeconds: afterGapSeconds,
+      isEligible: false,
+      reason: `Observed ${Math.round(afterGapSeconds / 60)}m after Sunday 23:59:59 IST boundary. Observations after boundary are excluded for that week (§9.1).`,
+    };
+  }
+
+  // 3-Hour Freshness Window Rule (§9.7)
+  const gapSeconds = Math.max(0, Math.floor((boundaryMs - observedMs) / 1000));
+  const isWithin3Hours = gapSeconds <= 3 * 3600;
+
+  if (isWithin3Hours) {
+    return {
+      status: "Finalized",
+      boundaryGapSeconds: gapSeconds,
+      isEligible: true,
+      reason: `Observed ${Math.round(gapSeconds / 60)}m before boundary (within 3-hour freshness threshold, §9.7).`,
+    };
+  }
+
+  return {
+    status: "Provisional",
+    boundaryGapSeconds: gapSeconds,
+    isEligible: false,
+    reason: `Observed ${Math.round(gapSeconds / 60)}m before boundary (exceeds 3-hour window). Marked Provisional (§9.7).`,
+  };
+}
+
+/**
  * Computes LeetCode problem category deltas between consecutive Sunday baselines
  */
 export function computeLeetCodeBaseline(

@@ -10,13 +10,14 @@ as a cohort leaderboard with auditable, disputeable observations.
 ## Quick start (local)
 
 ```bash
+nvm use                        # switches to Node.js 22 via .nvmrc
 npm install
 cp .env.example .env.local     # fill in secrets (see "Configuration")
 npm run dev                    # http://localhost:3000
 ```
 
-Requires **Node.js 22+** (uses the built-in `node:sqlite` module — no ORM, no native build step).
-Developed and verified on Node 24.
+Requires **Node.js 22 LTS** (`>=22.5.0`, uses the native `node:sqlite` module — zero external ORM, zero native C++ compilation steps).
+Aligned across `package.json` engines, `.nvmrc`, `Dockerfile`, and GitHub Actions CI.
 
 ### Scripts
 
@@ -90,6 +91,7 @@ database service. Backups via `npm run` scripts `backup-db.mjs` / `restore-db.mj
 | `/api/auth/session` | GET/PATCH | Session issue / read / identity tier update |
 | `/api/auth/disconnect` | POST/DELETE | 1-click platform disconnect & data sovereignty erasure (§17.4, §18.4) |
 | `/api/health` | GET | Production healthcheck, DB query latency, quorum status & env diagnostics |
+| `/api/stats/public` | GET | Public cohort aggregate counts (zero PII, safe for public landing page) |
 | `/api/telemetry/github` | POST | Commit + activity ingestion |
 | `/api/telemetry/leetcode` | POST | Solved-problem ingestion |
 | `/api/telemetry/hackerrank` | POST | Badge evidence ingestion |

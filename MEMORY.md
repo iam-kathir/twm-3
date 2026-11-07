@@ -130,6 +130,39 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-11-07 — Antigravity: Production Readiness & Technical Hardening Pass
+- **User Directive:** "Conduct a focused production-readiness engineering pass. Inspect the current repository, identify the exact implementation gaps listed below, fix them properly, and verify the results."
+- **Priority 1 (Node.js Version Alignment Across Project):**
+  - Configured `"engines": { "node": ">=22.5.0" }` in [`package.json`](package.json).
+  - Created [`.nvmrc`](.nvmrc) pinning Node.js `22`.
+  - Updated [`.github/workflows/ci.yml`](.github/workflows/ci.yml) to use Node.js 22 LTS (was Node 20), eliminating environment mismatch for native `node:sqlite`.
+  - Verified Dockerfile uses `node:22-alpine` across all 3 stages.
+- **Priority 2 (Launch Acceptance Checklist Deep Assertion Overhaul):**
+  - Overhauled [`scripts/audit-launch-checklist.mjs`](scripts/audit-launch-checklist.mjs). Replaced all hardcoded booleans with rigorous programmatic validations:
+    - `GATE-01`: Runtime rejection of unsupported platforms (`executeWeeklyFinalization` throws `UNSUPPORTED_COMPETITION_PLATFORM` on `hackerrank` or `merged`); cold-start missing baseline returns `null` delta (never 0).
+    - `GATE-02`: Denominator matches SQLite `roster_members` table row count (10); mathematically checked quorum ratio; dynamic threshold label verification.
+    - `GATE-03`: Programmatic ranking of sample ties: `1, 2, 2, 4` scheme with rank skipping and alphabetical secondary display order.
+    - `GATE-04`: Comprehensive Sunday 23:59:59 IST boundary validation: fixed UTC+5:30 offset invariance (18:29:59 UTC), Monday 00:00:00 IST transition, 3-hour freshness window (`isWithin3Hours` -> `Finalized`), stale gap (>3h -> `Provisional`), and post-boundary exclusion (`Excluded`).
+    - `GATE-05`: LeetCode cold-start vs baseline delta evaluation.
+    - `GATE-06`: HackerRank capability gating (`isEligibleForWeeklyCompetition: false`, `DISPLAY_ONLY_VERIFIED`, SHA-256 `hr-proof-` digest).
+    - `GATE-07`: Two-person dispute lifecycle: creation, conflict-of-interest prevention (student claimant self-resolution blocked), faculty co-admin resolution with audit timestamps, and double-resolution locking.
+    - `GATE-08`: AI zero-fabrication and grounding certification.
+    - `GATE-09`: Data sovereignty code check (8-section privacy policy, disconnect API, data wipe) with honest manual-review annotation for institutional campus agreement.
+    - `GATE-10`: Online database backup via `VACUUM INTO` with SHA-256 and `PRAGMA integrity_check` verification.
+- **Priority 3 (Replaced Hardcoded Student Statistics in `StatsBar.tsx`):**
+  - Created [`/api/stats/public`](src/app/api/stats/public/route.ts) returning aggregate cohort metrics (`totalEnrolled`, `verifiedOptedIn`, `quorumPercentage`, `meetsQuorum`, `label`) with zero private student records or PII.
+  - Updated [`StatsBar.tsx`](src/components/landing/StatsBar.tsx) to fetch from `/api/stats/public` on mount, displaying the true enrolled student count from SQLite with loading skeletons and graceful fallbacks (eliminated hardcoded "60+").
+- **Priority 4 & 6 (Dispute Resolution Separation-of-Duties Hardening & Security):**
+  - Hardened [`resolveDisputeInDb`](src/lib/db.ts) and [`/api/disputes`](src/app/api/disputes/route.ts) PATCH handler: rejects student self-resolution with `CONFLICT_OF_INTEREST` (403), rejects non-existent disputes with `DISPUTE_NOT_FOUND` (404), and prevents duplicate resolution with `DISPUTE_ALREADY_RESOLVED` (409).
+  - Added unit tests in [`scripts/test-foundation.mjs`](scripts/test-foundation.mjs) verifying conflict of interest, boundary semantics, and runtime platform rejection.
+- **Verification Gates (All Clean):**
+  - `npx tsc --noEmit`: 0 errors.
+  - `npm run lint`: `✔ No ESLint warnings or errors`.
+  - `npm test`: **20/20 test suites passed** (132ms).
+  - `npm run audit:launch`: **10/10 automated gates passed**.
+  - `npm run simulate`: **All 6 tournament steps & invariants passed**.
+  - `npx next build`: **13 static pages + 20 dynamic API routes compiled cleanly**.
+
 ### 2026-11-07 — Antigravity: Complete Brand Colour System Refinement (BRAND-5)
 - **User Directive:** "TWM — Complete Brand Colour System Refinement: Dark Obsidian + Purple / Electric Blue / Cyan (Balanced intensity). Complement TWM's official 3D ribbon logo (purple-to-blue-to-cyan gradient). Electric Blue is dominant functional interaction, Violet is supporting brand identity, Cyan is reserved for highlights/progress. Retain semantic colours independently (Emerald exclusively for verified/success, Amber for warnings, Red for errors). Retain platform colours (GitHub #60A5FA/#FFF, LeetCode #FFA116, HackerRank #2EC866). No layout changes; controlled design system migration."
 - **Design Tokens Configured (`tailwind.config.js` & `globals.css`):**
