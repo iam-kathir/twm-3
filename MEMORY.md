@@ -133,7 +133,29 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
-### 2026-11-07 — Antigravity: HERO-1 & FE-STATS A–E Engineering Refinement & Full Verification
+### 2026-11-07 — Antigravity: Hero Orbital Universe Icon Visibility Root Cause Fix & Full Motion Synchronization
+- **User Directive:** "resume and reson me that where did all theicons go"
+- **Technical Root Cause Analysis ("Where did all the icons go"):**
+  1. **Undefined Animation Class:** `HeroOrbitNode` was applying `animate-orbit-universe-cw` / `animate-orbit-universe-ccw`, which were never defined in `globals.css` (only `.animate-orbit-cw` and `.animate-orbit-ccw` existed).
+  2. **Unresolved Polar Angle:** `HeroOrbitalUniverse` was passing `initialAngle={node.initialAngle}`, but `node` had property `node.angle`. This produced `angle === undefined`, causing inline style `transform: rotate(undefineddeg)` which modern browser CSS engines reject as invalid syntax, completely discarding the transform.
+  3. **Visual Collapse to Center:** Because the transform was dropped and the container was styled with `absolute inset-0 flex items-center justify-center`, all 11 nodes (GitHub, LeetCode, HackerRank, 4 activity nodes, 4 achievement nodes) were rendered at coordinate `(0, 0)` in the dead center.
+  4. **Occlusion by HeroCore:** Sitting at `(0, 0)` is `HeroCore` — a 130px×130px opaque glassmorphic squircle with `z-30`. As a result, all 11 icons were completely trapped and occluded directly underneath the TWM logo card.
+- **Architectural Fix Implemented:**
+  1. **Layer-Level Rotating Tracks (`HeroOrbitTrack`):** Created 3 distinct rotating layer containers with hardware-accelerated CSS GPU transforms (`animate-orbit-cw` and `animate-orbit-ccw`):
+     - Layer 1 (Inner Providers + Energy Paths): 26s, Clockwise (`cw`).
+     - Layer 2 (Activity & Verification): 34s, Counter-Clockwise (`ccw`).
+     - Layer 3 (Analytics & Progress): 46s, Clockwise (`cw`).
+  2. **Cartesian Translation in Nodes (`HeroOrbitNode`):** Converted polar coordinates $(r, \theta)$ to Cartesian coordinates $x = r \sin(\theta)$ and $y = -r \cos(\theta)$, positioning nodes with `transform: translate3d(x, y, 0)`.
+  3. **Synchronized Upright Counter-Rotation:** Inside each node, a counter-rotating child div applies reverse angular velocity ($-\omega t$ vs $+\omega t$), ensuring all icons stay 100% upright and level throughout their entire 360° journey.
+  4. **Permanent SVG Beam Anchoring (`HeroConnectionPaths`):** Placed SVG connection paths inside the Inner `HeroOrbitTrack` so the beams rotate in identical synchrony with GitHub (0°), LeetCode (120°), and HackerRank (240°), permanently locking beams to badge centers without drift.
+  5. **Clearance Margins:** Repositioned floating micro-cards (`FLOATING_MICRO_CARDS`) outward to guarantee zero overlap with outer orbiting elements across all viewports.
+- **Verification Gates Passed:**
+  - `npx tsc --noEmit`: 0 errors.
+  - `npm run lint`: 0 errors / 0 warnings.
+  - `npm test`: 45/45 tests passing (Foundation + OTP + Hero-Stats Refinement).
+  - `npm run audit:launch`: 10/10 automated gates verified.
+  - `npx next build`: 13 static pages and 20 dynamic API routes compiled cleanly with 0 errors.
+  - **Live Browser Verification (Playwright):** All 11 nodes rendered and verified actively moving across live frames ($t=0$s to $t=2$s position deltas confirmed); provider drawer opens on click while remaining orbits continue uninterrupted.
 - **User Directive:** "Resolve all five identified issues (A–E) in the Hero Orbital Universe and StatsBar implementations: (A) Fix responsive orbital clipping and overflow; (B) Remove misleading engine verification claims; (C) Harden StatsBar API validation; (D) Correct StatsBar request and refresh lifecycle; (E) Correct data freshness semantics."
 - **Files Modified & Added:**
   - `src/lib/stats-validator.ts`: Strict fail-closed validation function `validateCohortStatsPayload` enforcing non-negative integer counts, `verifiedOptedIn <= totalEnrolled`, quorum percentage consistency, and 70% quorum threshold boolean validation.

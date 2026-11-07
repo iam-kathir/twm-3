@@ -175,7 +175,7 @@ export const FLOATING_MICRO_CARDS: FloatingMicroCard[] = [
     subtext: "Illustrative preview",
     icon: CheckCircle2,
     iconColor: "text-emerald-400",
-    positionClasses: "top-1 left-1 sm:top-2 sm:left-2 lg:top-3 lg:left-3",
+    positionClasses: "-top-2 -left-4 sm:-top-3 sm:-left-6 lg:-top-5 lg:-left-8",
   },
   {
     id: "card-baseline",
@@ -184,7 +184,7 @@ export const FLOATING_MICRO_CARDS: FloatingMicroCard[] = [
     subtext: "Illustrative preview",
     icon: BarChart3,
     iconColor: "text-brand-secondary",
-    positionClasses: "bottom-1 right-1 sm:bottom-2 sm:right-2 lg:bottom-3 lg:right-3",
+    positionClasses: "-bottom-2 -right-4 sm:-bottom-3 sm:-right-6 lg:-bottom-5 lg:-right-8",
   },
   {
     id: "card-audit",
@@ -193,7 +193,7 @@ export const FLOATING_MICRO_CARDS: FloatingMicroCard[] = [
     subtext: "Illustrative preview",
     icon: ShieldCheck,
     iconColor: "text-brand-highlight",
-    positionClasses: "bottom-1 left-2 sm:bottom-2 sm:left-4 lg:bottom-3 lg:left-5",
+    positionClasses: "-bottom-2 -left-4 sm:-bottom-3 sm:-left-6 lg:-bottom-5 lg:-left-8",
   },
 ];
 

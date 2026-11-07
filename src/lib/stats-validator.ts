@@ -146,3 +146,4 @@ export function validateCohortStatsPayload(data: unknown): StatsValidationResult
     },
   };
 }
+
