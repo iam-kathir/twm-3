@@ -52,7 +52,7 @@ function fmtGap(absMs: number): string {
 }
 
 const verdictStyle: Record<Verdict, { label: string; className: string }> = {
-  eligible: { label: "Eligible — finalized", className: "bg-accent text-canvas border-accent" },
+  eligible: { label: "Eligible — finalized", className: "bg-emerald-500 text-canvas border-emerald-500" },
   provisional: { label: "Provisional — stale observation", className: "bg-amber-500/15 text-amber-400 border-amber-500/40" },
   excluded: { label: "Excluded from this week", className: "bg-surface-raised text-muted border-white/15" },
 };
@@ -85,7 +85,7 @@ export function BoundaryChecker() {
   return (
     <section id="boundary-checker" className="scroll-mt-24 py-12 md:py-16 border-t border-white/[0.08] bg-canvas">
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
-        <p className="text-sm font-semibold text-accent">Sunday boundary checker</p>
+        <p className="text-sm font-semibold text-brand-secondary">Sunday boundary checker</p>
         <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-ink">
           Is one observation inside the week?
         </h2>
@@ -112,7 +112,7 @@ export function BoundaryChecker() {
                     onClick={() => setProvider(p)}
                     aria-pressed={provider === p}
                     className={`min-h-[44px] px-4 rounded-control text-sm font-semibold border transition-colors ${
-                      provider === p ? "bg-accent text-canvas border-accent" : "bg-surface-raised text-muted border-white/15 hover:text-ink"
+                      provider === p ? "bg-brand-secondary text-white border-brand-secondary" : "bg-surface-raised text-muted border-white/15 hover:text-ink"
                     }`}
                   >
                     {p === "github" ? "GitHub" : p === "leetcode" ? "LeetCode" : "HackerRank"}
@@ -130,7 +130,7 @@ export function BoundaryChecker() {
                 type="datetime-local"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                className="mt-2 w-full min-h-[44px] rounded-control bg-canvas border border-white/15 px-3 text-base text-ink focus:border-accent"
+                className="mt-2 w-full min-h-[44px] rounded-control bg-canvas border border-white/15 px-3 text-base text-ink focus:border-brand-primary"
               />
               <div className="mt-3 flex flex-wrap gap-2">
                 <button

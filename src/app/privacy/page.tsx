@@ -244,7 +244,7 @@ export default function PrivacyPolicyPage() {
                 <div className="space-y-3 pt-2">
                   <div className="p-4 rounded-xl bg-surface border border-white/10 space-y-1.5">
                     <div className="flex items-center space-x-2 text-white font-bold text-sm">
-                      <Github className="w-4 h-4 text-provider-github" />
+                      <Github className="w-4 h-4 text-white" />
                       <span>GitHub Telemetry</span>
                     </div>
                     <p className="text-sm text-muted leading-relaxed">

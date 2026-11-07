@@ -13,23 +13,25 @@
   --bg-rgb: 7 9 14;
   --surface: #0E121A;
   --surface-rgb: 14 18 26;
+  --surface-card: #121620;
+  --surface-card-rgb: 18 22 32;
   --surface-elevated: #151B24;
   --surface-elevated-rgb: 21 27 36;
-  --surface-card: #121620;
   --surface-highlight: #1B2330;
+  --surface-highlight-rgb: 27 35 48;
 
-  --border: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.08);
   --border-subtle: rgba(255, 255, 255, 0.05);
-  --border-active: rgba(16, 185, 129, 0.4);
+  --border-active: rgba(101, 85, 245, 0.45);
   --border-strong: rgba(255, 255, 255, 0.14);
   /* Border rgb triplets so Tailwind can apply opacity modifiers
      (border-border/60) without a second copy of each colour. */
   --border-rgb: 255 255 255;
   --border-subtle-rgb: 255 255 255;
   --border-strong-rgb: 255 255 255;
-  /* Focus ring: single accent source; :focus-visible below is the only
-     outline definition and must never be silenced by focus:outline-none. */
-  --focus-ring: var(--accent);
+
+  /* Focus ring: keyboard focus outline in brand violet */
+  --focus-ring: #6555F5;
 
   /* Elevation: panels sit on the ground (tone step + hairline). Shadows are
      reserved for real overlays (menus, dialogs, popovers). */
@@ -52,29 +54,47 @@
   --muted-dark: #707C92;
   --muted-dark-rgb: 112 124 146;
 
-  /* Decisive Instrument Accents (Precision Emerald & Hyper-Mint) */
-  --accent: #10B981;
-  --accent-rgb: 16 185 129;
-  --accent-hover: #059669;
-  --accent-hover-rgb: 5 150 105;
-  --accent-subtle: rgba(16, 185, 129, 0.12);
+  /* Primary Brand System: Dark Obsidian + Violet / Electric Blue / Cyan */
+  --brand-primary: #6555F5;
+  --brand-primary-rgb: 101 85 245;
+  --brand-secondary: #3478F6;
+  --brand-secondary-rgb: 52 120 246;
+  --brand-highlight: #16C8E8;
+  --brand-highlight-rgb: 22 200 232;
+  --brand-subtle: rgba(101, 85, 245, 0.12);
+  --brand-border: rgba(101, 85, 245, 0.35);
+
+  /* Functional Interaction Accent: Electric Blue (#3478F6) is the dominant functional interaction colour */
+  --accent: #3478F6;
+  --accent-rgb: 52 120 246;
+  --accent-hover: #2563EB;
+  --accent-hover-rgb: 37 99 235;
+  --accent-subtle: rgba(52, 120, 246, 0.12);
+
+  /* TWM Official Brand Gradient */
+  --brand-gradient: linear-gradient(110deg, #7627F5 0%, #3478F6 52%, #16C8E8 100%);
 
   /* Provider Telemetry Identifiers */
-  --provider-github: #60A5FA;
-  --provider-github-rgb: 96 165 250;
-  --provider-leetcode: #FBBF24;
-  --provider-leetcode-rgb: 251 191 36;
+  --provider-github: #FFFFFF;
+  --provider-github-rgb: 255 255 255;
+  --provider-leetcode: #FFA116;
+  --provider-leetcode-rgb: 255 161 22;
   --provider-leetcode-brand: #FFA116;
   --provider-leetcode-brand-rgb: 255 161 22;
-  --provider-hackerrank: #34D399;
-  --provider-hackerrank-rgb: 52 211 153;
+  --provider-hackerrank: #2EC866;
+  --provider-hackerrank-rgb: 46 200 102;
 
+  /* Semantic Status System */
   --status-verified: #10B981;
   --status-verified-rgb: 16 185 129;
+  --status-success: #10B981;
+  --status-success-rgb: 16 185 129;
   --status-warning: #F59E0B;
   --status-warning-rgb: 245 158 11;
   --status-error: #EF4444;
   --status-error-rgb: 239 68 68;
+  --status-info: #3478F6;
+  --status-info-rgb: 52 120 246;
 }
 
 html {
@@ -96,9 +116,25 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   overflow-x: hidden;
-  selection-background-color: #10B981;
-  selection-color: #07090E;
+  selection-background-color: rgba(101, 85, 245, 0.35);
+  selection-color: #FFFFFF;
   letter-spacing: -0.01em;
+}
+
+::selection {
+  background-color: rgba(101, 85, 245, 0.35);
+  color: #FFFFFF;
+}
+
+/* TWM Official Brand Gradient Utilities */
+.bg-brand-gradient {
+  background-image: var(--brand-gradient);
+}
+
+.text-brand-gradient {
+  background-image: var(--brand-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Prevent coding ligatures from morphing standard text into math symbols */

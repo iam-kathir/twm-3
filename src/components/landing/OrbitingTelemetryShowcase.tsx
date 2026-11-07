@@ -31,14 +31,14 @@ export function OrbitingTelemetryShowcase() {
       <Meteors number={18} />
 
       {/* Dynamic Ambient Background Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-accent/[0.07] rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-[#6555F5]/[0.08] rounded-full blur-[160px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header with Animated Shiny Text */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/30 bg-surface/80 backdrop-blur-xl mb-4 shadow-sm">
-            <span className="flex h-2 w-2 rounded-full bg-accent animate-ping" />
-            <AnimatedShinyText className="text-xs font-sans font-bold text-accent">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-primary/30 bg-surface/80 backdrop-blur-xl mb-4 shadow-sm">
+            <span className="flex h-2 w-2 rounded-full bg-brand-primary animate-ping" />
+            <AnimatedShinyText className="text-xs font-sans font-bold text-brand-primary">
               21st.dev Architecture • Orbiting Verification Engine
             </AnimatedShinyText>
           </div>
@@ -54,11 +54,11 @@ export function OrbitingTelemetryShowcase() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           {/* Main Visual: Orbiting Circles Component (7 Cols) */}
           <SpotlightCard
-            spotlightColor="rgba(16, 185, 129, 0.18)"
+            spotlightColor="rgba(101, 85, 245, 0.20)"
             className="lg:col-span-7 flex flex-col items-center justify-center p-8 sm:p-12 min-h-[460px] relative overflow-hidden"
           >
             {/* Ambient Radial Spotlight inside Card */}
-            <div className="absolute inset-0 bg-radial-gradient from-accent/[0.08] to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-radial-gradient from-[#6555F5]/[0.08] to-transparent pointer-events-none" />
 
             <div className="relative flex h-[380px] w-full max-w-[420px] items-center justify-center overflow-hidden">
               {/* Central Glowing Core: TWM Brand Mark */}
@@ -69,7 +69,7 @@ export function OrbitingTelemetryShowcase() {
                   fireMilestoneBurst(0.5, 0.5);
                   toast.success("TWM Verified Engine Core: SHA-256 HMAC & Boundary Guard Active");
                 }}
-                className="z-20 flex size-20 items-center justify-center rounded-3xl bg-surface-raised border border-accent/40 shadow-[0_0_35px_rgba(16,185,129,0.35)] cursor-pointer group"
+                className="z-20 flex size-20 items-center justify-center rounded-3xl bg-surface-raised border border-brand-primary/40 shadow-[0_0_35px_rgba(101,85,245,0.35)] cursor-pointer group"
               >
                 <BrandLogo variant="mark" size="lg" showLivePulse={true} />
               </motion.div>
@@ -79,9 +79,9 @@ export function OrbitingTelemetryShowcase() {
                 <div
                   title="GitHub Live Commits"
                   onClick={() => toast.info("GitHub Adapter: 7-Day Contribution Frequency")}
-                  className="flex size-10 items-center justify-center rounded-2xl border border-sky-500/30 bg-surface shadow-md cursor-pointer hover:scale-110 transition-transform"
+                  className="flex size-10 items-center justify-center rounded-2xl border border-white/20 bg-surface shadow-md cursor-pointer hover:scale-110 transition-transform"
                 >
-                  <Github className="size-5 text-sky-400" />
+                  <Github className="size-5 text-white" />
                 </div>
               </OrbitingCircles>
               <OrbitingCircles radius={100} duration={24} delay={8}>
@@ -97,9 +97,9 @@ export function OrbitingTelemetryShowcase() {
                 <div
                   title="HackerRank Verified Proof"
                   onClick={() => toast.info("HackerRank Adapter: Cryptographic Proof Digest")}
-                  className="flex size-10 items-center justify-center rounded-2xl border border-emerald-500/30 bg-surface shadow-md cursor-pointer hover:scale-110 transition-transform"
+                  className="flex size-10 items-center justify-center rounded-2xl border border-provider-hackerrank/30 bg-surface shadow-md cursor-pointer hover:scale-110 transition-transform"
                 >
-                  <Award className="size-5 text-emerald-400" />
+                  <Award className="size-5 text-provider-hackerrank" />
                 </div>
               </OrbitingCircles>
 
@@ -125,7 +125,7 @@ export function OrbitingTelemetryShowcase() {
                   title="Deterministic Proof §10.1"
                   className="flex size-9 items-center justify-center rounded-xl border border-white/10 bg-surface/90 text-slate-300 shadow-sm"
                 >
-                  <ShieldCheck className="size-4 text-sky-400" />
+                  <ShieldCheck className="size-4 text-brand-secondary" />
                 </div>
               </OrbitingCircles>
               <OrbitingCircles radius={165} duration={34} reverse delay={25.5}>
@@ -133,14 +133,14 @@ export function OrbitingTelemetryShowcase() {
                   title="Telemetry Stream §5.1"
                   className="flex size-9 items-center justify-center rounded-xl border border-white/10 bg-surface/90 text-slate-300 shadow-sm"
                 >
-                  <Radio className="size-4 text-accent animate-pulse" />
+                  <Radio className="size-4 text-brand-highlight animate-pulse" />
                 </div>
               </OrbitingCircles>
             </div>
 
             <div className="mt-4 text-center z-10">
               <span className="text-xs font-mono text-muted flex items-center justify-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-accent animate-ping" />
+                <span className="w-2 h-2 rounded-full bg-brand-secondary animate-ping" />
                 Continuous Real-Time Telemetry Synchronization
               </span>
             </div>
