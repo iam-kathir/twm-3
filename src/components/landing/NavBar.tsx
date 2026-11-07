@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Moon, Menu, X } from "lucide-react";
+import { ArrowRight, Menu, X, Moon } from "lucide-react";
 
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
@@ -63,15 +63,16 @@ export function NavBar() {
           ))}
         </nav>
 
-        {/* Right: Theme Toggle + Gradient CTA */}
+        {/* Right: Theme Indicator + Gradient CTA + Mobile Menu */}
         <div className="flex items-center gap-3">
-          <button
-            type="button"
-            aria-label="Toggle theme (dark mode)"
-            className="flex items-center justify-center w-9 h-9 rounded-full border border-white/10 bg-[#0c1220]/80 text-slate-300 hover:text-white hover:border-white/20 transition-colors shadow-sm"
+          <div
+            title="Dark theme active"
+            aria-label="Dark theme active"
+            className="flex items-center justify-center w-9 h-9 rounded-full border border-white/10 bg-[#0c1220]/80 text-slate-300 shadow-sm"
           >
-            <Moon className="h-4 w-4" />
-          </button>
+            <Moon className="h-4 w-4" aria-hidden="true" />
+          </div>
+
           <Link
             href="/login"
             className="inline-flex min-h-[40px] items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-500 hover:from-blue-500 hover:to-indigo-400 text-white text-sm font-semibold transition-all shadow-[0_0_20px_rgba(79,70,229,0.35)] hover:shadow-[0_0_25px_rgba(79,70,229,0.5)]"
