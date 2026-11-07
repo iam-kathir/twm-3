@@ -56,15 +56,15 @@ export function BrandLogo({
             alt="TWM — Track · Win · Maintain"
             width={w}
             height={h}
-            className="h-auto max-w-full transition-[filter] duration-200 group-hover:brightness-110 object-contain drop-shadow-[0_2px_12px_rgba(56,189,248,0.2)]"
+            className="h-auto max-w-full transition-[filter] duration-200 group-hover:brightness-110 object-contain drop-shadow-[0_2px_14px_rgba(101,85,245,0.25)]"
             priority
           />
         </div>
 
         {showLivePulse && (
           <span className="hidden shrink-0 items-center gap-1.5 rounded-full border border-border bg-surface-raised px-2 py-0.5 text-xs text-muted lg:inline-flex">
-            <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-accent" />
-            <span className="font-semibold text-accent">LIVE</span>
+            <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-status-verified" />
+            <span className="font-semibold text-status-verified">LIVE</span>
           </span>
         )}
       </motion.div>
@@ -88,7 +88,7 @@ export function BrandLogo({
       className={`inline-flex items-center gap-3 group select-none cursor-pointer ${className}`}
     >
       <div
-        className="relative rounded-xl overflow-hidden border border-white/10 bg-surface-elevated flex items-center justify-center transition-colors duration-300 group-hover:border-sky-500/40 p-1.5 shadow-sm"
+        className="relative rounded-xl overflow-hidden border border-white/10 bg-surface-elevated flex items-center justify-center transition-colors duration-300 group-hover:border-brand-primary/40 p-1.5 shadow-sm"
         style={{ width: Math.round(px * 1.3), height: px }}
       >
         <Image
@@ -96,7 +96,7 @@ export function BrandLogo({
           alt="TWM Platform Icon"
           width={Math.round(px * 1.2)}
           height={Math.round((px * 1.2 * 391) / 1018)}
-          className="transition-transform duration-300 group-hover:scale-105 object-contain drop-shadow-[0_0_10px_rgba(56,189,248,0.35)]"
+          className="transition-transform duration-300 group-hover:scale-105 object-contain drop-shadow-[0_0_12px_rgba(101,85,245,0.35)]"
           priority
         />
       </div>
@@ -111,7 +111,7 @@ export function BrandLogo({
             >
               TWM
             </span>
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-accent/15 border border-accent/30 text-accent text-xs font-semibold">
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-brand-primary/15 border border-brand-primary/30 text-brand-primary text-xs font-semibold">
               3.1
             </span>
           </div>
@@ -128,7 +128,7 @@ export function BrandLogo({
         <span
           aria-hidden="true"
           title="Telemetry engine active (static indicator)"
-          className="ml-0.5 h-2 w-2 shrink-0 rounded-full bg-accent"
+          className="ml-0.5 h-2 w-2 shrink-0 rounded-full bg-status-verified"
         />
       )}
     </motion.div>

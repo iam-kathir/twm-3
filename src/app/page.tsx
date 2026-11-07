@@ -13,7 +13,7 @@ import { Footer } from "@/components/landing/Footer";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-canvas text-ink flex flex-col selection:bg-accent selection:text-canvas">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col selection:bg-brand-primary/30 selection:text-white">
       <NavBar />
       <main className="flex-1">
         <HeroSection />

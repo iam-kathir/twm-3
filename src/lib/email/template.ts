@@ -44,15 +44,15 @@ TWM 3.1 — Institutional Developer Activity & Cohort Platform
         <table role="presentation" width="100%" max-width="540" style="max-width: 540px; background-color: #0E121A; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6);">
           <!-- Header Banner -->
           <tr>
-            <td style="padding: 32px 32px 24px 32px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(14, 18, 26, 0) 100%); /* taste-skill-ignore: transactional email header tint, outside the web UI */">
+            <td style="padding: 32px 32px 24px 32px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: linear-gradient(180deg, rgba(101, 85, 245, 0.12) 0%, rgba(14, 18, 26, 0) 100%); /* taste-skill-ignore: transactional email header tint, outside the web UI */">
               <table role="presentation" width="100%">
                 <tr>
                   <td>
-                    <span style="font-size: 20px; font-weight: 800; color: #FFFFFF; letter-spacing: -0.5px;">TWM <span style="color: #10B981;">3.1</span></span>
+                    <span style="font-size: 20px; font-weight: 800; color: #FFFFFF; letter-spacing: -0.5px;">TWM <span style="color: #6555F5;">3.1</span></span>
                     <span style="display: block; font-size: 11px; color: #8E98AB; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px;">Class Developer Platform</span>
                   </td>
                   <td align="right">
-                    <span style="display: inline-block; padding: 4px 10px; border-radius: 999px; background-color: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); font-size: 11px; font-weight: 700; color: #10B981;">
+                    <span style="display: inline-block; padding: 4px 10px; border-radius: 999px; background-color: rgba(101, 85, 245, 0.15); border: 1px solid rgba(101, 85, 245, 0.3); font-size: 11px; font-weight: 700; color: #6555F5;">
                       EMAIL VERIFICATION
                     </span>
                   </td>
@@ -72,8 +72,8 @@ TWM 3.1 — Institutional Developer Activity & Cohort Platform
               <!-- OTP Digits Box -->
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 28px;">
                 <tr>
-                  <td align="center" style="background-color: #151B24; border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 14px; padding: 22px 16px; box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);">
-                    <span style="font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 36px; font-weight: 800; letter-spacing: 10px; color: #10B981; display: inline-block;">
+                  <td align="center" style="background-color: #151B24; border: 1px solid rgba(101, 85, 245, 0.35); border-radius: 14px; padding: 22px 16px; box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);">
+                    <span style="font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 36px; font-weight: 800; letter-spacing: 10px; color: #3478F6; display: inline-block;">
                       ${props.otp}
                     </span>
                     <span style="display: block; font-size: 12px; color: #8E98AB; margin-top: 8px;">

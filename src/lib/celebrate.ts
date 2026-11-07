@@ -11,7 +11,7 @@ function prefersReducedMotion(): boolean {
 }
 
 /**
- * Fires full-screen celebratory confetti with TWM brand colors (Emerald, Mint, Gold, Cyan)
+ * Fires full-screen celebratory confetti with TWM brand colors (Violet, Electric Blue, Cyan, Emerald, White)
  */
 export function fireTournamentCelebration() {
   if (typeof window === "undefined" || prefersReducedMotion()) return;
@@ -24,7 +24,7 @@ export function fireTournamentCelebration() {
     spread: 360,
     ticks: 60,
     zIndex: 9999,
-    colors: ["#10B981", "#34D399", "#F59E0B", "#38BDF8", "#FFFFFF"],
+    colors: ["#6555F5", "#3478F6", "#16C8E8", "#10B981", "#FFFFFF"],
     disableForReducedMotion: true,
   };
 
@@ -59,7 +59,7 @@ export function fireMilestoneBurst(x = 0.5, y = 0.5) {
     particleCount: 50,
     spread: 60,
     origin: { x, y },
-    colors: ["#10B981", "#34D399", "#6EE7B7", "#F59E0B"],
+    colors: ["#6555F5", "#3478F6", "#16C8E8", "#10B981"],
     zIndex: 9999,
     disableForReducedMotion: true,
   });

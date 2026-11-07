@@ -267,7 +267,7 @@ export default function LeaderboardPage() {
   const activeRankedEntries = platform === "github" ? githubRanked : leetcodeRanked;
 
   return (
-    <div className="min-h-screen bg-canvas text-ink flex flex-col selection:bg-accent selection:text-canvas overflow-x-hidden">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col selection:bg-brand-primary/30 selection:text-white overflow-x-hidden">
       <AppHeader />
 
       {/* Main Container */}
@@ -277,7 +277,7 @@ export default function LeaderboardPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
             <div className="space-y-1.5 min-w-0">
               <div className="flex items-center gap-2.5">
-                <Trophy className="h-6 w-6 text-accent shrink-0" aria-hidden="true" />
+                <Trophy className="h-6 w-6 text-brand-secondary shrink-0" aria-hidden="true" />
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                   {isRepresentative ? "Representative Class Leaderboard" : "Participating Members Leaderboard"}
                 </h1>
@@ -295,7 +295,7 @@ export default function LeaderboardPage() {
 
             {/* 70% Participation Ratio Badge */}
             <div className="flex items-center gap-3.5 p-3.5 px-4 rounded-xl bg-surface-raised border border-white/[0.08] self-start sm:self-auto font-sans text-sm shadow-sm min-w-0">
-              <Users className="h-5 w-5 text-accent shrink-0" aria-hidden="true" />
+              <Users className="h-5 w-5 text-brand-secondary shrink-0" aria-hidden="true" />
               <div className="min-w-0">
                 <span className="text-muted block text-[13px] font-semibold">Participation ratio</span>
                 <span className="text-white font-bold tabular-nums">{participatingCount} / {totalRoster} students ({participationPercentage}%)</span>
@@ -324,7 +324,7 @@ export default function LeaderboardPage() {
                 aria-pressed={platform === "github"}
                 onClick={() => setPlatform("github")}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors font-semibold ${
-                  platform === "github" ? "bg-accent text-canvas font-bold" : "text-muted hover:text-white"
+                  platform === "github" ? "bg-brand-secondary text-white font-bold shadow-sm" : "text-muted hover:text-white"
                 }`}
               >
                 <Github className="h-4 w-4" />
@@ -335,7 +335,7 @@ export default function LeaderboardPage() {
                 aria-pressed={platform === "leetcode"}
                 onClick={() => setPlatform("leetcode")}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors font-semibold ${
-                  platform === "leetcode" ? "bg-accent text-canvas font-bold" : "text-muted hover:text-white"
+                  platform === "leetcode" ? "bg-brand-secondary text-white font-bold shadow-sm" : "text-muted hover:text-white"
                 }`}
               >
                 <Code2 className="h-4 w-4" />
@@ -346,7 +346,7 @@ export default function LeaderboardPage() {
                 aria-pressed={platform === "hackerrank"}
                 onClick={() => setPlatform("hackerrank")}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors font-semibold ${
-                  platform === "hackerrank" ? "bg-accent text-canvas font-bold" : "text-muted hover:text-white"
+                  platform === "hackerrank" ? "bg-brand-secondary text-white font-bold shadow-sm" : "text-muted hover:text-white"
                 }`}
               >
                 <Award className="h-4 w-4" />
@@ -370,7 +370,7 @@ export default function LeaderboardPage() {
                 onClick={() => setShowCalculationInfo(!showCalculationInfo)}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 bg-surface-raised text-sm font-sans text-ink-secondary hover:bg-surface transition-colors font-semibold"
               >
-                <Info className="h-4 w-4 text-accent" />
+                <Info className="h-4 w-4 text-brand-secondary" />
                 <span>Competition Rules</span>
               </button>
             </div>
@@ -384,10 +384,10 @@ export default function LeaderboardPage() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="p-6 rounded-2xl border border-accent/30 bg-surface-raised text-sm font-sans space-y-4 text-ink-secondary shadow-md overflow-hidden"
+              className="p-6 rounded-2xl border border-brand-primary/30 bg-surface-raised text-sm font-sans space-y-4 text-ink-secondary shadow-md overflow-hidden"
             >
               <div className="flex items-center justify-between text-white font-bold">
-                <span className="flex items-center gap-2 text-accent text-base font-sans">
+                <span className="flex items-center gap-2 text-brand-primary text-base font-sans">
                   <Info className="h-5 w-5" />
                   Deterministic Competition Rules &amp; Tie Policy (Rule 9.6)
                 </span>
@@ -402,7 +402,7 @@ export default function LeaderboardPage() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
                 <div className="p-4 rounded-xl bg-surface border border-white/5 space-y-1.5">
-                  <span className="block text-xs font-semibold text-accent font-sans">
+                  <span className="block text-xs font-semibold text-brand-primary font-sans">
                     RULE 9.6: TIE POLICY
                   </span>
                   <p className="text-xs text-muted leading-relaxed font-sans">
@@ -410,7 +410,7 @@ export default function LeaderboardPage() {
                   </p>
                 </div>
                 <div className="p-4 rounded-xl bg-surface border border-white/5 space-y-1.5">
-                  <span className="block text-xs font-semibold text-accent font-sans">
+                  <span className="block text-xs font-semibold text-brand-primary font-sans">
                     RULE 9.7: SUNDAY BOUNDARY
                   </span>
                   <p className="text-xs text-muted leading-relaxed font-sans">
@@ -418,7 +418,7 @@ export default function LeaderboardPage() {
                   </p>
                 </div>
                 <div className="p-4 rounded-xl bg-surface border border-white/5 space-y-1.5">
-                  <span className="block text-xs font-semibold text-accent font-sans">
+                  <span className="block text-xs font-semibold text-brand-primary font-sans">
                     RULE 5.6: CAPABILITY GATING
                   </span>
                   <p className="text-xs text-muted leading-relaxed font-sans">
@@ -468,7 +468,7 @@ export default function LeaderboardPage() {
                       <tr
                         key={item.id}
                         className={`transition-colors ${
-                          item.isCurrentUser ? "bg-surface-raised border-l-4 border-accent" : "hover:bg-white/[0.02]"
+                          item.isCurrentUser ? "bg-surface-raised border-l-4 border-brand-secondary" : "hover:bg-white/[0.02]"
                         }`}
                       >
                         <td className="py-4 px-6">
@@ -480,7 +480,7 @@ export default function LeaderboardPage() {
                               <div className="font-sans font-semibold text-white text-base flex items-center gap-2">
                                 <span>{item.name}</span>
                                 {item.isCurrentUser && (
-                                  <span className="text-xs px-2 py-0.5 rounded bg-accent text-canvas font-semibold">
+                                  <span className="text-xs px-2 py-0.5 rounded bg-brand-secondary text-white font-semibold">
                                     YOU
                                   </span>
                                 )}
@@ -582,7 +582,7 @@ export default function LeaderboardPage() {
                     <tr
                       key={item.id}
                       className={`transition-colors ${
-                        item.isCurrentUser ? "bg-surface-raised border-l-4 border-accent" : "hover:bg-white/[0.02]"
+                        item.isCurrentUser ? "bg-surface-raised border-l-4 border-brand-secondary" : "hover:bg-white/[0.02]"
                       }`}
                     >
                       {/* Rank & Tied Indicator */}
@@ -625,7 +625,7 @@ export default function LeaderboardPage() {
                             <div className="font-sans font-semibold text-white text-base flex items-center gap-2 flex-wrap">
                               <span>{item.name}</span>
                               {item.isCurrentUser && (
-                                <span className="text-[12px] px-2 py-0.5 rounded bg-accent text-canvas font-semibold">
+                                <span className="text-[12px] px-2 py-0.5 rounded bg-brand-secondary text-white font-semibold">
                                   YOU
                                 </span>
                               )}

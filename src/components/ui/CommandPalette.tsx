@@ -230,7 +230,7 @@ export function CommandPalette() {
       >
         {/* Search Input Bar */}
         <div className="flex items-center px-4 py-3.5 border-b border-white/[0.08] gap-3 bg-surface-raised/50 relative z-10">
-          <Search className="h-4 w-4 text-accent shrink-0" aria-hidden="true" />
+          <Search className="h-4 w-4 text-brand-secondary shrink-0" aria-hidden="true" />
           <input
             ref={inputRef}
             type="text"
@@ -248,7 +248,7 @@ export function CommandPalette() {
           <button
             onClick={closeCommandPalette}
             aria-label="Close command palette"
-            className="flex items-center gap-1 text-sm text-muted hover:text-ink px-2 py-1 rounded-md bg-white/5 border border-white/10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="flex items-center gap-1 text-sm text-muted hover:text-ink px-2 py-1 rounded-md bg-white/5 border border-white/10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
           >
             <span>ESC</span>
           </button>
@@ -275,19 +275,19 @@ export function CommandPalette() {
                       aria-selected={isSelected}
                       onClick={() => navigateTo(item.path)}
                       onMouseEnter={() => setSelectedIndex(itemIndex)}
-                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-sans transition-colors group text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-sans transition-colors group text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary ${
                         isSelected
-                          ? "bg-accent/15 border border-accent/30 text-white font-semibold"
+                          ? "bg-brand-primary/15 border border-brand-primary/30 text-white font-semibold"
                           : "text-slate-300 hover:bg-white/[0.06] border border-transparent"
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <Icon className={`h-4 w-4 ${isSelected ? "text-accent" : "text-slate-400"}`} aria-hidden="true" />
+                        <Icon className={`h-4 w-4 ${isSelected ? "text-brand-secondary" : "text-slate-400"}`} aria-hidden="true" />
                         <span>{item.label}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        {isSelected && <CornerDownLeft className="h-3.5 w-3.5 text-accent" aria-hidden="true" />}
-                        <ArrowRight className={`h-4 w-4 ${isSelected ? "text-accent" : "text-slate-500"}`} aria-hidden="true" />
+                        {isSelected && <CornerDownLeft className="h-3.5 w-3.5 text-brand-secondary" aria-hidden="true" />}
+                        <ArrowRight className={`h-4 w-4 ${isSelected ? "text-brand-secondary" : "text-slate-500"}`} aria-hidden="true" />
                       </div>
                     </button>
                   );
@@ -315,19 +315,19 @@ export function CommandPalette() {
                       aria-selected={isSelected}
                       onClick={item.action}
                       onMouseEnter={() => setSelectedIndex(itemIndex)}
-                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-sans transition-colors group text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-sans transition-colors group text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary ${
                         isSelected
-                          ? "bg-accent/15 border border-accent/30 text-white font-semibold"
+                          ? "bg-brand-primary/15 border border-brand-primary/30 text-white font-semibold"
                           : "text-slate-300 hover:bg-white/[0.06] border border-transparent"
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <Icon className={`h-4 w-4 ${isSelected ? "text-accent" : "text-slate-400"}`} aria-hidden="true" />
+                        <Icon className={`h-4 w-4 ${isSelected ? "text-brand-secondary" : "text-slate-400"}`} aria-hidden="true" />
                         <span>{item.label}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        {isSelected && <CornerDownLeft className="h-3.5 w-3.5 text-accent" aria-hidden="true" />}
-                        <span className={`text-sm font-medium px-1.5 py-0.5 rounded ${isSelected ? "bg-accent/20 text-accent font-semibold" : "bg-white/5 text-muted"}`}>Run</span>
+                        {isSelected && <CornerDownLeft className="h-3.5 w-3.5 text-brand-secondary" aria-hidden="true" />}
+                        <span className={`text-sm font-medium px-1.5 py-0.5 rounded ${isSelected ? "bg-brand-primary/20 text-brand-primary font-semibold" : "bg-white/5 text-muted"}`}>Run</span>
                       </div>
                     </button>
                   );
@@ -354,21 +354,21 @@ export function CommandPalette() {
                       aria-selected={isSelected}
                       onClick={() => navigateTo(`/search?q=${encodeURIComponent(s.name)}`)}
                       onMouseEnter={() => setSelectedIndex(itemIndex)}
-                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-sans transition-colors group text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-sans transition-colors group text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary ${
                         isSelected
-                          ? "bg-accent/15 border border-accent/30 text-white font-semibold"
+                          ? "bg-brand-primary/15 border border-brand-primary/30 text-white font-semibold"
                           : "text-slate-300 hover:bg-white/[0.06] border border-transparent"
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded-lg bg-surface-raised border border-white/10 flex items-center justify-center text-sm text-accent font-semibold" aria-hidden="true">
+                        <div className="w-6 h-6 rounded-lg bg-surface-raised border border-white/10 flex items-center justify-center text-sm text-brand-primary font-semibold" aria-hidden="true">
                           {s.avatarInitial}
                         </div>
                         <span>{s.name}</span>
                         <span className="text-sm text-muted">@{s.handle}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        {isSelected && <CornerDownLeft className="h-3.5 w-3.5 text-accent" aria-hidden="true" />}
+                        {isSelected && <CornerDownLeft className="h-3.5 w-3.5 text-brand-secondary" aria-hidden="true" />}
                         <span className="text-sm text-muted">{s.rollNo}</span>
                       </div>
                     </button>
@@ -389,7 +389,7 @@ export function CommandPalette() {
         {/* Footer info strip */}
         <div className="px-4 py-2.5 border-t border-white/[0.07] bg-canvas flex items-center justify-between text-sm text-muted relative z-10">
           <div className="flex items-center gap-2">
-            <Command className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+            <Command className="h-3.5 w-3.5 text-brand-primary" aria-hidden="true" />
             <span className="text-slate-300">Navigate:</span>
             <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-sm">↑</kbd>
             <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-sm">↓</kbd>

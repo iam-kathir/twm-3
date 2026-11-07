@@ -23,8 +23,8 @@ export function CockpitPreview() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-elevated border border-white/10 text-xs font-mono text-muted mb-4 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-elevated border border-brand-primary/25 text-xs font-mono text-muted mb-4 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
             <span>Interactive Cockpit Preview</span>
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-ink tracking-tight">
@@ -46,7 +46,7 @@ export function CockpitPreview() {
           {/* Cockpit Top Bar */}
           <div className="border-b border-white/[0.08] bg-surface-raised/80 px-6 sm:px-8 py-5 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-2xl bg-surface-raised border border-accent/25 flex items-center justify-center font-bold text-accent font-mono text-base">
+              <div className="h-12 w-12 rounded-2xl bg-surface-raised border border-brand-primary/30 flex items-center justify-center font-bold text-brand-primary font-mono text-base shadow-sm">
                 AS
               </div>
               <div>
@@ -67,7 +67,7 @@ export function CockpitPreview() {
 
             {/* Freshness & Timezone metadata */}
             <div className="flex items-center gap-2.5 text-xs sm:text-sm font-mono bg-surface border border-white/10 px-4 py-2 rounded-xl text-muted shadow-sm">
-              <Clock className="h-4 w-4 text-accent" />
+              <Clock className="h-4 w-4 text-brand-secondary" />
               <span>Last Synced: 14m ago</span>
               <span className="text-white/10">|</span>
               <span className="text-ink font-medium">Asia/Kolkata (IST)</span>
@@ -131,7 +131,7 @@ export function CockpitPreview() {
 
               <div className="mt-6 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs sm:text-sm font-mono text-muted">
                 <span>Weekly Consistency:</span>
-                <span className="text-accent font-black text-base">85.7%</span>
+                <span className="text-brand-secondary font-black text-base">85.7%</span>
               </div>
             </motion.div>
 
@@ -147,7 +147,7 @@ export function CockpitPreview() {
                     <Code2 className="h-5 w-5 text-provider-leetcode-brand" />
                     <span>LeetCode</span>
                   </div>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-accent/10 text-accent border border-accent/20">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-brand-primary/10 text-brand-primary border border-brand-primary/20">
                     <ShieldCheck className="h-3 w-3" />
                     HMAC_VERIFIED
                   </span>
@@ -176,7 +176,7 @@ export function CockpitPreview() {
 
                   <div className="pt-3 border-t border-white/[0.06] flex justify-between text-xs sm:text-sm">
                     <span className="text-muted">Weekly Delta:</span>
-                    <span className="text-accent font-bold">+12 Solved</span>
+                    <span className="text-brand-highlight font-bold">+12 Solved</span>
                   </div>
                 </div>
               </div>
@@ -219,7 +219,7 @@ export function CockpitPreview() {
 
               <div className="mt-6 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs sm:text-sm font-sans text-slate-400">
                 <span>Eligibility Status:</span>
-                <span className="text-accent font-bold">Display Only</span>
+                <span className="text-brand-primary font-bold">Display Only</span>
               </div>
             </motion.div>
           </div>
@@ -228,7 +228,7 @@ export function CockpitPreview() {
           <div className="border-t border-white/[0.08] bg-surface/95 p-6 sm:p-8">
             <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
               <div className="flex items-center gap-2.5">
-                <Sparkles className="h-5 w-5 text-accent" />
+                <Sparkles className="h-5 w-5 text-brand-primary" />
                 <h4 className="font-bold text-base sm:text-lg text-white">Weekly Developer Synthesis</h4>
                 <span className="text-xs font-sans px-2.5 py-0.5 rounded-md bg-surface-raised border border-white/[0.06] text-slate-300">
                   Non-Judgmental Peer Recap
@@ -239,7 +239,7 @@ export function CockpitPreview() {
                   type="button"
                   onClick={() => setRecapMode("ai")}
                   className={`px-3.5 py-1.5 rounded-lg transition-all ${
-                    recapMode === "ai" ? "bg-accent text-canvas font-bold" : "text-muted hover:text-white"
+                    recapMode === "ai" ? "bg-brand-secondary text-white font-bold" : "text-muted hover:text-white"
                   }`}
                 >
                   AI Explanation
@@ -248,7 +248,7 @@ export function CockpitPreview() {
                   type="button"
                   onClick={() => setRecapMode("deterministic")}
                   className={`px-3.5 py-1.5 rounded-lg transition-all ${
-                    recapMode === "deterministic" ? "bg-accent text-canvas font-bold" : "text-muted hover:text-white"
+                    recapMode === "deterministic" ? "bg-brand-secondary text-white font-bold" : "text-muted hover:text-white"
                   }`}
                 >
                   Pure Metrics View

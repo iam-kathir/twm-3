@@ -81,7 +81,7 @@ export function ManualSyncModal() {
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-lg bg-accent/10 border border-accent/20 text-accent">
+            <div className="p-2 rounded-lg bg-brand-primary/10 border border-brand-primary/20 text-brand-primary">
               <RotateCw className={`h-4 w-4 ${isSyncing ? "animate-spin" : ""}`} aria-hidden="true" />
             </div>
             <div>
@@ -98,7 +98,7 @@ export function ManualSyncModal() {
             ref={closeRef}
             onClick={closeSyncModal}
             aria-label="Close sync dialog"
-            className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
           >
             <X className="h-4 w-4" aria-hidden="true" />
           </button>
@@ -109,7 +109,7 @@ export function ManualSyncModal() {
           <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] space-y-3">
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted">Execution Status</span>
-              <span role="status" aria-live="polite" className={`font-semibold ${isSyncing ? "text-accent" : hasRequested ? "text-slate-200" : "text-slate-300"}`}>
+              <span role="status" aria-live="polite" className={`font-semibold ${isSyncing ? "text-brand-secondary" : hasRequested ? "text-slate-200" : "text-slate-300"}`}>
                 {isSyncing ? "Sync In Progress…" : hasRequested ? "Sync Requested" : "Ready"}
               </span>
             </div>
@@ -117,25 +117,25 @@ export function ManualSyncModal() {
             {/* Pipeline Steps - queued, not claimed complete until notifications confirm */}
             <div className="space-y-2.5 pt-2">
               <div className="flex items-center gap-2.5 text-sm">
-                <Globe className="h-4 w-4 text-accent shrink-0" aria-hidden="true" />
+                <Globe className="h-4 w-4 text-brand-secondary shrink-0" aria-hidden="true" />
                 <span className="text-slate-200">GitHub REST API (4 Course Repositories)</span>
               </div>
 
               <div className="flex items-center gap-2.5 text-sm">
-                <Database className="h-4 w-4 text-accent shrink-0" aria-hidden="true" />
+                <Database className="h-4 w-4 text-brand-primary shrink-0" aria-hidden="true" />
                 <span className="text-slate-200">LeetCode GraphQL Verified Delta</span>
               </div>
 
               <div className="flex items-center gap-2.5 text-sm">
-                <ShieldCheck className="h-4 w-4 text-accent shrink-0" aria-hidden="true" />
+                <ShieldCheck className="h-4 w-4 text-brand-primary shrink-0" aria-hidden="true" />
                 <span className="text-slate-200">Sunday 23:59:59 IST Boundary Audit</span>
               </div>
             </div>
 
             {/* Live Status readout */}
             {isSyncing && (
-              <div role="status" aria-live="polite" className="mt-3 p-2.5 rounded-lg bg-black/40 border border-white/10 text-sm text-accent flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" aria-hidden="true" />
+              <div role="status" aria-live="polite" className="mt-3 p-2.5 rounded-lg bg-black/40 border border-white/10 text-sm text-brand-secondary flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-secondary animate-ping" aria-hidden="true" />
                 <span>{syncStep}</span>
               </div>
             )}
@@ -147,7 +147,7 @@ export function ManualSyncModal() {
           </div>
 
           <div className="p-3.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-muted">
-            <span className="text-accent font-semibold">Rule §9.2 Compliance:</span> Manual sync requests are rate-limited to 1 request per 10 minutes to protect platform quotas and preserve deterministic delta timestamps.
+            <span className="text-brand-secondary font-semibold">Rule §9.2 Compliance:</span> Manual sync requests are rate-limited to 1 request per 10 minutes to protect platform quotas and preserve deterministic delta timestamps.
           </div>
         </div>
 
@@ -155,7 +155,7 @@ export function ManualSyncModal() {
         <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/[0.08]">
           <button
             onClick={closeSyncModal}
-            className="px-4 py-2.5 rounded-xl text-sm text-muted hover:text-white hover:bg-white/10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="px-4 py-2.5 rounded-xl text-sm text-muted hover:text-white hover:bg-white/10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
           >
             Close
           </button>
@@ -164,7 +164,7 @@ export function ManualSyncModal() {
             onClick={handleStartSync}
             disabled={isSyncing}
             aria-busy={isSyncing}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-canvas text-sm font-semibold transition-colors shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-secondary hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             <RotateCw className={`h-4 w-4 ${isSyncing ? "animate-spin" : ""}`} aria-hidden="true" />
             <span>{isSyncing ? "Synchronizing…" : "Execute Sync Now"}</span>

@@ -26,11 +26,11 @@ export function MotionShowcase() {
       iconColor: "text-amber-400",
     },
     hackerrank: {
-      glow: "bg-accent/[0.08]",
-      border: "border-emerald-500/30",
-      accentBg: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25",
-      badge: "border-emerald-500/30 text-emerald-400 bg-emerald-500/10",
-      iconColor: "text-emerald-400",
+      glow: "bg-[#2EC866]/[0.08]",
+      border: "border-[#2EC866]/30",
+      accentBg: "bg-[#2EC866]/10 text-[#2EC866] border-[#2EC866]/25",
+      badge: "border-[#2EC866]/30 text-[#2EC866] bg-[#2EC866]/10",
+      iconColor: "text-[#2EC866]",
     },
   };
 
@@ -46,7 +46,7 @@ export function MotionShowcase() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/25 bg-accent/10 text-accent text-xs font-sans font-semibold  mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-primary/25 bg-brand-primary/10 text-brand-primary text-xs font-sans font-semibold mb-4">
             <Sparkles className="h-3.5 w-3.5" />
             Interactive Observation Console
           </div>
@@ -110,7 +110,7 @@ export function MotionShowcase() {
               </span>
             </div>
             <div className="flex items-center gap-2 text-slate-400 text-xs sm:text-sm font-medium">
-              <Clock className="h-4 w-4 text-accent" />
+              <Clock className="h-4 w-4 text-brand-secondary" />
               <span>Synced 12m ago (IST)</span>
             </div>
           </div>
@@ -152,7 +152,7 @@ export function MotionShowcase() {
                             transition={{ delay: i * 0.04, duration: 0.2 }}
                             className={`h-14 sm:h-16 w-full rounded-2xl flex flex-col items-center justify-center font-sans text-xs font-bold transition-all ${
                               active
-                                ? "bg-accent text-canvas"
+                                ? "bg-emerald-500 text-canvas"
                                 : "bg-white/[0.03] text-slate-500 border border-white/[0.08]"
                             }`}
                           >
@@ -169,11 +169,11 @@ export function MotionShowcase() {
                   <div className="p-4 rounded-2xl bg-surface-raised/80 border border-white/[0.08] space-y-2">
                     <div className="flex justify-between items-center text-xs sm:text-sm font-sans">
                       <span className="text-slate-300 font-medium">Commit Author Matching &amp; Verification:</span>
-                      <span className="text-accent font-bold">94.2% (Passed &gt; 90% Threshold)</span>
+                      <span className="text-brand-highlight font-bold">94.2% (Passed &gt; 90% Threshold)</span>
                     </div>
                     <div className="h-2 w-full rounded-full bg-white/[0.06] overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-accent transition-all duration-500"
+                        className="h-full rounded-full bg-brand-highlight transition-all duration-500"
                         style={{ width: "94.2%" }}
                       />
                     </div>
@@ -260,7 +260,7 @@ export function MotionShowcase() {
           {/* Bottom Verification Footer Strip */}
           <div className="pt-5 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm font-sans text-slate-400">
             <div className="flex items-center gap-2 text-white font-medium">
-              <Sparkles className="h-4 w-4 text-accent" />
+              <Sparkles className="h-4 w-4 text-brand-primary" />
               <span>Sunday Recap: 85.7% cohort consistency rate</span>
             </div>
             <span className="text-emerald-400 font-semibold flex items-center gap-1.5">

@@ -33,3 +33,4 @@ HackerRankIcon.displayName = "HackerRankIcon";
 
 export { HackerRankIcon as HackerRank };
 export default HackerRankIcon;
+

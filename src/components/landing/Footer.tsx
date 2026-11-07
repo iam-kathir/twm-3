@@ -50,13 +50,13 @@ export function Footer() {
           <div className="flex items-center gap-2">
             <span>&copy; {new Date().getFullYear()} TWM Class Platform</span>
             <span className="text-white/20">/</span>
-            <span className="text-accent font-medium">v3.1.0</span>
+            <span className="text-brand-primary font-medium">v3.1.0</span>
             <span className="text-white/20">/</span>
             <span>Zero-fabrication architecture</span>
           </div>
 
           <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1.5 text-accent">
+            <span className="flex items-center gap-1.5 text-status-verified font-medium">
               <Shield className="h-3.5 w-3.5" />
               Two-person admin audit
             </span>

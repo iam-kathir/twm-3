@@ -100,7 +100,7 @@ export function DisputeModal() {
                 id="dispute-platform"
                 value={platform}
                 onChange={(e) => setPlatform(e.target.value as any)}
-                className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-[13px] font-mono text-ink focus:border-accent focus:outline-none"
+                className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-[13px] font-mono text-ink focus:border-brand-primary focus:outline-none"
               >
                 <option value="GitHub">GitHub</option>
                 <option value="LeetCode">LeetCode</option>
@@ -116,7 +116,7 @@ export function DisputeModal() {
                 id="dispute-metric"
                 value={metric}
                 onChange={(e) => setMetric(e.target.value as any)}
-                className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-[13px] font-mono text-ink focus:border-accent focus:outline-none"
+                className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-[13px] font-mono text-ink focus:border-brand-primary focus:outline-none"
               >
                 <option value="github_active_days">Active Contribution Days</option>
                 <option value="leetcode_delta">LeetCode Delta</option>
@@ -137,7 +137,7 @@ export function DisputeModal() {
               onChange={(e) => setClaim(e.target.value)}
               placeholder="e.g. Commit 8f1e pushed at 23:51 IST was recorded in git reflog but omitted from public contribution graph due to default branch merge delay."
               aria-describedby="dispute-required-hint"
-              className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-[13px] text-ink focus:border-accent focus:outline-none placeholder:text-muted"
+              className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-[13px] text-ink focus:border-brand-primary focus:outline-none placeholder:text-muted"
             />
           </div>
 
@@ -154,7 +154,7 @@ export function DisputeModal() {
                 onChange={(e) => setEvidenceUrl(e.target.value)}
                 placeholder="https://github.com/.../commit/... or https://leetcode.com/submissions/..."
                 aria-describedby="dispute-required-hint"
-                className="w-full pl-8 pr-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-[13px] font-mono text-ink focus:border-accent focus:outline-none placeholder:text-muted"
+                className="w-full pl-8 pr-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-[13px] font-mono text-ink focus:border-brand-primary focus:outline-none placeholder:text-muted"
               />
               <LinkIcon className="h-3.5 w-3.5 text-muted absolute left-2.5 top-2.5" aria-hidden="true" />
             </div>
@@ -171,7 +171,7 @@ export function DisputeModal() {
               id="dispute-rule"
               value={ruleReference}
               onChange={(e) => setRuleReference(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-[13px] font-mono text-ink focus:border-accent focus:outline-none"
+              className="w-full px-3 py-2 rounded-xl bg-surface-raised border border-white/10 text-[13px] font-mono text-ink focus:border-brand-primary focus:outline-none"
             >
               <option value="Rule §9.4: Timezone Normalization (IST 23:59:59)">
                 Rule §9.4: Timezone Normalization (IST 23:59:59)

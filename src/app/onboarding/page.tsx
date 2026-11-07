@@ -327,7 +327,7 @@ function OnboardingContent() {
 
   if (isUnmatched) {
     return (
-      <div className="min-h-screen bg-canvas text-ink flex flex-col justify-between selection:bg-accent selection:text-canvas relative overflow-hidden bg-tech-dots">
+      <div className="min-h-screen bg-canvas text-ink flex flex-col justify-between selection:bg-brand-primary/30 selection:text-white relative overflow-hidden bg-tech-dots">
         <header className="p-6 relative z-10 max-w-4xl mx-auto w-full flex items-center justify-between">
           <BrandLogo showLivePulse={true} />
         </header>
@@ -353,7 +353,7 @@ function OnboardingContent() {
             </div>
             <Link
               href="/login"
-              className="inline-flex w-full py-3.5 rounded-xl bg-surface-raised hover:bg-white/10 border border-white/10 text-white font-bold text-sm items-center justify-center gap-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="inline-flex w-full py-3.5 rounded-xl bg-surface-raised hover:bg-white/10 border border-white/10 text-white font-bold text-sm items-center justify-center gap-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
             >
               <span>Back to Login</span>
             </Link>
@@ -368,7 +368,7 @@ function OnboardingContent() {
   }
 
   return (
-    <div className="min-h-screen bg-canvas text-ink flex flex-col justify-between selection:bg-accent selection:text-canvas relative overflow-hidden bg-tech-dots">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col justify-between selection:bg-brand-primary/30 selection:text-white relative overflow-hidden bg-tech-dots">
       {/* Header */}
       <header className="p-6 relative z-10 max-w-4xl mx-auto w-full flex items-center justify-between">
         <BrandLogo showLivePulse={true} />
@@ -378,7 +378,7 @@ function OnboardingContent() {
           <span
             aria-current={step === 1 ? "step" : undefined}
             className={`px-2.5 py-1 rounded-full ${
-              step === 1 ? "bg-accent text-canvas font-bold" : "bg-surface-raised border border-white/[0.06]"
+              step === 1 ? "bg-brand-secondary text-white font-bold" : "bg-surface-raised border border-white/[0.06]"
             }`}
           >
             1. Identity &amp; Email
@@ -387,7 +387,7 @@ function OnboardingContent() {
           <span
             aria-current={step === 2 ? "step" : undefined}
             className={`px-2.5 py-1 rounded-full ${
-              step === 2 ? "bg-accent text-canvas font-bold" : "bg-surface-raised border border-white/[0.06]"
+              step === 2 ? "bg-brand-secondary text-white font-bold" : "bg-surface-raised border border-white/[0.06]"
             }`}
           >
             2. Privacy
@@ -396,7 +396,7 @@ function OnboardingContent() {
           <span
             aria-current={step === 3 ? "step" : undefined}
             className={`px-2.5 py-1 rounded-full ${
-              step === 3 ? "bg-accent text-canvas font-bold" : "bg-surface-raised border border-white/[0.06]"
+              step === 3 ? "bg-brand-secondary text-white font-bold" : "bg-surface-raised border border-white/[0.06]"
             }`}
           >
             3. Accounts
@@ -409,7 +409,7 @@ function OnboardingContent() {
         <div className="w-full max-w-xl rounded-panel border border-white/10 bg-surface p-8 sm:p-10 shadow-none">
           {loadingSession ? (
             <div className="py-20 flex flex-col items-center justify-center gap-3 text-muted" role="status" aria-live="polite">
-              <Loader2 className="h-6 w-6 animate-spin text-accent" aria-hidden="true" />
+              <Loader2 className="h-6 w-6 animate-spin text-brand-secondary" aria-hidden="true" />
               <p className="text-sm">Loading student identity session…</p>
             </div>
           ) : sessionError || !student ? (
@@ -425,14 +425,14 @@ function OnboardingContent() {
                 <button
                   type="button"
                   onClick={() => setSessionNonce((n) => n + 1)}
-                  className="flex-1 py-3.5 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-semibold text-base flex items-center justify-center gap-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  className="flex-1 py-3.5 rounded-xl bg-brand-secondary hover:bg-accent-hover text-white font-semibold text-base flex items-center justify-center gap-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 >
                   <RefreshCw className="h-4 w-4" aria-hidden="true" />
                   <span>Retry Loading Session</span>
                 </button>
                 <Link
                   href="/login"
-                  className="flex-1 py-3.5 rounded-xl border border-white/10 hover:bg-white/5 text-muted hover:text-white transition-colors text-sm font-semibold flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  className="flex-1 py-3.5 rounded-xl border border-white/10 hover:bg-white/5 text-muted hover:text-white transition-colors text-sm font-semibold flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                 >
                   <span>Back to Login</span>
                 </Link>
@@ -472,7 +472,7 @@ function OnboardingContent() {
                     </div>
                     <div className="flex justify-between pb-2.5 border-b border-white/[0.06]">
                       <span className="text-muted text-sm">Register Number:</span>
-                      <span className="text-accent font-bold text-sm">{student?.rollNo ?? "Unavailable"}</span>
+                      <span className="text-brand-primary font-bold text-sm">{student?.rollNo ?? "Unavailable"}</span>
                     </div>
                     <div className="flex justify-between pb-2.5 border-b border-white/[0.06]">
                       <span className="text-muted text-sm">Cohort:</span>
@@ -498,7 +498,7 @@ function OnboardingContent() {
                   {!student?.emailVerified ? (
                     <div className="p-5 rounded-2xl border border-white/10 bg-canvas space-y-4">
                       <div className="flex items-center gap-2">
-                        <Mail className="h-4 w-4 text-accent" aria-hidden="true" />
+                        <Mail className="h-4 w-4 text-brand-secondary" aria-hidden="true" />
                         <h2 className="text-sm font-bold text-white">Institutional Email OTP</h2>
                       </div>
 
@@ -546,7 +546,7 @@ function OnboardingContent() {
                               autoComplete="email"
                               aria-invalid={otpError ? "true" : undefined}
                               aria-describedby={otpError ? "otp-error" : "college-email-help"}
-                              className="w-full bg-surface-raised border border-white/10 rounded-xl px-3.5 py-3 text-base text-white placeholder:text-muted focus:outline-none focus:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                              className="w-full bg-surface-raised border border-white/10 rounded-xl px-3.5 py-3 text-base text-white placeholder:text-muted focus:outline-none focus:border-brand-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                             />
                             <p id="college-email-help" className="text-sm text-muted mt-1.5">
                               Use the email on your college roster. A 6-digit code will be sent to this address.
@@ -558,7 +558,7 @@ function OnboardingContent() {
                             type="submit"
                             disabled={sendingOtp || cooldownRemaining > 0 || !emailInput.trim()}
                             aria-busy={sendingOtp}
-                            className="w-full py-3 rounded-xl bg-accent hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 text-canvas font-semibold text-base flex items-center justify-center gap-2 transition-colors disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                            className="w-full py-3 rounded-xl bg-brand-secondary hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 text-white font-semibold text-base flex items-center justify-center gap-2 transition-colors disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                           >
                             {sendingOtp ? (
                               <>
@@ -598,7 +598,7 @@ function OnboardingContent() {
                                 setOtpError(null);
                                 setOtpSuccessMsg(null);
                               }}
-                              className="text-accent hover:underline text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded px-1"
+                              className="text-brand-secondary hover:underline text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary rounded px-1"
                             >
                               Change Email
                             </button>
@@ -628,7 +628,7 @@ function OnboardingContent() {
                               autoComplete="one-time-code"
                               aria-invalid={otpError ? "true" : undefined}
                               aria-describedby={otpError ? "otp-error" : "otp-help"}
-                              className="w-full bg-surface-raised border border-white/10 rounded-xl px-4 py-3 text-center text-2xl tracking-widest text-white placeholder:text-muted focus:outline-none focus:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                              className="w-full bg-surface-raised border border-white/10 rounded-xl px-4 py-3 text-center text-2xl tracking-widest text-white placeholder:text-muted focus:outline-none focus:border-brand-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                               autoFocus
                             />
                             <p id="otp-help" className="text-sm text-muted mt-1.5">
@@ -643,7 +643,7 @@ function OnboardingContent() {
                               onClick={handleRequestOtp}
                               disabled={sendingOtp || cooldownRemaining > 0}
                               aria-busy={sendingOtp}
-                              className="px-4 py-3 rounded-xl bg-surface-raised hover:bg-white/10 border border-white/10 text-sm font-bold text-muted hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                              className="px-4 py-3 rounded-xl bg-surface-raised hover:bg-white/10 border border-white/10 text-sm font-bold text-muted hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                             >
                               <RefreshCw className={`h-3.5 w-3.5 ${sendingOtp ? "animate-spin" : ""}`} aria-hidden="true" />
                               <span>{cooldownRemaining > 0 ? `${cooldownRemaining}s` : "Resend"}</span>
@@ -653,7 +653,7 @@ function OnboardingContent() {
                               type="submit"
                               disabled={verifyingOtp || otpInput.trim().length !== 6}
                               aria-busy={verifyingOtp}
-                              className="flex-1 py-3 rounded-xl bg-accent hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 text-canvas font-semibold text-base flex items-center justify-center gap-2 transition-colors disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                              className="flex-1 py-3 rounded-xl bg-brand-secondary hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 text-white font-semibold text-base flex items-center justify-center gap-2 transition-colors disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                             >
                               {verifyingOtp ? (
                                 <>
@@ -684,7 +684,7 @@ function OnboardingContent() {
                     onClick={() => setStep(2)}
                     disabled={!student?.emailVerified}
                     aria-describedby={!student?.emailVerified ? "step1-blocked" : undefined}
-                    className="w-full py-4 rounded-xl bg-accent hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 disabled:cursor-not-allowed text-canvas font-semibold text-base flex items-center justify-center gap-2.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                    className="w-full py-4 rounded-xl bg-brand-secondary hover:bg-accent-hover disabled:bg-surface-raised disabled:text-muted disabled:border disabled:border-white/10 disabled:cursor-not-allowed text-white font-semibold text-base flex items-center justify-center gap-2.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                   >
                     <span>Continue to Privacy Settings</span>
                     <ArrowRight className="h-5 w-5" aria-hidden="true" />
@@ -708,7 +708,7 @@ function OnboardingContent() {
                   className="space-y-8"
                 >
                   <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent border border-accent/20 text-xs font-bold mb-3">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/10 text-brand-primary border border-brand-primary/20 text-xs font-bold mb-3">
                       <Sliders className="h-4 w-4" aria-hidden="true" />
                       <span>Control Your Experience</span>
                     </div>
@@ -725,7 +725,7 @@ function OnboardingContent() {
                       type="button"
                       onClick={() => setOptInLeaderboard(!optInLeaderboard)}
                       aria-pressed={optInLeaderboard}
-                      className="w-full p-5 rounded-2xl border border-white/10 bg-surface-raised flex items-start justify-between gap-4 hover:border-white/25 transition-colors text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                      className="w-full p-5 rounded-2xl border border-white/10 bg-surface-raised flex items-start justify-between gap-4 hover:border-white/25 transition-colors text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                     >
                       <span>
                         <span className="text-base font-bold text-white block">Participate in Class Leaderboards</span>
@@ -736,7 +736,7 @@ function OnboardingContent() {
                       <span
                         aria-hidden="true"
                         className={`h-7 w-12 rounded-full p-1 transition-colors shrink-0 ${
-                          optInLeaderboard ? "bg-accent" : "bg-canvas border border-white/10"
+                          optInLeaderboard ? "bg-brand-secondary" : "bg-canvas border border-white/10"
                         }`}
                       >
                         <span
@@ -753,7 +753,7 @@ function OnboardingContent() {
                       type="button"
                       onClick={() => setPublicProfile(!publicProfile)}
                       aria-pressed={publicProfile}
-                      className="w-full p-5 rounded-2xl border border-white/10 bg-surface-raised flex items-start justify-between gap-4 hover:border-white/25 transition-colors text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                      className="w-full p-5 rounded-2xl border border-white/10 bg-surface-raised flex items-start justify-between gap-4 hover:border-white/25 transition-colors text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                     >
                       <span>
                         <span className="text-base font-bold text-white block">Public Profile Visibility</span>
@@ -764,7 +764,7 @@ function OnboardingContent() {
                       <span
                         aria-hidden="true"
                         className={`h-7 w-12 rounded-full p-1 transition-colors shrink-0 ${
-                          publicProfile ? "bg-accent" : "bg-canvas border border-white/10"
+                          publicProfile ? "bg-brand-secondary" : "bg-canvas border border-white/10"
                         }`}
                       >
                         <span
@@ -781,7 +781,7 @@ function OnboardingContent() {
                       type="button"
                       onClick={() => setWeeklyRecap(!weeklyRecap)}
                       aria-pressed={weeklyRecap}
-                      className="w-full p-5 rounded-2xl border border-white/10 bg-surface-raised flex items-start justify-between gap-4 hover:border-white/25 transition-colors text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                      className="w-full p-5 rounded-2xl border border-white/10 bg-surface-raised flex items-start justify-between gap-4 hover:border-white/25 transition-colors text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                     >
                       <span>
                         <span className="text-base font-bold text-white block">Weekly Developer Recap</span>
@@ -792,7 +792,7 @@ function OnboardingContent() {
                       <span
                         aria-hidden="true"
                         className={`h-7 w-12 rounded-full p-1 transition-colors shrink-0 ${
-                          weeklyRecap ? "bg-accent" : "bg-canvas border border-white/10"
+                          weeklyRecap ? "bg-brand-secondary" : "bg-canvas border border-white/10"
                         }`}
                       >
                         <span
@@ -809,14 +809,14 @@ function OnboardingContent() {
                     <button
                       type="button"
                       onClick={() => setStep(1)}
-                      className="px-6 py-4 rounded-xl border border-white/10 hover:bg-white/5 text-sm font-semibold text-muted hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                      className="px-6 py-4 rounded-xl border border-white/10 hover:bg-white/5 text-sm font-semibold text-muted hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                     >
                       Back
                     </button>
                     <button
                       type="button"
                       onClick={() => setStep(3)}
-                      className="flex-1 py-4 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-semibold text-base flex items-center justify-center gap-2.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                      className="flex-1 py-4 rounded-xl bg-brand-secondary hover:bg-accent-hover text-white font-semibold text-base flex items-center justify-center gap-2.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                     >
                       <span>Connect Developer Profiles</span>
                       <ArrowRight className="h-5 w-5" aria-hidden="true" />
@@ -836,7 +836,7 @@ function OnboardingContent() {
                   className="space-y-8"
                 >
                   <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent border border-accent/20 text-xs font-bold mb-3">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/10 text-brand-primary border border-brand-primary/20 text-xs font-bold mb-3">
                       <ShieldCheck className="h-4 w-4" aria-hidden="true" />
                       <span>Proof of Control</span>
                     </div>
@@ -888,19 +888,19 @@ function OnboardingContent() {
                         </p>
                         {challengeLoading ? (
                           <div role="status" aria-live="polite" className="flex items-center gap-2.5 p-3 rounded-xl bg-canvas border border-white/10 text-sm text-muted min-h-[52px]">
-                            <Loader2 className="h-4 w-4 animate-spin text-accent" aria-hidden="true" />
+                            <Loader2 className="h-4 w-4 animate-spin text-brand-secondary" aria-hidden="true" />
                             <span>Generating verification challenge…</span>
                           </div>
                         ) : challengeCode ? (
                           <div className="flex items-center gap-2.5">
-                            <code className="flex-1 bg-canvas border border-white/10 p-3 rounded-xl text-sm text-accent select-all font-bold break-all">
+                            <code className="flex-1 bg-canvas border border-white/10 p-3 rounded-xl text-sm text-brand-primary select-all font-bold break-all">
                               {challengeCode}
                             </code>
                             <button
                               type="button"
                               onClick={copyChallenge}
                               aria-label="Copy challenge code"
-                              className="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-ink-secondary hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                              className="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-ink-secondary hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                             >
                               {copied ? <Check className="h-5 w-5 text-emerald-400" aria-hidden="true" /> : <Copy className="h-5 w-5" aria-hidden="true" />}
                             </button>
@@ -922,7 +922,7 @@ function OnboardingContent() {
                           onClick={verifyLeetCode}
                           disabled={verifyingLeetCode || challengeLoading || !challengeCode}
                           aria-busy={verifyingLeetCode}
-                          className="w-full py-3 px-4 rounded-xl bg-canvas hover:bg-white/5 border border-accent/30 text-accent text-sm font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                          className="w-full py-3 px-4 rounded-xl bg-canvas hover:bg-brand-primary/10 border border-brand-primary/30 text-brand-primary text-sm font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                         >
                           {verifyingLeetCode ? (
                             <>
@@ -972,7 +972,7 @@ function OnboardingContent() {
                         onChange={(e) => setHackerRankUsername(e.target.value)}
                         placeholder="username"
                         autoComplete="username"
-                        className="w-full bg-canvas border border-white/10 rounded-xl px-3.5 py-2.5 text-base text-white placeholder:text-muted focus:outline-none focus:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        className="w-full bg-canvas border border-white/10 rounded-xl px-3.5 py-2.5 text-base text-white placeholder:text-muted focus:outline-none focus:border-brand-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                       />
                     </div>
                   </div>
@@ -981,14 +981,14 @@ function OnboardingContent() {
                     <button
                       type="button"
                       onClick={() => setStep(2)}
-                      className="px-6 py-4 rounded-xl border border-white/10 hover:bg-white/5 text-sm font-semibold text-muted hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                      className="px-6 py-4 rounded-xl border border-white/10 hover:bg-white/5 text-sm font-semibold text-muted hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                     >
                       Back
                     </button>
                     <button
                       type="button"
                       onClick={handleFinish}
-                      className="flex-1 py-4 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-semibold text-base flex items-center justify-center gap-2.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                      className="flex-1 py-4 rounded-xl bg-brand-secondary hover:bg-accent-hover text-white font-semibold text-base flex items-center justify-center gap-2.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                     >
                       <Sparkles className="h-5 w-5" aria-hidden="true" />
                       <span>Complete Setup &amp; Launch Dashboard</span>
@@ -1014,7 +1014,7 @@ export default function OnboardingPage() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-canvas text-ink flex items-center justify-center" role="status" aria-label="Loading onboarding">
-          <Loader2 className="h-8 w-8 animate-spin text-accent" aria-hidden="true" />
+          <Loader2 className="h-8 w-8 animate-spin text-brand-secondary" aria-hidden="true" />
         </div>
       }
     >

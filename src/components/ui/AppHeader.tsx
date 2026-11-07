@@ -74,9 +74,9 @@ export function AppHeader() {
               illustrative. Claiming "live" here would break the ground rule. */}
           <div
             title="Three provider adapters are wired (GitHub, LeetCode, HackerRank). The accounts and figures shown on these screens are illustrative until a student links one."
-            className="hidden shrink-0 cursor-help items-center gap-2 whitespace-nowrap rounded-xl border border-accent/25 bg-accent/10 px-3 py-1.5 font-sans text-xs text-accent shadow-sm transition-colors hover:bg-accent/15 xl:inline-flex"
+            className="hidden shrink-0 cursor-help items-center gap-2 whitespace-nowrap rounded-xl border border-brand-primary/30 bg-brand-primary/10 px-3 py-1.5 font-sans text-xs text-brand-primary shadow-sm transition-colors hover:bg-brand-primary/15 xl:inline-flex"
           >
-            <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-accent" />
+            <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-brand-primary" />
             <span className="font-semibold">Demo data · 3 adapters wired</span>
           </div>
 
@@ -115,7 +115,7 @@ export function AppHeader() {
             aria-label="Search or command"
             className="group flex shrink-0 items-center gap-2.5 rounded-xl border border-border bg-surface p-2.5 font-sans text-sm text-muted shadow-sm transition-colors hover:bg-surface-raised hover:text-ink lg:px-4 lg:py-2.5"
           >
-            <Search className="h-4 w-4 shrink-0 text-muted transition-colors group-hover:text-accent" />
+            <Search className="h-4 w-4 shrink-0 text-muted transition-colors group-hover:text-brand-secondary" />
             <span className="hidden whitespace-nowrap text-muted transition-colors group-hover:text-ink-secondary lg:inline">Search or command...</span>
             <kbd className="hidden items-center gap-1 rounded-md border border-border bg-white/5 px-2 py-0.5 font-sans text-xs font-semibold text-muted xl:inline-flex">
               <Command className="h-3 w-3 shrink-0" /> K
@@ -129,7 +129,7 @@ export function AppHeader() {
             className="flex shrink-0 items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2.5 font-sans text-sm text-ink transition-colors hover:bg-surface-raised disabled:opacity-50 lg:px-4"
             title="Execute Live Telemetry Crawl"
           >
-            <RotateCw className={`h-4 w-4 shrink-0 text-accent ${isSyncing ? "animate-spin" : ""}`} />
+            <RotateCw className={`h-4 w-4 shrink-0 text-brand-secondary ${isSyncing ? "animate-spin" : ""}`} />
             <span className="hidden whitespace-nowrap text-muted font-medium lg:inline">
               {isSyncing ? "Syncing..." : lastSyncTime}
             </span>
@@ -143,7 +143,7 @@ export function AppHeader() {
               aria-expanded={isProfileOpen}
               className="flex min-w-0 shrink-0 items-center gap-3 rounded-xl border border-border bg-surface p-1.5 shadow-sm transition-colors hover:bg-surface-raised sm:px-3 sm:py-2"
             >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-accent/40 bg-surface-raised font-mono text-sm font-bold text-accent shadow-sm">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-brand-primary/35 bg-surface-raised font-mono text-sm font-bold text-brand-primary shadow-sm">
                 {userInitials}
               </div>
               <div className="hidden min-w-0 text-left lg:block">
@@ -170,8 +170,8 @@ export function AppHeader() {
                   <div className="px-3.5 py-3 border-b border-border-subtle">
                     <div className="font-bold text-base text-ink">{currentUser.name}</div>
                     <div className="text-xs font-mono text-muted truncate mt-0.5">{currentUser.email}</div>
-                    <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono bg-white/5 border border-border text-accent">
-                      <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-accent" />
+                    <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono bg-white/5 border border-border text-brand-primary">
+                      <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-brand-primary" />
                       <span>Role: {currentUser.role === "co-admin" ? "Co-Admin Reviewer" : "Verified Student"}</span>
                     </div>
                   </div>
@@ -211,10 +211,10 @@ export function AppHeader() {
                         setIsProfileOpen(false);
                         switchRole(currentUser.role === "student" ? "co-admin" : "student");
                       }}
-                      className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-ink-secondary hover:text-accent hover:bg-white/5 transition-colors text-left font-medium"
+                      className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-ink-secondary hover:text-brand-secondary hover:bg-white/5 transition-colors text-left font-medium"
                     >
                       <div className="flex min-w-0 items-center gap-3">
-                        <Shield className="h-4 w-4 shrink-0 text-accent" />
+                        <Shield className="h-4 w-4 shrink-0 text-brand-secondary" />
                         <span>Switch to {currentUser.role === "student" ? "Co-Admin View" : "Student View"}</span>
                       </div>
                     </button>
@@ -251,7 +251,7 @@ export function AppHeader() {
       {isMobileMenuOpen && (
         <div className="border-t border-border-subtle bg-canvas px-4 pt-2 pb-4 space-y-1 lg:hidden">
           <div className="px-3 pb-2">
-            <span className="inline-flex items-center gap-1.5 rounded-md border border-accent/25 bg-accent/10 px-2 py-0.5 text-xs font-medium text-accent">
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-brand-primary/30 bg-brand-primary/10 px-2 py-0.5 text-xs font-medium text-brand-primary">
               Demo data — 3 adapters wired, no account linked
             </span>
           </div>
@@ -272,7 +272,7 @@ export function AppHeader() {
             }}
             className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-ink-secondary transition-colors hover:bg-white/5 hover:text-ink text-left"
           >
-            <Search className="h-3.5 w-3.5 shrink-0 text-accent" />
+            <Search className="h-3.5 w-3.5 shrink-0 text-brand-secondary" />
             <span>Search or command (Cmd+K)</span>
           </button>
         </div>

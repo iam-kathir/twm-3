@@ -110,7 +110,7 @@ export default function SearchPage() {
   }, [developers, searchQuery, selectedTag, evidenceFilter]);
 
   return (
-    <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans selection:bg-accent selection:text-canvas overflow-x-hidden">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans selection:bg-brand-primary/30 selection:text-white overflow-x-hidden">
       <AppHeader />
 
       {/* Main Container */}
@@ -119,7 +119,7 @@ export default function SearchPage() {
         <div className="space-y-3">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="space-y-2">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-accent/10 border border-accent/20 text-accent text-xs sm:text-sm font-mono font-semibold">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-xs sm:text-sm font-mono font-semibold">
                 <Sparkles className="w-4 h-4" />
                 <span>Audited Peer Discovery</span>
               </div>
@@ -139,7 +139,7 @@ export default function SearchPage() {
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>Source Manifest</span>
                 </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/10 text-accent border border-accent/25 font-mono text-xs font-semibold shadow-sm">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-brand-primary/10 text-brand-primary border border-brand-primary/25 font-mono text-xs font-semibold shadow-sm">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   <span>Observed Activity</span>
                 </span>
@@ -166,7 +166,7 @@ export default function SearchPage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by student name, roll number, GitHub handle, or technology..."
                 aria-describedby="developer-search-hint"
-                className="w-full pl-12 pr-20 py-3.5 bg-canvas border border-white/[0.08] rounded-xl text-base text-white placeholder:text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors font-sans shadow-inner"
+                className="w-full pl-12 pr-20 py-3.5 bg-canvas border border-white/[0.08] rounded-xl text-base text-white placeholder:text-muted focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-colors font-sans shadow-inner"
               />
               <span id="developer-search-hint" className="sr-only">Search filters the verified cohort directory below.</span>
               {searchQuery && (
@@ -190,7 +190,7 @@ export default function SearchPage() {
                 value={evidenceFilter}
                 onChange={(e) => setEvidenceFilter(e.target.value as any)}
                 aria-label="Filter by Evidence Standard"
-                className="bg-canvas border border-white/[0.08] text-white text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:border-accent font-mono cursor-pointer"
+                className="bg-canvas border border-white/[0.08] text-white text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:border-brand-primary font-mono cursor-pointer"
               >
                 <option value="ALL">All Evidence Standards</option>
                 <option value="EXPLICIT_SOURCE">Explicit Source Only</option>
@@ -209,7 +209,7 @@ export default function SearchPage() {
             {selectedTag && (
               <button
                 onClick={() => setSelectedTag(null)}
-                className="px-3 py-1.5 rounded-lg bg-accent text-canvas font-bold text-xs font-mono flex items-center space-x-1 shadow-sm"
+                className="px-3 py-1.5 rounded-lg bg-brand-secondary text-white font-bold text-xs font-mono flex items-center space-x-1 shadow-sm"
               >
                 <span>× {selectedTag}</span>
               </button>
@@ -220,7 +220,7 @@ export default function SearchPage() {
                 onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
                 className={`px-3 py-1.5 rounded-lg text-[13px] font-mono transition-colors duration-200 ${
                   selectedTag === tag
-                    ? "bg-accent text-canvas font-bold border border-accent"
+                    ? "bg-brand-secondary text-white font-bold border border-brand-secondary"
                     : "bg-surface-raised text-muted hover:text-white border border-white/[0.06] hover:border-white/20"
                 }`}
               >
@@ -235,7 +235,7 @@ export default function SearchPage() {
           <span>
             {loading ? (
               <span className="flex items-center gap-2">
-                <RefreshCw className="w-3.5 h-3.5 animate-spin text-accent" aria-hidden="true" />
+                <RefreshCw className="w-3.5 h-3.5 animate-spin text-brand-secondary" aria-hidden="true" />
                 <span>Loading verified class roster…</span>
               </span>
             ) : loadError ? (
@@ -304,11 +304,11 @@ export default function SearchPage() {
                     {/* Header Row */}
                     <div className="flex items-start justify-between">
                       <div className="flex items-center space-x-3.5">
-                        <div className="w-12 h-12 rounded-xl bg-surface-raised border border-white/10 flex items-center justify-center font-bold text-base text-accent shadow-sm">
+                        <div className="w-12 h-12 rounded-xl bg-surface-raised border border-brand-primary/20 flex items-center justify-center font-bold text-base text-brand-primary shadow-sm">
                           {dev.avatarInitials}
                         </div>
                         <div>
-                          <h3 className="font-bold text-lg text-white group-hover:text-accent transition-colors flex items-center space-x-1.5">
+                          <h3 className="font-bold text-lg text-white group-hover:text-brand-secondary transition-colors flex items-center space-x-1.5">
                             <span>{dev.name}</span>
                             <UserCheck className="w-4 h-4 text-emerald-400" />
                           </h3>
@@ -324,8 +324,8 @@ export default function SearchPage() {
                       <p className="text-sm sm:text-base font-medium text-slate-200">
                         {dev.roleInterest}
                       </p>
-                      <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-md bg-surface-raised border border-white/[0.06] text-xs font-mono text-accent">
-                        <span className="w-2 h-2 rounded-full bg-accent" />
+                      <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-md bg-surface-raised border border-white/[0.06] text-xs font-mono text-brand-secondary">
+                        <span className="w-2 h-2 rounded-full bg-brand-secondary" />
                         <span>{dev.activeRhythm}</span>
                       </div>
                     </div>
@@ -347,7 +347,7 @@ export default function SearchPage() {
                                 isExplicit
                                   ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:border-emerald-500/40"
                                   : isSupported
-                                  ? "bg-accent/10 text-accent border-accent/20 hover:border-accent/40"
+                                  ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20 hover:border-brand-primary/40"
                                   : "bg-surface-raised text-muted border-white/10 hover:border-white/20"
                               }`}
                             >
@@ -355,7 +355,7 @@ export default function SearchPage() {
                               {isExplicit ? (
                                 <CheckCircle2 className="w-3 h-3 text-emerald-400" />
                               ) : isSupported ? (
-                                <ShieldCheck className="w-3 h-3 text-accent" />
+                                <ShieldCheck className="w-3 h-3 text-brand-primary" />
                               ) : (
                                 <AlertCircle className="w-3 h-3 text-amber-400" />
                               )}
@@ -385,7 +385,7 @@ export default function SearchPage() {
 
                     <button
                       onClick={() => setSelectedDev(dev)}
-                      className="inline-flex items-center space-x-1 text-accent hover:underline text-sm font-sans font-semibold"
+                      className="inline-flex items-center space-x-1 text-brand-secondary hover:underline text-sm font-sans font-semibold"
                     >
                       <span>Inspect</span>
                       <ExternalLink className="w-3.5 h-3.5" />
@@ -448,7 +448,7 @@ export default function SearchPage() {
 
               {/* Modal Header */}
               <div className="flex items-start space-x-4">
-                <div className="w-14 h-14 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center font-bold text-xl text-accent">
+                <div className="w-14 h-14 rounded-2xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center font-bold text-xl text-brand-primary">
                   {selectedDev.avatarInitials}
                 </div>
                 <div>
@@ -471,7 +471,7 @@ export default function SearchPage() {
               <div className="grid grid-cols-3 gap-3">
                 <div className="p-3 bg-canvas rounded-xl border border-white/[0.06] text-xs space-y-1">
                   <span className="text-xs font-medium text-muted block">Active rhythm</span>
-                  <span className="text-sm font-bold text-accent font-mono">{selectedDev.activeRhythm}</span>
+                  <span className="text-sm font-bold text-brand-secondary font-mono">{selectedDev.activeRhythm}</span>
                   <span className="text-xs text-muted block">Weekly regularity</span>
                 </div>
                 <div className="p-3 bg-canvas rounded-xl border border-white/[0.06] text-xs space-y-1">
@@ -509,7 +509,7 @@ export default function SearchPage() {
                             tag.evidence === "EXPLICIT_SOURCE"
                               ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                               : tag.evidence === "SUPPORTED_INFERENCE"
-                              ? "bg-accent/10 text-accent border-accent/20"
+                              ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20"
                               : "bg-white/5 text-muted border-white/10"
                           }`}>
                             {tag.evidence}
@@ -520,7 +520,7 @@ export default function SearchPage() {
                         </p>
                       </div>
                       <div className="text-xs font-medium text-muted shrink-0 flex items-center space-x-1">
-                        <GitCommit className="w-3 h-3 text-accent" />
+                        <GitCommit className="w-3 h-3 text-brand-primary" />
                         <span>Sha Audited</span>
                       </div>
                     </div>
@@ -542,7 +542,7 @@ export default function SearchPage() {
                 <Link
                   href={`/dashboard?user=${selectedDev.githubHandle}`}
                   onClick={() => setSelectedDev(null)}
-                  className="flex-1 py-2.5 rounded-xl bg-accent hover:bg-emerald-400 text-canvas font-bold text-xs flex items-center justify-center space-x-1.5 transition-colors"
+                  className="flex-1 py-2.5 rounded-xl bg-brand-secondary hover:bg-accent-hover text-white font-bold text-xs flex items-center justify-center space-x-1.5 transition-colors"
                 >
                   <span>Open Telemetry Cockpit</span>
                   <ChevronRight className="w-3.5 h-3.5" />
@@ -554,7 +554,7 @@ export default function SearchPage() {
                   }}
                   className="px-4 py-2.5 rounded-xl bg-surface-raised hover:bg-white/10 text-xs font-mono text-ink-secondary border border-white/10 flex items-center space-x-1.5 transition-colors"
                 >
-                  <ShieldAlert className="w-3.5 h-3.5 text-accent" />
+                  <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />
                   <span>Peer Inquiry (§9.7)</span>
                 </button>
               </div>

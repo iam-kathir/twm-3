@@ -10,7 +10,7 @@ const pillars = [
     title: "Missing data is never zero",
     desc: "Rate limits, outages, or private days are never converted into zero. Standing is never penalised for a missing observation.",
     tag: "Rule 7.3",
-    accent: "text-accent",
+    accent: "text-brand-secondary",
   },
   {
     icon: Scale,
@@ -47,7 +47,7 @@ export function FairnessGuarantees() {
     <section id="pillars" className="scroll-mt-24 py-12 md:py-16 border-t border-white/[0.08] bg-canvas">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.4fr)] lg:gap-12">
         <div className="lg:sticky lg:top-24 lg:self-start">
-          <p className="text-sm font-semibold text-accent">Fairness guarantees</p>
+          <p className="text-sm font-semibold text-brand-secondary">Fairness guarantees</p>
           <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-ink">
             Fairness is a data rule, not a promise.
           </h2>

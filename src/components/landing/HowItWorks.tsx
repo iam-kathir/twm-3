@@ -31,7 +31,7 @@ export function HowItWorks() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-10">
           <div>
-            <p className="text-sm font-semibold text-accent">Deterministic flow</p>
+            <p className="text-sm font-semibold text-brand-secondary">Deterministic flow</p>
             <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold text-ink tracking-tight">
               Three steps. No passwords.
             </h2>
@@ -53,7 +53,7 @@ export function HowItWorks() {
                 transition={{ duration: 0.45, delay: idx * 0.07, ease: "easeOut" }}
                 className="border-t border-white/[0.08] pt-5"
               >
-                <span className="font-mono text-sm font-bold text-accent">{step.num}</span>
+                <span className="font-mono text-sm font-bold text-brand-secondary">{step.num}</span>
                 <h3 className="mt-3 flex items-center gap-2 text-base font-bold text-ink">
                   <Icon className="h-4 w-4 text-muted shrink-0" aria-hidden="true" />
                   {step.title}

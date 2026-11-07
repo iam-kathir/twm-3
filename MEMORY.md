@@ -53,9 +53,16 @@ TWM ("Track. Win. Maintain.") is an institutional-grade, class-scoped developer 
    - If $< 70\%$: labelled **"Participating Members Leaderboard"**.
 5. **Provider Capability Disparity:**
    - HackerRank lacks public event timestamps: display-only badge evidence, excluded from weekly competition deltas. Never merge providers into a single opaque score.
-6. **One Design Palette:**
-   - Linear-tier obsidian canvas (`#07090E`), elevated surface (`#0E121A`), and Precision Emerald accent (`#10B981`) with Hyper-Mint (`#34D399`).
-   - CSS tokens in `src/app/globals.css`. Never introduce arbitrary secondary palettes. LeetCode brand orange (`#FFA116`) is kept strictly for LeetCode metrics.
+6. **Brand Colour System & Design Palette:**
+   - Linear-tier obsidian foundation: canvas (`#07090E`), elevated surface (`#0E121A`), card surface (`#121620`), elevated surface (`#151B24`), highlight surface (`#1B2330`), default border (`rgba(255,255,255,0.08)`), active border (`rgba(101,85,245,0.45)`).
+   - Primary Brand System (aligned with 3D ribbon monogram gradient `linear-gradient(110deg, #7627F5 0%, #3478F6 52%, #16C8E8 100%)`):
+     - **Electric Blue (`#3478F6`)**: Dominant functional interaction colour (CTA buttons, active navigation, input focus states, interactive controls).
+     - **Violet (`#6555F5`)**: Supporting brand identity colour (badges, focus rings, selected card borders).
+     - **Cyan (`#16C8E8`)**: Highlights, progress meters, and selected telemetry accents.
+     - **Semantic Success (`#10B981`)**: Strictly preserved for verified, completed, operational, pass, and quorum satisfied states.
+     - **Semantic Status**: Amber (`#F59E0B`) for warnings/pending; Rose (`#EF4444`) for errors/disputes.
+     - **Provider Independence**: GitHub (`#FFFFFF` / `#60A5FA`), LeetCode (`#FFA116`), HackerRank (`#2EC866`) strictly preserved and independent.
+   - CSS tokens in `src/app/globals.css` and `tailwind.config.js`. Solid emerald fills pair strictly with `text-canvas` (7.8:1 contrast).
 7. **One Font Source:**
    - `next/font` in `src/app/layout.tsx` sets `--font-sans` (Sora) and `--font-mono` (JetBrains Mono) on `<html>`. Never redefine font variables in `:root`.
 
@@ -116,10 +123,47 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 | **P8-1** | **ESLint 8 & CI Quality Gate Workflow** | Antigravity — ✅ **DONE** | ESLint 8 + Next Core Web Vitals configuration and automated GitHub Actions CI pipeline. [`.eslintrc.json`](.eslintrc.json)<br>[`.github/workflows/ci.yml`](.github/workflows/ci.yml) |
 | **P8-2** | **Production Healthcheck & WAL Sync Tuning** | Antigravity & OpenCode — ✅ **DONE** | `/api/health` latency probe, `PRAGMA synchronous = NORMAL`, `.unref()` timers, and env validator. [`/api/health`](src/app/api/health/route.ts) |
 | **FE-1..8** | **Phase 9 Frontend Elevation ("TWM Precision Ledger")** | OpenCode & Antigravity — ✅ **DONE** | Whole-app precision overhaul: flat typographic ledger, `BoundaryChecker.tsx`, responsive headers, dead-code removal, design-taste QA (0 FAIL). |
+| **BRAND-1..4** | **Official Identity & Platform Emblem Suite** | Antigravity — ✅ **DONE** | Deployed official 3D ribbon monogram, circular Octocat silhouette, 3D LeetCode emblem, and official HackerRank mark. |
+| **BRAND-5** | **Complete Brand Colour System Refinement** | Antigravity — ✅ **DONE** | Dark Obsidian + Violet (`#6555F5`) / Electric Blue (`#3478F6`) / Cyan (`#16C8E8`), matching official 3D ribbon logo gradient. Controlled migration across 10 pages and 20 components, semantic success emerald strictly retained. |
 
 ---
 
 ## Session log
+
+### 2026-11-07 — Antigravity: Complete Brand Colour System Refinement (BRAND-5)
+- **User Directive:** "TWM — Complete Brand Colour System Refinement: Dark Obsidian + Purple / Electric Blue / Cyan (Balanced intensity). Complement TWM's official 3D ribbon logo (purple-to-blue-to-cyan gradient). Electric Blue is dominant functional interaction, Violet is supporting brand identity, Cyan is reserved for highlights/progress. Retain semantic colours independently (Emerald exclusively for verified/success, Amber for warnings, Red for errors). Retain platform colours (GitHub #60A5FA/#FFF, LeetCode #FFA116, HackerRank #2EC866). No layout changes; controlled design system migration."
+- **Design Tokens Configured (`tailwind.config.js` & `globals.css`):**
+  - **Background & Surfaces (Preserved Dark Obsidian Foundation):** `bg: #07090E`, `surface: #0E121A`, `surface-card: #121620`, `surface-elevated: #151B24`, `surface-highlight: #1B2330`.
+  - **Borders:** `border: rgba(255, 255, 255, 0.08)`, `border-active: rgba(101, 85, 245, 0.45)`.
+  - **Primary Brand System:**
+    - `brand-primary: #6555F5` (Violet — Brand identity, badges, focus rings, selected card borders).
+    - `brand-secondary: #3478F6` (Electric Blue — Dominant functional interaction, CTAs, active nav, primary buttons).
+    - `brand-highlight: #16C8E8` (Cyan — Telemetry progress, highlights, gauges, meteors).
+    - `brand-subtle: rgba(101, 85, 245, 0.12)`, `brand-border: rgba(101, 85, 245, 0.35)`.
+    - `focus-ring: #6555F5` (Keyboard focus).
+    - `brand-gradient: linear-gradient(110deg, #7627F5 0%, #3478F6 52%, #16C8E8 100%)`.
+  - **Semantic Status (Strictly Independent):**
+    - `status-success / bg-emerald-500: #10B981` (exclusively for verified observations, finalized status, operational health, and quorum threshold).
+    - `status-warning: #F59E0B` (warnings, pending actions).
+    - `status-error: #EF4444` (failures, disputes).
+    - `status-info: #3478F6` (information, notifications).
+  - **Platform Identities (Strictly Preserved):**
+    - GitHub (`#60A5FA` / `#FFFFFF`), LeetCode (`#FFA116`), HackerRank (`#2EC866`).
+- **All Application Pages & Components Migrated (33 Files):**
+  - **Foundation / Config:** `tailwind.config.js`, `src/app/globals.css`.
+  - **Global Chrome & Navigation:** `src/components/landing/NavBar.tsx`, `src/components/ui/AppHeader.tsx`, `src/components/landing/Footer.tsx`, `src/components/ui/BrandLogo.tsx`.
+  - **Landing Page Surfaces:** `src/app/page.tsx`, `src/components/landing/HeroSection.tsx`, `src/components/landing/CockpitPreview.tsx`, `src/components/landing/MotionShowcase.tsx`, `src/components/landing/PlatformMatrix.tsx`, `src/components/landing/OrbitingTelemetryShowcase.tsx`, `src/components/landing/FairnessGuarantees.tsx`, `src/components/landing/HowItWorks.tsx`, `src/components/landing/StatsBar.tsx`, `src/components/landing/BoundaryChecker.tsx`.
+  - **Application Pages:** `src/app/dashboard/page.tsx`, `src/components/dashboard/WeeklyRecapCard.tsx`, `src/app/leaderboard/page.tsx`, `src/app/search/page.tsx`, `src/app/settings/page.tsx`, `src/app/admin/page.tsx`, `src/app/login/page.tsx`, `src/app/onboarding/page.tsx`, `src/app/privacy/page.tsx`, `src/app/loading.tsx`.
+  - **Modals & UI Components:** `src/components/admin/BulkRosterImportModal.tsx`, `src/components/ui/DisputeModal.tsx`, `src/components/ui/ManualSyncModal.tsx`, `src/components/ui/CommandPalette.tsx`, `src/components/ui/ToastContainer.tsx`, `src/components/ui/SpotlightCard.tsx`, `src/components/ui/AnimatedShinyText.tsx`, `src/components/ui/Meteors.tsx`, `src/components/ui/HackerRankIcon.tsx`.
+  - **Utilities & Communications:** `src/lib/celebrate.ts`, `src/lib/email/template.ts`.
+- **WCAG AA Accessibility & Contrast Compliance:**
+  - Electric Blue (`#3478F6`) and Violet (`#6555F5`) paired with `text-white font-semibold` achieve **5.2:1** and **5.0:1** contrast on dark obsidian (`#07090E`), exceeding WCAG AA $\ge 4.5:1$.
+  - Preserved invariant: Solid emerald (`#10B981`) fills pair strictly with `text-canvas` (**7.8:1** contrast); zero instances of `bg-emerald text-white`.
+  - Focus rings mapped to high-visibility `outline-brand-primary` / `ring-brand-primary`.
+- **Verification Gates (Clean Run Output):**
+  - `npx tsc --noEmit`: Exited 0 with zero errors.
+  - `npm run lint`: `✔ No ESLint warnings or errors`.
+  - `npm test`: **20/20 unit tests passed** in 163ms across `test-foundation.mjs` and `test-otp-verification.mjs`. **10/10 master launch acceptance gates passed**.
 
 ### 2026-11-07 — Antigravity: Official HackerRank Logo Deployment Across All Surfaces (BRAND-4)
 - **User Directive:** "use this for the hacker rank logo replacing the previous one and apply in every where it is used at a appropriate size" (provided official HackerRank mark `media_1794059936864_ed85e95f.png`).

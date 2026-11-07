@@ -49,7 +49,7 @@ export default function DashboardPage() {
     "text-[13px] sm:text-sm font-medium min-w-0";
 
   return (
-    <div className="min-h-screen bg-canvas text-ink flex flex-col selection:bg-accent selection:text-canvas overflow-x-hidden">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col selection:bg-brand-primary/30 selection:text-white overflow-x-hidden">
       <AppHeader />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 min-w-0">
@@ -126,7 +126,7 @@ export default function DashboardPage() {
                 type="button"
                 onClick={() => triggerLiveSync()}
                 disabled={isSyncing}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-4 py-3 text-sm font-semibold text-canvas transition-colors hover:bg-accent-hover disabled:opacity-60"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-secondary px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover disabled:opacity-60 shadow-sm"
               >
                 <RefreshCw className={`h-4 w-4 ${isSyncing ? "animate-spin" : ""}`} aria-hidden="true" />
                 {isSyncing ? "Syncing…" : "Sync telemetry"}
@@ -148,7 +148,7 @@ export default function DashboardPage() {
                 Export ledger
               </button>
               <p className="text-[13px] text-muted text-center lg:text-right" aria-live="polite">
-                Last sync: <span className="text-emerald-400 font-semibold">{lastSyncTime}</span>
+                Last sync: <span className="text-status-verified font-semibold">{lastSyncTime}</span>
                 {isSyncing && syncStep ? ` — ${syncStep}` : ""}
               </p>
             </div>
@@ -193,7 +193,7 @@ export default function DashboardPage() {
             <p className={trackerClass}>LeetCode weekly delta</p>
             {lcConnected ? (
               <>
-                <p className="text-3xl sm:text-4xl font-bold font-mono text-accent tabular-nums mt-2">
+                <p className="text-3xl sm:text-4xl font-bold font-mono text-brand-secondary tabular-nums mt-2">
                   {currentUser.leetcode.weeklyDelta > 0
                     ? `+${currentUser.leetcode.weeklyDelta} solved`
                     : currentUser.leetcode.totalSolved > 0
@@ -277,7 +277,7 @@ export default function DashboardPage() {
               {lcConnected ? (
                 <dl className="space-y-2 text-[13px]">
                   <div className="flex justify-between gap-4"><dt className="text-muted">Total solved</dt><dd className="font-mono font-bold text-white tabular-nums">{currentUser.leetcode.totalSolved}</dd></div>
-                  <div className="flex justify-between gap-4"><dt className="text-muted">Weekly delta</dt><dd className="font-mono font-bold text-accent tabular-nums">{currentUser.leetcode.weeklyDelta}</dd></div>
+                  <div className="flex justify-between gap-4"><dt className="text-muted">Weekly delta</dt><dd className="font-mono font-bold text-brand-secondary tabular-nums">{currentUser.leetcode.weeklyDelta}</dd></div>
                   <div className="flex justify-between gap-4"><dt className="text-muted">HMAC verification</dt><dd className="font-mono font-bold text-emerald-400">{currentUser.leetcode.hmacVerified ? "Verified" : "Not verified"}</dd></div>
                   <div className="flex justify-between gap-4"><dt className="text-muted">Easy / Medium / Hard</dt><dd className="font-mono text-ink-secondary tabular-nums">{currentUser.leetcode.easyCount} / {currentUser.leetcode.mediumCount} / {currentUser.leetcode.hardCount}</dd></div>
                 </dl>
@@ -311,7 +311,7 @@ export default function DashboardPage() {
               )}
             </div>
             <p className="pt-4 border-t border-white/[0.06] text-[13px] text-muted flex items-start gap-2">
-              <ShieldCheck className="h-4 w-4 text-accent shrink-0 mt-0.5" aria-hidden="true" />
+              <ShieldCheck className="h-4 w-4 text-brand-secondary shrink-0 mt-0.5" aria-hidden="true" />
               Cumulative badges are display-only and excluded from weekly competition deltas (§5.6).
             </p>
           </section>
@@ -323,7 +323,7 @@ export default function DashboardPage() {
       <footer className="border-t border-white/[0.08] bg-canvas py-6 text-[12px] text-muted">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <span>TWM 3.1 Platform • Personal student dashboard</span>
-          <Link href="/leaderboard" className="text-accent hover:underline inline-flex items-center gap-1">
+          <Link href="/leaderboard" className="text-brand-secondary hover:underline inline-flex items-center gap-1">
             <span>View class leaderboards</span>
             <ChevronRight className="h-3 w-3" aria-hidden="true" />
           </Link>

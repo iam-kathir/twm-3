@@ -120,7 +120,7 @@ export function BulkRosterImportModal({ isOpen, onClose, onSuccess }: BulkRoster
           {/* Header */}
           <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-4">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="p-2.5 rounded-xl bg-accent/10 border border-accent/20 text-accent shrink-0">
+              <div className="p-2.5 rounded-xl bg-brand-primary/10 border border-brand-primary/20 text-brand-primary shrink-0">
                 <FileSpreadsheet className="h-6 w-6" aria-hidden="true" />
               </div>
               <div className="min-w-0">
@@ -145,11 +145,11 @@ export function BulkRosterImportModal({ isOpen, onClose, onSuccess }: BulkRoster
               onClick={handleDownloadSample}
               className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 transition-colors font-semibold"
             >
-              <Download className="h-4 w-4 text-accent shrink-0" aria-hidden="true" />
+              <Download className="h-4 w-4 text-brand-primary shrink-0" aria-hidden="true" />
               <span>Download Template (CSV)</span>
             </button>
 
-            <label htmlFor="bulk-csv-file" className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 cursor-pointer transition-colors font-semibold">
+            <label htmlFor="bulk-csv-file" className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-brand-primary/10 hover:bg-brand-primary/20 text-brand-primary border border-brand-primary/20 cursor-pointer transition-colors font-semibold">
               <UploadCloud className="h-4 w-4 shrink-0" aria-hidden="true" />
               <span>Choose CSV File</span>
               <input id="bulk-csv-file" type="file" accept=".csv,text/csv" onChange={handleFileUpload} className="hidden" aria-label="Choose a CSV file to load" />
@@ -165,7 +165,7 @@ export function BulkRosterImportModal({ isOpen, onClose, onSuccess }: BulkRoster
               <button
                 type="button"
                 onClick={() => setCsvText(SAMPLE_CSV)}
-                className="text-xs font-semibold text-accent hover:text-white transition-colors underline-offset-2 hover:underline"
+                className="text-xs font-semibold text-brand-secondary hover:text-white transition-colors underline-offset-2 hover:underline"
                 aria-label="Load demo rows into the CSV text area"
               >
                 Load Demo Rows
@@ -179,7 +179,7 @@ export function BulkRosterImportModal({ isOpen, onClose, onSuccess }: BulkRoster
               placeholder="Paste comma-separated rows or upload a .csv file above..."
               rows={8}
               aria-describedby="bulk-import-help"
-              className="w-full rounded-xl bg-surface-raised border border-white/10 px-4 py-3 text-[13px] font-mono text-slate-200 placeholder:text-muted focus:outline-none focus:border-accent"
+              className="w-full rounded-xl bg-surface-raised border border-white/10 px-4 py-3 text-[13px] font-mono text-slate-200 placeholder:text-muted focus:outline-none focus:border-brand-primary"
             />
           </div>
 
@@ -194,7 +194,7 @@ export function BulkRosterImportModal({ isOpen, onClose, onSuccess }: BulkRoster
           {/* Result Banner */}
           {importResult && (
             <div role="status" className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 space-y-2">
-              <div className="flex items-center gap-2 text-accent font-bold text-sm">
+              <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
                 <CheckCircle2 className="h-5 w-5 shrink-0" aria-hidden="true" />
                 <span className="break-words">Batch Import Completed Successfully!</span>
               </div>
@@ -234,7 +234,7 @@ export function BulkRosterImportModal({ isOpen, onClose, onSuccess }: BulkRoster
               type="button"
               onClick={handleSubmit}
               disabled={isSubmitting || !csvText.trim()}
-              className="px-6 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-bold text-sm flex items-center gap-2 transition-colors disabled:opacity-50"
+              className="px-6 py-2.5 rounded-xl bg-brand-secondary hover:bg-accent-hover text-white font-bold text-sm flex items-center gap-2 transition-colors disabled:opacity-50"
             >
               <Users className="h-4 w-4 shrink-0" aria-hidden="true" />
               <span>{isSubmitting ? "Importing Roster..." : "Execute Batch Import"}</span>

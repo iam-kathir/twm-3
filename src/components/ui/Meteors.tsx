@@ -26,11 +26,11 @@ export function Meteors({ number = 20, className = "" }: MeteorsProps) {
       {meteorStyles.map((style, idx) => (
         <span
           key={idx}
-          className="absolute h-0.5 w-0.5 rounded-full bg-emerald-400 shadow-[0_0_0_1px_#ffffff10] rotate-[215deg] animate-meteor"
+          className="absolute h-0.5 w-0.5 rounded-full bg-brand-highlight shadow-[0_0_0_1px_#ffffff10] rotate-[215deg] animate-meteor"
           style={style}
         >
-          {/* Meteor Tail with Hyper-Mint / Emerald Glow */}
-          <div className="pointer-events-none absolute top-1/2 -z-10 h-px w-[60px] -translate-y-1/2 bg-gradient-to-r from-emerald-400/80 via-accent/30 to-transparent" />
+          {/* Meteor Tail with Cyan / Electric Blue Ambient Glow */}
+          <div className="pointer-events-none absolute top-1/2 -z-10 h-px w-[60px] -translate-y-1/2 bg-gradient-to-r from-brand-highlight/80 via-brand-secondary/30 to-transparent" />
         </span>
       ))}
     </div>

@@ -79,7 +79,7 @@ export default function PrivacyPolicyPage() {
   const [activeSection, setActiveSection] = useState("principles");
 
   return (
-    <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans selection:bg-accent selection:text-canvas" data-measure="readable">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans selection:bg-brand-primary/30 selection:text-white" data-measure="readable">
       <AppHeader />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12" aria-labelledby="privacy-heading">
@@ -87,7 +87,7 @@ export default function PrivacyPolicyPage() {
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-muted hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-md px-1 py-1"
+            className="inline-flex items-center gap-2 text-sm text-muted hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary rounded-md px-1 py-1"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             <span>Back to Platform Overview</span>
@@ -100,7 +100,7 @@ export default function PrivacyPolicyPage() {
 
         {/* Hero Header */}
         <div className="space-y-4 max-w-4xl">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-bold">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-sm font-bold">
             <Shield className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Institutional Governance • Fairness Rules §1.2, §18 &amp; §19</span>
           </div>
@@ -117,7 +117,7 @@ export default function PrivacyPolicyPage() {
         {/* 4 Core Guarantees Callout Banner */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl bg-surface border border-white/[0.08] space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-accent flex items-center justify-center font-bold text-xs">
+            <div className="w-8 h-8 rounded-lg bg-brand-primary/10 text-brand-primary flex items-center justify-center font-bold text-xs">
               01
             </div>
             <h3 className="font-bold text-white text-base">Zero Code Reading</h3>
@@ -127,7 +127,7 @@ export default function PrivacyPolicyPage() {
           </div>
 
           <div className="p-5 rounded-2xl bg-surface border border-white/[0.08] space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-accent flex items-center justify-center font-bold text-xs">
+            <div className="w-8 h-8 rounded-lg bg-brand-primary/10 text-brand-primary flex items-center justify-center font-bold text-xs">
               02
             </div>
             <h3 className="font-bold text-white text-base">Non-Punitive Missing Data</h3>
@@ -137,7 +137,7 @@ export default function PrivacyPolicyPage() {
           </div>
 
           <div className="p-5 rounded-2xl bg-surface border border-white/[0.08] space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-accent flex items-center justify-center font-bold text-xs">
+            <div className="w-8 h-8 rounded-lg bg-brand-primary/10 text-brand-primary flex items-center justify-center font-bold text-xs">
               03
             </div>
             <h3 className="font-bold text-white text-base">Pseudonymous Identity</h3>
@@ -147,7 +147,7 @@ export default function PrivacyPolicyPage() {
           </div>
 
           <div className="p-5 rounded-2xl bg-surface border border-white/[0.08] space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-accent flex items-center justify-center font-bold text-xs">
+            <div className="w-8 h-8 rounded-lg bg-brand-primary/10 text-brand-primary flex items-center justify-center font-bold text-xs">
               04
             </div>
             <h3 className="font-bold text-white text-base">1-Click Full Portability</h3>
@@ -171,9 +171,9 @@ export default function PrivacyPolicyPage() {
                   href={`#${sec.id}`}
                   onClick={() => setActiveSection(sec.id)}
                   aria-current={activeSection === sec.id ? "true" : undefined}
-                  className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center space-x-3 block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                  className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center space-x-3 block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary ${
                     activeSection === sec.id
-                      ? "bg-accent/15 text-accent border border-accent/30 font-bold"
+                      ? "bg-brand-primary/15 text-brand-primary border border-brand-primary/30 font-bold"
                       : "text-muted hover:text-white hover:bg-surface border border-transparent"
                   }`}
                 >
@@ -183,7 +183,7 @@ export default function PrivacyPolicyPage() {
               ))}
             </nav>
 
-            <div className="p-5 rounded-2xl bg-surface border border-white/[0.06] space-y-3 text-sm text-muted mt-6">
+            <div className="p-5 rounded-2xl bg-surface border border-white/0.06 space-y-3 text-sm text-muted mt-6">
               <span className="text-white font-bold block text-sm">
                 Your Privacy Controls
               </span>
@@ -192,7 +192,7 @@ export default function PrivacyPolicyPage() {
               </p>
               <Link
                 href="/settings"
-                className="inline-flex items-center space-x-1.5 text-accent hover:text-white font-bold pt-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-md px-1 py-0.5"
+                className="inline-flex items-center space-x-1.5 text-brand-secondary hover:text-white font-bold pt-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary rounded-md px-1 py-0.5"
               >
                 <span>Open Privacy Settings</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -204,7 +204,7 @@ export default function PrivacyPolicyPage() {
           <div className="lg:col-span-8 space-y-12">
             {/* Section 1 */}
             <section id="principles" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent text-sm font-bold">
+              <div className="flex items-center space-x-3 text-brand-secondary text-sm font-bold">
                 <Shield className="w-4 h-4" />
                 <span>Section 1</span>
               </div>
@@ -219,7 +219,7 @@ export default function PrivacyPolicyPage() {
                   TWM is <strong>not</strong> an academic surveillance system, exam proctor, keystroke logger, or punitive grading instrument. The platform is intentionally segregated from official gradebooks and cannot be used by academic institutions to inflict penalties, demerits, or compulsory tracking.
                 </p>
                 <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] text-sm text-muted flex items-start space-x-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-4 h-4 text-brand-primary shrink-0 mt-0.5" />
                   <span>
                     Rule §1.2 Invariant: Participation in competitive class leaderboards is entirely opt-in. Opting out never limits access to course materials, assignments, or cohort resources.
                   </span>
@@ -229,7 +229,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 2 */}
             <section id="data-collection" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent text-sm font-bold">
+              <div className="flex items-center space-x-3 text-brand-secondary text-sm font-bold">
                 <Code2 className="w-4 h-4" />
                 <span>Section 2</span>
               </div>
@@ -277,7 +277,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 3 */}
             <section id="zero-fabrication" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent text-sm font-bold">
+              <div className="flex items-center space-x-3 text-brand-secondary text-sm font-bold">
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Section 3</span>
               </div>
@@ -290,13 +290,13 @@ export default function PrivacyPolicyPage() {
                 </p>
                 <ul className="list-disc pl-5 space-y-2 text-sm text-muted">
                   <li>
-                    <strong>Missing data is never zero:</strong> If a third-party platform experiences downtime, rate limiting, or webhook drops, the observation is labelled <code className="text-accent bg-accent/10 px-1 py-0.5 rounded">UNAVAILABLE</code> or <code className="text-accent bg-accent/10 px-1 py-0.5 rounded">Pending</code>. It is never displayed as zero.
+                    <strong>Missing data is never zero:</strong> If a third-party platform experiences downtime, rate limiting, or webhook drops, the observation is labelled <code className="text-brand-secondary bg-brand-secondary/10 px-1 py-0.5 rounded">UNAVAILABLE</code> or <code className="text-brand-secondary bg-brand-secondary/10 px-1 py-0.5 rounded">Pending</code>. It is never displayed as zero.
                   </li>
                   <li>
                     <strong>Never fabricate success:</strong> Simulated delays or artificial &quot;all systems operational&quot; indicators are strictly prohibited.
                   </li>
                   <li>
-                    <strong>Demo data transparency:</strong> Any mock or illustrative views are prominently badged with <code className="text-accent bg-accent/10 px-1 py-0.5 rounded">Demo data</code>.
+                    <strong>Demo data transparency:</strong> Any mock or illustrative views are prominently badged with <code className="text-brand-primary bg-brand-primary/10 px-1 py-0.5 rounded">Demo data</code>.
                   </li>
                 </ul>
               </div>
@@ -304,7 +304,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 4 */}
             <section id="identity-visibility" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent text-sm font-bold">
+              <div className="flex items-center space-x-3 text-brand-secondary text-sm font-bold">
                 <Eye className="w-4 h-4" />
                 <span>Section 4</span>
               </div>
@@ -313,7 +313,7 @@ export default function PrivacyPolicyPage() {
               </h2>
               <div className="text-ink-secondary text-sm sm:text-base leading-relaxed space-y-3">
                 <p>
-                  Every student possesses complete sovereignty over how their activity is displayed to peers. Under <strong>Rule §18.1</strong>, you can configure your presentation tier at any time in <Link href="/settings" className="text-accent hover:underline">Settings</Link>:
+                  Every student possesses complete sovereignty over how their activity is displayed to peers. Under <strong>Rule §18.1</strong>, you can configure your presentation tier at any time in <Link href="/settings" className="text-brand-secondary hover:underline">Settings</Link>:
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
@@ -341,7 +341,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 5 */}
             <section id="authentication" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent text-sm font-bold">
+              <div className="flex items-center space-x-3 text-brand-secondary text-sm font-bold">
                 <Lock className="w-4 h-4" />
                 <span>Section 5</span>
               </div>
@@ -365,7 +365,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 6 */}
             <section id="disputes" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent text-sm font-bold">
+              <div className="flex items-center space-x-3 text-brand-secondary text-sm font-bold">
                 <Scale className="w-4 h-4" />
                 <span>Section 6</span>
               </div>
@@ -389,7 +389,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 7 */}
             <section id="retention-export" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent text-sm font-bold">
+              <div className="flex items-center space-x-3 text-brand-secondary text-sm font-bold">
                 <Database className="w-4 h-4" />
                 <span>Section 7</span>
               </div>
@@ -403,11 +403,11 @@ export default function PrivacyPolicyPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                   <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.08] space-y-2">
                     <span className="text-sm font-bold text-white flex items-center space-x-1.5">
-                      <Download className="w-4 h-4 text-accent" />
+                      <Download className="w-4 h-4 text-brand-secondary" />
                       <span>Instant Data Export</span>
                     </span>
                     <p className="text-sm text-muted">
-                      Download your raw observations, weekly ranks, and audit snapshots anytime in CSV or structured JSON formats from <Link href="/settings" className="text-accent hover:underline">Settings</Link>.
+                      Download your raw observations, weekly ranks, and audit snapshots anytime in CSV or structured JSON formats from <Link href="/settings" className="text-brand-secondary hover:underline">Settings</Link>.
                     </p>
                   </div>
 
@@ -426,7 +426,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Section 8 */}
             <section id="governance" className="space-y-4 scroll-mt-28">
-              <div className="flex items-center space-x-3 text-accent text-sm font-bold">
+              <div className="flex items-center space-x-3 text-brand-secondary text-sm font-bold">
                 <Users className="w-4 h-4" />
                 <span>Section 8</span>
               </div>
@@ -447,7 +447,7 @@ export default function PrivacyPolicyPage() {
             <div className="p-6 rounded-2xl bg-surface border border-white/10 space-y-3">
               <h3 className="text-base font-bold text-white">Questions or Governance Inquiries?</h3>
               <p className="text-sm text-muted leading-relaxed max-w-[72ch]">
-                If you have questions regarding telemetry attribution, boundary timezones, or data rights under TWM Master Plan v3.1, contact your course faculty co-admin or file an audited request via the <Link href="/admin" className="text-accent hover:underline">Admin Hub</Link>.
+                If you have questions regarding telemetry attribution, boundary timezones, or data rights under TWM Master Plan v3.1, contact your course faculty co-admin or file an audited request via the <Link href="/admin" className="text-brand-secondary hover:underline">Admin Hub</Link>.
               </p>
             </div>
           </div>

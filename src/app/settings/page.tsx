@@ -262,15 +262,15 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans selection:bg-accent selection:text-canvas">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans selection:bg-brand-primary/30 selection:text-white">
       <AppHeader />
 
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10" aria-labelledby="settings-heading">
         {/* Title & Description Header */}
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-accent/10 border border-accent/20 text-sm font-medium text-accent">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-brand-primary/10 border border-brand-primary/20 text-sm font-medium text-brand-primary">
             <span>Platform settings</span>
-            <span className="text-accent" aria-hidden="true">/</span>
+            <span className="text-brand-primary" aria-hidden="true">/</span>
             <span>Rule §10.3 compliant</span>
           </div>
           <h1 id="settings-heading" className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
@@ -309,7 +309,7 @@ export default function SettingsPage() {
                     document.getElementById(`settings-tab-${next.id}`)?.focus();
                   }
                 }}
-                className={`relative flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm sm:text-base font-semibold transition-colors whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                className={`relative flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm sm:text-base font-semibold transition-colors whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary ${
                   isSelected
                     ? "text-white font-bold"
                     : "text-muted hover:text-white hover:bg-white/5"
@@ -318,12 +318,12 @@ export default function SettingsPage() {
                 {isSelected && (
                   <motion.span
                     layoutId="settings-active-tab"
-                    className="absolute inset-0 rounded-xl bg-surface-raised border border-accent/40"
+                    className="absolute inset-0 rounded-xl bg-surface-raised border border-brand-primary/40"
                     transition={{ type: "spring", stiffness: 420, damping: 32 }}
                     aria-hidden="true"
                   />
                 )}
-                <Icon className={`relative z-10 h-5 w-5 ${isSelected ? "text-accent" : "text-slate-300"}`} aria-hidden="true" />
+                <Icon className={`relative z-10 h-5 w-5 ${isSelected ? "text-brand-secondary" : "text-slate-300"}`} aria-hidden="true" />
                 <span className="relative z-10">{tab.label}</span>
               </button>
             );
@@ -376,7 +376,7 @@ export default function SettingsPage() {
                     readOnly
                     value={currentUser.rollNo}
                     autoComplete="off"
-                    className="w-full px-4 py-3.5 rounded-xl bg-surface-raised border border-white/10 text-base sm:text-lg text-accent cursor-not-allowed font-bold"
+                    className="w-full px-4 py-3.5 rounded-xl bg-surface-raised border border-white/10 text-base sm:text-lg text-brand-primary cursor-not-allowed font-bold"
                   />
                   <span className="text-sm text-muted block">Immutable cohort participant index</span>
                 </div>
@@ -424,9 +424,9 @@ export default function SettingsPage() {
             </div>
 
             <div className="p-6 rounded-2xl bg-surface-raised/70 border border-white/[0.08] flex items-start gap-4 shadow-md">
-              <Lock className="h-6 w-6 text-accent shrink-0 mt-0.5" aria-hidden="true" />
+              <Lock className="h-6 w-6 text-brand-primary shrink-0 mt-0.5" aria-hidden="true" />
               <p className="text-sm sm:text-base text-ink-secondary leading-relaxed">
-                Need to correct a misspelled name or update class section? Per <strong>Rule §3.3</strong>, student identity modifications require two-person integrity approval from the faculty co-admin. You can file an audited request via the <strong className="text-accent">Admin Hub</strong>.
+                Need to correct a misspelled name or update class section? Per <strong>Rule §3.3</strong>, student identity modifications require two-person integrity approval from the faculty co-admin. You can file an audited request via the <strong className="text-brand-secondary">Admin Hub</strong>.
               </p>
             </div>
           </motion.section>
@@ -499,9 +499,9 @@ export default function SettingsPage() {
                   onClick={testGitHubAdapter}
                   disabled={testingAdapter === "github"}
                   aria-busy={testingAdapter === "github"}
-                  className="px-5 py-3 rounded-xl bg-surface-raised hover:bg-white/10 text-slate-200 text-sm font-medium transition-colors border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  className="px-5 py-3 rounded-xl bg-surface-raised hover:bg-white/10 text-slate-200 text-sm font-medium transition-colors border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                 >
-                  <RotateCw className={`h-4 w-4 text-accent ${testingAdapter === "github" ? "animate-spin" : ""}`} aria-hidden="true" />
+                  <RotateCw className={`h-4 w-4 text-brand-secondary ${testingAdapter === "github" ? "animate-spin" : ""}`} aria-hidden="true" />
                   <span>{testingAdapter === "github" ? "Querying GitHub…" : "Test GitHub Connection"}</span>
                 </button>
                 {currentUser.github.connected ? (
@@ -511,14 +511,14 @@ export default function SettingsPage() {
                       <button
                         type="button"
                         onClick={() => handleDisconnect("github")}
-                        className="px-5 py-3 rounded-xl text-sm font-semibold bg-rose-500 text-canvas border border-rose-500/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        className="px-5 py-3 rounded-xl text-sm font-semibold bg-rose-500 text-canvas border border-rose-500/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                       >
                         Confirm Disconnect
                       </button>
                       <button
                         type="button"
                         onClick={() => setConfirmAction(null)}
-                        className="px-5 py-3 rounded-xl text-sm font-medium bg-surface-raised text-slate-200 border border-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        className="px-5 py-3 rounded-xl text-sm font-medium bg-surface-raised text-slate-200 border border-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                       >
                         Cancel
                       </button>
@@ -527,7 +527,7 @@ export default function SettingsPage() {
                     <button
                       type="button"
                       onClick={() => setConfirmAction("disconnect-github")}
-                      className="px-5 py-3 rounded-xl text-sm font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                      className="px-5 py-3 rounded-xl text-sm font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                     >
                       Disconnect GitHub Adapter
                     </button>
@@ -536,7 +536,7 @@ export default function SettingsPage() {
                   <button
                     type="button"
                     onClick={() => updateConnectedAccount("github", true)}
-                    className="px-5 py-3 rounded-xl text-sm font-semibold bg-accent hover:bg-emerald-400 text-canvas focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                    className="px-5 py-3 rounded-xl text-sm font-semibold bg-brand-secondary hover:bg-accent-hover text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                   >
                     Connect GitHub Account
                   </button>
@@ -569,7 +569,7 @@ export default function SettingsPage() {
                   <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0" aria-hidden="true" />
                   <span className="text-slate-200 font-medium">Bio Challenge Token: Valid, Active &amp; Cryptographically Signed</span>
                 </div>
-                <span className="text-sm text-accent bg-accent/10 px-3 py-1 rounded-md border border-accent/20">
+                <span className="text-sm text-brand-primary bg-brand-primary/10 px-3 py-1 rounded-md border border-brand-primary/20">
                   Hash: 8f4c9a2...39b1
                 </span>
               </div>
@@ -580,9 +580,9 @@ export default function SettingsPage() {
                   onClick={testHmacChallenge}
                   disabled={testingAdapter === "hmac"}
                   aria-busy={testingAdapter === "hmac"}
-                  className="px-5 py-3 rounded-xl bg-surface-raised hover:bg-white/10 text-slate-200 text-sm font-medium transition-colors border border-white/10 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  className="px-5 py-3 rounded-xl bg-surface-raised hover:bg-white/10 text-slate-200 text-sm font-medium transition-colors border border-white/10 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                 >
-                  <Lock className="h-4 w-4 text-accent" aria-hidden="true" />
+                  <Lock className="h-4 w-4 text-brand-primary" aria-hidden="true" />
                   <span>{testingAdapter === "hmac" ? "Generating…" : "Generate New Challenge"}</span>
                 </button>
                 <button
@@ -590,9 +590,9 @@ export default function SettingsPage() {
                   onClick={testLeetCodeAdapter}
                   disabled={testingAdapter === "leetcode"}
                   aria-busy={testingAdapter === "leetcode"}
-                  className="px-5 py-3 rounded-xl bg-surface-raised hover:bg-white/10 text-slate-200 text-sm font-medium transition-colors border border-white/10 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  className="px-5 py-3 rounded-xl bg-surface-raised hover:bg-white/10 text-slate-200 text-sm font-medium transition-colors border border-white/10 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                 >
-                  <RotateCw className={`h-4 w-4 text-amber-400 ${testingAdapter === "leetcode" ? "animate-spin" : ""}`} aria-hidden="true" />
+                  <RotateCw className={`h-4 w-4 text-provider-leetcode-brand ${testingAdapter === "leetcode" ? "animate-spin" : ""}`} aria-hidden="true" />
                   <span>{testingAdapter === "leetcode" ? "Fetching…" : "Query Live Snapshot"}</span>
                 </button>
                 {confirmAction === "disconnect-leetcode" ? (
@@ -601,14 +601,14 @@ export default function SettingsPage() {
                     <button
                       type="button"
                       onClick={() => handleDisconnect("leetcode")}
-                      className="px-5 py-3 rounded-xl text-sm font-semibold bg-rose-500 text-canvas border border-rose-500/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                      className="px-5 py-3 rounded-xl text-sm font-semibold bg-rose-500 text-canvas border border-rose-500/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                     >
                       Confirm Disconnect
                     </button>
                     <button
                       type="button"
                       onClick={() => setConfirmAction(null)}
-                      className="px-5 py-3 rounded-xl text-sm font-medium bg-surface-raised text-slate-200 border border-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                      className="px-5 py-3 rounded-xl text-sm font-medium bg-surface-raised text-slate-200 border border-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                     >
                       Cancel
                     </button>
@@ -617,7 +617,7 @@ export default function SettingsPage() {
                   <button
                     type="button"
                     onClick={() => setConfirmAction("disconnect-leetcode")}
-                    className="px-5 py-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/25 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    className="px-5 py-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/25 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                   >
                     Disconnect LeetCode
                   </button>
@@ -655,9 +655,9 @@ export default function SettingsPage() {
                   onClick={testHackerRankAdapter}
                   disabled={testingAdapter === "hackerrank"}
                   aria-busy={testingAdapter === "hackerrank"}
-                  className="px-5 py-3 rounded-xl bg-surface-raised hover:bg-white/10 text-slate-200 text-sm font-medium transition-colors border border-white/10 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  className="px-5 py-3 rounded-xl bg-surface-raised hover:bg-white/10 text-slate-200 text-sm font-medium transition-colors border border-white/10 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                 >
-                  <RotateCw className={`h-4 w-4 text-emerald-400 ${testingAdapter === "hackerrank" ? "animate-spin" : ""}`} aria-hidden="true" />
+                  <RotateCw className={`h-4 w-4 text-provider-hackerrank ${testingAdapter === "hackerrank" ? "animate-spin" : ""}`} aria-hidden="true" />
                   <span>{testingAdapter === "hackerrank" ? "Querying…" : "Verify HackerRank Profile"}</span>
                 </button>
               </div>
@@ -684,9 +684,9 @@ export default function SettingsPage() {
               </div>
 
               {/* Full Policy Link Banner */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-surface-raised border border-emerald-500/25 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="p-4 sm:p-5 rounded-2xl bg-surface-raised border border-brand-primary/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3.5">
-                  <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-accent">
+                  <div className="p-2.5 rounded-xl bg-brand-primary/10 border border-brand-primary/20 text-brand-primary">
                     <Shield className="h-5 w-5" aria-hidden="true" />
                   </div>
                   <div>
@@ -696,10 +696,10 @@ export default function SettingsPage() {
                 </div>
                 <Link
                   href="/privacy"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white text-sm font-semibold border border-white/10 transition-colors shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white text-sm font-semibold border border-white/10 transition-colors shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                 >
                   <span>Read Policy</span>
-                  <ArrowRight className="h-4 w-4 text-accent" aria-hidden="true" />
+                  <ArrowRight className="h-4 w-4 text-brand-secondary" aria-hidden="true" />
                 </Link>
               </div>
 
@@ -738,14 +738,14 @@ export default function SettingsPage() {
                           setVisibility(tier.id as typeof visibility);
                           setSaveError(null);
                         }}
-                        className={`p-5 rounded-2xl text-left border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                        className={`p-5 rounded-2xl text-left border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary ${
                           selected
-                            ? "bg-surface-raised border-accent ring-1 ring-accent"
+                            ? "bg-surface-raised border-brand-primary ring-1 ring-brand-primary"
                             : "bg-surface border-white/10 hover:border-white/25"
                         }`}
                       >
                         <span className="text-base font-bold text-white flex items-center gap-2">
-                          {selected && <CheckCircle2 className="h-4 w-4 text-accent shrink-0" aria-hidden="true" />}
+                          {selected && <CheckCircle2 className="h-4 w-4 text-brand-primary shrink-0" aria-hidden="true" />}
                           {tier.title}
                         </span>
                         <span className="text-sm text-muted mt-2 leading-relaxed block">{tier.desc}</span>
@@ -760,7 +760,7 @@ export default function SettingsPage() {
                 <div className="space-y-1">
                   <label htmlFor="setting-discovery" className="text-base font-bold text-white block">Semantic Peer Discovery Listing</label>
                   <p id="setting-discovery-help" className="text-sm text-muted max-w-2xl leading-relaxed">
-                    Allow classmates to discover your profile in <code className="text-accent">/search</code> using verified capabilities &amp; explicit source manifests.
+                    Allow classmates to discover your profile in <code className="text-brand-secondary">/search</code> using verified capabilities &amp; explicit source manifests.
                   </p>
                 </div>
 
@@ -770,7 +770,7 @@ export default function SettingsPage() {
                   checked={publicDiscovery}
                   onChange={(e) => setPublicDiscovery(e.target.checked)}
                   aria-describedby="setting-discovery-help"
-                  className="w-5 h-5 rounded accent-accent cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent shrink-0"
+                  className="w-5 h-5 rounded accent-brand-secondary cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary shrink-0"
                 />
               </div>
 
@@ -788,9 +788,9 @@ export default function SettingsPage() {
                   onClick={() => setRecapPref(recapPref === "ai" ? "deterministic" : "ai")}
                   aria-pressed={recapPref === "ai"}
                   aria-label={`AI recap synthesis: ${recapPref === "ai" ? "enabled" : "disabled"}. Activate to toggle.`}
-                  className={`px-4 py-2.5 rounded-xl text-sm font-semibold border transition-colors shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                  className={`px-4 py-2.5 rounded-xl text-sm font-semibold border transition-colors shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary ${
                     recapPref === "ai"
-                      ? "bg-accent/10 text-accent border-accent/30"
+                      ? "bg-brand-primary/10 text-brand-primary border-brand-primary/30"
                       : "bg-surface-raised text-muted border-white/10"
                   }`}
                 >
@@ -813,7 +813,7 @@ export default function SettingsPage() {
                   checked={notifyDispute}
                   onChange={(e) => setNotifyDispute(e.target.checked)}
                   aria-describedby="setting-dispute-help"
-                  className="w-5 h-5 rounded accent-accent cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent shrink-0"
+                  className="w-5 h-5 rounded accent-brand-secondary cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary shrink-0"
                 />
               </div>
 
@@ -830,7 +830,7 @@ export default function SettingsPage() {
                   onClick={handleSavePrivacy}
                   disabled={isSaving}
                   aria-busy={isSaving}
-                  className="px-8 py-3.5 rounded-xl bg-accent hover:bg-emerald-400 disabled:opacity-60 disabled:cursor-not-allowed text-canvas font-bold text-base flex items-center gap-2.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  className="px-8 py-3.5 rounded-xl bg-brand-secondary hover:bg-accent-hover disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-base flex items-center gap-2.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 >
                   {isSaving ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> : <Save className="h-5 w-5" aria-hidden="true" />}
                   <span>{isSaving ? "Saving…" : "Save Privacy Preferences"}</span>
@@ -863,7 +863,7 @@ export default function SettingsPage() {
                 <div className="p-6 rounded-2xl bg-surface-raised border border-white/10 flex flex-col justify-between space-y-6">
                   <div className="space-y-2">
                     <div className="flex items-center gap-3">
-                      <div className="p-3 rounded-xl bg-accent/10 border border-accent/20 text-accent">
+                      <div className="p-3 rounded-xl bg-brand-primary/10 border border-brand-primary/20 text-brand-primary">
                         <Database className="h-6 w-6" aria-hidden="true" />
                       </div>
                       <h3 className="text-lg font-bold text-white">Full Telemetry Archive</h3>
@@ -876,9 +876,9 @@ export default function SettingsPage() {
                   <button
                     type="button"
                     onClick={exportTelemetryJSON}
-                    className="w-full py-3.5 rounded-xl bg-surface hover:bg-white/10 border border-white/10 text-white text-sm font-semibold flex items-center justify-center gap-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    className="w-full py-3.5 rounded-xl bg-surface hover:bg-white/10 border border-white/10 text-white text-sm font-semibold flex items-center justify-center gap-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                   >
-                    <FileDown className="h-4 w-4 text-accent" aria-hidden="true" />
+                    <FileDown className="h-4 w-4 text-brand-primary" aria-hidden="true" />
                     <span>Download Telemetry JSON</span>
                   </button>
                 </div>

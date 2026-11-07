@@ -42,14 +42,14 @@ function LoginContent() {
   };
 
   return (
-    <div className="min-h-screen bg-canvas text-ink flex flex-col justify-between selection:bg-accent selection:text-canvas relative overflow-hidden bg-tech-dots">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col justify-between selection:bg-brand-primary/30 selection:text-white relative overflow-hidden bg-tech-dots">
       {/* Header */}
       <header className="p-6 relative z-10 max-w-5xl mx-auto w-full flex items-center justify-between">
         <BrandLogo showLivePulse={true} />
 
         <Link
           href="/"
-          className="text-sm text-muted hover:text-white transition-colors flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-md px-1 py-1"
+          className="text-sm text-muted hover:text-white transition-colors flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary rounded-md px-1 py-1"
         >
           <span aria-hidden="true">&larr;</span>
           <span>Back to Home</span>
@@ -96,7 +96,7 @@ function LoginContent() {
               onClick={handleGitHubLogin}
               disabled={isLoading}
               aria-busy={isLoading}
-              className="w-full py-4 px-6 rounded-xl bg-white text-canvas hover:bg-slate-100 font-bold text-sm sm:text-base flex items-center justify-center gap-3 transition-colors shadow-xl disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer font-sans focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="w-full py-4 px-6 rounded-xl bg-white text-canvas hover:bg-slate-100 font-bold text-sm sm:text-base flex items-center justify-center gap-3 transition-colors shadow-xl disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer font-sans focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
             >
               <Github className="h-5 w-5" aria-hidden="true" />
               <span>{isLoading ? "Redirecting to GitHub…" : "Continue with GitHub"}</span>
@@ -105,14 +105,14 @@ function LoginContent() {
 
             {/* University Domains Pill */}
             <div className="flex items-center justify-center gap-2 text-sm text-muted">
-              <GraduationCap className="h-4 w-4 text-accent" aria-hidden="true" />
+              <GraduationCap className="h-4 w-4 text-brand-secondary" aria-hidden="true" />
               <span>Supported: karunya.edu, .edu.in, .ac.in</span>
             </div>
 
             {/* Dev Demo Fast-Track Modal / Card if demo mode active or requested */}
             {isDemoOAuth ? (
-              <div className="p-4 rounded-xl bg-accent/10 border border-accent/25 space-y-3 text-left">
-                <div className="flex items-center gap-2 text-sm font-bold text-accent">
+              <div className="p-4 rounded-xl bg-brand-primary/10 border border-brand-primary/25 space-y-3 text-left">
+                <div className="flex items-center gap-2 text-sm font-bold text-brand-primary">
                   <span aria-hidden="true">Demo</span>
                   <span>Local Dev OAuth Simulator</span>
                 </div>
@@ -130,10 +130,10 @@ function LoginContent() {
                       type="button"
                       onClick={() => handleDemoStudentLogin(s.id)}
                       disabled={isLoading}
-                      className="w-full py-2.5 px-3 rounded-lg bg-surface hover:bg-surface-raised border border-white/10 text-sm text-ink text-left flex items-center justify-between transition-colors disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                      className="w-full py-2.5 px-3 rounded-lg bg-surface hover:bg-surface-raised border border-white/10 text-sm text-ink text-left flex items-center justify-between transition-colors disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                     >
                       <span>{s.name}</span>
-                      <ArrowRight className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+                      <ArrowRight className="h-3.5 w-3.5 text-brand-secondary" aria-hidden="true" />
                     </button>
                   ))}
                 </div>
@@ -148,7 +148,7 @@ function LoginContent() {
                   type="button"
                   onClick={() => handleDemoStudentLogin("roster_aarav_sharma")}
                   disabled={isLoading}
-                  className="text-sm font-medium text-accent hover:underline inline-flex items-center gap-1.5 disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-md px-1 py-1"
+                  className="text-sm font-medium text-brand-secondary hover:underline inline-flex items-center gap-1.5 disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary rounded-md px-1 py-1"
                 >
                   <span>Simulate Instant Sign In (Aarav Sharma)</span>
                   <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -165,7 +165,7 @@ function LoginContent() {
             </div>
             <p className="text-sm text-muted leading-relaxed font-sans">
               Stateless HMAC-SHA256 tokens tied to verified university roll numbers. No credentials, tokens, or surveillance scripts are ever persisted.{" "}
-              <Link href="/privacy" className="text-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded">
+              <Link href="/privacy" className="text-brand-secondary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary rounded">
                 Read the privacy policy
               </Link>
               .
@@ -187,7 +187,7 @@ export default function LoginPage() {
     <React.Suspense
       fallback={
         <div className="min-h-screen bg-canvas text-ink flex items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" role="status" aria-label="Loading sign-in" />
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-brand-secondary border-t-transparent" role="status" aria-label="Loading sign-in" />
         </div>
       }
     >

@@ -33,7 +33,7 @@ export function NavBar() {
               alt="TWM Logo"
               width={82}
               height={32}
-              className="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105 drop-shadow-[0_2px_12px_rgba(56,189,248,0.35)]"
+              className="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105 drop-shadow-[0_2px_14px_rgba(101,85,245,0.35)]"
               priority
             />
           </div>
@@ -49,7 +49,7 @@ export function NavBar() {
 
         {/* Center: Floating Nav Pill */}
         <nav
-          className="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-full border border-white/[0.08] bg-[#0c1220]/80 backdrop-blur-md shadow-inner"
+          className="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-full border border-white/[0.08] bg-surface/90 backdrop-blur-md shadow-inner"
           aria-label="Primary"
         >
           {NAV_ITEMS.map((item) => (
@@ -67,7 +67,7 @@ export function NavBar() {
         <div className="flex items-center gap-3">
           <Link
             href="/login"
-            className="inline-flex min-h-[40px] items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-500 hover:from-blue-500 hover:to-indigo-400 text-white text-sm font-semibold transition-all shadow-[0_0_20px_rgba(79,70,229,0.35)] hover:shadow-[0_0_25px_rgba(79,70,229,0.5)]"
+            className="inline-flex min-h-[40px] items-center gap-2 px-5 py-2 rounded-full bg-brand-secondary hover:bg-accent-hover text-white text-sm font-semibold transition-all shadow-[0_0_20px_rgba(52,120,246,0.35)] hover:shadow-[0_0_25px_rgba(52,120,246,0.5)]"
           >
             <span>Get Started</span>
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />

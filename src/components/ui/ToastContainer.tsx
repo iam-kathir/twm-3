@@ -30,7 +30,7 @@ export function ToastContainer() {
             ? "border-amber-500/30"
             : isError
             ? "border-rose-500/30"
-            : "border-sky-500/30";
+            : "border-brand-secondary/30";
 
           const iconColor = isSuccess
             ? "text-emerald-400"
@@ -38,7 +38,7 @@ export function ToastContainer() {
             ? "text-amber-400"
             : isError
             ? "text-rose-400"
-            : "text-sky-400";
+            : "text-brand-secondary";
 
           const progressBg = isSuccess
             ? "bg-emerald-400"
@@ -46,7 +46,7 @@ export function ToastContainer() {
             ? "bg-amber-400"
             : isError
             ? "bg-rose-400"
-            : "bg-sky-400";
+            : "bg-brand-secondary";
 
           return (
             <motion.div

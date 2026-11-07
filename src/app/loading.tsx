@@ -37,25 +37,25 @@ export default function Loading() {
               duration: 1.6,
               ease: "easeInOut",
             }}
-            className="h-full w-1/2 rounded-full bg-accent"
+            className="h-full w-1/2 rounded-full bg-brand-secondary"
           />
         </div>
 
         {/* Status hint (static dot, no attention loop). */}
         <div className="mt-5 flex items-center justify-center gap-2 text-xs font-sans text-ink-secondary">
-          <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-accent" />
+          <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-brand-secondary" />
           <span>Hydrating verified cohort telemetry...</span>
         </div>
 
         {/* Guaranteed Invariant Badges */}
         <div className="mt-6 pt-5 border-t border-border-subtle flex items-center justify-center gap-4 text-xs font-sans text-muted">
           <span className="flex items-center gap-1.5">
-            <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-accent" />
+            <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-brand-primary" />
             Zero Fabrication
           </span>
           <span className="text-ink/20">•</span>
           <span className="flex items-center gap-1.5">
-            <Activity className="h-3.5 w-3.5 shrink-0 text-accent" />
+            <Activity className="h-3.5 w-3.5 shrink-0 text-brand-secondary" />
             Sunday Boundary Engine
           </span>
         </div>

@@ -466,7 +466,7 @@ export default function AdminHubPage() {
   };
 
   return (
-    <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans selection:bg-accent selection:text-canvas">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans selection:bg-brand-primary/30 selection:text-white">
       <AppHeader />
 
       {/* Main Container */}
@@ -474,7 +474,7 @@ export default function AdminHubPage() {
         {/* Header Title with Sync Button */}
         <div className="flex flex-col gap-5 min-w-0">
           <div className="min-w-0">
-            <div className="inline-flex max-w-full items-center space-x-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-bold mb-3">
+            <div className="inline-flex max-w-full items-center space-x-2 px-3 py-1 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-xs font-bold mb-3">
               <Shield className="w-3.5 h-3.5 shrink-0" />
               <span className="truncate" title="Administrative Operations • Rule §3.3 & §9.7">Administrative Operations • Rule §3.3 & §9.7</span>
             </div>
@@ -492,7 +492,7 @@ export default function AdminHubPage() {
               disabled={isSyncing}
               className="inline-flex items-center space-x-2.5 px-5 py-3 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm font-semibold text-ink-secondary hover:text-white transition-colors disabled:opacity-50"
             >
-              <RefreshCw className={`w-4 h-4 shrink-0 ${isSyncing ? "animate-spin text-accent" : "text-muted"}`} />
+              <RefreshCw className={`w-4 h-4 shrink-0 ${isSyncing ? "animate-spin text-brand-secondary" : "text-muted"}`} />
               <span className="break-words">{isSyncing ? "Auditing Connectors..." : "Audit Telemetry Connectors"}</span>
             </button>
           </div>
@@ -516,26 +516,26 @@ export default function AdminHubPage() {
                 aria-pressed={isSelected}
                 className={`relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center space-x-2 shrink-0 ${
                   isSelected
-                    ? "bg-accent text-canvas font-bold"
+                    ? "bg-brand-secondary text-white font-bold"
                     : "text-muted hover:text-white bg-surface/50 hover:bg-surface border border-transparent hover:border-white/10"
                 }`}
               >
                 {isSelected && (
                   <motion.span
                     layoutId="admin-active-tab-pill"
-                    className="absolute inset-0 rounded-xl bg-accent"
+                    className="absolute inset-0 rounded-xl bg-brand-secondary"
                     transition={{ type: "spring", stiffness: 420, damping: 32 }}
                   />
                 )}
-                {Icon && <Icon className={`relative z-10 w-4 h-4 shrink-0 ${isSelected ? "text-canvas" : "text-muted"}`} />}
+                {Icon && <Icon className={`relative z-10 w-4 h-4 shrink-0 ${isSelected ? "text-white" : "text-muted"}`} />}
                 <span className="relative z-10 whitespace-nowrap">{tab.label}</span>
                 {typeof tab.badge === "number" && tab.badge > 0 && (
-                  <span className={`relative z-10 w-5 h-5 rounded-full flex items-center justify-center text-xs font-semibold ${isSelected ? "bg-canvas text-accent" : "bg-amber-500/20 text-amber-300 border border-amber-500/30"}`}>
+                  <span className={`relative z-10 w-5 h-5 rounded-full flex items-center justify-center text-xs font-semibold ${isSelected ? "bg-white/20 text-white" : "bg-amber-500/20 text-amber-300 border border-amber-500/30"}`}>
                     {tab.badge}
                   </span>
                 )}
                 {tab.tag && (
-                  <span className={`relative z-10 px-1.5 py-0.5 rounded text-xs font-bold whitespace-nowrap ${isSelected ? "bg-canvas text-accent" : "bg-accent/20 text-accent"}`} title={tab.tag}>
+                  <span className={`relative z-10 px-1.5 py-0.5 rounded text-xs font-bold whitespace-nowrap ${isSelected ? "bg-white/20 text-white" : "bg-brand-primary/20 text-brand-primary"}`} title={tab.tag}>
                     {tab.tag}
                   </span>
                 )}
@@ -547,7 +547,7 @@ export default function AdminHubPage() {
         {/* Co-Admin Mode Banner */}
         <div className="p-5 sm:p-6 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-sm">
           <div className="flex items-center space-x-3.5">
-            <ShieldAlert className="w-6 h-6 text-accent shrink-0" />
+            <ShieldAlert className="w-6 h-6 text-amber-400 shrink-0" />
             <div>
               <span className="font-bold text-white text-base">
                 Active Session: {currentUser.name} ({currentUser.role === "co-admin" ? "Faculty Co-Admin" : "Elected Class Rep"})
@@ -561,7 +561,7 @@ export default function AdminHubPage() {
           </div>
           <button
             onClick={() => switchRole(currentUser.role === "co-admin" ? "student" : "co-admin")}
-            className="px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm font-semibold text-accent hover:text-white transition-colors shrink-0"
+            className="px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm font-semibold text-brand-secondary hover:text-white transition-colors shrink-0"
           >
             Switch to {currentUser.role === "co-admin" ? "Student View" : "Co-Admin View"}
           </button>
@@ -598,7 +598,7 @@ export default function AdminHubPage() {
               </div>
               <button
                 onClick={() => setActiveTab("disputes")}
-                className="px-4 py-2 rounded-xl bg-surface hover:bg-white/10 border border-white/10 text-sm font-semibold text-accent hover:text-white transition-colors shrink-0"
+                className="px-4 py-2 rounded-xl bg-surface hover:bg-white/10 border border-white/10 text-sm font-semibold text-brand-secondary hover:text-white transition-colors shrink-0"
               >
                 Open dispute queue
               </button>
@@ -629,7 +629,7 @@ export default function AdminHubPage() {
               </div>
               <button
                 onClick={() => setActiveTab("roster")}
-                className="px-4 py-2 rounded-xl bg-surface hover:bg-white/10 border border-white/10 text-sm font-semibold text-accent hover:text-white transition-colors shrink-0"
+                className="px-4 py-2 rounded-xl bg-surface hover:bg-white/10 border border-white/10 text-sm font-semibold text-brand-secondary hover:text-white transition-colors shrink-0"
               >
                 Open roster
               </button>
@@ -650,7 +650,7 @@ export default function AdminHubPage() {
               </div>
               <button
                 onClick={() => setActiveTab("overview")}
-                className="px-4 py-2 rounded-xl bg-surface hover:bg-white/10 border border-white/10 text-sm font-semibold text-accent hover:text-white transition-colors shrink-0"
+                className="px-4 py-2 rounded-xl bg-surface hover:bg-white/10 border border-white/10 text-sm font-semibold text-brand-secondary hover:text-white transition-colors shrink-0"
               >
                 Review provider config
               </button>
@@ -666,7 +666,7 @@ export default function AdminHubPage() {
               <div className="flex flex-col gap-5 min-w-0">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-3">
-                    <Users className="w-5 h-5 text-accent shrink-0" />
+                    <Users className="w-5 h-5 text-brand-primary shrink-0" />
                     <h2 className="text-xl sm:text-2xl font-bold text-white break-words">
                       Roster Quorum &amp; Participation Denominator
                     </h2>
@@ -689,14 +689,14 @@ export default function AdminHubPage() {
                     onClick={exportLeaderboardCSV}
                     className="px-4 py-2 rounded-xl bg-surface-raised hover:bg-white/10 text-sm font-semibold text-ink-secondary hover:text-white border border-white/10 flex items-center gap-2 transition-colors"
                   >
-                    <Download className="w-4 h-4 shrink-0" />
+                    <Download className="w-4 h-4 shrink-0 text-brand-primary" />
                     <span className="break-words">Export Standings</span>
                   </button>
 
                   <button 
                     onClick={handleTriggerSundayFinalize}
                     disabled={isFinalizing}
-                    className="px-4 py-2 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-semibold text-sm flex items-center gap-2 transition-colors disabled:opacity-50"
+                    className="px-4 py-2 rounded-xl bg-brand-secondary hover:bg-accent-hover text-white font-semibold text-sm flex items-center gap-2 transition-colors disabled:opacity-50"
                     title="Close and finalize competition under Rule §9.1 and §9.7"
                   >
                     <Clock className={`w-4 h-4 shrink-0 ${isFinalizing ? "animate-spin" : ""}`} />
@@ -709,7 +709,7 @@ export default function AdminHubPage() {
               <div className="space-y-3 min-w-0">
                 <div className="flex flex-col sm:flex-row sm:justify-between gap-1 text-sm">
                   <span className="text-ink-secondary break-words">
-                    Verified Students: <strong className="text-accent font-bold tabular-nums">{verifiedCount}</strong> / <span className="tabular-nums">{totalEnrolled}</span> total
+                    Verified Students: <strong className="text-brand-primary font-bold tabular-nums">{verifiedCount}</strong> / <span className="tabular-nums">{totalEnrolled}</span> total
                   </span>
                   <span className="text-muted break-words">
                     Threshold: <strong className="text-white">70.0%</strong> (Current: <strong className={`tabular-nums ${meetsQuorum ? "text-emerald-400 font-bold" : "text-amber-400 font-bold"}`}>{quorumPercentage}%</strong>)
@@ -717,7 +717,7 @@ export default function AdminHubPage() {
                 </div>
                 <div className="w-full h-4 bg-canvas rounded-full overflow-hidden p-0.5 border border-white/[0.08]">
                   <div
-                    className={`h-full rounded-full transition-colors duration-500 ${meetsQuorum ? "bg-emerald-400" : "bg-amber-400"}`}
+                    className={`h-full rounded-full transition-colors duration-500 ${meetsQuorum ? "bg-emerald-400" : "bg-brand-primary"}`}
                     style={{ width: `${Math.min(quorumPercentage, 100)}%` }}
                   />
                 </div>
@@ -737,7 +737,7 @@ export default function AdminHubPage() {
                 </div>
                 <div className="p-5 rounded-2xl bg-surface-raised border border-white/[0.06] space-y-2 min-w-0">
                   <span className="text-muted text-xs font-semibold block">Opted-in and participating</span>
-                  <span className="text-2xl sm:text-3xl font-extrabold text-accent tabular-nums break-words">{verifiedCount} Students</span>
+                  <span className="text-2xl sm:text-3xl font-extrabold text-brand-primary tabular-nums break-words">{verifiedCount} Students</span>
                   <p className="text-sm text-muted break-words">Connected GitHub/LeetCode profiles</p>
                 </div>
                 <div className="p-5 rounded-2xl bg-surface-raised border border-white/[0.06] space-y-2 min-w-0">
@@ -753,7 +753,7 @@ export default function AdminHubPage() {
             {/* Provider Sync Health Monitor */}
             <div className="space-y-4 min-w-0">
               <div className="flex flex-wrap items-center gap-2.5">
-                <Activity className="w-5 h-5 text-accent shrink-0" />
+                <Activity className="w-5 h-5 text-brand-secondary shrink-0" />
                 <h3 className="text-xl font-bold text-white break-words">
                   Telemetry Provider Sync Health
                 </h3>
@@ -877,13 +877,13 @@ export default function AdminHubPage() {
                   onClick={handleExportRosterCSV}
                   className="px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm font-semibold text-ink-secondary hover:text-white flex items-center gap-2 transition-colors"
                 >
-                  <Download className="w-4 h-4 text-accent shrink-0" />
+                  <Download className="w-4 h-4 text-brand-primary shrink-0" />
                   <span className="break-words">Export CSV</span>
                 </button>
 
                 <button
                   onClick={() => setIsBulkImportOpen(true)}
-                  className="px-4 py-2.5 rounded-xl bg-surface-raised hover:bg-white/10 border border-accent/30 text-accent hover:text-white text-sm font-semibold flex items-center gap-2 transition-colors"
+                  className="px-4 py-2.5 rounded-xl bg-surface-raised hover:bg-white/10 border border-brand-primary/30 text-brand-primary hover:text-white text-sm font-semibold flex items-center gap-2 transition-colors"
                 >
                   <FileSpreadsheet className="w-4 h-4 shrink-0" />
                   <span className="break-words">Bulk CSV Import</span>
@@ -891,7 +891,7 @@ export default function AdminHubPage() {
 
                 <button
                   onClick={() => setIsEnrollModalOpen(true)}
-                  className="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-canvas font-semibold text-sm flex items-center gap-2 transition-colors"
+                  className="px-5 py-2.5 rounded-xl bg-brand-secondary hover:bg-accent-hover text-white font-semibold text-sm flex items-center gap-2 transition-colors"
                 >
                   <UserPlus className="w-4 h-4 shrink-0" />
                   <span className="break-words">Enroll Student</span>
@@ -913,7 +913,7 @@ export default function AdminHubPage() {
                   <span className="text-muted text-xs font-semibold block">
                     Participation ratio
                   </span>
-                  <span className="text-lg font-bold tabular-nums text-accent break-words">
+                  <span className="text-lg font-bold tabular-nums text-brand-primary break-words">
                     {verifiedCount} / {totalEnrolled} ({quorumPercentage}%)
                   </span>
                 </div>
@@ -924,7 +924,7 @@ export default function AdminHubPage() {
                 <div className="w-full h-3 rounded-full bg-surface-raised border border-white/10 overflow-hidden">
                   <div
                     className={`h-full transition-colors duration-500 rounded-full ${
-                      meetsQuorum ? "bg-status-verified" : "bg-accent"
+                      meetsQuorum ? "bg-status-verified" : "bg-brand-primary"
                     }`}
                     style={{ width: `${Math.min(quorumPercentage, 100)}%` }}
                   />
@@ -986,7 +986,7 @@ export default function AdminHubPage() {
                     {isLoadingRoster ? (
                       <tr>
                         <td colSpan={5} className="py-12 text-center text-muted">
-                          <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-2 text-accent" aria-hidden="true" />
+                          <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-2 text-brand-secondary" aria-hidden="true" />
                           <p className="text-sm">Loading authoritative class roster from SQLite...</p>
                         </td>
                       </tr>
@@ -1028,7 +1028,7 @@ export default function AdminHubPage() {
                             <td className="py-4 px-5 min-w-0">
                               <div className="font-bold text-white text-base break-words">{member.name ?? "Unknown student"}</div>
                               <div className="flex flex-wrap items-center gap-x-2 text-[13px] text-muted mt-0.5 min-w-0">
-                                <span className="text-accent font-mono break-words" title={member.rollNo ?? "Unavailable"}>{member.rollNo ?? "Unavailable"}</span>
+                                <span className="text-brand-primary font-mono break-words" title={member.rollNo ?? "Unavailable"}>{member.rollNo ?? "Unavailable"}</span>
                                 <span aria-hidden="true">•</span>
                                 <span className="min-w-0 truncate" title={member.email ?? "Unavailable"}>{member.email ?? "Unavailable"}</span>
                               </div>
@@ -1103,7 +1103,7 @@ export default function AdminHubPage() {
                   Inspect raw platform timestamps, time-boundary evaluations, and log verified adjustments.
                 </p>
               </div>
-              <span className="text-sm text-accent bg-accent/10 px-3 py-1.5 rounded-xl border border-accent/20 w-fit whitespace-nowrap" title="Rule §12: Transparent Student Recourse">
+              <span className="text-sm text-brand-primary bg-brand-primary/10 px-3 py-1.5 rounded-xl border border-brand-primary/20 w-fit whitespace-nowrap" title="Rule §12: Transparent Student Recourse">
                 Rule §12: Transparent Student Recourse
               </span>
             </div>
@@ -1120,7 +1120,7 @@ export default function AdminHubPage() {
                     aria-label={`Inspect dispute from ${dispute.studentName ?? "Unknown student"}`}
                     className={`w-full text-left p-6 rounded-2xl border transition-colors ${
                       selectedDispute?.id === dispute.id
-                        ? "bg-surface-raised border-accent"
+                        ? "bg-surface-raised border-brand-primary"
                         : "bg-surface border-white/[0.08] hover:border-white/20"
                     }`}
                   >
@@ -1152,7 +1152,7 @@ export default function AdminHubPage() {
 
                     <div className="mt-4 pt-3 border-t border-white/[0.06] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-[13px] text-muted min-w-0">
                       <span className="break-words">{dispute.platform ?? "Unavailable"} • {dispute.submittedAt ?? "Unavailable"}</span>
-                      <span className="text-accent font-semibold">Inspect Audit Claim →</span>
+                      <span className="text-brand-secondary font-semibold">Inspect Audit Claim →</span>
                     </div>
                   </button>
                 ))}
@@ -1195,7 +1195,7 @@ export default function AdminHubPage() {
                         </div>
                         <div className="p-3.5 rounded-xl bg-canvas border border-white/[0.06] min-w-0">
                           <span className="text-muted block text-xs font-semibold mb-1">Metric target</span>
-                          <span className="text-accent font-semibold font-mono text-[13px] break-words" title={selectedDispute.metric ?? "Unavailable"}>{selectedDispute.metric ?? "Unavailable"}</span>
+                          <span className="text-brand-secondary font-semibold font-mono text-[13px] break-words" title={selectedDispute.metric ?? "Unavailable"}>{selectedDispute.metric ?? "Unavailable"}</span>
                         </div>
                       </div>
 
@@ -1206,7 +1206,7 @@ export default function AdminHubPage() {
                             href={selectedDispute.evidenceUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-accent hover:underline flex items-center gap-1.5 shrink-0 font-semibold text-sm transition-colors"
+                            className="text-brand-secondary hover:underline flex items-center gap-1.5 shrink-0 font-semibold text-sm transition-colors"
                           >
                             <span>Open URL</span>
                             <ExternalLink className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -1237,7 +1237,7 @@ export default function AdminHubPage() {
                           onChange={(e) => setResolutionNote(e.target.value)}
                           placeholder="e.g. Verified UTC to IST boundary offset under Rule §9.7"
                           aria-describedby="resolution-help"
-                          className="w-full min-w-0 px-4 py-3 bg-canvas border border-white/10 rounded-xl text-base text-white placeholder:text-muted focus:outline-none focus:border-accent"
+                          className="w-full min-w-0 px-4 py-3 bg-canvas border border-white/10 rounded-xl text-base text-white placeholder:text-muted focus:outline-none focus:border-brand-primary"
                         />
                         <p id="resolution-help" className="text-xs text-muted">
                           Stored with the audit log. Empty note uses the default §9.7 justification.
@@ -1287,7 +1287,7 @@ export default function AdminHubPage() {
               <div className="flex flex-wrap items-center gap-3">
                 <button
                   onClick={handleExportAuditLogs}
-                  className="px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm font-semibold text-accent hover:text-white flex items-center gap-2 transition-colors"
+                  className="px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm font-semibold text-brand-primary hover:text-white flex items-center gap-2 transition-colors"
                 >
                   <Download className="w-4 h-4 shrink-0" aria-hidden="true" />
                   <span className="break-words">Export Audit Trail (CSV)</span>
@@ -1338,7 +1338,7 @@ export default function AdminHubPage() {
             <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 sm:p-8 space-y-6 min-w-0">
               <div className="flex flex-col gap-5 min-w-0">
                 <div className="min-w-0">
-                  <div className="inline-flex max-w-full items-center space-x-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-bold mb-2">
+                  <div className="inline-flex max-w-full items-center space-x-2 px-3 py-1 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-xs font-bold mb-2">
                     <Activity className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                     <span className="truncate" title="Phase 5 • End-to-End Operational Lifecycle">Phase 5 • End-to-End Operational Lifecycle</span>
                   </div>
@@ -1368,7 +1368,7 @@ export default function AdminHubPage() {
                   <button
                     onClick={handleRunSimulation}
                     disabled={isSimulating}
-                    className="px-6 py-3 rounded-xl bg-accent hover:bg-accent-hover text-canvas text-sm font-semibold flex items-center gap-2 transition-colors disabled:opacity-50"
+                    className="px-6 py-3 rounded-xl bg-brand-secondary hover:bg-accent-hover text-white text-sm font-semibold flex items-center gap-2 transition-colors disabled:opacity-50"
                   >
                     {isSimulating ? (
                       <>
@@ -1388,23 +1388,23 @@ export default function AdminHubPage() {
               {/* Status Chips */}
               <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-white/[0.06] text-xs text-muted">
                 <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.03] border border-white/[0.06]">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-accent shrink-0" aria-hidden="true" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-brand-primary shrink-0" aria-hidden="true" />
                   <span className="whitespace-nowrap">Rule §3.3 Quorum</span>
                 </span>
                 <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.03] border border-white/[0.06]">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-accent shrink-0" aria-hidden="true" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-brand-primary shrink-0" aria-hidden="true" />
                   <span className="whitespace-nowrap">Rule §9.1 Author Match</span>
                 </span>
                 <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.03] border border-white/[0.06]">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-accent shrink-0" aria-hidden="true" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-brand-primary shrink-0" aria-hidden="true" />
                   <span className="whitespace-nowrap">Rule §9.6 Ties (1, 2, 2, 4)</span>
                 </span>
                 <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.03] border border-white/[0.06]">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-accent shrink-0" aria-hidden="true" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-brand-primary shrink-0" aria-hidden="true" />
                   <span className="whitespace-nowrap">Rule §9.7 3h Freshness</span>
                 </span>
                 <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.03] border border-white/[0.06]">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-accent shrink-0" aria-hidden="true" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-brand-primary shrink-0" aria-hidden="true" />
                   <span className="whitespace-nowrap">Rule §1.2 Zero Fabrication</span>
                 </span>
               </div>
@@ -1413,7 +1413,7 @@ export default function AdminHubPage() {
             {/* Empty State before running */}
             {!simulationResult && !isSimulating && (
               <div className="bg-surface border border-white/[0.08] rounded-2xl p-8 sm:p-10 text-center space-y-4 min-w-0">
-                <div className="w-14 h-14 rounded-2xl bg-accent/10 border border-accent/20 text-accent flex items-center justify-center mx-auto">
+                <div className="w-14 h-14 rounded-2xl bg-brand-primary/10 border border-brand-primary/20 text-brand-primary flex items-center justify-center mx-auto">
                   <Play className="w-6 h-6 fill-current ml-0.5" aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold text-white break-words">No Active Simulation Run</h3>
@@ -1422,7 +1422,7 @@ export default function AdminHubPage() {
                 </p>
                 <button
                   onClick={handleRunSimulation}
-                  className="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-canvas text-sm font-semibold inline-flex items-center gap-2 transition-colors"
+                  className="px-5 py-2.5 rounded-xl bg-brand-secondary hover:bg-accent-hover text-white text-sm font-semibold inline-flex items-center gap-2 transition-colors"
                 >
                   <Sparkles className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                   <span className="break-words">Execute Week {simWeek} Simulation</span>
@@ -1432,8 +1432,8 @@ export default function AdminHubPage() {
 
             {/* Simulation Loading State */}
             {isSimulating && (
-              <div className="bg-surface border border-accent/20 rounded-2xl p-8 sm:p-12 text-center space-y-4 min-w-0">
-                <RefreshCw className="w-10 h-10 text-accent animate-spin mx-auto" aria-hidden="true" />
+              <div className="bg-surface border border-brand-secondary/30 rounded-2xl p-8 sm:p-12 text-center space-y-4 min-w-0">
+                <RefreshCw className="w-10 h-10 text-brand-secondary animate-spin mx-auto" aria-hidden="true" />
                 <h3 className="text-xl font-bold text-white break-words">Executing 7-Day Tournament Simulation...</h3>
                 <p className="text-sm text-muted break-words">
                   Evaluating Section 3.3 Quorum → Syncing Telemetry → Ingesting Disputes → Applying 23:59:59 IST Boundary Cutoff → Generating Recaps
@@ -1445,15 +1445,15 @@ export default function AdminHubPage() {
             {simulationResult && !isSimulating && (
               <div className="space-y-8 min-w-0">
                 {/* Audit Verdict Banner */}
-                <div className="p-6 rounded-2xl bg-accent/10 border border-accent/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-w-0">
+                <div className="p-6 rounded-2xl bg-brand-primary/10 border border-brand-primary/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-w-0">
                   <div className="flex items-start sm:items-center gap-4 min-w-0 flex-1">
-                    <div className="w-12 h-12 rounded-xl bg-accent text-canvas flex items-center justify-center font-bold shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-brand-primary text-white flex items-center justify-center font-bold shrink-0">
                       <Check className="w-6 h-6 stroke-[3]" aria-hidden="true" />
                     </div>
                     <div className="min-w-0">
                       <h3 className="text-lg font-bold text-white flex flex-wrap items-center gap-2">
                         <span className="break-words">Tournament Week {simulationResult.weekNumber ?? "—"} Simulated &amp; Certified</span>
-                        <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-accent/20 text-accent border border-accent/30 whitespace-nowrap">
+                        <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-brand-primary/20 text-brand-primary border border-brand-primary/30 whitespace-nowrap">
                           All Invariants Passed
                         </span>
                       </h3>
@@ -1465,7 +1465,7 @@ export default function AdminHubPage() {
 
                   <Link
                     href="/leaderboard"
-                    className="px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-xs font-semibold text-accent hover:text-white flex items-center gap-2 shrink-0 transition-colors"
+                    className="px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-xs font-semibold text-brand-secondary hover:text-white flex items-center gap-2 shrink-0 transition-colors"
                   >
                     <span className="break-words">View Live Leaderboard</span>
                     <ArrowUpRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
@@ -1475,7 +1475,7 @@ export default function AdminHubPage() {
                 {/* Invariant Verification Table */}
                 <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 sm:p-8 space-y-4 min-w-0">
                   <h3 className="text-lg font-bold text-white flex flex-wrap items-center gap-2">
-                    <Shield className="w-5 h-5 text-accent shrink-0" aria-hidden="true" />
+                    <Shield className="w-5 h-5 text-brand-primary shrink-0" aria-hidden="true" />
                     <span className="break-words">Invariant Rule Compliance Audit</span>
                   </h3>
 
@@ -1496,7 +1496,7 @@ export default function AdminHubPage() {
                             <td className="py-3.5 px-4 text-muted text-[13px] break-words" title={String(a.expected ?? "Unavailable")}>{a.expected ?? "Unavailable"}</td>
                             <td className="py-3.5 px-4 text-white text-[13px] break-words" title={String(a.actual ?? "Unavailable")}>{a.actual ?? "Unavailable"}</td>
                             <td className="py-3.5 px-4 text-right">
-                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-accent border border-emerald-500/20 whitespace-nowrap">
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
                                 <Check className="w-3 h-3 stroke-[2.5]" aria-hidden="true" />
                                 <span>Passed</span>
                               </span>
@@ -1511,7 +1511,7 @@ export default function AdminHubPage() {
                 {/* 6-Step Chronological Stepper */}
                 <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 sm:p-8 space-y-6 min-w-0">
                   <h3 className="text-lg font-bold text-white flex flex-wrap items-center gap-2">
-                    <History className="w-5 h-5 text-accent shrink-0" aria-hidden="true" />
+                    <History className="w-5 h-5 text-brand-primary shrink-0" aria-hidden="true" />
                     <span className="break-words">Chronological 7-Day Simulation Stepper</span>
                   </h3>
 
@@ -1519,11 +1519,11 @@ export default function AdminHubPage() {
                     {simulationResult.steps?.map((st: any) => (
                       <div
                         key={st.step ?? st.title ?? `step-${st.timestamp}`}
-                        className="p-5 rounded-xl bg-surface-raised border border-white/[0.06] hover:border-accent/30 transition-colors space-y-3 flex flex-col justify-between min-w-0"
+                        className="p-5 rounded-xl bg-surface-raised border border-white/[0.06] hover:border-brand-primary/30 transition-colors space-y-3 flex flex-col justify-between min-w-0"
                       >
                         <div className="space-y-2 min-w-0">
                           <div className="flex flex-wrap items-center justify-between gap-2">
-                            <span className="text-xs font-bold text-accent px-2 py-0.5 rounded bg-accent/10 border border-accent/20 whitespace-nowrap">
+                            <span className="text-xs font-bold text-brand-primary px-2 py-0.5 rounded bg-brand-primary/10 border border-brand-primary/20 whitespace-nowrap">
                               STEP {st.step ?? "—"}
                             </span>
                             <span className="text-xs text-muted flex items-center gap-1 whitespace-nowrap">
@@ -1554,7 +1554,7 @@ export default function AdminHubPage() {
                   <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 sm:p-8 space-y-4 min-w-0">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <h3 className="text-lg font-bold text-white flex flex-wrap items-center gap-2">
-                        <Award className="w-5 h-5 text-accent shrink-0" aria-hidden="true" />
+                        <Award className="w-5 h-5 text-brand-secondary shrink-0" aria-hidden="true" />
                         <span className="break-words">Finalized GitHub Standings (§9.6)</span>
                       </h3>
                       <span className="text-xs text-muted tabular-nums whitespace-nowrap">
@@ -1583,7 +1583,7 @@ export default function AdminHubPage() {
                           <div className="flex items-center gap-3 shrink-0">
                             <span className="text-white text-[13px] font-bold tabular-nums" title={String(s.displayValue ?? "Unavailable")}>{s.displayValue ?? "Unavailable"}</span>
                             <span className={`text-xs px-2 py-0.5 rounded-full whitespace-nowrap ${
-                              s.status === "Finalized" ? "bg-accent/10 text-accent border border-accent/20" : "bg-amber-500/10 text-amber-300 border border-transparent"
+                              s.status === "Finalized" ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-amber-500/10 text-amber-300 border border-transparent"
                             }`}>
                               {s.status ?? "Pending"}
                             </span>
@@ -1598,16 +1598,16 @@ export default function AdminHubPage() {
                     <div className="space-y-4 min-w-0">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <h3 className="text-lg font-bold text-white flex flex-wrap items-center gap-2">
-                          <Sparkles className="w-5 h-5 text-accent shrink-0" aria-hidden="true" />
+                          <Sparkles className="w-5 h-5 text-brand-primary shrink-0" aria-hidden="true" />
                           <span className="break-words">Grounded AI Natural Language Recap (§10.2)</span>
                         </h3>
-                        <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-accent/20 text-accent border border-accent/30 whitespace-nowrap">
+                        <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-brand-primary/20 text-brand-primary border border-brand-primary/30 whitespace-nowrap">
                           Zero Fabrication
                         </span>
                       </div>
 
                       <div className="p-4 rounded-xl bg-surface-raised border border-white/[0.06] space-y-2 min-w-0">
-                        <span className="text-xs font-bold text-accent block">
+                        <span className="text-xs font-bold text-brand-primary block">
                           Executive Analyst Summary
                         </span>
                         <p className="text-sm text-ink-secondary leading-relaxed break-words">
@@ -1622,7 +1622,7 @@ export default function AdminHubPage() {
                         <ul className="space-y-1.5 text-[13px] text-muted">
                           {simulationResult.recaps?.deterministic?.highlights?.map((h: string, idx: number) => (
                             <li key={idx} className="flex items-start gap-2">
-                              <span className="text-accent shrink-0" aria-hidden="true">•</span>
+                              <span className="text-brand-primary shrink-0" aria-hidden="true">•</span>
                               <span className="text-white break-words">{h ?? "Unavailable"}</span>
                             </li>
                           ))}
@@ -1632,7 +1632,7 @@ export default function AdminHubPage() {
 
                     <div className="pt-4 border-t border-white/[0.06] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-xs text-muted min-w-0">
                       <span className="break-words tabular-nums">Roster Denominator: {simulationResult.recaps?.deterministic?.cohort?.totalEnrolled ?? "Unavailable"}</span>
-                      <span className="text-accent font-bold break-words">
+                      <span className="text-brand-secondary font-bold break-words">
                         {simulationResult.recaps?.deterministic?.cohort?.quorumLabel ?? "Unavailable"}
                       </span>
                     </div>
@@ -1667,7 +1667,7 @@ export default function AdminHubPage() {
                 <div className="flex items-start justify-between gap-3 border-b border-white/[0.08] pb-4">
                   <div className="min-w-0">
                     <h3 id="enroll-modal-title" className="text-xl font-bold text-white flex flex-wrap items-center gap-2">
-                      <UserPlus className="w-5 h-5 text-accent shrink-0" aria-hidden="true" />
+                      <UserPlus className="w-5 h-5 text-brand-primary shrink-0" aria-hidden="true" />
                       <span className="break-words">Enroll Classmate</span>
                     </h3>
                     <p className="text-xs text-muted mt-1">
@@ -1687,7 +1687,7 @@ export default function AdminHubPage() {
                 <form onSubmit={handleEnrollSubmit} className="space-y-4" noValidate={false}>
                   <div className="space-y-1.5">
                     <label htmlFor="enroll-rollno" className="text-xs font-semibold text-muted flex items-center gap-1">
-                      <Hash className="w-3.5 h-3.5 text-accent shrink-0" aria-hidden="true" />
+                      <Hash className="w-3.5 h-3.5 text-brand-primary shrink-0" aria-hidden="true" />
                       <span>Roll Number *</span>
                     </label>
                     <input
@@ -1699,13 +1699,13 @@ export default function AdminHubPage() {
                       placeholder="e.g. 22CS101"
                       value={enrollForm.rollNo}
                       onChange={(e) => setEnrollForm(prev => ({ ...prev, rollNo: e.target.value }))}
-                      className="w-full bg-surface-raised border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-muted focus:outline-none focus:border-accent font-mono"
+                      className="w-full bg-surface-raised border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-muted focus:outline-none focus:border-brand-primary font-mono"
                     />
                   </div>
 
                   <div className="space-y-1.5">
                     <label htmlFor="enroll-name" className="text-xs font-semibold text-muted flex items-center gap-1">
-                      <Users className="w-3.5 h-3.5 text-accent shrink-0" aria-hidden="true" />
+                      <Users className="w-3.5 h-3.5 text-brand-primary shrink-0" aria-hidden="true" />
                       <span>Full Student Name *</span>
                     </label>
                     <input
@@ -1716,13 +1716,13 @@ export default function AdminHubPage() {
                       placeholder="e.g. Anandha Krishnan"
                       value={enrollForm.name}
                       onChange={(e) => setEnrollForm(prev => ({ ...prev, name: e.target.value }))}
-                      className="w-full bg-surface-raised border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-muted focus:outline-none focus:border-accent"
+                      className="w-full bg-surface-raised border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-muted focus:outline-none focus:border-brand-primary"
                     />
                   </div>
 
                   <div className="space-y-1.5">
                     <label htmlFor="enroll-email" className="text-xs font-semibold text-muted flex items-center gap-1">
-                      <Mail className="w-3.5 h-3.5 text-accent shrink-0" aria-hidden="true" />
+                      <Mail className="w-3.5 h-3.5 text-brand-primary shrink-0" aria-hidden="true" />
                       <span>College Email Address *</span>
                     </label>
                     <input
@@ -1733,7 +1733,7 @@ export default function AdminHubPage() {
                       placeholder="e.g. anand.k@college.edu"
                       value={enrollForm.email}
                       onChange={(e) => setEnrollForm(prev => ({ ...prev, email: e.target.value }))}
-                      className="w-full bg-surface-raised border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-muted focus:outline-none focus:border-accent font-mono"
+                      className="w-full bg-surface-raised border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-muted focus:outline-none focus:border-brand-primary font-mono"
                     />
                   </div>
 
@@ -1746,7 +1746,7 @@ export default function AdminHubPage() {
                       type="text"
                       value={enrollForm.classSection}
                       onChange={(e) => setEnrollForm(prev => ({ ...prev, classSection: e.target.value }))}
-                      className="w-full bg-surface-raised border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-accent font-mono"
+                      className="w-full bg-surface-raised border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-primary font-mono"
                     />
                   </div>
 
@@ -1767,7 +1767,7 @@ export default function AdminHubPage() {
                           placeholder="username"
                           value={enrollForm.handleGithub}
                           onChange={(e) => setEnrollForm(prev => ({ ...prev, handleGithub: e.target.value }))}
-                          className="w-full bg-surface-raised border border-white/10 rounded-xl px-3 py-2 text-[13px] text-white placeholder:text-muted focus:outline-none focus:border-accent font-mono"
+                          className="w-full bg-surface-raised border border-white/10 rounded-xl px-3 py-2 text-[13px] text-white placeholder:text-muted focus:outline-none focus:border-brand-primary font-mono"
                         />
                       </div>
 
@@ -1782,7 +1782,7 @@ export default function AdminHubPage() {
                           placeholder="username"
                           value={enrollForm.handleLeetcode}
                           onChange={(e) => setEnrollForm(prev => ({ ...prev, handleLeetcode: e.target.value }))}
-                          className="w-full bg-surface-raised border border-white/10 rounded-xl px-3 py-2 text-[13px] text-white placeholder:text-muted focus:outline-none focus:border-accent font-mono"
+                          className="w-full bg-surface-raised border border-white/10 rounded-xl px-3 py-2 text-[13px] text-white placeholder:text-muted focus:outline-none focus:border-brand-primary font-mono"
                         />
                       </div>
                     </div>
@@ -1798,13 +1798,13 @@ export default function AdminHubPage() {
                         placeholder="username"
                         value={enrollForm.handleHackerrank}
                         onChange={(e) => setEnrollForm(prev => ({ ...prev, handleHackerrank: e.target.value }))}
-                        className="w-full bg-surface-raised border border-white/10 rounded-xl px-3 py-2 text-[13px] text-white placeholder:text-muted focus:outline-none focus:border-accent font-mono"
+                        className="w-full bg-surface-raised border border-white/10 rounded-xl px-3 py-2 text-[13px] text-white placeholder:text-muted focus:outline-none focus:border-brand-primary font-mono"
                       />
                     </div>
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs text-muted flex items-start gap-2">
-                    <Info className="w-4 h-4 text-accent shrink-0 mt-0.5" aria-hidden="true" />
+                    <Info className="w-4 h-4 text-brand-secondary shrink-0 mt-0.5" aria-hidden="true" />
                     <span className="break-words">
                       Zero Fabrication Principle (§1.2): Enrolling establishes the official cohort member. Telemetry metrics will only be populated after verified API observations.
                     </span>
@@ -1821,7 +1821,7 @@ export default function AdminHubPage() {
                     <button
                       type="submit"
                       disabled={isSubmittingEnrollment}
-                      className="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-canvas text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-50"
+                      className="px-5 py-2.5 rounded-xl bg-brand-secondary hover:bg-accent-hover text-white text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-50"
                     >
                       {isSubmittingEnrollment ? (
                         <>
@@ -1862,7 +1862,7 @@ export default function AdminHubPage() {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 min-w-0">
           <span className="break-words">TWM 3.0 Platform • Administrator Governance &amp; Audit Registry</span>
           <span className="flex flex-wrap items-center gap-3">
-            <Link href="/privacy" className="text-accent hover:text-white transition-colors underline-offset-2 hover:underline">
+            <Link href="/privacy" className="text-brand-secondary hover:text-white transition-colors underline-offset-2 hover:underline">
               Privacy &amp; data governance policy
             </Link>
             <span className="whitespace-nowrap">Rule §3.3 &amp; §9.7 Compliance Enforced</span>

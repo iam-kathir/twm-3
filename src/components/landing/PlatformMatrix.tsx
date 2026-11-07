@@ -32,7 +32,7 @@ export function PlatformMatrix() {
       iconColor: "text-provider-leetcode-brand",
       status: "SUPPORTED_SNAPSHOT",
       statusLabel: "Snapshot",
-      statusClass: "bg-accent/10 text-accent border-accent/20",
+      statusClass: "bg-brand-primary/10 text-brand-primary border-brand-primary/20",
       spotlightColor: "rgba(245, 158, 11, 0.16)",
       description: "HMAC profile bio challenge verification with cumulative problem-solving snapshots.",
       fields: [
@@ -49,7 +49,7 @@ export function PlatformMatrix() {
       status: "LIMITED_CAPABILITY",
       statusLabel: "Limited",
       statusClass: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-      spotlightColor: "rgba(16, 185, 129, 0.16)",
+      spotlightColor: "rgba(46, 200, 102, 0.16)",
       description: "Community profile badges and domain star ratings with honest capability gating.",
       fields: [
         { name: "Domain Badges & Stars", state: "Display Only", period: "Cumulative" },
@@ -64,7 +64,7 @@ export function PlatformMatrix() {
     <section id="platforms" className="py-20 md:py-32 border-t border-white/[0.08] bg-canvas relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent/10 text-accent border border-accent/20 text-xs font-mono font-medium mb-3 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-primary/10 text-brand-primary border border-brand-primary/20 text-xs font-mono font-medium mb-3 shadow-sm">
             <Layers className="h-4 w-4" />
             <span>Multi-Provider Invariants (§5.1)</span>
           </div>

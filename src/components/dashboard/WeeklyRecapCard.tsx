@@ -101,7 +101,7 @@ export function WeeklyRecapCard() {
           onClick={fetchRecap}
           className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-surface-raised px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/10"
         >
-          <RefreshCw className="h-4 w-4 text-accent" aria-hidden="true" /> Retry
+          <RefreshCw className="h-4 w-4 text-brand-secondary" aria-hidden="true" /> Retry
         </button>
       </section>
     );
@@ -115,12 +115,12 @@ export function WeeklyRecapCard() {
       className="rounded-2xl border border-white/[0.08] bg-surface p-6 sm:p-7 space-y-6 shadow-xl relative overflow-hidden"
     >
       {/* Background Subtle Ambient Glow */}
-      <div className="absolute top-0 right-0 w-80 h-80 bg-accent/5 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+      <div className="absolute top-0 right-0 w-80 h-80 bg-brand-primary/5 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <Sparkles className="h-5 w-5 text-accent shrink-0" aria-hidden="true" />
+          <Sparkles className="h-5 w-5 text-brand-primary shrink-0" aria-hidden="true" />
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-lg sm:text-xl font-bold text-white font-sans">Weekly Performance Recap</h3>
@@ -145,7 +145,7 @@ export function WeeklyRecapCard() {
               onClick={() => handleTabChange("deterministic")}
               className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[13px] font-mono transition-colors ${
                 activeTab === "deterministic"
-                  ? "bg-accent text-canvas font-bold shadow-sm"
+                  ? "bg-brand-secondary text-white font-bold shadow-sm"
                   : "text-muted hover:text-white"
               }`}
             >
@@ -158,7 +158,7 @@ export function WeeklyRecapCard() {
               onClick={() => handleTabChange("ai")}
               className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[13px] font-mono transition-colors ${
                 activeTab === "ai"
-                  ? "bg-accent text-canvas font-bold shadow-sm"
+                  ? "bg-brand-secondary text-white font-bold shadow-sm"
                   : "text-muted hover:text-white"
               }`}
             >
@@ -242,7 +242,7 @@ export function WeeklyRecapCard() {
                   <span className="block text-[13px] font-medium text-muted">Consistency streak</span>
                   <div className="flex items-baseline justify-between gap-2">
                     <span className="text-2xl font-black font-mono text-white flex items-center gap-1.5 tabular-nums">
-                      <Flame className="h-5 w-5 text-accent" aria-hidden="true" />
+                      <Flame className="h-5 w-5 text-brand-secondary" aria-hidden="true" />
                       <span>{recap.student.consistencyStreakWeeks} weeks</span>
                     </span>
                     <span className="text-[12px] font-mono text-muted font-bold">≥4 days / cycle</span>
@@ -279,15 +279,15 @@ export function WeeklyRecapCard() {
           >
             {aiLoading ? (
               <div className="p-8 rounded-xl bg-surface-raised border border-white/[0.06] flex flex-col items-center justify-center space-y-3" aria-busy="true">
-                <RefreshCw className="h-6 w-6 text-accent animate-spin" aria-hidden="true" />
+                <RefreshCw className="h-6 w-6 text-brand-secondary animate-spin" aria-hidden="true" />
                 <span className="text-[13px] font-mono text-muted">Summarizing verified telemetry facts…</span>
               </div>
             ) : aiRecap ? (
               <div className="space-y-5">
                 {/* Executive Summary Callout */}
-                <div className="p-4 sm:p-5 rounded-xl bg-surface-raised border border-accent/20 space-y-2">
+                <div className="p-4 sm:p-5 rounded-xl bg-surface-raised border border-brand-primary/30 space-y-2">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="text-[13px] font-bold text-accent flex items-center gap-1.5">
+                    <span className="text-[13px] font-bold text-brand-primary flex items-center gap-1.5">
                       <Bot className="h-3.5 w-3.5" aria-hidden="true" />
                       <span>Grounded analyst synthesis</span>
                     </span>
@@ -344,7 +344,7 @@ export function WeeklyRecapCard() {
                         <div key={i} className="p-3.5 rounded-xl bg-surface-raised border border-white/[0.06] space-y-1.5">
                           <div className="flex items-center justify-between gap-2">
                             <span className="text-[13px] font-mono font-bold text-white">{action.title}</span>
-                            <ArrowRight className="h-3.5 w-3.5 text-accent shrink-0" aria-hidden="true" />
+                            <ArrowRight className="h-3.5 w-3.5 text-brand-secondary shrink-0" aria-hidden="true" />
                           </div>
                           <p className="text-[13px] text-ink-secondary leading-snug">
                             {action.description}
