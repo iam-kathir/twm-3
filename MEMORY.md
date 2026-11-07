@@ -121,6 +121,31 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-11-07 — Antigravity: Official HackerRank Logo Deployment Across All Surfaces (BRAND-4)
+- **User Directive:** "use this for the hacker rank logo replacing the previous one and apply in every where it is used at a appropriate size" (provided official HackerRank mark `media_1794059936864_ed85e95f.png`).
+- **Assets Created:**
+  - `public/hackerrank-logo.png`: Tight-cropped 766×519 transparent PNG preserving original aspect ratio.
+  - `public/hackerrank-icon.png`: Centered 512×512 1:1 square transparent PNG icon for balanced display in square containers.
+  - `src/components/ui/HackerRankIcon.tsx`: ForwardRef component with `variant` ("square" | "wide"), responsive Tailwind sizing, `inline-block`, `shrink-0`, and drop-in `HackerRank` / `Award` alias exports.
+- **Surfaces Replaced (12 Sites):**
+  1. `src/components/landing/HeroSection.tsx`: Right orbital platform card (`h-6 w-auto`, variant="wide").
+  2. `src/components/landing/MotionShowcase.tsx`: Live telemetry tab & domain badge card (`h-10 w-10 sm:h-12 sm:w-12`).
+  3. `src/components/landing/PlatformMatrix.tsx`: Supported platform matrix cards (`icon: HackerRankIcon`).
+  4. `src/components/landing/CockpitPreview.tsx`: Cockpit provider telemetry preview card (`h-5 w-5`).
+  5. `src/components/landing/OrbitingTelemetryShowcase.tsx`: Outer orbital circle badge (`size-5`).
+  6. `src/app/dashboard/page.tsx`: Student telemetry breakdown panel (`h-5 w-5`).
+  7. `src/app/leaderboard/page.tsx`: Platform filter toggle button (`h-4 w-4`).
+  8. `src/app/onboarding/page.tsx`: Step 3 proof of control account card (`h-6 w-6`).
+  9. `src/app/settings/page.tsx`: Connected adapters card (`h-7 w-7`).
+  10. `src/app/search/page.tsx`: Classmate developer search card telemetry footer (`w-3.5 h-3.5`).
+  11. `src/app/admin/page.tsx`: Roster table student badge (`w-3.5 h-3.5`) & enrollment modal input label.
+  12. `src/app/privacy/page.tsx`: Telemetry minimization & non-surveillance policy section (`w-4 h-4`).
+- **Verification Gates Clean:**
+  - `npx tsc --noEmit`: 0 errors.
+  - `npm run lint`: `✔ No ESLint warnings or errors`.
+  - `npm test`: **20/20 test suites passed**.
+  - All 12 sites verified.
+
 ### 2026-11-07 — Antigravity: Official 3D Glossy LeetCode Emblem Deployment Across All Surfaces (BRAND-3)
 - **User Directive:** "use this for the leet code logo replacing the previous one and apply in every where it is used at a appropriate size" (provided high-resolution 3D emblem `media_1794059036815_af9c6642.png`).
 - **Assets Created:**

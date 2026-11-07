@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Github } from "@/components/ui/GithubIcon";
 import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
+import { HackerRankIcon } from "@/components/ui/HackerRankIcon";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -185,10 +186,7 @@ export function HeroSection() {
               transition={{ type: "spring", stiffness: 350, damping: 20 }}
               className="absolute top-1/2 -translate-y-1/2 right-1 sm:right-4 p-3 sm:p-3.5 rounded-2xl bg-[#0c1220]/95 border border-emerald-500/25 shadow-[0_8px_24px_rgba(0,0,0,0.6)] flex items-center justify-center cursor-pointer"
             >
-              <div className="flex items-center justify-center font-black text-white font-mono text-lg leading-none">
-                <span>H</span>
-                <span className="w-2 h-4 bg-emerald-400 rounded-xs ml-1 inline-block" />
-              </div>
+              <HackerRankIcon className="h-6 w-auto" variant="wide" />
             </motion.div>
           </motion.div>
         </motion.div>

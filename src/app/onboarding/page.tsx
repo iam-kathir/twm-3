@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle2,
   ShieldCheck,
-  Award,
   ArrowRight,
   Copy,
   Check,
@@ -24,6 +23,7 @@ import {
 } from "lucide-react";
 import { Github } from "@/components/ui/GithubIcon";
 import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
+import { HackerRankIcon as Award } from "@/components/ui/HackerRankIcon";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 
 interface StudentSessionData {

@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 import { Github } from "@/components/ui/GithubIcon";
 import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
+import { HackerRankIcon } from "@/components/ui/HackerRankIcon";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useApp } from "@/context/AppContext";
 import { TelemetryDispute } from "@/types/saas";
@@ -1053,7 +1054,7 @@ export default function AdminHubPage() {
                                 )}
                                 {member.handleHackerrank && (
                                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 font-mono max-w-full" title={member.handleHackerrank}>
-                                    <Award className="w-3 h-3 text-emerald-400 shrink-0" aria-hidden="true" />
+                                    <HackerRankIcon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                                     <span className="truncate">{member.handleHackerrank}</span>
                                   </span>
                                 )}
@@ -1788,7 +1789,7 @@ export default function AdminHubPage() {
 
                     <div className="space-y-1">
                       <label htmlFor="enroll-hackerrank" className="text-xs text-muted flex items-center gap-1">
-                        <Award className="w-3 h-3 text-emerald-400 shrink-0" aria-hidden="true" />
+                        <HackerRankIcon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                         <span>HackerRank</span>
                       </label>
                       <input

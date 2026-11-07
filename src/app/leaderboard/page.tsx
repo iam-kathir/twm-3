@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Trophy, 
-  Award, 
   Info, 
   ShieldCheck, 
   AlertCircle, 
@@ -22,6 +21,7 @@ import {
 } from "lucide-react";
 import { Github } from "@/components/ui/GithubIcon";
 import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
+import { HackerRankIcon as Award } from "@/components/ui/HackerRankIcon";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useApp } from "@/context/AppContext";
 import { computeCompetitionRanks, RawParticipant, RankedParticipant } from "@/lib/leaderboard";

@@ -3,7 +3,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-  Award,
   GitCommit,
   Trophy,
   ShieldCheck,
@@ -16,6 +15,7 @@ import {
 } from "lucide-react";
 import { Github } from "@/components/ui/GithubIcon";
 import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
+import { HackerRankIcon as Award } from "@/components/ui/HackerRankIcon";
 import { OrbitingCircles } from "@/components/ui/OrbitingCircles";
 import { Meteors } from "@/components/ui/Meteors";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";

@@ -31,3 +31,4 @@ LeetCodeIcon.displayName = "LeetCodeIcon";
 
 export { LeetCodeIcon as LeetCode, LeetCodeIcon as Code2 };
 export default LeetCodeIcon;
+

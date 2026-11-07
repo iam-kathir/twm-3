@@ -15,12 +15,12 @@ import {
   ArrowLeft,
   Download,
   ExternalLink,
-  Award,
   Scale,
   Users
 } from "lucide-react";
 import { Github } from "@/components/ui/GithubIcon";
 import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
+import { HackerRankIcon as Award } from "@/components/ui/HackerRankIcon";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { Footer } from "@/components/landing/Footer";
 

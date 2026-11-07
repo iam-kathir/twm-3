@@ -2,9 +2,10 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Award, CheckCircle2, AlertTriangle, Layers } from "lucide-react";
+import { CheckCircle2, AlertTriangle, Layers } from "lucide-react";
 import { Github } from "@/components/ui/GithubIcon";
 import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
+import { HackerRankIcon as Award } from "@/components/ui/HackerRankIcon";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
 
 export function PlatformMatrix() {

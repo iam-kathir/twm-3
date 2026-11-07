@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Award, 
   Activity, 
   Clock, 
   ShieldCheck, 
@@ -14,6 +13,7 @@ import {
 } from "lucide-react";
 import { Github } from "@/components/ui/GithubIcon";
 import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
+import { HackerRankIcon as Award } from "@/components/ui/HackerRankIcon";
 
 export function CockpitPreview() {
   const [recapMode, setRecapMode] = useState<"ai" | "deterministic">("ai");
