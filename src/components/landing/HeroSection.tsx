@@ -147,13 +147,13 @@ export function HeroSection() {
             <motion.div
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="relative z-10 w-28 h-28 sm:w-34 sm:h-34 rounded-3xl bg-gradient-to-b from-[#111933] to-[#080d1c] border border-sky-400/50 shadow-[0_0_55px_rgba(56,189,248,0.35)] flex items-center justify-center p-4 cursor-pointer"
+              className="relative z-10 w-28 h-28 sm:w-34 sm:h-34 rounded-3xl bg-gradient-to-b from-[#111933] to-[#080d1c] border border-sky-400/50 shadow-[0_0_55px_rgba(56,189,248,0.35)] flex items-center justify-center p-3 cursor-pointer"
             >
               <div className="relative w-full h-full flex items-center justify-center">
                 <Image
                   src="/icon.svg"
                   alt="TWM Platform Emblem"
-                  width={84}
+                  width={104}
                   height={40}
                   priority
                   className="object-contain drop-shadow-[0_0_18px_rgba(56,189,248,0.6)]"

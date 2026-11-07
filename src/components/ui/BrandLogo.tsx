@@ -27,21 +27,21 @@ export function BrandLogo({
   const iconSizes = {
     sm: 30,
     md: 38,
-    lg: 46,
-    xl: 54,
+    lg: 48,
+    xl: 56,
   };
 
   const px = iconSizes[size];
 
   if (variant === "horizontal") {
     const horizontalWidths = {
-      sm: 130,
-      md: 165,
-      lg: 200,
-      xl: 240,
+      sm: 135,
+      md: 175,
+      lg: 215,
+      xl: 255,
     };
     const w = horizontalWidths[size];
-    const h = Math.max(22, Math.round((w * 100) / 652));
+    const h = Math.max(24, Math.round((w * 200) / 975));
 
     const logoContent = (
       <motion.div
@@ -56,7 +56,7 @@ export function BrandLogo({
             alt="TWM — Track · Win · Maintain"
             width={w}
             height={h}
-            className="h-auto max-w-full transition-[filter] duration-200 group-hover:brightness-110 object-contain"
+            className="h-auto max-w-full transition-[filter] duration-200 group-hover:brightness-110 object-contain drop-shadow-[0_2px_12px_rgba(56,189,248,0.2)]"
             priority
           />
         </div>
@@ -88,15 +88,15 @@ export function BrandLogo({
       className={`inline-flex items-center gap-3 group select-none cursor-pointer ${className}`}
     >
       <div
-        className="relative rounded-xl overflow-hidden border border-white/10 bg-surface-elevated flex items-center justify-center transition-colors duration-300 group-hover:border-sky-500/40 p-1"
-        style={{ width: px, height: px }}
+        className="relative rounded-xl overflow-hidden border border-white/10 bg-surface-elevated flex items-center justify-center transition-colors duration-300 group-hover:border-sky-500/40 p-1.5 shadow-sm"
+        style={{ width: Math.round(px * 1.3), height: px }}
       >
         <Image
           src="/icon.svg"
           alt="TWM Platform Icon"
-          width={Math.round(px * 0.88)}
-          height={Math.round((px * 0.88 * 176) / 376)}
-          className="transition-transform duration-300 group-hover:scale-110 object-contain"
+          width={Math.round(px * 1.2)}
+          height={Math.round((px * 1.2 * 391) / 1018)}
+          className="transition-transform duration-300 group-hover:scale-105 object-contain drop-shadow-[0_0_10px_rgba(56,189,248,0.35)]"
           priority
         />
       </div>
@@ -117,7 +117,7 @@ export function BrandLogo({
           </div>
 
           {showSubtitle && (
-            <span className="text-xs text-muted leading-tight font-medium">
+            <span className="text-xs text-muted leading-tight font-medium font-sans">
               Track · Win · Maintain
             </span>
           )}

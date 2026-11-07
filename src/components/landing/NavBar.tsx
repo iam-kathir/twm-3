@@ -27,13 +27,13 @@ export function NavBar() {
       <div className="h-18 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-3.5">
         {/* Left: Stylized TWM Logo + Brand */}
         <Link href="/" className="inline-flex items-center gap-3.5 group shrink-0">
-          <div className="relative h-7 w-auto flex items-center justify-center">
+          <div className="relative h-8 w-auto flex items-center justify-center">
             <Image
               src="/icon.svg"
               alt="TWM Logo"
-              width={56}
-              height={26}
-              className="h-7 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+              width={82}
+              height={32}
+              className="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105 drop-shadow-[0_2px_12px_rgba(56,189,248,0.35)]"
               priority
             />
           </div>
