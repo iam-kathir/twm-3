@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   User,
-  Code2,
   Award,
   Shield,
   FileDown,
@@ -21,6 +20,7 @@ import {
   Trash2
 } from "lucide-react";
 import { Github } from "@/components/ui/GithubIcon";
+import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useApp } from "@/context/AppContext";
 

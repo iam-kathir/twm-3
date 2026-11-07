@@ -9,7 +9,6 @@ import {
   Tag, 
   CheckCircle2, 
   AlertCircle, 
-  Code2, 
   ExternalLink,
   ShieldCheck,
   Sparkles,
@@ -22,6 +21,7 @@ import {
   RefreshCw
 } from "lucide-react";
 import { Github } from "@/components/ui/GithubIcon";
+import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useApp } from "@/context/AppContext";
 import type { SearchableDeveloper, EvidenceLevel } from "@/lib/search";

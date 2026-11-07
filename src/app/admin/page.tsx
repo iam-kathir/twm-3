@@ -23,7 +23,6 @@ import {
   ExternalLink,
   UserPlus,
   Plus,
-  Code2,
   Award,
   Mail,
   Hash,
@@ -31,6 +30,7 @@ import {
   Sparkles
 } from "lucide-react";
 import { Github } from "@/components/ui/GithubIcon";
+import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useApp } from "@/context/AppContext";
 import { TelemetryDispute } from "@/types/saas";

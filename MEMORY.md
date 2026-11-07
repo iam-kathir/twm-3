@@ -121,6 +121,30 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-11-07 — Antigravity: Official 3D Glossy LeetCode Emblem Deployment Across All Surfaces (BRAND-3)
+- **User Directive:** "use this for the leet code logo replacing the previous one and apply in every where it is used at a appropriate size" (provided high-resolution 3D emblem `media_1794059036815_af9c6642.png`).
+- **Assets Created:**
+  - `public/leetcode-3d.png`: Tight-cropped 512×512 transparent PNG master with the 3D white chevron loop, glossy orange interior arms, and horizontal silver pill.
+  - `src/components/ui/LeetCodeIcon.tsx`: ForwardRef component with `inline-block`, `shrink-0`, responsive Tailwind sizing support, and drop-in `LeetCode` and `Code2` alias exports.
+- **Surfaces Replaced (12 Sites):**
+  1. `src/components/landing/HeroSection.tsx`: Left orbital platform card (`h-6 w-6`).
+  2. `src/components/landing/MotionShowcase.tsx`: Live telemetry demo tab (`icon: LeetCodeIcon`).
+  3. `src/components/landing/PlatformMatrix.tsx`: Supported platform matrix cards (`icon: LeetCodeIcon`).
+  4. `src/components/landing/CockpitPreview.tsx`: Cockpit provider telemetry preview (`h-5 w-5`).
+  5. `src/components/landing/OrbitingTelemetryShowcase.tsx`: Inner orbital ring badge (`size-5`).
+  6. `src/app/dashboard/page.tsx`: Student telemetry breakdown panel (`h-5 w-5 text-provider-leetcode-brand`).
+  7. `src/app/leaderboard/page.tsx`: Platform filter toggle button (`h-4 w-4`).
+  8. `src/app/onboarding/page.tsx`: Step 3 proof of control account card (`h-6 w-6 text-provider-leetcode-brand`).
+  9. `src/app/settings/page.tsx`: Connected adapters card (`h-7 w-7`).
+  10. `src/app/search/page.tsx`: Developer search telemetry card footer (`w-4 h-4 text-provider-leetcode-brand`).
+  11. `src/app/admin/page.tsx`: Roster table student badge (`w-3 h-3`) & enrollment modal input label.
+  12. `src/app/privacy/page.tsx`: Telemetry minimization policy section (`w-4 h-4 text-provider-leetcode-brand`).
+- **Verification Gates Clean:**
+  - `npx tsc --noEmit`: 0 errors.
+  - `npm run lint`: `✔ No ESLint warnings or errors`.
+  - `npm test`: **20/20 test suites passed**.
+  - All 12 sites verified.
+
 ### 2026-11-07 — opencode: Theme Control Rectification & Navbar Rebalance (FE-9)
 
 - **Finding:** dark-only is intentional and enforced — `layout.tsx` strips `twm-theme` from localStorage, adds `.dark` and sets `data-theme="dark"`; `globals.css` sets `color-scheme: dark`; there is no theme architecture at all (`next-themes`, `ThemeProvider`, `useTheme`, `prefers-color-scheme` = 0 hits). The moon control in `NavBar.tsx` was therefore a dead control: first a `<button aria-label="Toggle theme (dark mode)">` with no `onClick`, then (commit `86bf930`) a decorative `<div title="Dark theme active">`. Both implied a theme switch the app cannot perform.

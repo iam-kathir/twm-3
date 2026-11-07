@@ -2,8 +2,9 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Code2, Award, CheckCircle2, AlertTriangle, Layers } from "lucide-react";
+import { Award, CheckCircle2, AlertTriangle, Layers } from "lucide-react";
 import { Github } from "@/components/ui/GithubIcon";
+import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
 
 export function PlatformMatrix() {

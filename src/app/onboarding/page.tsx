@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle2,
   ShieldCheck,
-  Code2,
   Award,
   ArrowRight,
   Copy,
@@ -24,6 +23,7 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import { Github } from "@/components/ui/GithubIcon";
+import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 
 interface StudentSessionData {

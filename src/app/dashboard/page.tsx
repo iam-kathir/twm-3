@@ -3,7 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import {
-  Code2,
   Award,
   ShieldCheck,
   CheckCircle2,
@@ -13,6 +12,7 @@ import {
   Download,
 } from "lucide-react";
 import { Github } from "@/components/ui/GithubIcon";
+import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useApp } from "@/context/AppContext";
 import { WeeklyRecapCard } from "@/components/dashboard/WeeklyRecapCard";

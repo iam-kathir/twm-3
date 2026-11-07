@@ -10,9 +10,9 @@ import {
   Trophy,
   ShieldCheck,
   BarChart2,
-  Code2,
 } from "lucide-react";
 import { Github } from "@/components/ui/GithubIcon";
+import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
 
 const containerVariants = {
   hidden: { opacity: 0 },

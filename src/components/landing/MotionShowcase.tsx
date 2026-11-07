@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Code2, Award, Clock, Sparkles, CheckCircle2, ShieldCheck, Zap, Check } from "lucide-react";
+import { Award, Clock, Sparkles, CheckCircle2, ShieldCheck, Zap, Check } from "lucide-react";
 import { Github } from "@/components/ui/GithubIcon";
+import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
 
 export function MotionShowcase() {
   const [activeTab, setActiveTab] = useState<"github" | "leetcode" | "hackerrank">("github");
