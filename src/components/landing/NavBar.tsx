@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Menu, X, Moon } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
@@ -37,7 +37,7 @@ export function NavBar() {
               priority
             />
           </div>
-          <div className="flex flex-col">
+          <div className="hidden sm:flex flex-col">
             <span className="text-base font-extrabold text-white tracking-tight leading-none font-sans">
               TWM
             </span>
@@ -49,7 +49,7 @@ export function NavBar() {
 
         {/* Center: Floating Nav Pill */}
         <nav
-          className="hidden md:flex items-center gap-1 px-3 py-1.5 rounded-full border border-white/[0.08] bg-[#0c1220]/80 backdrop-blur-md shadow-inner"
+          className="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-full border border-white/[0.08] bg-[#0c1220]/80 backdrop-blur-md shadow-inner"
           aria-label="Primary"
         >
           {NAV_ITEMS.map((item) => (
@@ -63,16 +63,8 @@ export function NavBar() {
           ))}
         </nav>
 
-        {/* Right: Theme Indicator + Gradient CTA + Mobile Menu */}
+        {/* Right: Gradient CTA + Mobile Menu */}
         <div className="flex items-center gap-3">
-          <div
-            title="Dark theme active"
-            aria-label="Dark theme active"
-            className="flex items-center justify-center w-9 h-9 rounded-full border border-white/10 bg-[#0c1220]/80 text-slate-300 shadow-sm"
-          >
-            <Moon className="h-4 w-4" aria-hidden="true" />
-          </div>
-
           <Link
             href="/login"
             className="inline-flex min-h-[40px] items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-500 hover:from-blue-500 hover:to-indigo-400 text-white text-sm font-semibold transition-all shadow-[0_0_20px_rgba(79,70,229,0.35)] hover:shadow-[0_0_25px_rgba(79,70,229,0.5)]"
@@ -86,7 +78,7 @@ export function NavBar() {
             onClick={() => setIsMobileOpen((prev) => !prev)}
             aria-label="Toggle navigation"
             aria-expanded={isMobileOpen}
-            className="shrink-0 rounded-xl border border-white/[0.08] bg-surface p-2 text-slate-300 hover:text-white md:hidden transition-colors"
+            className="shrink-0 rounded-xl border border-white/[0.08] bg-surface p-2 text-slate-300 hover:text-white lg:hidden transition-colors"
           >
             {isMobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -101,7 +93,7 @@ export function NavBar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="overflow-hidden border-t border-white/[0.06] bg-canvas md:hidden"
+            className="overflow-hidden border-t border-white/[0.06] bg-canvas lg:hidden"
           >
             <div className="px-4 py-3 space-y-1">
               {NAV_ITEMS.map((item) => (

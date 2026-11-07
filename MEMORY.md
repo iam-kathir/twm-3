@@ -121,6 +121,22 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-11-07 — opencode: Theme Control Rectification & Navbar Rebalance (FE-9)
+
+- **Finding:** dark-only is intentional and enforced — `layout.tsx` strips `twm-theme` from localStorage, adds `.dark` and sets `data-theme="dark"`; `globals.css` sets `color-scheme: dark`; there is no theme architecture at all (`next-themes`, `ThemeProvider`, `useTheme`, `prefers-color-scheme` = 0 hits). The moon control in `NavBar.tsx` was therefore a dead control: first a `<button aria-label="Toggle theme (dark mode)">` with no `onClick`, then (commit `86bf930`) a decorative `<div title="Dark theme active">`. Both implied a theme switch the app cannot perform.
+- **Change (`src/components/landing/NavBar.tsx` only):**
+  - Removed the moon control and the now-unused `Moon` import.
+  - Nav pill `hidden md:flex` → `hidden lg:flex`; drawer and menu button `md:hidden` → `lg:hidden`. Previously at 768px the pill was squeezed into an 85px-tall wrapping block while the CTA and menu button ran past the viewport edge.
+  - Wordmark block `flex flex-col` → `hidden sm:flex`, so the mobile header stops clipping at 390px (emblem-only below `sm`).
+- **Measured (production build + Playwright, with a CSS assertion `body bg = rgb(7,9,14)` before trusting any number):**
+  - 1440: header 76px, pill 553×47 in one row, CTA right edge 1344 < 1433 content edge.
+  - 768: header 69px, pill hidden, CTA 548–692, menu 704–737 < 761.
+  - 390: header 69px, CTA 178–322, menu 334–367 < 383.
+  - All three: no theme control, no moon icon, no horizontal overflow, no clipped CTA or menu button. Drawer opens with 5 links at 390 and 768 (`aria-expanded` toggles).
+- **Gates (run on the final tree):** `npx tsc --noEmit` exit 0 · `npm run lint` "No ESLint warnings or errors" · `npm test` 20/20 pass, 0 fail · `npm run build` exit 0.
+- **⚠️ Concurrency:** another agent rewrote `NavBar.tsx` at 19:15:23 (after this session's first edit) and committed the "theme moon indicator" as `86bf930` — if it runs again it may re-add the control. Separately, its `next dev` restarts wipe `.next` including `.next/standalone`, which silently breaks standalone verification; serve verification builds from outside `.next` and assert CSS applied before measuring.
+- **Not changed:** `layout.tsx` dark enforcement, the palette, the gradient CTA, and every other page. `darkMode: ["class"]` with an always-present `.dark` class is harmless and was left alone.
+
 ### 2026-11-07 — Antigravity: Custom GitHub Octocat Emblem Deployment Across All Surfaces
 - **User Directive:** "use this for the github logo replacing the previous one and apply in every where it is used" (provided circular Octocat silhouette `media_1794056961802_5cf5337a.png`).
 - **Assets Created:**
