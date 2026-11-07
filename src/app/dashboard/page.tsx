@@ -3,7 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import {
-  Github,
   Code2,
   Award,
   ShieldCheck,
@@ -13,6 +12,7 @@ import {
   ChevronRight,
   Download,
 } from "lucide-react";
+import { Github } from "@/components/ui/GithubIcon";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useApp } from "@/context/AppContext";
 import { WeeklyRecapCard } from "@/components/dashboard/WeeklyRecapCard";

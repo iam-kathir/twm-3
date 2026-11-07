@@ -23,7 +23,6 @@ import {
   ExternalLink,
   UserPlus,
   Plus,
-  Github,
   Code2,
   Award,
   Mail,
@@ -31,6 +30,7 @@ import {
   Play,
   Sparkles
 } from "lucide-react";
+import { Github } from "@/components/ui/GithubIcon";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useApp } from "@/context/AppContext";
 import { TelemetryDispute } from "@/types/saas";

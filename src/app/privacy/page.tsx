@@ -16,11 +16,11 @@ import {
   Download,
   ExternalLink,
   Code2,
-  Github,
   Award,
   Scale,
   Users
 } from "lucide-react";
+import { Github } from "@/components/ui/GithubIcon";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { Footer } from "@/components/landing/Footer";
 

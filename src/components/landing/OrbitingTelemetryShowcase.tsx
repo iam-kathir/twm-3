@@ -3,7 +3,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-  Github,
   Code2,
   Award,
   GitCommit,
@@ -16,6 +15,7 @@ import {
   Flame,
   ArrowRight
 } from "lucide-react";
+import { Github } from "@/components/ui/GithubIcon";
 import { OrbitingCircles } from "@/components/ui/OrbitingCircles";
 import { Meteors } from "@/components/ui/Meteors";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";

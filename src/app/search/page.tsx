@@ -9,7 +9,6 @@ import {
   Tag, 
   CheckCircle2, 
   AlertCircle, 
-  Github, 
   Code2, 
   ExternalLink,
   ShieldCheck,
@@ -22,6 +21,7 @@ import {
   Award,
   RefreshCw
 } from "lucide-react";
+import { Github } from "@/components/ui/GithubIcon";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useApp } from "@/context/AppContext";
 import type { SearchableDeveloper, EvidenceLevel } from "@/lib/search";

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   User,
-  Github,
   Code2,
   Award,
   Shield,
@@ -21,6 +20,7 @@ import {
   AlertTriangle,
   Trash2
 } from "lucide-react";
+import { Github } from "@/components/ui/GithubIcon";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useApp } from "@/context/AppContext";
 
@@ -254,7 +254,7 @@ export default function SettingsPage() {
     setConfirmAction(null);
   };
 
-  const tabs: Array<{ id: SettingsTab; label: string; icon: typeof User }> = [
+  const tabs: Array<{ id: SettingsTab; label: string; icon: React.ComponentType<{ className?: string }> }> = [
     { id: "profile", label: "Profile & Roster", icon: User },
     { id: "adapters", label: "Connected Adapters", icon: Github },
     { id: "privacy", label: "Privacy & Visibility", icon: Eye },

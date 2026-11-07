@@ -10,9 +10,9 @@ import {
   Trophy,
   ShieldCheck,
   BarChart2,
-  Github,
   Code2,
 } from "lucide-react";
+import { Github } from "@/components/ui/GithubIcon";
 
 const containerVariants = {
   hidden: { opacity: 0 },

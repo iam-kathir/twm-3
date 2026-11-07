@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle2,
   ShieldCheck,
-  Github,
   Code2,
   Award,
   ArrowRight,
@@ -24,6 +23,7 @@ import {
   Clock,
   ShieldAlert,
 } from "lucide-react";
+import { Github } from "@/components/ui/GithubIcon";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 
 interface StudentSessionData {

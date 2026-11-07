@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Github, 
   Code2, 
   Award, 
   Activity, 
@@ -14,6 +13,7 @@ import {
   CheckCircle,
   HelpCircle
 } from "lucide-react";
+import { Github } from "@/components/ui/GithubIcon";
 
 export function CockpitPreview() {
   const [recapMode, setRecapMode] = useState<"ai" | "deterministic">("ai");

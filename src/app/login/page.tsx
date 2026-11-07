@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { Github, Shield, ArrowRight, ShieldAlert, GraduationCap } from "lucide-react";
+import { Shield, ArrowRight, ShieldAlert, GraduationCap } from "lucide-react";
+import { Github } from "@/components/ui/GithubIcon";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 
 function LoginContent() {

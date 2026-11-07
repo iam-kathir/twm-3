@@ -2,7 +2,8 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Github, Code2, Award, CheckCircle2, AlertTriangle, Layers } from "lucide-react";
+import { Code2, Award, CheckCircle2, AlertTriangle, Layers } from "lucide-react";
+import { Github } from "@/components/ui/GithubIcon";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
 
 export function PlatformMatrix() {
