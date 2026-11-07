@@ -121,6 +121,27 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-11-07 — Antigravity: Workspace Pruning, Dead Asset Deletion & Logo Isolation
+- **User Directive:** "kepping the new logo file and delete all other files and the old logo and at the same time check the complete folder and the delete the unnecessary fies and folders"
+- **Actions Executed:**
+  - **Isolated Official Logo:** Kept only the official new 3D ribbon emblem files: `public/twm-glyph.png`, `public/icon.svg`, and `public/logo-horizontal.svg`.
+  - **PWA Asset Modernization:** Regenerated `android-chrome-192x192.png` and `android-chrome-512x512.png` using the new official logo, and pruned redundant favicon sizes from `site.webmanifest`.
+  - **Deleted Obsolete Logo & Unreferenced Assets from `public/` (Saved ~1.2 MB):**
+    - Old logo sizes: `favicon-48x48.png`, `favicon-64x64.png`, `favicon-128x128.png`, `favicon-256x256.png`.
+    - Temporary crops: `twm-logo-horizontal.png`, `twm-center-card.png`.
+    - Unreferenced old mock screenshots: `twm_admin_disputes.png`, `twm_admin_view.png`, `twm_dashboard_breakdown.png`, `twm_leaderboard_view.png`, `twm_onboarding_step1.png`, `twm_onboarding_step3_verified.png`, `twm_search_view.png`.
+  - **Deleted Unreferenced Legacy Components:**
+    - `src/components/landing/CyberConstellation.tsx` (old Three.js background).
+    - `src/components/landing/SundayCountdownClock.tsx` (old clock replaced by modern hero).
+  - **Deleted Temporary Test Inspection Folders (Saved ~21.3 MB):**
+    - `.taste-skill/` (temporary design-taste audit screenshots).
+    - `.playwright-mcp/` (temporary playwright logs).
+- **Verification Gates Clean:**
+  - `npx tsc --noEmit`: 0 errors.
+  - `npm run lint`: `✔ No ESLint warnings or errors`.
+  - `npm test`: **20/20 test suites passed**.
+  - Dev server: running live on `http://localhost:3000` (HTTP 200).
+
 ### 2026-11-07 — Antigravity: Official High-Resolution 3D TWM Logo Deployment Across All Pages
 - **User Directive:** "use this for the logo replacing the previous one and apply in every where" (provided high-res official 3D ribbon PNG `media_1794055570608_99bc3b6e.png`).
 - **Assets Generated & Deployed:**
