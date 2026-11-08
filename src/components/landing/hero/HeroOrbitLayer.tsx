@@ -97,3 +97,51 @@ export function HeroOrbitNode({
     </div>
   );
 }
+
+export interface HeroStationaryOrbitNodeProps {
+  angle: number; // polar angle in degrees (0 = North / 12 o'clock, clockwise)
+  radius: number; // orbit radius in pixels from center
+  pulseDuration?: number; // seconds for gentle breathing cycle (default: 4s)
+  pulseDelay?: string; // staggered delay e.g. "1s"
+  children: React.ReactNode;
+  className?: string;
+}
+
+/**
+ * Stationary orbit node positioned at Cartesian coordinates (x, y) along an orbital track.
+ * Does not revolve around the core; instead anchors at a fixed landmark coordinate with
+ * subtle breathing illumination to prevent visual crowding while maintaining spatial structure.
+ */
+export function HeroStationaryOrbitNode({
+  angle,
+  radius,
+  pulseDuration = 4,
+  pulseDelay = "0s",
+  children,
+  className = "",
+}: HeroStationaryOrbitNodeProps) {
+  const rad = (angle * Math.PI) / 180;
+  const x = Math.round(radius * Math.sin(rad) * 100) / 100;
+  const y = -Math.round(radius * Math.cos(rad) * 100) / 100;
+
+  return (
+    <div
+      style={{
+        transform: `translate3d(${x}px, ${y}px, 0)`,
+      }}
+      className={`absolute flex items-center justify-center pointer-events-none ${className}`}
+    >
+      <div
+        style={
+          {
+            "--pulse-duration": `${pulseDuration}s`,
+            animationDelay: pulseDelay,
+          } as React.CSSProperties
+        }
+        className="pointer-events-auto animate-pulse-subtle"
+      >
+        {children}
+      </div>
+    </div>
+  );
+}

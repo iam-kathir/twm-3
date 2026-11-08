@@ -15,14 +15,22 @@ export function HeroRadar({ innerRadius, middleRadius, outerRadius }: HeroRadarP
   return (
     <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-visible">
       {/* Ambient Radial Lighting Field behind the Universe */}
-      <div className="absolute w-[450px] h-[450px] sm:w-[550px] sm:h-[550px] rounded-full bg-gradient-to-tr from-[#6555F5]/12 via-[#3478F6]/10 to-[#16C8E8]/12 blur-[100px] pointer-events-none" />
-
-      {/* Rotating Conic Radar Sweep */}
       <div
-        className="absolute w-[440px] h-[440px] sm:w-[520px] sm:h-[520px] rounded-full animate-radar-sweep opacity-35 pointer-events-none"
+        className="absolute rounded-full bg-gradient-to-tr from-[#6555F5]/10 via-[#3478F6]/08 to-[#16C8E8]/10 blur-[85px] pointer-events-none"
         style={{
+          width: Math.round(outerRadius * 2.2),
+          height: Math.round(outerRadius * 2.2),
+        }}
+      />
+
+      {/* Rotating Conic Radar Sweep (Sized proportionally to Outer Orbit Track) */}
+      <div
+        className="absolute rounded-full animate-radar-sweep opacity-30 pointer-events-none"
+        style={{
+          width: outerRadius * 2,
+          height: outerRadius * 2,
           background:
-            "conic-gradient(from 0deg at 50% 50%, rgba(22, 200, 232, 0.15) 0deg, rgba(101, 85, 245, 0.05) 45deg, transparent 90deg, transparent 360deg)",
+            "conic-gradient(from 0deg at 50% 50%, rgba(22, 200, 232, 0.16) 0deg, rgba(101, 85, 245, 0.05) 45deg, transparent 90deg, transparent 360deg)",
         }}
       />
 

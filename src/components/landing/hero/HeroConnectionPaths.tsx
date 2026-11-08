@@ -6,17 +6,23 @@ import { ProviderId } from "./hero-constants";
 interface HeroConnectionPathsProps {
   activeProvider: ProviderId | null;
   innerRadius: number;
+  containerSize?: number;
 }
 
 /**
  * Animated SVG energy streams connecting Central TWM Core to the 3 Provider nodes (§3, §5).
  * Rendered within the revolving Inner Orbit Layer so connection beams stay permanently locked
  * to GitHub (0°), LeetCode (120°), and HackerRank (240°) as they orbit the core.
+ * Coordinates are mapped 1:1 to container pixels using dynamic viewBox dimensions.
  */
 export function HeroConnectionPaths({
   activeProvider,
   innerRadius,
+  containerSize,
 }: HeroConnectionPathsProps) {
+  const size = containerSize && containerSize > 0 ? containerSize : 540;
+  const half = size / 2;
+
   // Trigonometric coordinates for provider endpoints relative to center (0, 0)
   const xLeetCode = Math.round(innerRadius * Math.sin((120 * Math.PI) / 180));
   const yLeetCode = -Math.round(innerRadius * Math.cos((120 * Math.PI) / 180));
@@ -27,7 +33,7 @@ export function HeroConnectionPaths({
   return (
     <svg
       className="absolute inset-0 w-full h-full pointer-events-none overflow-visible"
-      viewBox="-300 -300 600 600"
+      viewBox={`-${half} -${half} ${size} ${size}`}
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >

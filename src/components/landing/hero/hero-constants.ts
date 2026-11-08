@@ -69,13 +69,14 @@ export interface OrbitalNodeItem {
   angle: number; // degrees (0 to 360)
   colorClass: string;
   glowColor: string;
+  pulseDelay?: string; // staggered breathing pulse timing
 }
 
 /**
- * Layer 2: Activity & Verification Orbit (Counter-Clockwise, ~34s)
- * 4 curated, meaningful telemetry streams evenly spaced at 90° intervals
+ * Layer 2: Moving Activity & Telemetry Nodes (Counter-Clockwise, ~44s)
+ * Exactly 2 selected moving telemetry pillars representing active development velocity
  */
-export const ACTIVITY_VERIFICATION_NODES: OrbitalNodeItem[] = [
+export const MOVING_ACTIVITY_NODES: OrbitalNodeItem[] = [
   {
     id: "act-commit",
     name: "Git Rhythm",
@@ -86,65 +87,77 @@ export const ACTIVITY_VERIFICATION_NODES: OrbitalNodeItem[] = [
     glowColor: "rgba(22, 200, 232, 0.45)",
   },
   {
+    id: "act-boundary",
+    name: "Sunday Snapshot",
+    label: "23:59:59 IST Hard Boundary",
+    icon: Target,
+    angle: 180,
+    colorClass: "text-brand-secondary",
+    glowColor: "rgba(52, 120, 246, 0.45)",
+  },
+];
+
+/**
+ * Layer 2: Stationary Secondary Activity Landmarks (Track 2, R2)
+ * Anchored at 90° and 270° with subtle breathing illumination, eliminating visual crowding
+ */
+export const STATIONARY_ACTIVITY_NODES: OrbitalNodeItem[] = [
+  {
     id: "act-solve",
     name: "Problem Velocity",
     label: "Algorithmic Solves",
     icon: Code2,
     angle: 90,
     colorClass: "text-[#FFA116]",
-    glowColor: "rgba(255, 161, 22, 0.45)",
-  },
-  {
-    id: "act-domain",
-    name: "Domain Badges",
-    label: "Verified Skill Stars",
-    icon: CheckCircle2,
-    angle: 180,
-    colorClass: "text-[#2EC866]",
-    glowColor: "rgba(46, 200, 102, 0.45)",
+    glowColor: "rgba(255, 161, 22, 0.4)",
+    pulseDelay: "0.5s",
   },
   {
     id: "act-audit",
     name: "HMAC Proof",
-    label: "Two-Person Verification",
+    label: "Two-Person Audit Gate",
     icon: ShieldCheck,
     angle: 270,
     colorClass: "text-brand-primary",
-    glowColor: "rgba(101, 85, 245, 0.45)",
+    glowColor: "rgba(101, 85, 245, 0.4)",
+    pulseDelay: "2s",
   },
 ];
 
 /**
- * Layer 3: Analytics & Achievement Orbit (Clockwise, ~44s)
- * 4 curated pillars of competition and governance evenly spaced at 90° intervals (offset 45°)
+ * Layer 3: Stationary Secondary Analytics & Governance Landmarks (Track 3, R3)
+ * 4 balanced navigational beacons anchored at 45°, 135°, 225°, and 315°
  */
-export const ANALYTICS_ACHIEVEMENT_NODES: OrbitalNodeItem[] = [
+export const STATIONARY_ANALYTICS_NODES: OrbitalNodeItem[] = [
   {
     id: "ana-standings",
     name: "Standings",
-    label: "1, 2, 2, 4 Tie Policy",
+    label: "1, 2, 2, 4 Competition Ranking",
     icon: Trophy,
     angle: 45,
     colorClass: "text-amber-400",
-    glowColor: "rgba(245, 158, 11, 0.4)",
-  },
-  {
-    id: "ana-boundary",
-    name: "Sunday Boundary",
-    label: "23:59:59 IST Close",
-    icon: Target,
-    angle: 135,
-    colorClass: "text-brand-secondary",
-    glowColor: "rgba(52, 120, 246, 0.4)",
+    glowColor: "rgba(245, 158, 11, 0.35)",
+    pulseDelay: "1s",
   },
   {
     id: "ana-quorum",
     name: "Cohort Quorum",
     label: "≥ 70% Class Demarcation",
     icon: Users,
-    angle: 225,
+    angle: 135,
     colorClass: "text-emerald-400",
-    glowColor: "rgba(16, 185, 129, 0.4)",
+    glowColor: "rgba(16, 185, 129, 0.35)",
+    pulseDelay: "2.5s",
+  },
+  {
+    id: "ana-domain",
+    name: "Domain Badges",
+    label: "Verified Skill Stars",
+    icon: CheckCircle2,
+    angle: 225,
+    colorClass: "text-[#2EC866]",
+    glowColor: "rgba(46, 200, 102, 0.35)",
+    pulseDelay: "1.5s",
   },
   {
     id: "ana-momentum",
@@ -153,9 +166,17 @@ export const ANALYTICS_ACHIEVEMENT_NODES: OrbitalNodeItem[] = [
     icon: Flame,
     angle: 315,
     colorClass: "text-brand-highlight",
-    glowColor: "rgba(22, 200, 232, 0.4)",
+    glowColor: "rgba(22, 200, 232, 0.35)",
+    pulseDelay: "3s",
   },
 ];
+
+// Backwards compatibility alias for existing imports
+export const ACTIVITY_VERIFICATION_NODES = [
+  ...MOVING_ACTIVITY_NODES,
+  ...STATIONARY_ACTIVITY_NODES,
+];
+export const ANALYTICS_ACHIEVEMENT_NODES = STATIONARY_ANALYTICS_NODES;
 
 export interface FloatingMicroCard {
   id: string;
@@ -206,7 +227,8 @@ export interface OrbitalRadii {
 
 /**
  * Mathematically calculates responsive orbital radii based on container width.
- * Ensures all nodes remain safely inside the container across viewports from 320px to 1920px.
+ * Enforces safe provider-to-core clearance (R_inner >= coreRadius + providerHalfSize + clearance)
+ * and balanced concentric spacing across all viewport dimensions from 320px to 1920px.
  */
 export function calculateResponsiveOrbitalRadii(containerWidth: number): OrbitalRadii {
   const clampedWidth = Math.max(
@@ -215,11 +237,11 @@ export function calculateResponsiveOrbitalRadii(containerWidth: number): Orbital
   );
 
   // Clearance margins for outer node badges
-  const outerNodeAllowance = clampedWidth < 380 ? 22 : clampedWidth < 500 ? 26 : 30;
+  const outerNodeAllowance = clampedWidth < 380 ? 20 : clampedWidth < 500 ? 24 : 26;
 
-  const outerRadius = Math.max(105, Math.floor(clampedWidth / 2 - outerNodeAllowance));
-  const middleRadius = Math.round(outerRadius * 0.75);
-  const innerRadius = Math.max(65, Math.round(outerRadius * 0.50));
+  const outerRadius = Math.max(118, Math.floor(clampedWidth / 2 - outerNodeAllowance));
+  const innerRadius = Math.max(76, Math.round(outerRadius * 0.56));
+  const middleRadius = Math.max(innerRadius + 21, Math.round(outerRadius * 0.77));
 
   return {
     innerRadius,

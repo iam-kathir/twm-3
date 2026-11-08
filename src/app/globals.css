@@ -366,13 +366,17 @@ table,
 }
 
 .animate-orbit-cw {
-  animation: orbit-layer-cw var(--duration, 30s) linear infinite;
+  animation: orbit-layer-cw var(--duration, 34s) linear infinite;
   transform-origin: center center;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .animate-orbit-ccw {
-  animation: orbit-layer-ccw var(--duration, 30s) linear infinite;
+  animation: orbit-layer-ccw var(--duration, 34s) linear infinite;
   transform-origin: center center;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 /* Orbital Radar Scanning Sweep */
@@ -386,8 +390,9 @@ table,
 }
 
 .animate-radar-sweep {
-  animation: radar-sweep 18s linear infinite;
+  animation: radar-sweep 20s linear infinite;
   transform-origin: center center;
+  will-change: transform;
 }
 
 /* Energy Core Breathing & Pulse */
@@ -404,16 +409,24 @@ table,
 
 .animate-energy-pulse {
   animation: energy-pulse-glow 3.5s ease-in-out infinite;
+  transform-origin: center center;
 }
 
-/* Reduced Motion Override for Accessibility */
-@media (prefers-reduced-motion: reduce) {
-  .animate-orbit-cw,
-  .animate-orbit-ccw,
-  .animate-radar-sweep,
-  .animate-energy-pulse {
-    animation: none !important;
+/* Subtle Breathing Pulse for Stationary Secondary Landmark Nodes */
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 0.82;
+    transform: scale(1);
   }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle var(--pulse-duration, 4s) ease-in-out infinite;
+  transform-origin: center center;
 }
 
 /* 21st.dev Shiny Text Shimmer */
@@ -441,14 +454,21 @@ table,
    or brighter (ink-secondary / ink / accent / status tokens). Never use
    text-muted-soft or text-muted-dark below 18px; see AGENTS.md audit. */
 
-/* Accessibility: Reduced Motion */
+/* Unified Accessibility: Reduced Motion (Consolidated Single Authority) */
 @media (prefers-reduced-motion: reduce) {
+  .animate-orbit-cw,
+  .animate-orbit-ccw,
+  .animate-radar-sweep,
+  .animate-energy-pulse,
+  .animate-pulse-subtle,
+  .animate-orbit,
+  .animate-shiny-text {
+    animation: none !important;
+  }
+
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 }

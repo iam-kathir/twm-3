@@ -4,14 +4,19 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   PROVIDERS_META,
   ProviderId,
-  ACTIVITY_VERIFICATION_NODES,
-  ANALYTICS_ACHIEVEMENT_NODES,
+  MOVING_ACTIVITY_NODES,
+  STATIONARY_ACTIVITY_NODES,
+  STATIONARY_ANALYTICS_NODES,
   calculateResponsiveOrbitalRadii,
 } from "./hero-constants";
 import { HeroRadar } from "./HeroRadar";
 import { HeroConnectionPaths } from "./HeroConnectionPaths";
 import { HeroCore } from "./HeroCore";
-import { HeroOrbitTrack, HeroOrbitNode } from "./HeroOrbitLayer";
+import {
+  HeroOrbitTrack,
+  HeroOrbitNode,
+  HeroStationaryOrbitNode,
+} from "./HeroOrbitLayer";
 import { HeroProviderNode } from "./HeroProviderNode";
 import { HeroMicroStats } from "./HeroMicroStats";
 import { HeroProviderInfo } from "./HeroProviderInfo";
@@ -62,7 +67,7 @@ export function HeroOrbitalUniverse() {
     };
   }, []);
 
-  const { innerRadius, middleRadius, outerRadius } = radii;
+  const { innerRadius, middleRadius, outerRadius, containerSize } = radii;
 
   const handleProviderSelect = (id: ProviderId) => {
     setActiveProvider((prev) => (prev === id ? null : id));
@@ -87,49 +92,72 @@ export function HeroOrbitalUniverse() {
         outerRadius={outerRadius}
       />
 
-      {/* 2. Layer 3: Analytics & Achievement Orbit (Outer, CW, 46s) */}
-      <HeroOrbitTrack duration={46} direction="cw">
-        {ANALYTICS_ACHIEVEMENT_NODES.map((node) => {
-          const Icon = node.icon;
-          return (
-            <HeroOrbitNode
-              key={node.id}
-              angle={node.angle}
-              radius={outerRadius}
-              duration={46}
-              direction="cw"
+      {/* 2. Layer 3: Stationary Secondary Analytics & Governance Landmarks (Outer Track, R3)
+          Anchored at 45°, 135°, 225°, and 315° with subtle breathing illumination to prevent crowding */}
+      {STATIONARY_ANALYTICS_NODES.map((node) => {
+        const Icon = node.icon;
+        return (
+          <HeroStationaryOrbitNode
+            key={node.id}
+            angle={node.angle}
+            radius={outerRadius}
+            pulseDelay={node.pulseDelay}
+          >
+            <div
+              title={`${node.name}: ${node.label}`}
+              className="p-1.5 sm:p-2 sm:p-2.5 rounded-lg sm:rounded-xl bg-surface/90 backdrop-blur-md border border-white/10 hover:border-brand-secondary/60 shadow-md transition-all hover:scale-110 cursor-default group"
+              style={{
+                boxShadow: `0 0 16px ${node.glowColor}`,
+              }}
             >
-              <div
-                title={`${node.name}: ${node.label}`}
-                className="p-1.5 sm:p-2 sm:p-2.5 rounded-lg sm:rounded-xl bg-surface/90 backdrop-blur-md border border-white/10 hover:border-brand-secondary/60 shadow-md transition-all hover:scale-115 cursor-default group"
-                style={{
-                  boxShadow: `0 0 16px ${node.glowColor}`,
-                }}
-              >
-                <Icon className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${node.colorClass} transition-transform group-hover:scale-110`} />
-              </div>
-            </HeroOrbitNode>
-          );
-        })}
-      </HeroOrbitTrack>
+              <Icon className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${node.colorClass} transition-transform group-hover:scale-110`} />
+            </div>
+          </HeroStationaryOrbitNode>
+        );
+      })}
 
-      {/* 3. Layer 2: Activity & Verification Orbit (Middle, CCW, 34s) */}
-      <HeroOrbitTrack duration={34} direction="ccw">
-        {ACTIVITY_VERIFICATION_NODES.map((node) => {
+      {/* 3. Layer 2: Stationary Secondary Activity Landmarks (Track 2, R2)
+          Anchored at 90° and 270° with subtle breathing illumination */}
+      {STATIONARY_ACTIVITY_NODES.map((node) => {
+        const Icon = node.icon;
+        return (
+          <HeroStationaryOrbitNode
+            key={node.id}
+            angle={node.angle}
+            radius={middleRadius}
+            pulseDelay={node.pulseDelay}
+          >
+            <div
+              title={`${node.name}: ${node.label}`}
+              className="p-1.5 sm:p-2 sm:p-2.5 rounded-lg sm:rounded-xl bg-surface/90 backdrop-blur-md border border-white/10 hover:border-brand-highlight/60 shadow-md transition-all hover:scale-110 cursor-default group"
+              style={{
+                boxShadow: `0 0 16px ${node.glowColor}`,
+              }}
+            >
+              <Icon className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${node.colorClass} transition-transform group-hover:scale-110`} />
+            </div>
+          </HeroStationaryOrbitNode>
+        );
+      })}
+
+      {/* 4. Layer 2: Moving Activity Orbit (Middle, CCW, 44s)
+          Exactly 2 selected active telemetry streams revolving gracefully */}
+      <HeroOrbitTrack duration={44} direction="ccw">
+        {MOVING_ACTIVITY_NODES.map((node) => {
           const Icon = node.icon;
           return (
             <HeroOrbitNode
               key={node.id}
               angle={node.angle}
               radius={middleRadius}
-              duration={34}
+              duration={44}
               direction="ccw"
             >
               <div
                 title={`${node.name}: ${node.label}`}
-                className="p-1.5 sm:p-2 sm:p-2.5 rounded-lg sm:rounded-xl bg-surface/90 backdrop-blur-md border border-white/10 hover:border-brand-highlight/60 shadow-md transition-all hover:scale-115 cursor-default group"
+                className="p-1.5 sm:p-2 sm:p-2.5 rounded-lg sm:rounded-xl bg-surface/95 backdrop-blur-md border border-white/15 hover:border-brand-highlight/80 shadow-lg transition-all hover:scale-115 cursor-default group"
                 style={{
-                  boxShadow: `0 0 16px ${node.glowColor}`,
+                  boxShadow: `0 0 18px ${node.glowColor}`,
                 }}
               >
                 <Icon className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${node.colorClass} transition-transform group-hover:scale-110`} />
@@ -139,21 +167,23 @@ export function HeroOrbitalUniverse() {
         })}
       </HeroOrbitTrack>
 
-      {/* 4. Layer 1: Core Provider Orbit (Inner, CW, 26s)
+      {/* 5. Layer 1: Dedicated Provider Orbit (Inner, CW, 34s)
+          Spacious orbit corridor with generous clearance from central core.
           Both Connection Beams and Provider Nodes revolve together inside this track
           so beams stay permanently locked to GitHub (0°), LeetCode (120°), and HackerRank (240°). */}
-      <HeroOrbitTrack duration={26} direction="cw">
-        {/* Animated Energy Connection Paths from Core to Providers */}
+      <HeroOrbitTrack duration={34} direction="cw">
+        {/* Animated Energy Connection Paths from Core to Providers (Mapped 1:1 to container size) */}
         <HeroConnectionPaths
           activeProvider={activeProvider}
           innerRadius={innerRadius}
+          containerSize={containerSize}
         />
 
-        {/* 4a. GitHub (0 deg / North) */}
+        {/* 5a. GitHub (0 deg / North) */}
         <HeroOrbitNode
           angle={0}
           radius={innerRadius}
-          duration={26}
+          duration={34}
           direction="cw"
         >
           <HeroProviderNode
@@ -164,11 +194,11 @@ export function HeroOrbitalUniverse() {
           />
         </HeroOrbitNode>
 
-        {/* 4b. LeetCode (120 deg / South-East) */}
+        {/* 5b. LeetCode (120 deg / South-East) */}
         <HeroOrbitNode
           angle={120}
           radius={innerRadius}
-          duration={26}
+          duration={34}
           direction="cw"
         >
           <HeroProviderNode
@@ -179,11 +209,11 @@ export function HeroOrbitalUniverse() {
           />
         </HeroOrbitNode>
 
-        {/* 4c. HackerRank (240 deg / South-West) */}
+        {/* 5c. HackerRank (240 deg / South-West) */}
         <HeroOrbitNode
           angle={240}
           radius={innerRadius}
-          duration={26}
+          duration={34}
           direction="cw"
         >
           <HeroProviderNode
@@ -195,13 +225,13 @@ export function HeroOrbitalUniverse() {
         </HeroOrbitNode>
       </HeroOrbitTrack>
 
-      {/* 5. Central Stationary TWM Core */}
+      {/* 6. Zone 1: Central Stationary TWM Core */}
       <HeroCore onCoreClick={handleCoreClick} />
 
-      {/* 6. Floating Micro-Stat Preview Cards (Safe Corners) */}
+      {/* 7. Floating Micro-Stat Preview Cards (Safe Corners) */}
       <HeroMicroStats />
 
-      {/* 7. Contextual Provider Info Drawer (Focus Mode — Does Not Pause Universe) */}
+      {/* 8. Contextual Provider Info Drawer (Focus Mode — Does Not Freeze Universe) */}
       <HeroProviderInfo
         provider={activeProvider ? PROVIDERS_META[activeProvider] : null}
         onClose={() => setActiveProvider(null)}
