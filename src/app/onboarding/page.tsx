@@ -374,33 +374,41 @@ function OnboardingContent() {
         <BrandLogo showLivePulse={true} />
 
         {/* Step Indicator */}
-        <nav aria-label="Onboarding progress" className="flex items-center gap-2 text-sm text-muted">
-          <span
-            aria-current={step === 1 ? "step" : undefined}
-            className={`px-2.5 py-1 rounded-full ${
-              step === 1 ? "bg-brand-secondary text-white font-bold" : "bg-surface-raised border border-white/[0.06]"
-            }`}
-          >
-            1. Identity &amp; Email
+        <nav aria-label="Onboarding progress" className="flex items-center gap-2 text-xs sm:text-sm text-muted">
+          {/* Mobile Compact Step */}
+          <span className="sm:hidden px-3 py-1 rounded-full bg-brand-secondary text-white font-mono font-bold text-xs">
+            Step {step} of 3
           </span>
-          <span className="text-white/40" aria-hidden="true">&rarr;</span>
-          <span
-            aria-current={step === 2 ? "step" : undefined}
-            className={`px-2.5 py-1 rounded-full ${
-              step === 2 ? "bg-brand-secondary text-white font-bold" : "bg-surface-raised border border-white/[0.06]"
-            }`}
-          >
-            2. Privacy
-          </span>
-          <span className="text-white/40" aria-hidden="true">&rarr;</span>
-          <span
-            aria-current={step === 3 ? "step" : undefined}
-            className={`px-2.5 py-1 rounded-full ${
-              step === 3 ? "bg-brand-secondary text-white font-bold" : "bg-surface-raised border border-white/[0.06]"
-            }`}
-          >
-            3. Accounts
-          </span>
+
+          {/* Tablet & Desktop Full Steps */}
+          <div className="hidden sm:flex items-center gap-2">
+            <span
+              aria-current={step === 1 ? "step" : undefined}
+              className={`px-2.5 py-1 rounded-full ${
+                step === 1 ? "bg-brand-secondary text-white font-bold" : "bg-surface-raised border border-white/[0.06]"
+              }`}
+            >
+              1. Identity &amp; Email
+            </span>
+            <span className="text-white/40" aria-hidden="true">&rarr;</span>
+            <span
+              aria-current={step === 2 ? "step" : undefined}
+              className={`px-2.5 py-1 rounded-full ${
+                step === 2 ? "bg-brand-secondary text-white font-bold" : "bg-surface-raised border border-white/[0.06]"
+              }`}
+            >
+              2. Privacy
+            </span>
+            <span className="text-white/40" aria-hidden="true">&rarr;</span>
+            <span
+              aria-current={step === 3 ? "step" : undefined}
+              className={`px-2.5 py-1 rounded-full ${
+                step === 3 ? "bg-brand-secondary text-white font-bold" : "bg-surface-raised border border-white/[0.06]"
+              }`}
+            >
+              3. Accounts
+            </span>
+          </div>
         </nav>
       </header>
 

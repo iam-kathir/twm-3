@@ -22,6 +22,8 @@ import { Github } from "@/components/ui/GithubIcon";
 import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
 import { HackerRankIcon as Award } from "@/components/ui/HackerRankIcon";
 import { AppHeader } from "@/components/ui/AppHeader";
+import { PageContainer } from "@/components/layout/PageContainer";
+import { PageHeader } from "@/components/layout/PageHeader";
 import { useApp } from "@/context/AppContext";
 
 type SettingsTab = "profile" | "adapters" | "privacy" | "data";
@@ -265,24 +267,21 @@ export default function SettingsPage() {
     <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans selection:bg-brand-primary/30 selection:text-white">
       <AppHeader />
 
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10" aria-labelledby="settings-heading">
-        {/* Title & Description Header */}
-        <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-brand-primary/10 border border-brand-primary/20 text-sm font-medium text-brand-primary">
-            <span>Platform settings</span>
-            <span className="text-brand-primary" aria-hidden="true">/</span>
-            <span>Rule §10.3 compliant</span>
-          </div>
-          <h1 id="settings-heading" className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-            Account &amp; Telemetry Preferences
-          </h1>
-          <p className="text-base sm:text-lg text-muted max-w-3xl leading-relaxed">
-            Manage your verified provider adapters, privacy visibility tiers, cohort roster credentials, and export verifiable observation artifacts.
-          </p>
-        </div>
+      <PageContainer className="space-y-6 sm:space-y-8">
+        {/* Standardized Page Header */}
+        <PageHeader
+          badge={
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/10 border border-brand-primary/25 text-brand-primary text-xs font-mono font-semibold">
+              <Shield className="w-3.5 h-3.5 text-brand-secondary shrink-0" />
+              <span>Platform Settings · Rule §10.3 Compliant</span>
+            </div>
+          }
+          title="Account & Telemetry Preferences"
+          description="Manage your verified provider adapters, privacy visibility tiers, cohort roster credentials, and export verifiable observation artifacts."
+        />
 
         {/* Tab Controls Bar */}
-        <div role="tablist" aria-label="Settings sections" className="flex items-center gap-2 sm:gap-3 border-b border-white/[0.08] pb-4 overflow-x-auto p-1">
+        <div role="tablist" aria-label="Settings sections" className="flex items-center gap-1.5 sm:gap-2 border-b border-border pb-3 overflow-x-auto no-scrollbar">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isSelected = activeTab === tab.id;
@@ -951,7 +950,7 @@ export default function SettingsPage() {
             </div>
           </motion.section>
         )}
-      </main>
+      </PageContainer>
     </div>
   );
 }

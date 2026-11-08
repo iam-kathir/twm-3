@@ -22,6 +22,8 @@ import { Github } from "@/components/ui/GithubIcon";
 import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
 import { HackerRankIcon as Award } from "@/components/ui/HackerRankIcon";
 import { AppHeader } from "@/components/ui/AppHeader";
+import { PageContainer } from "@/components/layout/PageContainer";
+import { PageHeader } from "@/components/layout/PageHeader";
 import { Footer } from "@/components/landing/Footer";
 
 const POLICY_SECTIONS = [
@@ -82,37 +84,39 @@ export default function PrivacyPolicyPage() {
     <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans selection:bg-brand-primary/30 selection:text-white" data-measure="readable">
       <AppHeader />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12" aria-labelledby="privacy-heading">
+      <PageContainer className="space-y-8 sm:space-y-10">
         {/* Navigation Breadcrumb */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between text-xs sm:text-sm">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-muted hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary rounded-md px-1 py-1"
+            className="inline-flex items-center gap-2 text-muted hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary rounded-md px-1 py-1"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             <span>Back to Platform Overview</span>
           </Link>
 
-          <span className="text-sm text-muted">
-            Policy Version 3.1 • Last Revised October 2026
+          <span className="text-muted font-mono text-xs">
+            Policy Version 3.1 · October 2026
           </span>
         </div>
 
-        {/* Hero Header */}
-        <div className="space-y-4 max-w-4xl">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-sm font-bold">
-            <Shield className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>Institutional Governance • Fairness Rules §1.2, §18 &amp; §19</span>
-          </div>
-
-          <h1 id="privacy-heading" className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight max-w-[72ch]">
-            Privacy, Fairness &amp; Student Data Governance Policy
-          </h1>
-
-          <p className="text-base sm:text-lg text-muted leading-relaxed max-w-[72ch]">
-            TWM (&quot;Track. Win. Maintain.&quot;) is designed around a single non-negotiable principle: <strong>friendly competition should inspire practice, never inflict surveillance or punitive anxiety</strong>. This document specifies our cryptographic guarantees, telemetry boundaries, and student privacy rights.
-          </p>
-        </div>
+        {/* Standardized Page Header */}
+        <PageHeader
+          badge={
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/10 border border-brand-primary/25 text-brand-primary text-xs font-mono font-semibold">
+              <Shield className="w-3.5 h-3.5 text-brand-secondary shrink-0" />
+              <span>Institutional Governance · Fairness Rules §1.2, §18 &amp; §19</span>
+            </div>
+          }
+          title="Privacy, Fairness & Student Data Governance Policy"
+          description={
+            <span>
+              TWM (&quot;Track. Win. Maintain.&quot;) is designed around a single non-negotiable principle:{" "}
+              <strong className="text-white">friendly competition should inspire practice, never inflict surveillance or punitive anxiety</strong>.
+              This document specifies our cryptographic guarantees, telemetry boundaries, and student privacy rights.
+            </span>
+          }
+        />
 
         {/* 4 Core Guarantees Callout Banner */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -452,7 +456,7 @@ export default function PrivacyPolicyPage() {
             </div>
           </div>
         </div>
-      </main>
+      </PageContainer>
 
       <Footer />
     </div>

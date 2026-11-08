@@ -33,6 +33,8 @@ import { Github } from "@/components/ui/GithubIcon";
 import { LeetCodeIcon as Code2 } from "@/components/ui/LeetCodeIcon";
 import { HackerRankIcon } from "@/components/ui/HackerRankIcon";
 import { AppHeader } from "@/components/ui/AppHeader";
+import { PageContainer } from "@/components/layout/PageContainer";
+import { PageHeader } from "@/components/layout/PageHeader";
 import { useApp } from "@/context/AppContext";
 import { TelemetryDispute } from "@/types/saas";
 import { BulkRosterImportModal } from "@/components/admin/BulkRosterImportModal";
@@ -472,34 +474,28 @@ export default function AdminHubPage() {
     <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans selection:bg-brand-primary/30 selection:text-white">
       <AppHeader />
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
-        {/* Header Title with Sync Button */}
-        <div className="flex flex-col gap-5 min-w-0">
-          <div className="min-w-0">
-            <div className="inline-flex max-w-full items-center space-x-2 px-3 py-1 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-xs font-bold mb-3">
-              <Shield className="w-3.5 h-3.5 shrink-0" />
-              <span className="truncate" title="Administrative Operations • Rule §3.3 & §9.7">Administrative Operations • Rule §3.3 & §9.7</span>
+      <PageContainer className="space-y-6 sm:space-y-8">
+        {/* Standardized Page Header */}
+        <PageHeader
+          badge={
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/10 border border-brand-primary/25 text-brand-primary text-xs font-mono font-semibold">
+              <Shield className="w-3.5 h-3.5 text-brand-secondary shrink-0" />
+              <span>Administrative Operations · Rule §3.3 &amp; §9.7</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white leading-tight text-balance break-words">
-              Class Administrator &amp; Audit Hub
-            </h1>
-            <p className="text-sm sm:text-base text-muted mt-2 max-w-3xl break-words">
-              Deterministic roster governance, sync connector monitors, and tamper-resistant dispute logging.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
+          }
+          title="Class Administrator & Audit Hub"
+          description="Deterministic roster governance, sync connector monitors, and tamper-resistant dispute logging."
+          actions={
             <button
               onClick={handleTriggerGlobalSync}
               disabled={isSyncing}
-              className="inline-flex items-center space-x-2.5 px-5 py-3 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm font-semibold text-ink-secondary hover:text-white transition-colors disabled:opacity-50"
+              className="inline-flex items-center space-x-2.5 px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-border text-xs sm:text-sm font-semibold text-ink-secondary hover:text-white transition-all shadow-sm disabled:opacity-50"
             >
               <RefreshCw className={`w-4 h-4 shrink-0 ${isSyncing ? "animate-spin text-brand-secondary" : "text-muted"}`} />
-              <span className="break-words">{isSyncing ? "Auditing Connectors..." : "Audit Telemetry Connectors"}</span>
+              <span>{isSyncing ? "Auditing Connectors..." : "Audit Telemetry Connectors"}</span>
             </button>
-          </div>
-        </div>
+          }
+        />
 
         {/* Tab Controls */}
         <div className="flex items-center space-x-2 border-b border-white/[0.08] pb-3 overflow-x-auto p-1">
@@ -1858,7 +1854,7 @@ export default function AdminHubPage() {
             });
           }}
         />
-      </main>
+      </PageContainer>
 
       {/* Footer */}
       <footer className="border-t border-white/[0.08] bg-canvas px-6 py-4 text-xs text-muted">
