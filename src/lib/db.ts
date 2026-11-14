@@ -160,6 +160,11 @@ function initSchema(db: DatabaseSync): void {
 }
 
 function seedInitialRosterIfEmpty(db: DatabaseSync): void {
+  // TWM-001H: In production, never seed fictional roster or observations (§5.7, ARCH-02, INV-01)
+  if (process.env.NODE_ENV === "production") {
+    return;
+  }
+
   const countRow = db.prepare("SELECT COUNT(*) as count FROM roster_members").get() as { count: number };
   if (countRow && countRow.count > 0) {
     return;
