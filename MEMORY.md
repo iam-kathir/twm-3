@@ -135,6 +135,26 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-11-14 — Task Pack TWM-001 (P0 Security Containment): Batch 2 Execution
+- **User Directive:** "Authorize TWM-001 Batch 2: TWM-001C (Disputes), TWM-001D (Roster Bulk Import), TWM-001G (Provider Isolation)"
+- **Tasks Implemented & Bounded Commits:**
+  1. `TWM-001C` (Commit `f4b406a`):
+     - `src/app/api/disputes/route.ts`: Enforced `getCurrentSession()` on GET and POST (401 on missing session); scoped GET strictly to authenticated student's own disputes via `getDisputesByStudentId()`; derived student identity strictly from server-side session in POST (ignoring forged body payloads); enforced DEC-02 limit (max 2 open disputes per student); locked PATCH fail-closed with HTTP 403 `FORBIDDEN` pending Faculty workspace RBAC (preventing students/coordinators from resolving disputes).
+     - `src/lib/db.ts`: Added `getDisputesByStudentId()` and `getOpenDisputesCountForStudent()`.
+  2. `TWM-001D` (Commit `b0fdc32`):
+     - `src/app/api/roster/bulk-import/route.ts`: Completely eliminated `isDev` authentication bypass; locked endpoint fail-closed with HTTP 403 `FORBIDDEN` pending Faculty cohort RBAC; 0 roster mutations possible.
+  3. `TWM-001G` (Commit `1395d18`):
+     - `src/app/api/telemetry/leetcode/route.ts`: Disabled live GraphQL endpoint scraping; returns honest `UNAVAILABLE` state with `isVerified: false`.
+     - `src/app/api/telemetry/hackerrank/route.ts`: Disabled live REST endpoint scraping; returns honest `UNAVAILABLE` state with `isVerified: false` and `isEligibleForWeeklyCompetition: false`, preserving Section 5.6 audit proof digest format.
+  4. **Negative Test Suite Expansion** (Commit `02766fb`):
+     - `scripts/test-p0-containment.mjs`: Added static invariant and live route tests for TWM-001C, TWM-001D, and TWM-001G; added isolated temporary DB tests verifying cross-student dispute isolation (Student A cannot read Student B's disputes), identity spoofing rejection, DEC-02 open dispute limits, and coordinator PATCH 403 rejection.
+- **Verification Gates (all passed):**
+  - `npx tsc --noEmit`: 0 errors.
+  - `npm run lint`: 0 errors / 0 warnings.
+  - `npm test`: **89/89 tests passing** across 26 suites in 757ms.
+  - `git status --short`: Tracked files 100% clean.
+
+
 ### 2026-11-14 — TWM-001 Batch 1: Test Isolation Remediation & Phase 4 Tracking
 - **User Directive:** "Fix scripts/test-p0-containment.mjs. Ensure all nonce-related tests use a dedicated temporary SQLite database... Record cron period integer and range validation as a tracked requirement for boundary-automation phase."
 - **Actions Implemented:**

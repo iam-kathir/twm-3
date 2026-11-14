@@ -198,6 +198,21 @@ Full evidence in [`PROVIDER_FEASIBILITY_AUDIT.md`](PROVIDER_FEASIBILITY_AUDIT.md
 
 ---
 
+## 🛡️ Task Pack TWM-001: P0 Security Containment (COMPLETED)
+
+| Task ID | Task Description | Scope & Requirements | Target Files | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **TWM-001H** | **Production Demo Seeding Guard** | Guard `seedInitialRosterIfEmpty` under `NODE_ENV === "production"`; clean production DB boots with 0 records. | [`src/lib/db.ts`](src/lib/db.ts) | ✅ **DONE** (Commit `d4f809a`) |
+| **TWM-001E** | **Atomic Nonce Lifecycle & Challenge Disablement** | Fail closed on unknown nonces (`NONCE_NOT_FOUND`); atomic conditional SQL update; bio-challenge returns 403 `DISABLED`. | [`src/lib/db.ts`](src/lib/db.ts)<br>[`src/app/api/auth/hmac-challenge/route.ts`](src/app/api/auth/hmac-challenge/route.ts) | ✅ **DONE** (Commit `41ab7f8`) |
+| **TWM-001B** | **Client Telemetry Injection Containment** | Replace `/api/telemetry/sync` write path with fail-closed HTTP 403 `FORBIDDEN`; 0 client writes. | [`src/app/api/telemetry/sync/route.ts`](src/app/api/telemetry/sync/route.ts) | ✅ **DONE** (Commit `bf2e53a`) |
+| **TWM-001F** | **Scheduler Authentication & Safe Finalization** | Mandatory `CRON_SECRET` using `crypto.timingSafeEqual`; explicit numeric `weekNumber`/`year` required; no week 42 fallback. | [`src/app/api/cron/boundary-finalize/route.ts`](src/app/api/cron/boundary-finalize/route.ts) | ✅ **DONE** (Commit `0e95653`) |
+| **TWM-001C** | **Dispute Authorization & Cross-Student Isolation** | Require session on GET/POST; student sees strictly own disputes; POST derives identity from session; DEC-02 limit; PATCH fails closed with 403. | [`src/app/api/disputes/route.ts`](src/app/api/disputes/route.ts)<br>[`src/lib/db.ts`](src/lib/db.ts) | ✅ **DONE** (Commit `f4b406a`) |
+| **TWM-001D** | **Roster Import Containment** | Eliminate `isDev` bypass; fail closed with HTTP 403 `FORBIDDEN` pending Faculty cohort RBAC; 0 roster mutations. | [`src/app/api/roster/bulk-import/route.ts`](src/app/api/roster/bulk-import/route.ts) | ✅ **DONE** (Commit `b0fdc32`) |
+| **TWM-001G** | **LeetCode & HackerRank Collection Isolation** | Pause unsanctioned scraping; return honest `UNAVAILABLE` state with `isVerified: false`; zero network fetches. | [`src/app/api/telemetry/leetcode/route.ts`](src/app/api/telemetry/leetcode/route.ts)<br>[`src/app/api/telemetry/hackerrank/route.ts`](src/app/api/telemetry/hackerrank/route.ts) | ✅ **DONE** (Commit `1395d18`) |
+
+
+---
+
 ## 🛠️ Commands & Verification Reference
 
 ```powershell
