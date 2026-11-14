@@ -194,6 +194,7 @@ Full evidence in [`PROVIDER_FEASIBILITY_AUDIT.md`](PROVIDER_FEASIBILITY_AUDIT.md
 | **PRV-5** | Add Codeforces as 4th provider (official API, per-submission UTC timestamps) and make it the ranked anchor | new adapter + leaderboard tab + 1 req/2 s throttle + cache | ⬜ **OPEN (P1, ~3-5d)** |
 | **PRV-6** | Production credentials: `GITHUB_TOKEN` (60 → 5,000 req/hr), GitHub OAuth app, Resend/SendGrid key, `TWM_SESSION_SECRET`, `TWM_HMAC_SECRET` | env + GitHub/Resend dashboards | ⬜ **OPEN (P0, user action)** |
 | **PRV-7** | Replace seed placeholder roster handles (`aarav-dev`, `rohan-code`, `priya-n`) with a real section roster and run 2 full Sunday boundaries before publishing any claim | `data/twm.sqlite` via bulk import | ⬜ **OPEN (pilot gate)** |
+| **CRON-1** | **Cron Period Range & Integer Validation (Phase 4 Boundary Automation)** | In `/api/cron/boundary-finalize`, enforce strict integer and range validation for competition periods (`1 <= weekNumber <= 53`, `2020 <= year <= 2100`, `Number.isInteger()`), returning 400 Bad Request on out-of-range periods. (Tracked requirement for Phase 4 boundary automation; deferred per Batch 1 scope boundary). | `src/app/api/cron/boundary-finalize/route.ts` | ⬜ **OPEN (Phase 4 Boundary Automation)** |
 
 ---
 

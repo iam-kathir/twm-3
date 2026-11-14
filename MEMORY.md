@@ -135,6 +135,21 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-11-14 — TWM-001 Batch 1: Test Isolation Remediation & Phase 4 Tracking
+- **User Directive:** "Fix scripts/test-p0-containment.mjs. Ensure all nonce-related tests use a dedicated temporary SQLite database... Record cron period integer and range validation as a tracked requirement for boundary-automation phase."
+- **Actions Implemented:**
+  1. `src/lib/db.ts`: Exported `initSchema(db: DatabaseSync)` and added optional `dbInstance?: DatabaseSync` parameter (defaulting to `dbInstance ?? getDb()`) to `registerHmacNonce` and `verifyAndConsumeNonce`.
+  2. `scripts/test-p0-containment.mjs`: Rewrote nonce lifecycle suite (TWM-001E) to execute against a dedicated temporary SQLite database with automatic `after()` unlinking of `.sqlite`, `-wal`, and `-shm` files; removed top-level `getDb()` coupling; added static route invariant assertions and detached dev-db queries.
+  3. Purged all 10 legacy test nonces from shared `data/twm.sqlite` (`test-atomic-%`, `test-expired-%`). Verified count = 0.
+  4. Tracked requirement `CRON-1` (cron period integer and range validation: `1 <= weekNumber <= 53`, `2020 <= year <= 2100`, `Number.isInteger()`) logged in `TASKS.md` for Phase 4 boundary automation.
+- **Verification Gates (all passed):**
+  - `npx tsc --noEmit`: 0 errors.
+  - `npm run lint`: 0 errors / 0 warnings.
+  - `npm test`: **81/81 tests passing** across 23 suites in 484ms.
+  - Dev DB Verification: `SELECT COUNT(*) FROM hmac_nonces WHERE nonce LIKE 'test-%'` = 0.
+  - Temp DB Cleanup: 0 orphaned files in `data/test-*`.
+
+
 ### 2026-11-14 — Task Pack TWM-001 (P0 Security Containment): Batch 1 Execution
 - **User Directive:** "Authorize implementation of TWM-001 Batch 1 only: TWM-001H, TWM-001E, TWM-001B, TWM-001F"
 - **Tasks Implemented & Bounded Commits:**

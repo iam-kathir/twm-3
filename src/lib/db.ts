@@ -40,7 +40,7 @@ export function getDb(): DatabaseSync {
   return dbInstance;
 }
 
-function initSchema(db: DatabaseSync): void {
+export function initSchema(db: DatabaseSync): void {
   db.exec(`
     -- 1. Class Roster Members (§3.2, §3.3)
     CREATE TABLE IF NOT EXISTS roster_members (
@@ -467,8 +467,15 @@ export function getLatestPlatformObservations(platform: string): Record<string, 
 }
 
 // Nonce Storage (§6.2 replay prevention)
-export function registerHmacNonce(nonce: string, userId: string, provider: string, handle: string, expiresAt: number): void {
-  const db = getDb();
+export function registerHmacNonce(
+  nonce: string,
+  userId: string,
+  provider: string,
+  handle: string,
+  expiresAt: number,
+  dbInstance?: DatabaseSync
+): void {
+  const db = dbInstance ?? getDb();
   const stmt = db.prepare(`
     INSERT OR IGNORE INTO hmac_nonces (nonce, user_id, provider, handle, created_at, expires_at)
     VALUES (?, ?, ?, ?, ?, ?)
@@ -476,8 +483,11 @@ export function registerHmacNonce(nonce: string, userId: string, provider: strin
   stmt.run(nonce, userId, provider, handle, Date.now(), expiresAt);
 }
 
-export function verifyAndConsumeNonce(nonce: string): { valid: boolean; reason?: string } {
-  const db = getDb();
+export function verifyAndConsumeNonce(
+  nonce: string,
+  dbInstance?: DatabaseSync
+): { valid: boolean; reason?: string } {
+  const db = dbInstance ?? getDb();
   const row = db.prepare("SELECT * FROM hmac_nonces WHERE nonce = ?").get(nonce) as {
     nonce: string;
     expires_at: number;
