@@ -210,6 +210,18 @@ Full evidence in [`PROVIDER_FEASIBILITY_AUDIT.md`](PROVIDER_FEASIBILITY_AUDIT.md
 | **TWM-001D** | **Roster Import Containment** | Eliminate `isDev` bypass; fail closed with HTTP 403 `FORBIDDEN` pending Faculty cohort RBAC; 0 roster mutations. | [`src/app/api/roster/bulk-import/route.ts`](src/app/api/roster/bulk-import/route.ts) | ✅ **DONE** (Commit `b0fdc32`) |
 | **TWM-001G** | **LeetCode & HackerRank Collection Isolation** | Pause unsanctioned scraping; return honest `UNAVAILABLE` state with `isVerified: false`; zero network fetches. | [`src/app/api/telemetry/leetcode/route.ts`](src/app/api/telemetry/leetcode/route.ts)<br>[`src/app/api/telemetry/hackerrank/route.ts`](src/app/api/telemetry/hackerrank/route.ts) | ✅ **DONE** (Commit `1395d18`) |
 
+---
+
+## 🏛️ Phase 1: PostgreSQL & Authoritative RBAC (COMPLETED)
+
+| Task ID | Task Description | Scope & Requirements | Target Files | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **P1-PG-MIG** | **PostgreSQL DDL Migration Infrastructure** | Established production migrations 0001 (Core: users, cohorts, memberships), 0002 (RBAC: roles, grants with triage DDL constraint `chk_coordinator_triage_boundary`), 0003 (Sessions & Tamper-Evident Audit with append-only immutability trigger). | [`migrations/0001_core_schema.sql`](migrations/0001_core_schema.sql)<br>[`migrations/0002_rbac_and_grants.sql`](migrations/0002_rbac_and_grants.sql)<br>[`migrations/0003_sessions_and_audit.sql`](migrations/0003_sessions_and_audit.sql) | ✅ **DONE** (Commit `acabe62`) |
+| **P1-RBAC-ENG** | **Authoritative Server-Side RBAC Engine** | Implemented core RBAC logic: `checkPermission`, `verifyCohortAccess`, `verifyCoordinatorGrant`, `assertPermission`. Enforces student dispute ownership, coordinator triage-only boundary, time-bounded grants, faculty cohort boundaries, and platform admin overrides. | [`src/lib/rbac/types.ts`](src/lib/rbac/types.ts)<br>[`src/lib/rbac/permissions.ts`](src/lib/rbac/permissions.ts)<br>[`src/lib/rbac/engine.ts`](src/lib/rbac/engine.ts)<br>[`src/lib/rbac/index.ts`](src/lib/rbac/index.ts) | ✅ **DONE** (Commit `acabe62`) |
+| **P1-SESSION** | **Database-Backed Session Manager** | 256-bit entropy bearer tokens (`twm_s_<base64url>`), SHA-256 token hashing, atomic single-use rotation, and immediate revocation. Preserves PO-14 configurable/unapproved session lifetime policy. | [`src/lib/rbac/session.ts`](src/lib/rbac/session.ts) | ✅ **DONE** (Commit `acabe62`) |
+| **P1-AUDIT** | **Tamper-Evident Chained Audit Logging** | SHA-256 cryptographic hash-chaining (`previous_log_hash` → `entry_hash`), genesis hash anchor, cryptographic chain validation (`verifyAuditChain`), and structured decision auditing. | [`src/lib/rbac/audit.ts`](src/lib/rbac/audit.ts) | ✅ **DONE** (Commit `acabe62`) |
+| **P1-TEST-SUITE** | **Phase 1 Automated Test Verification Suite** | 23 dedicated automated unit & security tests covering migration DDL invariants, RBAC boundaries, session hashing/rotation, and audit hash-chain integrity. Automated test total increased from 89 to 112 (100% passing). | [`scripts/test-rbac-postgresql.mjs`](scripts/test-rbac-postgresql.mjs)<br>[`package.json`](package.json) | ✅ **DONE** (Commit `acabe62`) |
+
 
 ---
 
