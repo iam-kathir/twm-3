@@ -547,19 +547,19 @@ export function getAllDisputes(): DisputeRow[] {
   return db.prepare("SELECT * FROM disputes ORDER BY submitted_at DESC").all() as unknown as DisputeRow[];
 }
 
-export function getDisputesByStudentId(studentId: string): DisputeRow[] {
-  const db = getDb();
+export function getDisputesByStudentId(studentId: string, customDb?: DatabaseSync): DisputeRow[] {
+  const db = customDb ?? getDb();
   return db.prepare("SELECT * FROM disputes WHERE student_id = ? ORDER BY submitted_at DESC").all(studentId) as unknown as DisputeRow[];
 }
 
-export function getOpenDisputesCountForStudent(studentId: string): number {
-  const db = getDb();
+export function getOpenDisputesCountForStudent(studentId: string, customDb?: DatabaseSync): number {
+  const db = customDb ?? getDb();
   const row = db.prepare("SELECT COUNT(*) as count FROM disputes WHERE student_id = ? AND status = 'pending'").get(studentId) as { count: number };
   return row ? row.count : 0;
 }
 
-export function getDisputeById(id: string): DisputeRow | undefined {
-  const db = getDb();
+export function getDisputeById(id: string, customDb?: DatabaseSync): DisputeRow | undefined {
+  const db = customDb ?? getDb();
   return db.prepare("SELECT * FROM disputes WHERE id = ?").get(id) as unknown as DisputeRow | undefined;
 }
 
@@ -573,8 +573,8 @@ export function insertDispute(d: {
   claim: string;
   evidenceUrl: string;
   ruleReference: string;
-}): void {
-  const db = getDb();
+}, customDb?: DatabaseSync): void {
+  const db = customDb ?? getDb();
   const stmt = db.prepare(`
     INSERT INTO disputes (id, student_id, student_name, roll_no, metric, platform, claim, evidence_url, rule_reference, status)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')
