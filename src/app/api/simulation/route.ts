@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   // Prevent test data generation from overwriting production state
-  if (process.env.NODE_ENV === "production") {
+  if ((process.env.NODE_ENV as string) === "production") {
     return NextResponse.json(
       {
         error: "FORBIDDEN",
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
   }
 
   const session = await getCurrentSession();
-  const isDev = process.env.NODE_ENV !== "production";
+  const isDev = (process.env.NODE_ENV as string) !== "production";
   if (!session && !isDev) {
     return NextResponse.json(
       { error: "UNAUTHORIZED", message: "Administrative session required to run tournament simulation." },

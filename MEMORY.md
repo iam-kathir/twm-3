@@ -135,6 +135,32 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-11-14 — Ponytail Mode: Full Repository Audit & Comprehensive Fix Pass
+- **User Directive:** "using ponytail mode analyse the complete folder" -> "fix everything"
+- **Audit Findings Resolved (14/14):**
+  1. **Security & Auth:**
+     - `src/app/api/roster/bulk-import/route.ts`: Protected with `getCurrentSession()`, failing closed with `401 Unauthorized` in production.
+     - `src/app/api/disputes/route.ts`: Added administrative session gate to `PATCH /api/disputes`; replaced collision-prone `Math.random()` ID with collision-free cryptographic `DSP-${Date.now().toString(36)}-${crypto.randomBytes(3).toString("hex")}`.
+     - `src/app/api/simulation/route.ts`: Blocked in production (`NODE_ENV === "production" -> 403 FORBIDDEN`); required session gate; protected baseline seed week 42 in `src/lib/simulation.ts`.
+     - `src/app/api/cron/boundary-finalize/route.ts`: Enforced `CRON_SECRET` authorization check (`Bearer ${process.env.CRON_SECRET}`); updated `scripts/boundary-scheduler.mjs` to dispatch Authorization header.
+  2. **Data & Query Reliability:**
+     - `src/app/api/telemetry/sync/route.ts`: Replaced hardcoded static date `"2026-10-25T23:59:59.000Z"` with dynamic `getCurrentSundayClosingBoundaryIST().toISOString()`; standardized to `node:crypto`.
+     - `src/lib/finalizer.ts`: Hoisted `db.prepare(...)` outside the member iteration loop, eliminating redundant statement compilation.
+     - `src/lib/search.ts`: Replaced hardcoded `WHERE week_number = 42 AND year = 2026` with dynamic subquery selecting latest tournament week.
+     - `src/app/api/auth/github/callback/route.ts`: Added safe fail-closed checks on GitHub profile fetch and login handle.
+  3. **Lean Code & Dead Dependency Removal:**
+     - Removed `three` (`^0.186.1`) and `@types/three` (`^0.186.0`) from `package.json` (-600KB+ unpacked bundle).
+     - Removed duplicate `OrbitingTelemetryShowcase.tsx` from landing page; purged unused UI components (`OrbitingCircles.tsx`, `Meteors.tsx`, `AnimatedShinyText.tsx`).
+     - Removed unused `theme` / `toggleTheme` dead state from `AppContext.tsx`.
+     - Fixed React DOM hydration warning by aligning `data-theme="dark"` and `suppressHydrationWarning` on `<html>` in `src/app/layout.tsx`.
+- **Verification Gates (all 5 passed):**
+  - `npx tsc --noEmit`: 0 errors.
+  - `npm run lint`: 0 errors / 0 warnings.
+  - `npm test`: 73/73 tests passing across 19 suites (316ms).
+  - `npm run simulate`: 100% tournament invariants verified.
+  - `npm run audit:launch`: 10/10 launch gates verified.
+
+
 ### 2026-11-14 — OpenCode: Live Provider Feasibility & Go-to-Market Audit
 - **User Directive:** "Analyse everything and make sure all our plan can be achieved practically — linking all external providers. Think like a CEO, marketing team and solution team. If the external providers can't be accessed, find a way."
 - **Deliverable:** [`PROVIDER_FEASIBILITY_AUDIT.md`](PROVIDER_FEASIBILITY_AUDIT.md) — evidence-based audit, capability truth table, 5 defects, 6 fallback strategies, roadmap, decision sheet.

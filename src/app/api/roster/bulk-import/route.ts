@@ -68,7 +68,7 @@ function parseCsvRows(csvText: string): StudentImportRow[] {
 export async function POST(request: NextRequest) {
   // Section 3.2 Authorization: Only authenticated sessions may modify the class roster
   const session = await getCurrentSession();
-  const isDev = process.env.NODE_ENV !== "production";
+  const isDev = (process.env.NODE_ENV as string) !== "production";
   if (!session && !isDev) {
     return NextResponse.json(
       {

@@ -101,7 +101,7 @@ export async function PATCH(req: NextRequest) {
 
   try {
     const session = await getCurrentSession();
-    const isDev = process.env.NODE_ENV !== "production";
+    const isDev = (process.env.NODE_ENV as string) !== "production";
     if (!session && !isDev) {
       return NextResponse.json(
         { error: "UNAUTHORIZED", message: "Authenticated faculty co-admin session required to resolve disputes." },
