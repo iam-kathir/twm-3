@@ -135,6 +135,21 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-11-14 — Task Pack TWM-001 (P0 Security Containment): Batch 1 Execution
+- **User Directive:** "Authorize implementation of TWM-001 Batch 1 only: TWM-001H, TWM-001E, TWM-001B, TWM-001F"
+- **Tasks Implemented & Bounded Commits:**
+  1. `TWM-001H` (Commit `d4f809a`): Guarded `seedInitialRosterIfEmpty` in `src/lib/db.ts` under `process.env.NODE_ENV === "production"` to guarantee a clean production database is never seeded with fictional VIT records.
+  2. `TWM-001E` (Commit `41ab7f8`): Refactored `verifyAndConsumeNonce()` in `src/lib/db.ts` to fail closed (`NONCE_NOT_FOUND`) on unknown nonces with conditional atomic SQL update; disabled unauthenticated bio-challenge ownership verification in `src/app/api/auth/hmac-challenge/route.ts` (403 DISABLED).
+  3. `TWM-001B` (Commit `bf2e53a`): Replaced client telemetry write path in `src/app/api/telemetry/sync/route.ts` with fail-closed HTTP 403 Forbidden, eliminating arbitrary client score/metric injection.
+  4. `TWM-001F` (Commit `0e95653`): Enforced mandatory `CRON_SECRET` with timing-safe comparison on `src/app/api/cron/boundary-finalize/route.ts` and required explicit numeric `weekNumber` and `year`, eliminating fail-open and hardcoded week 42 fallbacks.
+  5. **Negative Test Suite** (Commit `aaf4339`): Created `scripts/test-p0-containment.mjs` verifying production seeding isolation, unknown nonce rejection, replayed nonce rejection, sync write 403 with 0 DB mutations, bio-challenge 403, and cron 401 fail-closed behavior.
+- **Verification Gates (all 5 passed):**
+  - `npx tsc --noEmit`: 0 errors.
+  - `npm run lint`: 0 errors / 0 warnings.
+  - `npm test`: **80/80 tests passing** across 23 suites in 323ms (73 foundation + 7 negative containment).
+  - `git status --short`: Tracked files 100% clean.
+- **Next Stage:** Standing by for Product Owner review before Batch 2 authorization.
+
 ### 2026-11-14 — Ponytail Mode: Full Repository Audit & Comprehensive Fix Pass
 - **User Directive:** "using ponytail mode analyse the complete folder" -> "fix everything"
 - **Audit Findings Resolved (14/14):**
