@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "node --test --test-force-exit scripts/test-foundation.mjs scripts/test-otp-verification.mjs scripts/test-hero-stats-refinement.mjs scripts/test-orbital-engine.mjs scripts/test-authenticated-layout.mjs",
+    "test": "node --test --test-force-exit scripts/test-foundation.mjs scripts/test-otp-verification.mjs scripts/test-hero-stats-refinement.mjs scripts/test-orbital-engine.mjs scripts/test-authenticated-layout.mjs scripts/test-p0-containment.mjs",
     "simulate": "node scripts/simulate-tournament-week.mjs",
     "backup": "node scripts/backup-db.mjs",
     "restore": "node scripts/restore-db.mjs",

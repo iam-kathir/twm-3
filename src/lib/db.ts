@@ -159,7 +159,7 @@ function initSchema(db: DatabaseSync): void {
   try { db.exec("ALTER TABLE roster_members ADD COLUMN email_verified_at TEXT;"); } catch {}
 }
 
-function seedInitialRosterIfEmpty(db: DatabaseSync): void {
+export function seedInitialRosterIfEmpty(db: DatabaseSync): void {
   // TWM-001H: In production, never seed fictional roster or observations (§5.7, ARCH-02, INV-01)
   if (process.env.NODE_ENV === "production") {
     return;
