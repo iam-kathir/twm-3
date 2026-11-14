@@ -141,123 +141,13 @@ async function fetchPublicBio(provider: Provider, handle: string): Promise<strin
 }
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get("x-forwarded-for") || "local";
-  const rateLimit = checkRateLimit(`hmac:${ip}`, { limit: 15, windowMs: 60000 });
-  if (!rateLimit.allowed) {
-    return NextResponse.json(
-      { error: "Too many requests. Please wait a moment before trying again." },
-      { status: 429, headers: getRateLimitHeaders(rateLimit) }
-    );
-  }
-
-  let body: ChallengeRequest;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Request body must be JSON." }, { status: 400 });
-  }
-
-  const { action, userId, provider, handle, challenge } = body;
-
-  if (!userId || !provider || !handle) {
-    return NextResponse.json(
-      { error: "Missing required fields: userId, provider, and handle are required." },
-      { status: 400 }
-    );
-  }
-
-  if (provider !== "leetcode" && provider !== "hackerrank") {
-    return NextResponse.json(
-      { error: "Provider must be either 'leetcode' or 'hackerrank' for bio challenge verification." },
-      { status: 400 }
-    );
-  }
-
-  try {
-    if (action === "create") {
-      const { challengeCode, expiresAt } = createChallenge(userId, provider, handle);
-      return NextResponse.json({
-        success: true,
-        action: "create",
-        provider,
-        handle,
-        challengeCode,
-        expiresAt,
-        ttlMinutes: 15,
-        instructions: `Paste '${challengeCode}' anywhere in your public ${
-          provider === "leetcode" ? "LeetCode profile summary/bio" : "HackerRank 'About Me' bio"
-        }. Once verified, you may safely delete it.`,
-      });
-    }
-
-    if (action === "verify") {
-      if (!challenge) {
-        return NextResponse.json(
-          { error: "Missing 'challenge' string for verification." },
-          { status: 400 }
-        );
-      }
-
-      // Signature and expiry are checked before any network call: a forged or stale
-      // token must never be able to trigger a provider request.
-      const check = checkToken(challenge, userId, provider, handle);
-      if (!check.ok) {
-        return NextResponse.json(
-          { verified: false, error: "Challenge token is invalid or expired.", reason: check.reason },
-          { status: check.status }
-        );
-      }
-
-      let bio: string;
-      try {
-        bio = await fetchPublicBio(provider, handle);
-      } catch (err) {
-        return NextResponse.json(
-          {
-            verified: false,
-            error: `Could not read the public ${provider} profile: ${
-              err instanceof Error ? err.message : "provider unavailable"
-            }.`,
-            reason: "PROVIDER_UNAVAILABLE",
-          },
-          { status: 502 }
-        );
-      }
-
-      if (!bio) {
-        return NextResponse.json(
-          {
-            verified: false,
-            error: `The public ${provider} profile for '${handle}' has no bio text. Make the profile public and add the code, then retry.`,
-            reason: "NO_PUBLIC_BIO",
-          },
-          { status: 422 }
-        );
-      }
-
-      // Exact token match inside the real bio, not a substring supplied by the caller.
-      const verified = bio.includes(challenge.trim());
-
-      return NextResponse.json({
-        success: true,
-        action: "verify",
-        provider,
-        handle,
-        verified,
-        verifiedAt: verified ? new Date().toISOString() : null,
-        reason: verified ? "TOKEN_FOUND" : "TOKEN_NOT_IN_BIO",
-        message: verified
-          ? "Account ownership successfully verified! You can now remove the verification code from your profile."
-          : "The challenge code was not found in your public profile bio. Paste it, save, and try again before the token expires.",
-      });
-    }
-
-    return NextResponse.json(
-      { error: "Invalid action. Supported actions: 'create' | 'verify'" },
-      { status: 400 }
-    );
-  } catch (error) {
-    console.error("hmac-challenge error:", error);
-    return NextResponse.json({ error: "Internal challenge handler error" }, { status: 500 });
-  }
+  // TWM-001E: Bio-challenge ownership verification is disabled during containment pending authenticated connection workflow (§6.2, MOD-11)
+  return NextResponse.json(
+    {
+      error: "DISABLED",
+      message: "Provider bio-challenge ownership verification is disabled during security containment pending authenticated provider connection workflow (TWM-001E).",
+      verified: false,
+    },
+    { status: 403 }
+  );
 }

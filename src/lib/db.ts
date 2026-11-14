@@ -485,13 +485,8 @@ export function verifyAndConsumeNonce(nonce: string): { valid: boolean; reason?:
   } | undefined;
 
   if (!row) {
-    // If not found in registry, record it as consumed now so it cannot be re-used
-    const insert = db.prepare(`
-      INSERT INTO hmac_nonces (nonce, user_id, provider, handle, created_at, expires_at, consumed_at)
-      VALUES (?, 'unknown', 'unknown', 'unknown', ?, ?, datetime('now'))
-    `);
-    insert.run(nonce, Date.now(), Date.now() + 900000);
-    return { valid: true };
+    // TWM-001E: Fail closed on unknown nonce (§6.2, MOD-11)
+    return { valid: false, reason: "NONCE_NOT_FOUND" };
   }
 
   if (row.consumed_at) {
@@ -502,8 +497,16 @@ export function verifyAndConsumeNonce(nonce: string): { valid: boolean; reason?:
     return { valid: false, reason: "TOKEN_EXPIRED" };
   }
 
-  // Mark consumed
-  db.prepare("UPDATE hmac_nonces SET consumed_at = datetime('now') WHERE nonce = ?").run(nonce);
+  // TWM-001E: Atomic single-use consumption via conditional SQL update
+  const now = Date.now();
+  const result = db.prepare(
+    "UPDATE hmac_nonces SET consumed_at = datetime('now') WHERE nonce = ? AND consumed_at IS NULL AND expires_at > ?"
+  ).run(nonce, now);
+
+  if (result.changes !== 1) {
+    return { valid: false, reason: "NONCE_ALREADY_USED" };
+  }
+
   return { valid: true };
 }
 
