@@ -547,6 +547,17 @@ export function getAllDisputes(): DisputeRow[] {
   return db.prepare("SELECT * FROM disputes ORDER BY submitted_at DESC").all() as unknown as DisputeRow[];
 }
 
+export function getDisputesByStudentId(studentId: string): DisputeRow[] {
+  const db = getDb();
+  return db.prepare("SELECT * FROM disputes WHERE student_id = ? ORDER BY submitted_at DESC").all(studentId) as unknown as DisputeRow[];
+}
+
+export function getOpenDisputesCountForStudent(studentId: string): number {
+  const db = getDb();
+  const row = db.prepare("SELECT COUNT(*) as count FROM disputes WHERE student_id = ? AND status = 'pending'").get(studentId) as { count: number };
+  return row ? row.count : 0;
+}
+
 export function getDisputeById(id: string): DisputeRow | undefined {
   const db = getDb();
   return db.prepare("SELECT * FROM disputes WHERE id = ?").get(id) as unknown as DisputeRow | undefined;

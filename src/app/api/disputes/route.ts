@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
-import { getAllDisputes, insertDispute, resolveDisputeInDb, getCurrentUserMember } from "@/lib/db";
+import { getDisputesByStudentId, insertDispute, getOpenDisputesCountForStudent } from "@/lib/db";
 import { checkRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
 import { getCurrentSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * GET /api/disputes
+ * TWM-001C: Scoped disputes retrieval.
+ * Requires authenticated session. Ordinary students receive strictly their own disputes.
+ */
 export async function GET(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for") || "local";
   const rateLimit = checkRateLimit(`disputes-get:${ip}`, { limit: 60, windowMs: 60000 });
@@ -16,8 +21,17 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  const session = await getCurrentSession();
+  if (!session) {
+    return NextResponse.json(
+      { error: "UNAUTHORIZED", message: "Authentication required to view disputes." },
+      { status: 401 }
+    );
+  }
+
   try {
-    const disputes = getAllDisputes();
+    // Scoped strictly to the authenticated student's own disputes (§10.1, TWM-001C)
+    const disputes = getDisputesByStudentId(session.studentId);
     return NextResponse.json({
       success: true,
       total: disputes.length,
@@ -29,6 +43,10 @@ export async function GET(req: NextRequest) {
   }
 }
 
+/**
+ * POST /api/disputes
+ * TWM-001C: Dispute creation with server-derived student identity & DEC-02 concurrency limits.
+ */
 export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for") || "local";
   const rateLimit = checkRateLimit(`disputes-post:${ip}`, { limit: 10, windowMs: 60000 });
@@ -39,6 +57,14 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  const session = await getCurrentSession();
+  if (!session) {
+    return NextResponse.json(
+      { error: "UNAUTHORIZED", message: "Authentication required to submit disputes." },
+      { status: 401 }
+    );
+  }
+
   let body: any;
   try {
     body = await req.json();
@@ -46,7 +72,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
 
-  const { metric, platform, claim, evidenceUrl, ruleReference, studentName, rollNo, studentId } = body;
+  const { metric, platform, claim, evidenceUrl, ruleReference } = body || {};
 
   if (!metric || !platform || !claim) {
     return NextResponse.json(
@@ -55,87 +81,60 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Decision DEC-02: Maximum of 2 simultaneously open disputes per student per competition week
+  const openCount = getOpenDisputesCountForStudent(session.studentId);
+  if (openCount >= 2) {
+    return NextResponse.json(
+      {
+        error: "MAX_OPEN_DISPUTES_EXCEEDED",
+        message: "Maximum of 2 open disputes permitted simultaneously under Rule DEC-02.",
+      },
+      { status: 400 }
+    );
+  }
+
   try {
-    const currentUser = getCurrentUserMember();
     const disputeId = `DSP-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
 
+    // Identity is derived STRICTLY from the server session (TWM-001C)
     insertDispute({
       id: disputeId,
-      studentId: studentId || (currentUser ? currentUser.id : "usr-aarav"),
-      studentName: studentName || (currentUser ? currentUser.name : "Aarav Sharma"),
-      rollNo: rollNo || (currentUser ? currentUser.roll_no : "2022BCSE042"),
-      metric,
-      platform,
-      claim,
-      evidenceUrl: evidenceUrl || "https://github.com",
-      ruleReference: ruleReference || "Rule §9.7: Sunday Boundary Observation",
+      studentId: session.studentId,
+      studentName: session.name,
+      rollNo: session.rollNo,
+      metric: String(metric).trim(),
+      platform: String(platform).trim(),
+      claim: String(claim).trim(),
+      evidenceUrl: evidenceUrl ? String(evidenceUrl).trim() : "https://github.com",
+      ruleReference: ruleReference ? String(ruleReference).trim() : "Rule §9.7: Sunday Boundary Observation",
     });
 
-    return NextResponse.json({
-      success: true,
-      disputeId,
-      message: "Dispute lodged successfully. Queued for two-person review.",
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        disputeId,
+        message: "Dispute lodged successfully. Queued for two-person review.",
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Dispute submission error:", error);
     return NextResponse.json({ error: "Failed to record dispute." }, { status: 500 });
   }
 }
 
-export async function PATCH(req: NextRequest) {
-  let body: any;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
-  }
-
-  const { id, status, resolutionNote, reviewer } = body;
-
-  if (!id || (status !== "approved" && status !== "rejected")) {
-    return NextResponse.json(
-      { error: "Valid dispute ID and status ('approved' | 'rejected') are required." },
-      { status: 400 }
-    );
-  }
-
-  try {
-    const session = await getCurrentSession();
-    const isDev = (process.env.NODE_ENV as string) !== "production";
-    if (!session && !isDev) {
-      return NextResponse.json(
-        { error: "UNAUTHORIZED", message: "Authenticated faculty co-admin session required to resolve disputes." },
-        { status: 401 }
-      );
-    }
-
-    const currentUser = session
-      ? { id: session.studentId, name: session.name, roll_no: session.rollNo }
-      : getCurrentUserMember();
-    const reviewerName = reviewer || (currentUser ? `${currentUser.name} (Co-Admin)` : "Faculty Co-Admin");
-
-    const resolved = resolveDisputeInDb(id, status, resolutionNote || "Resolved per Rule §9.7 audit criteria.", reviewerName);
-
-    return NextResponse.json({
-      success: true,
-      id,
-      status: resolved.status,
-      reviewedBy: resolved.reviewed_by,
-      reviewedAt: resolved.reviewed_at,
-      message: `Dispute ${id} marked ${status} in SQLite audit log.`,
-    });
-  } catch (error: any) {
-    const msg = error instanceof Error ? error.message : String(error);
-    if (msg.includes("CONFLICT_OF_INTEREST")) {
-      return NextResponse.json({ error: msg }, { status: 403 });
-    }
-    if (msg.includes("DISPUTE_NOT_FOUND")) {
-      return NextResponse.json({ error: msg }, { status: 404 });
-    }
-    if (msg.includes("DISPUTE_ALREADY_RESOLVED")) {
-      return NextResponse.json({ error: msg }, { status: 409 });
-    }
-    console.error("Dispute resolution error:", error);
-    return NextResponse.json({ error: "Failed to update dispute status." }, { status: 500 });
-  }
+/**
+ * PATCH /api/disputes
+ * TWM-001C: Dispute adjudication lock.
+ * Fails closed for all callers pending authoritative Faculty workspace deployment.
+ * Prevents unauthorized students or Coordinators from making final dispute decisions (GOV-06).
+ */
+export async function PATCH() {
+  return NextResponse.json(
+    {
+      error: "FORBIDDEN",
+      message: "Dispute adjudication requires authoritative Faculty workspace credentials.",
+    },
+    { status: 403 }
+  );
 }
