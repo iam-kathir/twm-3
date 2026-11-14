@@ -135,6 +135,23 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-11-14 — OpenCode: Live Provider Feasibility & Go-to-Market Audit
+- **User Directive:** "Analyse everything and make sure all our plan can be achieved practically — linking all external providers. Think like a CEO, marketing team and solution team. If the external providers can't be accessed, find a way."
+- **Deliverable:** [`PROVIDER_FEASIBILITY_AUDIT.md`](PROVIDER_FEASIBILITY_AUDIT.md) — evidence-based audit, capability truth table, 5 defects, 6 fallback strategies, roadmap, decision sheet.
+- **Live probe evidence (2026-11-14, ~12:00 UTC):**
+  - **HackerRank adapter is broken.** `GET /api/telemetry/hackerrank?username=abhinav_kumar` (a real account) returns `NOT_FOUND`. Root cause: `/rest/hackers/{u}/profile` returns **404** for every real user (3 handles × 3 attempts). Only `/rest/hackers/{u}/badges` still returns 200 (rich payload: `solved`, `stars`, `current_points`, `hacker_rank`); nonexistent handles 404 there, so it doubles as an existence check. The HTML profile page returns 500 to server-side fetch. `/api/auth/hmac-challenge` also calls the dead endpoint → HR ownership verification is impossible today.
+  - **Codeforces is the viable anchor:** official API, no key, `user.status` returns per-submission `creationTimeSeconds` + `verdict` + tags → genuine timestamped weekly delta (§9.1/§9.7). 1 req/2 s documented throttle.
+  - **LeetCode:** GraphQL 200 (cumulative only), `profile.aboutMe` readable (bio challenge viable), `/api/submissions` 403 (no history). Weekly delta must stay our own snapshot diff (`src/lib/baseline.ts`).
+  - **CodeChef** HTML parseable (200, 204 KB) but undocumented + ToS grey. **GeeksforGeeks** bot-blocked (empty body).
+  - **GitHub:** 60 req/hr unauth vs **5,000** with token (measured via `/rate_limit`).
+- **Integrity defects found (not fixed in this pass — code not touched, tri-agent segregation):**
+  1. `/api/telemetry/sync` accepts client-supplied `metricValue` → leaderboard is spoofable; also hardcodes `scheduledBoundaryAt: "2026-10-25T23:59:59.000Z"` (20 days stale; all 41 `telemetry_observations` rows carry it).
+  2. `api/telemetry/github/route.ts:236` returns hardcoded `observationCoveragePercent: 94.2`, surfaced as "Coverage" and marketed as "Audited · Min 90% required".
+  3. `AppContext.tsx:559` toast claims "All 3 Telemetry Feeds Synced … HackerRank verified" regardless of provider failure; handle fallbacks `neal_wu` / `alice` / `iam-kathir` sync the wrong person.
+  4. Roster handles are seed placeholders (`aarav-dev`, `rohan-code`, `priya-n`); all 41 observations belong to `usr-aarav` with GitHub active days `0`.
+  5. `/api/health`: `githubOAuth:false`, `emailDelivery:false`, `emailProvider:mock`, `sessionSecured:false` → login/OTP not launchable as configured.
+- **⚠️ Next agent:** Read §4–5 of the audit before touching providers. D1 (HR badges-only) is a ~0.5-day fix; D2 (server-side observation write path) is the product moat and should not be shortcut.
+
 ### 2026-11-08 — Antigravity & Subagent: Authenticated Application UI Reconstruction & Layout Refinement (FE-AUTH-LAYOUT)
 - **User Directive:** "TWM — AUTHENTICATED APPLICATION UI RECONSTRUCTION & LAYOUT REFINEMENT: Complete internal application audit, rebuild application shell, establish consistent page layout system, refine Leaderboard page, design system consistency, premium animation, accessibility, and responsive testing across 10 viewports."
 - **Root Cause & Architectural Resolution:**

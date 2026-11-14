@@ -5,6 +5,16 @@ import { checkRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
+  // Verify Cron authorization secret
+  const cronSecret = process.env.CRON_SECRET;
+  const authHeader = req.headers.get("authorization");
+  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+    return NextResponse.json(
+      { error: "UNAUTHORIZED", message: "Invalid or missing CRON_SECRET authorization." },
+      { status: 401 }
+    );
+  }
+
   const ip = req.headers.get("x-forwarded-for") || "local";
   const rateLimit = checkRateLimit(`cron-finalize:${ip}`, { limit: 10, windowMs: 60000 });
   if (!rateLimit.allowed) {

@@ -53,10 +53,6 @@ interface AppContextType {
   leaderboard: LeaderboardStudent[];
   exportLeaderboardCSV: () => void;
   exportTelemetryJSON: () => void;
-
-  // Theme
-  theme: "dark" | "light";
-  toggleTheme: () => void;
 }
 
 const DEFAULT_USER: UserProfile = {
@@ -277,23 +273,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [disputeModalMetric, setDisputeModalMetric] = useState<string | undefined>(undefined);
 
   // Theme state: permanently locked to obsidian dark
-  const [theme] = useState<"dark" | "light">("dark");
-
-  useEffect(() => {
-    try {
-      localStorage.removeItem("twm-theme");
-      document.documentElement.setAttribute("data-theme", "dark");
-      document.documentElement.classList.remove("light");
-      document.documentElement.classList.add("dark");
-    } catch {
-      // Ignore in restricted environments
-    }
-  }, []);
-
-  const toggleTheme = useCallback(() => {
-    // White theme disabled per project specification - permanently locked to dark obsidian
-  }, []);
-
   // Load saved state from localStorage on mount
   useEffect(() => {
     try {
@@ -701,9 +680,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         closeDisputeModal,
         leaderboard,
         exportLeaderboardCSV,
-        exportTelemetryJSON,
-        theme,
-        toggleTheme
+        exportTelemetryJSON
       }}
     >
       {children}

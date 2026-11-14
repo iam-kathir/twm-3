@@ -65,14 +65,17 @@ export function executeWeeklyFinalization(options: {
   // Retrieve latest observation for each student at or before Sunday boundary
   const rawParticipants: (RawParticipant & { boundaryGapSeconds: number })[] = [];
 
+  // Prepare statement once outside member loop to eliminate redundant statement compilation overhead
+  const latestObsStmt = db.prepare(`
+    SELECT * FROM telemetry_observations
+    WHERE student_id = ? AND platform = ? AND datetime(observed_at) <= datetime(?)
+    ORDER BY observed_at DESC
+    LIMIT 1
+  `);
+
   for (const m of members) {
     // Only query observations taken at or before boundary timestamp
-    const obs = db.prepare(`
-      SELECT * FROM telemetry_observations
-      WHERE student_id = ? AND platform = ? AND datetime(observed_at) <= datetime(?)
-      ORDER BY observed_at DESC
-      LIMIT 1
-    `).get(m.id, platform, boundaryIso) as any;
+    const obs = latestObsStmt.get(m.id, platform, boundaryIso) as any;
 
     if (obs) {
       const eligibility = evaluateObservationBoundaryEligibility(obs.observed_at, boundaryIso);

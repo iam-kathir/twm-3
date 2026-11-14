@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb, getRosterQuorumStats, type RosterMemberRow } from "@/lib/db";
-import { isInstitutionalCollegeEmail } from "@/lib/auth";
+import { isInstitutionalCollegeEmail, getCurrentSession } from "@/lib/auth";
 import crypto from "node:crypto";
 
 export const dynamic = "force-dynamic";
@@ -66,6 +66,19 @@ function parseCsvRows(csvText: string): StudentImportRow[] {
  * Batch imports class roster from CSV or JSON array inside an atomic SQLite transaction (§3.2, §3.3)
  */
 export async function POST(request: NextRequest) {
+  // Section 3.2 Authorization: Only authenticated sessions may modify the class roster
+  const session = await getCurrentSession();
+  const isDev = process.env.NODE_ENV !== "production";
+  if (!session && !isDev) {
+    return NextResponse.json(
+      {
+        error: "UNAUTHORIZED",
+        message: "Administrative session required to modify class roster records.",
+      },
+      { status: 401 }
+    );
+  }
+
   try {
     const contentType = request.headers.get("content-type") || "";
     let studentRows: StudentImportRow[] = [];

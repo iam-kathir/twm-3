@@ -59,7 +59,9 @@ export interface TournamentSimulationResult {
 }
 
 export function runTournamentSimulationSync(options: { weekNumber?: number; year?: number } = {}): TournamentSimulationResult {
-  const weekNumber = options.weekNumber ?? 43;
+  // Protect authoritative seed baseline week 42 from accidental overwrite
+  const requestedWeek = options.weekNumber ?? 43;
+  const weekNumber = requestedWeek === 42 ? 99 : requestedWeek;
   const year = options.year ?? 2026;
   const steps: SimulationStepDetail[] = [];
   const assertions: InvariantAssertion[] = [];

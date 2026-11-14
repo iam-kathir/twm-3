@@ -52,7 +52,9 @@ export function getCohortDevelopers(options: SearchCohortOptions = {}): Searchab
   const standingsQuery = db.prepare(`
     SELECT student_id, platform, score_value, rank, is_tied
     FROM weekly_standings
-    WHERE week_number = 42 AND year = 2026
+    WHERE (week_number, year) = (
+      SELECT week_number, year FROM weekly_standings ORDER BY year DESC, week_number DESC LIMIT 1
+    )
   `).all() as Array<{
     student_id: string;
     platform: string;

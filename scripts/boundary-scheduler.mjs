@@ -59,6 +59,7 @@ async function triggerApiFinalization(weekNumber, year) {
         headers: {
           "Content-Type": "application/json",
           "Content-Length": Buffer.byteLength(payload),
+          ...(process.env.CRON_SECRET ? { Authorization: `Bearer ${process.env.CRON_SECRET}` } : {}),
         },
         timeout: 5000,
       },

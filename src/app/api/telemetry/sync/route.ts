@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
+import crypto from "node:crypto";
 import { recordObservation, getCurrentUserMember, getDb } from "@/lib/db";
 import { checkRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
+import { getCurrentSundayClosingBoundaryIST } from "@/lib/baseline";
 
 export const dynamic = "force-dynamic";
 
@@ -61,7 +62,7 @@ export async function POST(req: NextRequest) {
       metricValue,
       displayValue: displayValue || `${metricValue}`,
       observedAt: now,
-      scheduledBoundaryAt: "2026-10-25T23:59:59.000Z", // Next Sunday closing
+      scheduledBoundaryAt: getCurrentSundayClosingBoundaryIST().toISOString(), // Authoritative next Sunday 23:59:59 IST boundary (§9.1)
       boundaryGapSeconds: 0,
       isProvisional: !!isProvisional,
       coveragePass: coveragePass !== false,

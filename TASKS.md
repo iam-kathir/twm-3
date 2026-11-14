@@ -181,6 +181,22 @@ WCAG math on the real `globals.css` token pairs. Foundation verdict: **GOOD** (d
 
 ---
 
+## 🚨 Discovered — Provider & Data-Integrity Backlog (2026-11-14 audit, OpenCode)
+
+Full evidence in [`PROVIDER_FEASIBILITY_AUDIT.md`](PROVIDER_FEASIBILITY_AUDIT.md). Live probes confirmed: HackerRank `/profile` is 404 for real users; LeetCode has no timestamps; Codeforces has an official timestamped API; CodeChef is scrape-only; GFG is bot-blocked.
+
+| Task ID | Fix | Scope | Status |
+| :--- | :--- | :--- | :--- |
+| **PRV-1** | HackerRank: drop the dead `/profile` call, use `/badges` only (existence check + rich payload), remove HR from `/api/auth/hmac-challenge`, label `UNVERIFIED_DISPLAY` | `api/telemetry/hackerrank/route.ts`, `api/auth/hmac-challenge/route.ts`, HR UI copy | ⬜ **OPEN (P0, ~0.5d)** |
+| **PRV-2** | `/api/telemetry/sync` must re-fetch server-side and reject client-supplied `metricValue`; compute `scheduledBoundaryAt` from next Sunday 23:59:59 IST (currently hardcoded `2026-10-25`) | `api/telemetry/sync/route.ts`, `AppContext.tsx`, `lib/db.ts` | ⬜ **OPEN (P0, ~3d)** |
+| **PRV-3** | Delete hardcoded `observationCoveragePercent: 94.2`; compute real coverage or remove the column | `api/telemetry/github/route.ts:236`, `PlatformMatrix.tsx`, leaderboard | ⬜ **OPEN (P0, ~4h)** |
+| **PRV-4** | Fix "All 3 Telemetry Feeds Synced … verified" toast + remove `neal_wu` / `alice` handle fallbacks | `AppContext.tsx:467-469,559` | ⬜ **OPEN (P0, ~2h)** |
+| **PRV-5** | Add Codeforces as 4th provider (official API, per-submission UTC timestamps) and make it the ranked anchor | new adapter + leaderboard tab + 1 req/2 s throttle + cache | ⬜ **OPEN (P1, ~3-5d)** |
+| **PRV-6** | Production credentials: `GITHUB_TOKEN` (60 → 5,000 req/hr), GitHub OAuth app, Resend/SendGrid key, `TWM_SESSION_SECRET`, `TWM_HMAC_SECRET` | env + GitHub/Resend dashboards | ⬜ **OPEN (P0, user action)** |
+| **PRV-7** | Replace seed placeholder roster handles (`aarav-dev`, `rohan-code`, `priya-n`) with a real section roster and run 2 full Sunday boundaries before publishing any claim | `data/twm.sqlite` via bulk import | ⬜ **OPEN (pilot gate)** |
+
+---
+
 ## 🛠️ Commands & Verification Reference
 
 ```powershell

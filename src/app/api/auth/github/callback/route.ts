@@ -119,8 +119,17 @@ export async function GET(request: NextRequest) {
         "User-Agent": "TWM-3.1-Auth-Client",
       },
     });
+
+    if (!userRes.ok) {
+      return NextResponse.redirect(new URL(`/login?error=GITHUB_USER_FETCH_FAILED`, request.url));
+    }
+
     const githubUser = await userRes.json();
-    const githubLogin = githubUser.login;
+    const githubLogin = githubUser?.login;
+
+    if (!githubLogin || typeof githubLogin !== "string") {
+      return NextResponse.redirect(new URL(`/login?error=GITHUB_PROFILE_INVALID`, request.url));
+    }
 
     // Fetch User Verified Emails
     const emailRes = await fetch("https://api.github.com/user/emails", {

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
+import crypto from "node:crypto";
 import { getAllDisputes, insertDispute, resolveDisputeInDb, getCurrentUserMember } from "@/lib/db";
 import { checkRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
+import { getCurrentSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -56,7 +57,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const currentUser = getCurrentUserMember();
-    const disputeId = `DSP-${Math.floor(1050 + Math.random() * 900)}`;
+    const disputeId = `DSP-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
 
     insertDispute({
       id: disputeId,
@@ -99,7 +100,18 @@ export async function PATCH(req: NextRequest) {
   }
 
   try {
-    const currentUser = getCurrentUserMember();
+    const session = await getCurrentSession();
+    const isDev = process.env.NODE_ENV !== "production";
+    if (!session && !isDev) {
+      return NextResponse.json(
+        { error: "UNAUTHORIZED", message: "Authenticated faculty co-admin session required to resolve disputes." },
+        { status: 401 }
+      );
+    }
+
+    const currentUser = session
+      ? { id: session.studentId, name: session.name, roll_no: session.rollNo }
+      : getCurrentUserMember();
     const reviewerName = reviewer || (currentUser ? `${currentUser.name} (Co-Admin)` : "Faculty Co-Admin");
 
     const resolved = resolveDisputeInDb(id, status, resolutionNote || "Resolved per Rule §9.7 audit criteria.", reviewerName);

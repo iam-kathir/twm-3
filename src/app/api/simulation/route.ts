@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { runTournamentSimulationSync } from "@/lib/simulation";
 import { checkRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
+import { getCurrentSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,26 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  // Prevent test data generation from overwriting production state
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      {
+        error: "FORBIDDEN",
+        message: "Tournament simulation is strictly disabled in production environments per Section 1.2 zero-fabrication rules.",
+      },
+      { status: 403 }
+    );
+  }
+
+  const session = await getCurrentSession();
+  const isDev = process.env.NODE_ENV !== "production";
+  if (!session && !isDev) {
+    return NextResponse.json(
+      { error: "UNAUTHORIZED", message: "Administrative session required to run tournament simulation." },
+      { status: 401 }
+    );
+  }
+
   const ip = req.headers.get("x-forwarded-for") || "local";
   const rateLimit = checkRateLimit(`sim-run:${ip}`, { limit: 15, windowMs: 60000 });
   if (!rateLimit.allowed) {
