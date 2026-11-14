@@ -1,14 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "node:crypto";
 import { executeWeeklyFinalization } from "@/lib/finalizer";
 import { checkRateLimit, getRateLimitHeaders } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
-  // Verify Cron authorization secret
+  // TWM-001F: Strict scheduler authentication — fail closed if secret is unset
   const cronSecret = process.env.CRON_SECRET;
+  if (!cronSecret) {
+    return NextResponse.json(
+      { error: "UNAUTHORIZED", message: "CRON_SECRET is not configured on the server." },
+      { status: 401 }
+    );
+  }
+
   const authHeader = req.headers.get("authorization");
-  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+  const expectedHeader = `Bearer ${cronSecret}`;
+  if (!authHeader || authHeader.length !== expectedHeader.length) {
+    return NextResponse.json(
+      { error: "UNAUTHORIZED", message: "Invalid or missing CRON_SECRET authorization." },
+      { status: 401 }
+    );
+  }
+
+  const expectedBuf = Buffer.from(expectedHeader);
+  const receivedBuf = Buffer.from(authHeader);
+  if (!crypto.timingSafeEqual(expectedBuf, receivedBuf)) {
     return NextResponse.json(
       { error: "UNAUTHORIZED", message: "Invalid or missing CRON_SECRET authorization." },
       { status: 401 }
@@ -24,16 +42,24 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let body: { weekNumber?: number; year?: number; platform?: "github" | "leetcode" | "all" } = {};
+  // TWM-001F: Require explicit period parameters; reject implicit fallbacks
+  let body: { weekNumber?: number; year?: number; platform?: "github" | "leetcode" | "all" };
   try {
     body = await req.json();
   } catch {
-    // default params
+    return NextResponse.json(
+      { error: "BAD_REQUEST", message: "Missing required JSON body with explicit weekNumber and year." },
+      { status: 400 }
+    );
   }
 
-  const weekNumber = body.weekNumber ?? 42;
-  const year = body.year ?? 2026;
-  const targetPlatform = body.platform ?? "all";
+  const { weekNumber, year, platform: targetPlatform = "all" } = body;
+  if (typeof weekNumber !== "number" || typeof year !== "number") {
+    return NextResponse.json(
+      { error: "BAD_REQUEST", message: "Explicit numeric weekNumber and year are required (§9.1, TWM-001F)." },
+      { status: 400 }
+    );
+  }
 
   try {
     const reports = [];
