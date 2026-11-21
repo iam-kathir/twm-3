@@ -90,7 +90,8 @@ export default function AdminHubPage() {
     disputes, 
     resolveDispute, 
     addToast,
-    exportLeaderboardCSV 
+    exportLeaderboardCSV,
+    can
   } = useApp();
 
   const [activeTab, setActiveTab] = useState<"overview" | "roster" | "disputes" | "logs" | "simulator">("overview");
@@ -263,11 +264,26 @@ export default function AdminHubPage() {
   };
 
   const handleResolveDispute = (id: string, decision: "approved" | "rejected") => {
+    if (!can("FINALIZE_DISPUTE")) {
+      addToast({
+        title: "Permission Denied (DEC-05 / RBAC)",
+        description: "Student Coordinators have triage-only privileges. Final dispute adjudication requires Faculty review.",
+        type: "error"
+      });
+      return;
+    }
+
     const note = resolutionNote.trim() || (decision === "approved" 
       ? "Telemetry verified against provider timestamp certificate under Rule §9.7."
       : "Does not meet boundary exemption criteria under Rule §9.7.");
     
     resolveDispute(id, decision, note);
+
+    const reviewerTitle = currentUser.role === "platform_admin" 
+      ? "Platform Admin" 
+      : currentUser.role === "faculty" 
+      ? "Faculty Lead" 
+      : "Co-Admin";
 
     // Persist resolution to SQLite backend
     fetch("/api/disputes", {
@@ -277,7 +293,7 @@ export default function AdminHubPage() {
         id,
         status: decision,
         resolutionNote: note,
-        reviewer: `${currentUser.name} (Co-Admin)`
+        reviewer: `${currentUser.name} (${reviewerTitle})`
       })
     }).catch(() => null);
 
@@ -286,7 +302,7 @@ export default function AdminHubPage() {
       id: `log-${Date.now()}`,
       timestamp: "Just now",
       action: decision === "approved" ? "DISPUTE_ACCEPTED" : "DISPUTE_REJECTED",
-      actor: `${currentUser.name} (${currentUser.role === "co-admin" ? "Co-Admin" : "Class Rep"})`,
+      actor: `${currentUser.name} (${reviewerTitle})`,
       details: `${decision === "approved" ? "Accepted" : "Rejected"} dispute #${id} for ${dispute?.studentName ?? "Unknown student"}. Justification: ${note}`,
       severity: decision === "approved" ? "WARNING" : "INFO"
     };
@@ -543,27 +559,62 @@ export default function AdminHubPage() {
           })}
         </div>
 
-        {/* Co-Admin Mode Banner */}
-        <div className="p-5 sm:p-6 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-sm">
+        {/* Authoritative Role Authority Banner (§11.1, Phase 1 RBAC) */}
+        <div className={`p-5 sm:p-6 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-sm ${
+          currentUser.role === "platform_admin"
+            ? "bg-amber-500/10 border-amber-500/25"
+            : currentUser.role === "faculty"
+            ? "bg-brand-primary/10 border-brand-primary/25"
+            : currentUser.role === "coordinator"
+            ? "bg-brand-secondary/10 border-brand-secondary/25"
+            : "bg-surface-raised border-white/10"
+        }`}>
           <div className="flex items-center space-x-3.5">
-            <ShieldAlert className="w-6 h-6 text-amber-400 shrink-0" />
+            <ShieldAlert className={`w-6 h-6 shrink-0 ${
+              currentUser.role === "platform_admin"
+                ? "text-amber-400"
+                : currentUser.role === "faculty"
+                ? "text-brand-primary"
+                : currentUser.role === "coordinator"
+                ? "text-brand-secondary"
+                : "text-muted"
+            }`} />
             <div>
               <span className="font-bold text-white text-base">
-                Active Session: {currentUser.name} ({currentUser.role === "co-admin" ? "Faculty Co-Admin" : "Elected Class Rep"})
+                Active Session: {currentUser.name} (
+                {currentUser.role === "platform_admin"
+                  ? "Platform Admin · Root"
+                  : currentUser.role === "faculty"
+                  ? `Faculty Lead · ${currentUser.assignedCohorts?.[0] || "CSE 2026"}`
+                  : currentUser.role === "coordinator"
+                  ? "Student Coordinator · Triage Only"
+                  : "Student Observer"}
+                )
               </span>
               <p className="text-muted text-sm mt-0.5">
-                {currentUser.role === "co-admin"
-                  ? "Full administrative quorum authorization active. All actions cryptographically signed."
-                  : "Operating with delegated student-representative review rights under Rule §9.7."}
+                {currentUser.role === "platform_admin"
+                  ? "Global platform authority active across all cohorts. All administrative operations cryptographically chained in audit ledger."
+                  : currentUser.role === "faculty"
+                  ? "Full cohort administration active. Authorized to finalize telemetry disputes and manage cohort roster."
+                  : currentUser.role === "coordinator"
+                  ? "Operating under delegated triage assistance grant (Rule §10.1 & DEC-05). Final dispute adjudication and roster imports require Faculty review."
+                  : "Read-only access. Full administrative review and dispute adjudication require elevated Faculty credentials."}
               </p>
             </div>
           </div>
-          <button
-            onClick={() => switchRole(currentUser.role === "co-admin" ? "student" : "co-admin")}
-            className="px-4 py-2.5 rounded-xl bg-surface hover:bg-surface-raised border border-white/10 text-sm font-semibold text-brand-secondary hover:text-white transition-colors shrink-0"
-          >
-            Switch to {currentUser.role === "co-admin" ? "Student View" : "Co-Admin View"}
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="text-xs font-mono text-muted hidden sm:inline">Role View:</span>
+            <select
+              value={currentUser.role}
+              onChange={(e) => switchRole(e.target.value as any)}
+              className="px-3 py-2 rounded-xl bg-surface border border-white/15 text-xs font-mono text-ink-secondary focus:border-brand-primary focus:outline-none"
+            >
+              <option value="student">Student</option>
+              <option value="coordinator">Coordinator (Triage)</option>
+              <option value="faculty">Faculty</option>
+              <option value="platform_admin">Platform Admin</option>
+            </select>
+          </div>
         </div>
 
         {/* What needs my decision now? */}
@@ -882,10 +933,19 @@ export default function AdminHubPage() {
 
                 <button
                   onClick={() => setIsBulkImportOpen(true)}
-                  className="px-4 py-2.5 rounded-xl bg-surface-raised hover:bg-white/10 border border-brand-primary/30 text-brand-primary hover:text-white text-sm font-semibold flex items-center gap-2 transition-colors"
+                  disabled={!can("IMPORT_COHORT_ROSTER")}
+                  aria-disabled={!can("IMPORT_COHORT_ROSTER")}
+                  title={!can("IMPORT_COHORT_ROSTER") ? "Roster bulk import requires Faculty or Platform Admin authority." : "Upload CSV roster"}
+                  className={`px-4 py-2.5 rounded-xl border text-sm font-semibold flex items-center gap-2 transition-colors ${
+                    !can("IMPORT_COHORT_ROSTER")
+                      ? "opacity-40 cursor-not-allowed bg-surface border-white/10 text-muted"
+                      : "bg-surface-raised hover:bg-white/10 border-brand-primary/30 text-brand-primary hover:text-white"
+                  }`}
                 >
                   <FileSpreadsheet className="w-4 h-4 shrink-0" />
-                  <span className="break-words">Bulk CSV Import</span>
+                  <span className="break-words">
+                    Bulk CSV Import {!can("IMPORT_COHORT_ROSTER") && "(Faculty Only)"}
+                  </span>
                 </button>
 
                 <button
@@ -1226,37 +1286,67 @@ export default function AdminHubPage() {
 
                     {selectedDispute.status === "pending" && (
                       <div className="space-y-4 pt-4 border-t border-white/[0.08] min-w-0">
-                        <label htmlFor="resolution-note" className="text-sm font-semibold text-ink-secondary block">
-                          Mandatory Resolution Justification:
-                        </label>
-                        <input
-                          id="resolution-note"
-                          type="text"
-                          value={resolutionNote}
-                          onChange={(e) => setResolutionNote(e.target.value)}
-                          placeholder="e.g. Verified UTC to IST boundary offset under Rule §9.7"
-                          aria-describedby="resolution-help"
-                          className="w-full min-w-0 px-4 py-3 bg-canvas border border-white/10 rounded-xl text-base text-white placeholder:text-muted focus:outline-none focus:border-brand-primary"
-                        />
-                        <p id="resolution-help" className="text-xs text-muted">
-                          Stored with the audit log. Empty note uses the default §9.7 justification.
-                        </p>
-                        <div className="flex items-center space-x-3 pt-1">
-                          <button
-                            onClick={() => handleResolveDispute(selectedDispute.id, "approved")}
-                            className="flex-1 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-canvas font-bold text-sm sm:text-base flex items-center justify-center space-x-2 transition-colors"
-                          >
-                            <Check className="w-4 h-4" />
-                            <span>Accept &amp; Backfill Telemetry</span>
-                          </button>
-                          <button
-                            onClick={() => handleResolveDispute(selectedDispute.id, "rejected")}
-                            className="flex-1 py-3 rounded-xl bg-surface-raised hover:bg-white/10 text-ink-secondary hover:text-white font-semibold text-sm sm:text-base flex items-center justify-center space-x-2 transition-colors border border-white/10"
-                          >
-                            <X className="w-4 h-4" />
-                            <span>Reject Appeal</span>
-                          </button>
-                        </div>
+                        {can("FINALIZE_DISPUTE") ? (
+                          <>
+                            <label htmlFor="resolution-note" className="text-sm font-semibold text-ink-secondary block">
+                              Mandatory Resolution Justification:
+                            </label>
+                            <input
+                              id="resolution-note"
+                              type="text"
+                              value={resolutionNote}
+                              onChange={(e) => setResolutionNote(e.target.value)}
+                              placeholder="e.g. Verified UTC to IST boundary offset under Rule §9.7"
+                              aria-describedby="resolution-help"
+                              className="w-full min-w-0 px-4 py-3 bg-canvas border border-white/10 rounded-xl text-base text-white placeholder:text-muted focus:outline-none focus:border-brand-primary"
+                            />
+                            <p id="resolution-help" className="text-xs text-muted">
+                              Stored with the audit log. Empty note uses the default §9.7 justification.
+                            </p>
+                            <div className="flex items-center space-x-3 pt-1">
+                              <button
+                                onClick={() => handleResolveDispute(selectedDispute.id, "approved")}
+                                className="flex-1 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-canvas font-bold text-sm sm:text-base flex items-center justify-center space-x-2 transition-colors"
+                              >
+                                <Check className="w-4 h-4" />
+                                <span>Accept &amp; Backfill Telemetry</span>
+                              </button>
+                              <button
+                                onClick={() => handleResolveDispute(selectedDispute.id, "rejected")}
+                                className="flex-1 py-3 rounded-xl bg-surface-raised hover:bg-white/10 text-ink-secondary hover:text-white font-semibold text-sm sm:text-base flex items-center justify-center space-x-2 transition-colors border border-white/10"
+                              >
+                                <X className="w-4 h-4" />
+                                <span>Reject Appeal</span>
+                              </button>
+                            </div>
+                          </>
+                        ) : currentUser.role === "coordinator" ? (
+                          <div className="p-4 rounded-xl bg-brand-secondary/10 border border-brand-secondary/25 space-y-2">
+                            <div className="flex items-center gap-2 text-brand-secondary font-semibold text-sm">
+                              <ShieldAlert className="h-4 w-4 shrink-0" />
+                              <span>Coordinator Triage Boundary (Rule §10.1 &amp; DEC-05)</span>
+                            </div>
+                            <p className="text-xs text-muted leading-relaxed">
+                              Student Coordinators may assist with telemetry inspection and evidence triage. Final dispute adjudication (Accept / Reject) is strictly restricted to assigned Faculty Leads or Platform Administrators.
+                            </p>
+                            <div className="flex items-center gap-2 pt-2">
+                              <button
+                                type="button"
+                                disabled
+                                aria-disabled="true"
+                                className="flex-1 py-2.5 rounded-xl bg-surface border border-white/10 text-muted/60 text-xs font-mono font-medium cursor-not-allowed flex items-center justify-center gap-1.5"
+                              >
+                                <span>Adjudication Locked to Faculty</span>
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="p-4 rounded-xl bg-surface-raised border border-white/10 space-y-1">
+                            <p className="text-xs text-muted">
+                              Dispute adjudication requires elevated Faculty authority. Standard student accounts can track their submitted appeals in the Dashboard.
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

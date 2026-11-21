@@ -1,4 +1,6 @@
-export type UserRole = "student" | "co-admin";
+import type { Role as RbacRole } from "@/lib/rbac/types";
+
+export type UserRole = RbacRole;
 
 export type LeaderboardVisibility = "public" | "handle_only" | "anonymous";
 export type RecapPreference = "ai" | "deterministic";
@@ -11,6 +13,17 @@ export interface UserProfile {
   email: string;
   avatar: string;
   role: UserRole;
+  roles?: UserRole[];
+  assignedCohorts?: string[];
+  coordinatorGrant?: {
+    id: string;
+    cohortId: string;
+    grantedBy?: string;
+    startsAt: string;
+    expiresAt: string;
+    permissions: string[];
+    isRevoked?: boolean;
+  } | null;
   activeTrack: "Systems & Cloud" | "Fullstack & Product" | "Algorithms & Theory";
   github: {
     connected: boolean;

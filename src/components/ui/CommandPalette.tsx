@@ -134,12 +134,12 @@ export function CommandPalette() {
     },
     {
       id: "act-role",
-      label: currentUser.role === "student" ? "Switch Persona to Co-Admin" : "Switch Persona to Student",
+      label: currentUser.role === "student" ? "Switch Role to Coordinator View" : "Switch Role to Student View",
       category: "Actions",
       icon: User,
       action: () => {
         closeCommandPalette();
-        switchRole(currentUser.role === "student" ? "co-admin" : "student");
+        switchRole(currentUser.role === "student" ? "coordinator" : "student");
       }
     }
   ];

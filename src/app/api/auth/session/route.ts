@@ -35,6 +35,10 @@ export async function GET() {
             name: defaultUser.name,
             email: defaultUser.email,
             handleGithub: defaultUser.handle_github,
+            roles: ["student"],
+            primaryRole: "student",
+            assignedCohorts: [defaultUser.class_section],
+            coordinatorGrant: null,
           }
         : null,
     });
@@ -52,6 +56,10 @@ export async function GET() {
     session: {
       ...session,
       displayName,
+      roles: ["student"],
+      primaryRole: "student",
+      assignedCohorts: [session.classSection],
+      coordinatorGrant: null,
     },
   });
 }

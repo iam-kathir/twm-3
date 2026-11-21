@@ -8,10 +8,12 @@ import {
   LeaderboardStudent,
   UserRole
 } from "@/types/saas";
+import { Permission, Actor, checkPermission } from "@/lib/rbac";
 
 interface AppContextType {
   currentUser: UserProfile;
   switchRole: (role: UserRole) => void;
+  can: (permission: Permission, cohortId?: string) => boolean;
   updateUserSettings: (settings: Partial<UserProfile["settings"]>) => void;
   updateConnectedAccount: (
     platform: "github" | "leetcode" | "hackerrank",
@@ -63,6 +65,9 @@ const DEFAULT_USER: UserProfile = {
   email: "aarav.sharma2022@vitstudent.ac.in",
   avatar: "/icon.svg",
   role: "student",
+  roles: ["student"],
+  assignedCohorts: ["cohort-vit-2026-cse-a"],
+  coordinatorGrant: null,
   activeTrack: "Systems & Cloud",
   github: {
     connected: true,
@@ -331,20 +336,103 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
-  // User persona switch
+  // Authoritative User persona switch (§11.1, Phase 1 RBAC)
   const switchRole = useCallback((role: UserRole) => {
-    saveUser({
+    let grant: UserProfile["coordinatorGrant"] = null;
+    let assignedCohorts = currentUser.assignedCohorts || ["cohort-vit-2026-cse-a"];
+    let roles: UserRole[] = [role];
+
+    if (role === "coordinator") {
+      roles = ["student", "coordinator"];
+      grant = {
+        id: "grant-coord-2026-triage-42",
+        cohortId: "cohort-vit-2026-cse-a",
+        grantedBy: "faculty_dr_rao",
+        permissions: ["VIEW_OWN_DISPUTES", "LODGE_DISPUTE", "ASSIST_DISPUTE_TRIAGE", "VIEW_COHORT_ROSTER"],
+        startsAt: new Date(Date.now() - 24 * 3600 * 1000).toISOString(),
+        expiresAt: new Date(Date.now() + 6 * 24 * 3600 * 1000).toISOString(),
+      };
+    } else if (role === "faculty") {
+      assignedCohorts = ["cohort-vit-2026-cse-a"];
+    } else if (role === "platform_admin") {
+      assignedCohorts = ["*"];
+    }
+
+    const updatedUser: UserProfile = {
       ...currentUser,
-      role
-    });
+      role,
+      roles,
+      assignedCohorts,
+      coordinatorGrant: grant,
+    };
+
+    saveUser(updatedUser);
+
+    const roleTitles: Record<UserRole, { title: string; desc: string }> = {
+      student: {
+        title: "Switched to Student View",
+        desc: "Standard telemetry observation and personal dispute lodging view restored.",
+      },
+      coordinator: {
+        title: "Switched to Student Coordinator View",
+        desc: "Operating under delegated triage assistance grant (Triage Only • Rule §10.1).",
+      },
+      faculty: {
+        title: "Switched to Faculty Lead View",
+        desc: "Cohort B.Tech CSE 2026 (Sec A) unlocked with full dispute adjudication authority.",
+      },
+      platform_admin: {
+        title: "Switched to Platform Admin View",
+        desc: "Global system-wide authorization active across all institutional cohorts.",
+      },
+    };
+
+    const info = roleTitles[role] || roleTitles.student;
     addToast({
-      title: `Switched Persona to ${role === "co-admin" ? "Co-Admin Reviewer" : "Student Candidate"}`,
-      description: role === "co-admin" 
-        ? "Administrative audit controls and dispute resolution tools unlocked."
-        : "Standard telemetry observation view restored.",
-      type: "info"
+      title: info.title,
+      description: info.desc,
+      type: "info",
     });
   }, [currentUser, saveUser, addToast]);
+
+  // Authoritative client-side RBAC verification gate
+  const can = useCallback(
+    (permission: Permission, cohortId?: string): boolean => {
+      const actor: Actor = {
+        id: currentUser.rollNo || "usr-student-default",
+        rollNo: currentUser.rollNo,
+        name: currentUser.name,
+        email: currentUser.email,
+        roles: currentUser.roles || [currentUser.role],
+        primaryRole: currentUser.role,
+        assignedCohorts: currentUser.assignedCohorts || ["cohort-vit-2026-cse-a"],
+        isActive: true,
+      };
+
+      const targetCohort = cohortId || "cohort-vit-2026-cse-a";
+      const decision = checkPermission(actor, permission, {
+        cohortId: targetCohort,
+        grants: currentUser.coordinatorGrant
+          ? [
+              {
+                id: currentUser.coordinatorGrant.id,
+                coordinatorUserId: actor.id,
+                cohortId: currentUser.coordinatorGrant.cohortId,
+                grantedBy: "faculty_dr_rao",
+                permissions: currentUser.coordinatorGrant.permissions as Permission[],
+                startsAt: currentUser.coordinatorGrant.startsAt,
+                expiresAt: currentUser.coordinatorGrant.expiresAt,
+                revokedAt: currentUser.coordinatorGrant.isRevoked ? new Date().toISOString() : null,
+              },
+            ]
+          : [],
+        facultyCohortAssignments: currentUser.assignedCohorts || ["cohort-vit-2026-cse-a"],
+      });
+
+      return decision.granted;
+    },
+    [currentUser]
+  );
 
   const updateUserSettings = useCallback((newSettings: Partial<UserProfile["settings"]>) => {
     const updated = {
@@ -656,6 +744,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       value={{
         currentUser,
         switchRole,
+        can,
         updateUserSettings,
         updateConnectedAccount,
         disputes,

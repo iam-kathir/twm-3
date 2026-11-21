@@ -271,12 +271,12 @@ export function StatsBar() {
                 </div>
               )}
               {!loading && stats && !stats.meetsQuorum && (
-                <div className="inline-flex items-center gap-1.5 mt-2 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-muted-soft text-[10px] sm:text-[11px] font-mono font-medium leading-none">
+                <div className="inline-flex items-center gap-1.5 mt-2 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-muted text-[10px] sm:text-[11px] font-mono font-medium leading-none">
                   <span>{stats.quorumPercentage}% Participating</span>
                 </div>
               )}
               {!loading && isUnavailable && (
-                <div className="inline-flex items-center gap-1.5 mt-2 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-muted-soft text-[10px] sm:text-[11px] font-mono font-medium leading-none">
+                <div className="inline-flex items-center gap-1.5 mt-2 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-muted text-[10px] sm:text-[11px] font-mono font-medium leading-none">
                   <span>Quorum Pending</span>
                 </div>
               )}
@@ -304,7 +304,7 @@ export function StatsBar() {
               <div className="text-xs sm:text-[13px] text-slate-400 font-medium font-sans mt-1 leading-tight">
                 Connected Platforms
               </div>
-              <div className="text-[10px] sm:text-[11px] text-muted-soft font-mono mt-1.5 leading-none truncate">
+              <div className="text-[10px] sm:text-[11px] text-muted font-mono mt-1.5 leading-none truncate">
                 GitHub · LeetCode · HR
               </div>
             </div>
@@ -331,7 +331,7 @@ export function StatsBar() {
               <div className="text-xs sm:text-[13px] text-slate-400 font-medium font-sans mt-1 leading-tight">
                 Leaderboards
               </div>
-              <div className="text-[10px] sm:text-[11px] text-muted-soft font-mono mt-1.5 leading-none">
+              <div className="text-[10px] sm:text-[11px] text-muted font-mono mt-1.5 leading-none">
                 Sunday 23:59 IST
               </div>
             </div>
@@ -358,7 +358,7 @@ export function StatsBar() {
               <div className="text-xs sm:text-[13px] text-slate-400 font-medium font-sans mt-1 leading-tight">
                 &amp; Auditable
               </div>
-              <div className="text-[10px] sm:text-[11px] text-muted-soft font-mono mt-1.5 leading-none">
+              <div className="text-[10px] sm:text-[11px] text-muted font-mono mt-1.5 leading-none">
                 Zero fabrication
               </div>
             </div>
@@ -385,7 +385,7 @@ export function StatsBar() {
               <div className="text-xs sm:text-[13px] text-slate-400 font-medium font-sans mt-1 leading-tight">
                 Your Profile
               </div>
-              <div className="text-[10px] sm:text-[11px] text-muted-soft font-mono mt-1.5 leading-none">
+              <div className="text-[10px] sm:text-[11px] text-muted font-mono mt-1.5 leading-none">
                 Verified trajectory
               </div>
             </div>
@@ -394,7 +394,7 @@ export function StatsBar() {
 
         {/* Honest Non-Fabricated Telemetry & Response Freshness Metadata (§E) */}
         {stats && (stats.generatedAt || stats.latestObservationAt) && (
-          <div className="mt-4 pt-3 border-t border-white/[0.04] flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono text-muted-soft">
+          <div className="mt-4 pt-3 border-t border-white/[0.04] flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono text-muted">
             {stats.latestObservationAt ? (
               <span title="Genuine SQLite observation record timestamp">
                 Latest Telemetry: {new Date(stats.latestObservationAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}

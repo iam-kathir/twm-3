@@ -18,7 +18,10 @@ import {
   X,
   LayoutDashboard,
   Trophy,
-  Compass
+  Compass,
+  GraduationCap,
+  KeyRound,
+  Check
 } from "lucide-react";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 import { useApp } from "@/context/AppContext";
@@ -185,7 +188,7 @@ export function AppHeader() {
                   {currentUser.name}
                 </div>
                 <div className="truncate text-[10px] font-mono text-muted">
-                  {currentUser.role === "co-admin" ? "Faculty" : currentUser.rollNo}
+                  {currentUser.role === "student" ? currentUser.rollNo : currentUser.role === "coordinator" ? "Coordinator" : currentUser.role === "faculty" ? "Faculty" : "Admin"}
                 </div>
               </div>
               <ChevronDown
@@ -210,10 +213,38 @@ export function AppHeader() {
                   <div className="px-3 py-2.5 border-b border-border-subtle">
                     <div className="font-bold text-sm text-white truncate">{currentUser.name}</div>
                     <div className="text-xs font-mono text-muted truncate mt-0.5">{currentUser.email}</div>
-                    <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-mono bg-white/5 border border-border text-brand-primary">
-                      <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
-                      <span>{currentUser.role === "co-admin" ? "Faculty Co-Admin" : "Verified Student"}</span>
-                    </div>
+                    {/* Authoritative Role Badges (§11.1, Phase 1 RBAC) */}
+                    {currentUser.role === "student" && (
+                      <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-mono bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+                        <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
+                        <span>Verified Student</span>
+                      </div>
+                    )}
+                    {currentUser.role === "coordinator" && (
+                      <div className="mt-2 flex flex-col gap-1">
+                        <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-mono bg-brand-secondary/15 border border-brand-secondary/30 text-brand-secondary">
+                          <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-secondary" />
+                          <span>Student Coordinator · Triage Only</span>
+                        </div>
+                        {currentUser.coordinatorGrant && (
+                          <div className="text-[10px] font-mono text-muted pl-0.5">
+                            Grant: {currentUser.coordinatorGrant.cohortId} (Active)
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    {currentUser.role === "faculty" && (
+                      <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-mono bg-brand-primary/15 border border-brand-primary/30 text-brand-primary">
+                        <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+                        <span>Faculty Lead · {currentUser.assignedCohorts?.[0] || "CSE 2026"}</span>
+                      </div>
+                    )}
+                    {currentUser.role === "platform_admin" && (
+                      <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-mono bg-amber-500/15 border border-amber-500/30 text-amber-300">
+                        <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
+                        <span>Platform Admin · Root</span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="py-1 space-y-0.5" role="none">
@@ -249,19 +280,74 @@ export function AppHeader() {
                       <span>Lodge Score Dispute</span>
                     </button>
 
-                    <button
-                      role="menuitem"
-                      onClick={() => {
-                        setIsProfileOpen(false);
-                        switchRole(currentUser.role === "student" ? "co-admin" : "student");
-                      }}
-                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-ink-secondary hover:text-brand-secondary hover:bg-brand-secondary/10 transition-colors text-left font-medium text-xs sm:text-sm"
-                    >
-                      <div className="flex min-w-0 items-center gap-2.5">
-                        <Shield className="h-4 w-4 shrink-0 text-brand-secondary" />
-                        <span>Switch to {currentUser.role === "student" ? "Co-Admin View" : "Student View"}</span>
+                    {/* Authoritative Persona Selector (§11.1) */}
+                    <div className="pt-1 border-t border-border-subtle/60 mt-1" role="none">
+                      <div className="px-3 py-1 text-[11px] font-mono uppercase tracking-wider text-muted">
+                        Simulate Role View
                       </div>
-                    </button>
+                      <div className="grid grid-cols-2 gap-1 p-1">
+                        <button
+                          role="menuitem"
+                          onClick={() => {
+                            switchRole("student");
+                            setIsProfileOpen(false);
+                          }}
+                          className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-mono transition-colors text-left ${
+                            currentUser.role === "student"
+                              ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-semibold"
+                              : "text-muted hover:text-white hover:bg-white/5"
+                          }`}
+                        >
+                          <span>Student</span>
+                          {currentUser.role === "student" && <Check className="h-3 w-3 shrink-0" />}
+                        </button>
+                        <button
+                          role="menuitem"
+                          onClick={() => {
+                            switchRole("coordinator");
+                            setIsProfileOpen(false);
+                          }}
+                          className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-mono transition-colors text-left ${
+                            currentUser.role === "coordinator"
+                              ? "bg-brand-secondary/15 text-brand-secondary border border-brand-secondary/30 font-semibold"
+                              : "text-muted hover:text-white hover:bg-white/5"
+                          }`}
+                        >
+                          <span>Coordinator</span>
+                          {currentUser.role === "coordinator" && <Check className="h-3 w-3 shrink-0" />}
+                        </button>
+                        <button
+                          role="menuitem"
+                          onClick={() => {
+                            switchRole("faculty");
+                            setIsProfileOpen(false);
+                          }}
+                          className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-mono transition-colors text-left ${
+                            currentUser.role === "faculty"
+                              ? "bg-brand-primary/15 text-brand-primary border border-brand-primary/30 font-semibold"
+                              : "text-muted hover:text-white hover:bg-white/5"
+                          }`}
+                        >
+                          <span>Faculty</span>
+                          {currentUser.role === "faculty" && <Check className="h-3 w-3 shrink-0" />}
+                        </button>
+                        <button
+                          role="menuitem"
+                          onClick={() => {
+                            switchRole("platform_admin");
+                            setIsProfileOpen(false);
+                          }}
+                          className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-mono transition-colors text-left ${
+                            currentUser.role === "platform_admin"
+                              ? "bg-amber-500/15 text-amber-300 border border-amber-500/30 font-semibold"
+                              : "text-muted hover:text-white hover:bg-white/5"
+                          }`}
+                        >
+                          <span>Admin</span>
+                          {currentUser.role === "platform_admin" && <Check className="h-3 w-3 shrink-0" />}
+                        </button>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="pt-1 border-t border-border-subtle" role="none">

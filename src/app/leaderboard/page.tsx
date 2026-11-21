@@ -727,7 +727,7 @@ export default function LeaderboardPage() {
                                 2
                               </span>
                             ) : item.rank === 3 ? (
-                              <span className="h-7 w-7 rounded-lg bg-amber-700/20 text-amber-600 border border-amber-700/40 flex items-center justify-center text-xs font-mono font-bold shadow-sm">
+                              <span className="h-7 w-7 rounded-lg bg-amber-700/20 text-amber-400 border border-amber-700/40 flex items-center justify-center text-xs font-mono font-bold shadow-sm">
                                 3
                               </span>
                             ) : (
@@ -843,7 +843,7 @@ export default function LeaderboardPage() {
                             2
                           </span>
                         ) : item.rank === 3 ? (
-                          <span className="h-7 w-7 rounded-lg bg-amber-700/20 text-amber-600 border border-amber-700/40 flex items-center justify-center text-xs font-mono font-bold shadow-sm">
+                          <span className="h-7 w-7 rounded-lg bg-amber-700/20 text-amber-400 border border-amber-700/40 flex items-center justify-center text-xs font-mono font-bold shadow-sm">
                             3
                           </span>
                         ) : (

@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, UploadCloud, FileSpreadsheet, CheckCircle2, AlertCircle, Users, Download } from "lucide-react";
+import { X, UploadCloud, FileSpreadsheet, CheckCircle2, AlertCircle, Users, Download, ShieldAlert } from "lucide-react";
+import { useApp } from "@/context/AppContext";
 
 interface BulkRosterImportModalProps {
   isOpen: boolean;
@@ -18,6 +19,8 @@ const SAMPLE_CSV = `roll_no,name,email,class_section,handle_github,handle_leetco
 2022BCSE105,Siddharth Rao,siddharth.rao@college.edu,CSE-A,sid_codes,sid_leet,sid_hr`;
 
 export function BulkRosterImportModal({ isOpen, onClose, onSuccess }: BulkRosterImportModalProps) {
+  const { can, currentUser } = useApp();
+  const canImport = can("IMPORT_COHORT_ROSTER");
   const [csvText, setCsvText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [importResult, setImportResult] = useState<{
@@ -110,12 +113,13 @@ export function BulkRosterImportModal({ isOpen, onClose, onSuccess }: BulkRoster
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80" onClick={onClose}>
         <motion.div
           role="dialog"
           aria-modal="true"
           aria-labelledby="bulk-import-title"
           aria-describedby="bulk-import-help"
+          onClick={(e) => e.stopPropagation()}
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
@@ -141,6 +145,21 @@ export function BulkRosterImportModal({ isOpen, onClose, onSuccess }: BulkRoster
               <X className="h-5 w-5" aria-hidden="true" />
             </button>
           </div>
+
+          {/* RBAC Restriction Alert */}
+          {!canImport && (
+            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-start gap-3 text-xs">
+              <ShieldAlert className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <span className="font-semibold text-amber-300 block text-sm">
+                  Roster Import Restricted (DEC-05 / RBAC)
+                </span>
+                <p className="text-muted mt-0.5 leading-relaxed">
+                  Your active role ({currentUser.role}) does not have cohort roster import authority. Roster ingestion is restricted to assigned Faculty Leads and Platform Administrators. Student Coordinators possess triage-only assistance privileges.
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Action Row */}
           <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
@@ -237,11 +256,18 @@ export function BulkRosterImportModal({ isOpen, onClose, onSuccess }: BulkRoster
             <button
               type="button"
               onClick={handleSubmit}
-              disabled={isSubmitting || !csvText.trim()}
-              className="px-6 py-2.5 rounded-xl bg-brand-secondary hover:bg-accent-hover text-white font-bold text-sm flex items-center gap-2 transition-colors disabled:opacity-50"
+              disabled={isSubmitting || !csvText.trim() || !canImport}
+              aria-disabled={isSubmitting || !csvText.trim() || !canImport}
+              className="px-6 py-2.5 rounded-xl bg-brand-secondary hover:bg-accent-hover text-white font-bold text-sm flex items-center gap-2 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <Users className="h-4 w-4 shrink-0" aria-hidden="true" />
-              <span>{isSubmitting ? "Importing Roster..." : "Execute Batch Import"}</span>
+              <span>
+                {!canImport
+                  ? "Import Restricted (Faculty Only)"
+                  : isSubmitting
+                  ? "Importing Roster..."
+                  : "Execute Batch Import"}
+              </span>
             </button>
           </div>
         </motion.div>

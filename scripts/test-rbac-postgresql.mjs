@@ -544,3 +544,106 @@ test("4. Tamper-Evident Structured Audit Logging System", async (t) => {
     assert.equal(auditEntry.ipAddress, "127.0.0.1");
   });
 });
+
+// ------------------------------------------------------------------------------
+// Test Group 5: Phase 1 RBAC UI & Client Context Integration Verification
+// ------------------------------------------------------------------------------
+test("5. Phase 1 RBAC UI & Client Context Integration", async (t) => {
+  await t.test("verifies client UserRole supports authoritative 4-role hierarchy", () => {
+    const saasTypesPath = path.join(process.cwd(), "src", "types", "saas.ts");
+    const content = fs.readFileSync(saasTypesPath, "utf-8");
+    assert.ok(content.includes("export type UserRole = RbacRole;"), "saas.ts binds UserRole to RbacRole");
+    assert.ok(content.includes("coordinatorGrant?:"), "UserProfile includes coordinatorGrant");
+    assert.ok(content.includes("assignedCohorts?:"), "UserProfile includes assignedCohorts");
+  });
+
+  await t.test("simulates client can() evaluation for all 4 authoritative roles", () => {
+    const targetCohort = "cohort-vit-2026-cse-a";
+
+    // 1. Student
+    const studentActor = {
+      id: "usr_student_01",
+      name: "Aarav Sharma",
+      email: "aarav@vitstudent.ac.in",
+      roles: ["student"],
+      primaryRole: "student",
+      assignedCohorts: [targetCohort],
+      isActive: true,
+    };
+    assert.equal(checkPermission(studentActor, "VIEW_OWN_DISPUTES", { cohortId: targetCohort }).granted, true);
+    assert.equal(checkPermission(studentActor, "LODGE_DISPUTE", { cohortId: targetCohort }).granted, true);
+    assert.equal(checkPermission(studentActor, "FINALIZE_DISPUTE", { cohortId: targetCohort }).granted, false);
+    assert.equal(checkPermission(studentActor, "IMPORT_COHORT_ROSTER", { cohortId: targetCohort }).granted, false);
+
+    // 2. Coordinator (Active Triage Grant)
+    const coordActor = {
+      id: "usr_coord_01",
+      name: "Rohan Verma",
+      email: "rohan@vitstudent.ac.in",
+      roles: ["student", "coordinator"],
+      primaryRole: "coordinator",
+      assignedCohorts: [targetCohort],
+      isActive: true,
+    };
+    const activeGrant = {
+      id: "grant_triage_01",
+      coordinatorUserId: coordActor.id,
+      cohortId: targetCohort,
+      grantedBy: "faculty_dr_rao",
+      permissions: ["VIEW_OWN_DISPUTES", "LODGE_DISPUTE", "ASSIST_DISPUTE_TRIAGE", "VIEW_COHORT_ROSTER"],
+      startsAt: new Date(Date.now() - 3600000).toISOString(),
+      expiresAt: new Date(Date.now() + 7 * 86400000).toISOString(),
+    };
+    const coordCtx = { cohortId: targetCohort, grants: [activeGrant] };
+
+    assert.equal(checkPermission(coordActor, "ASSIST_DISPUTE_TRIAGE", coordCtx).granted, true);
+    assert.equal(checkPermission(coordActor, "VIEW_COHORT_ROSTER", coordCtx).granted, true);
+    // Coordinator boundary strictly enforced
+    const finalizeDec = checkPermission(coordActor, "FINALIZE_DISPUTE", coordCtx);
+    assert.equal(finalizeDec.granted, false);
+    assert.equal(finalizeDec.code, "COORDINATOR_BOUNDARY_VIOLATION");
+    const importDec = checkPermission(coordActor, "IMPORT_COHORT_ROSTER", coordCtx);
+    assert.equal(importDec.granted, false);
+    assert.equal(importDec.code, "COORDINATOR_BOUNDARY_VIOLATION");
+
+    // 3. Faculty (Scoped to Assigned Cohort)
+    const facultyActor = {
+      id: "usr_faculty_01",
+      name: "Dr. K. Ramanathan",
+      email: "ramanathan@vit.ac.in",
+      roles: ["faculty"],
+      primaryRole: "faculty",
+      assignedCohorts: [targetCohort],
+      isActive: true,
+    };
+    const facultyCtx = { cohortId: targetCohort, facultyCohortAssignments: [targetCohort] };
+    assert.equal(checkPermission(facultyActor, "FINALIZE_DISPUTE", facultyCtx).granted, true);
+    assert.equal(checkPermission(facultyActor, "IMPORT_COHORT_ROSTER", facultyCtx).granted, true);
+    // Unassigned cohort check
+    const unassignedCtx = { cohortId: "cohort_outside_scope", facultyCohortAssignments: [targetCohort] };
+    const facultyDenied = checkPermission(facultyActor, "FINALIZE_DISPUTE", unassignedCtx);
+    assert.equal(facultyDenied.granted, false);
+    assert.equal(facultyDenied.code, "COHORT_NOT_ASSIGNED");
+
+    // 4. Platform Admin (Global Oversight)
+    const adminActor = {
+      id: "usr_admin_root",
+      name: "Platform Admin",
+      email: "admin@twm.internal",
+      roles: ["platform_admin"],
+      primaryRole: "platform_admin",
+      isActive: true,
+    };
+    assert.equal(checkPermission(adminActor, "FINALIZE_DISPUTE", { cohortId: "any_cohort" }).granted, true);
+    assert.equal(checkPermission(adminActor, "IMPORT_COHORT_ROSTER", { cohortId: "any_cohort" }).granted, true);
+  });
+
+  await t.test("verifies session route handler delivers structured RBAC attributes", () => {
+    const sessionRoutePath = path.join(process.cwd(), "src", "app", "api", "auth", "session", "route.ts");
+    const content = fs.readFileSync(sessionRoutePath, "utf-8");
+    assert.ok(content.includes('roles: ["student"]'), "session exposes roles array");
+    assert.ok(content.includes('primaryRole: "student"'), "session exposes primaryRole");
+    assert.ok(content.includes("assignedCohorts:"), "session exposes assignedCohorts");
+    assert.ok(content.includes("coordinatorGrant: null"), "session exposes coordinatorGrant");
+  });
+});
