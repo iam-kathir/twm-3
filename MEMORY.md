@@ -136,6 +136,33 @@ All skills are permanently installed and linked across **Claude Code, OpenAI Cod
 
 ## Session log
 
+### 2026-11-21 — Frontend Design Systems Audit & Phase 1 RBAC UI Integration
+- **User Directive:** "/frontend-design-systems -> Options 1 and 4: Design System Audit & Phase 1 RBAC UI Integration."
+- **Actions Implemented & Bounded Commits:**
+  1. **Comprehensive Design System Audit:**
+     - Spawned autonomous subagent `Design System & A11y Auditor` to inspect all 66 component and route files against the 5 UI micro-states, WCAG 2.1 AA contrast rules, and headless primitive architecture.
+     - Documented audit report: Zero fabrication 100% compliant, micro-states 84% pass, WCAG AA 88% pass, primitives 82% pass.
+  2. **Priority 0 Contrast & Accessibility Remediation:**
+     - `src/components/landing/PlatformMatrix.tsx`: Fixed line 122 `text-muted-soft` -> `text-muted` on `bg-surface` (contrast elevated from 4.31:1 to 6.38:1, passing AA).
+     - `src/components/landing/StatsBar.tsx`: Replaced `text-muted-soft` with `text-muted` across 7 sub-12px metric label elements.
+     - `src/app/leaderboard/page.tsx`: Replaced `text-amber-600` with `text-amber-400` on lines 730 & 846 for Rank 3 bronze badge, restoring clear legibility.
+     - `src/components/admin/BulkRosterImportModal.tsx`: Attached `onClick={onClose}` to fixed backdrop overlay for backdrop click-outside dismissal and updated submit button with `disabled:cursor-not-allowed aria-disabled="true"`.
+  3. **Phase 1 RBAC UI & Client Context Integration:**
+     - `src/types/saas.ts`: Bound `UserRole` to `RbacRole` (`"student" | "coordinator" | "faculty" | "platform_admin"`), added `roles`, `assignedCohorts`, and `coordinatorGrant`.
+     - `src/context/AppContext.tsx`: Integrated `can(permission, cohortId)` RBAC gate, updated `switchRole` across all 4 roles with time-bounded coordinator grant emulation, and updated `DEFAULT_USER`.
+     - `src/components/ui/AppHeader.tsx`: Upgraded profile menu with color-coded role badges, active coordinator grant tracking, and 4-role persona view selector.
+     - `src/app/admin/page.tsx`: Rebuilt role authority banner, gated dispute adjudication actions with coordinator triage boundary alert (Rule §10.1 & DEC-05), and guarded bulk roster import.
+     - `src/components/admin/BulkRosterImportModal.tsx`: Added RBAC restriction banner and disabled import button for non-faculty/admin users.
+     - `src/app/api/auth/session/route.ts`: Exposing structured RBAC attributes (`roles`, `primaryRole`, `assignedCohorts`, `coordinatorGrant`).
+  4. **Automated Test Suite Expansion:**
+     - `scripts/test-rbac-postgresql.mjs`: Added Test Group 5 (3 dedicated tests) covering client `UserRole` hierarchy, `can()` permission evaluation for all 4 roles, coordinator triage boundary, faculty cohort jurisdiction, and session RBAC contract.
+     - Elevated test total to **116/116 passing tests** across 26 test suites in 435ms.
+- **Verification Gates (all passed):**
+  - `npx tsc --noEmit`: 0 errors.
+  - `npm run lint`: 0 errors / 0 warnings.
+  - `npm test`: **116/116 tests passing** in 435ms.
+  - Commit SHA: `61b9d20` (`feat(rbac-ui): integrate Phase 1 authoritative RBAC into authenticated app shell and resolve contrast audits`).
+
 ### 2026-11-14 — Phase 1: PostgreSQL & Authoritative RBAC Implementation
 - **User Directive:** "TWM-001 Batch 2 is accepted... Next: Phase 1 — PostgreSQL and Authoritative RBAC. Establish migration infrastructure, foundational schema, authoritative server-side RBAC, time-bounded Coordinator grants, database-backed sessions (PO-14 configurable/unapproved), tamper-evident audit records, and authorization test suite."
 - **Tasks Implemented & Bounded Commits:**
